@@ -10,6 +10,7 @@ const actions: Record<string, { method: string; keys?: string[] }> = {
   management: { method: "GET" },
   refresh: { method: "POST", keys: [] },
   cancel: { method: "POST", keys: [] },
+  resume: { method: "POST", keys: [] },
   "change-plan": { method: "POST", keys: ["planId", "quoteId"] },
   "change-plan/quote": { method: "POST", keys: ["planId"] },
   "change-plan/patients": { method: "GET" },

@@ -82,6 +82,18 @@ headless_subscriptions.cancel:
   options:
     no_cache: TRUE
 
+headless_subscriptions.resume:
+  path: '/api/headless/subscriptions/resume'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionController::handle'
+    _format: json
+    action: 'resume'
+  methods: [POST]
+  requirements:
+    _custom_access: '\Drupal\headless_subscriptions\Access\BillingAccountAccess::access'
+  options:
+    no_cache: TRUE
+
 headless_subscriptions.payment_method:
   path: '/api/headless/subscriptions/payment-method'
   defaults:

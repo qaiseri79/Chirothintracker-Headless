@@ -49,6 +49,7 @@ final class SubscriptionController extends ControllerBase {
         'change_patients' => $service->planChangePatients($uid),
         'change_archive' => $service->archivePlanChangePatients($uid, $this->planId($body), is_array($body['patientIds'] ?? NULL) ? $body['patientIds'] : []),
         'cancel' => $service->cancel($uid),
+        'resume' => $service->resume($uid),
         'payment_method' => $service->updatePayment($uid, $body),
         'webhook' => $this->webhook($request, $body),
         default => throw new SubscriptionException('not_found', 'Unknown operation.', 404),

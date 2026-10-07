@@ -463,6 +463,7 @@ final class SubscriptionServiceTest extends UnitTestCase {
     $this->assertSame([], $other['payments']);
     $this->assertNull($other['paymentMethod']);
     $this->assertTrue($other['actions']['resubscribe']);
+    $this->assertFalse($other['actions']['resume']);
   }
   public function testUpdatingPaymentDoesNotGrantAnExpiredAccountPaidAccess(): void {
     extract($this->fixture());
