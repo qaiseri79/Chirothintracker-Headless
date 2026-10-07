@@ -1,0 +1,76 @@
+headless_commerce.payment_settings:
+  path: '/api/headless/commerce/payment-settings'
+  defaults:
+    _controller: '\Drupal\headless_commerce\Controller\CommerceController::handle'
+    action: payment_settings
+  methods: [POST]
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_commerce.fulfillment_settings:
+  path: '/api/headless/commerce/fulfillment-settings'
+  defaults:
+    _controller: '\Drupal\headless_commerce\Controller\CommerceController::handle'
+    action: fulfillment_settings
+  methods: [POST]
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_commerce.catalog:
+  path: '/api/headless/commerce/catalog'
+  defaults:
+    _controller: '\Drupal\headless_commerce\Controller\CommerceController::handle'
+    action: catalog_read
+  methods: [GET]
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_commerce.catalog_override:
+  path: '/api/headless/commerce/catalog/override'
+  defaults:
+    _controller: '\Drupal\headless_commerce\Controller\CommerceController::handle'
+    action: catalog_override
+  methods: [POST]
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_commerce.custom_products_read:
+  path: '/api/headless/commerce/custom-products'
+  defaults:
+    _controller: '\Drupal\headless_commerce\Controller\CommerceController::handle'
+    action: custom_products_read
+  methods: [GET]
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_commerce.custom_products_create:
+  path: '/api/headless/commerce/custom-products'
+  defaults:
+    _controller: '\Drupal\headless_commerce\Controller\CommerceController::handle'
+    action: custom_products_create
+  methods: [POST]
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_commerce.custom_products_delete:
+  path: '/api/headless/commerce/custom-products/{id}'
+  defaults:
+    _controller: '\Drupal\headless_commerce\Controller\CommerceController::handle'
+    action: custom_products_delete
+  methods: [DELETE]
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+  options:
+    no_cache: TRUE
