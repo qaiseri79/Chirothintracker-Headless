@@ -17,6 +17,11 @@ services:
     arguments: ['@current_user', '@entity_type.manager']
     tags:
       - { name: event_subscriber } 
+  # custom_module.event_subscriber.subscription_update_event_subscriber:
+  #   class: Drupal\custom_module\EventSubscriber\SubscriptionUpdateEventSubscriber
+  #   arguments: []
+  #   tags:
+  #     - { name: kernel.event_subscriber }
   custom_module.subscriber_event_subscriber:
     class: Drupal\custom_module\EventSubscriber\RedirectSubscriber
     arguments: ['@current_user', '@router.request_context']
@@ -38,7 +43,3 @@ services:
   custom_module.product_variation_lazy_builders:
     class: Drupal\custom_module\ProductVariationLazyBuilders
     arguments: ['@entity_type.manager', '@form_builder', '@entity.repository']
-  custom_module.payment_gateway_filter_subscriber:
-    class: Drupal\custom_module\EventSubscriber\PaymentGatewayFilterSubscriber
-    tags:
-      - { name: event_subscriber }
