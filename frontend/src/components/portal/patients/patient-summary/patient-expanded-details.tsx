@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import { Calendar, ChevronRight, Plus, Zap } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Calendar, ChevronRight, MessageSquare, Plus, StickyNote, Zap } from "lucide-react";
 import { formatSummaryNumber, type PatientSummaryRow } from "@/lib/patients/summary";
 import { SummarySectionStatus, useSummaryData } from "./summary-data-provider";
 import { LogProgressDialog } from "./log-progress-dialog";
@@ -41,9 +42,12 @@ export function PatientExpandedDetails({
   const logsState = sections[`${patient.id}:logs`];
   const [logDialogOpen, setLogDialogOpen] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const router = useRouter();
+  const [readFull, setReadFull] = useState<{ kind: "message" | "note"; time: string; text: string } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   /** The date input's value, held in `YYYY-MM-DD` as the input requires. */
   const [draftDate, setDraftDate] = useState("");
+  const latestNote = [...patient.notesList].sort((a, b) => b.date.localeCompare(a.date))[0];
 
   function openModal() {
     setDraftDate(toIso(patient.lastSeen));
@@ -58,6 +62,41 @@ export function PatientExpandedDetails({
 
   return (
     <>
+      <div className="mb-4 rounded-xl border border-line bg-white px-4 py-3">
+        <p className="text-[12px] font-semibold tracking-[0.05em] uppercase text-[#6B7280]">
+          Messages &amp; notes
+        </p>
+        <div className="mt-1 divide-y divide-line">
+          <CommRow
+            icon={<MessageSquare className="size-4" />}
+            name="Message"
+            count={PLACEHOLDER_MESSAGES.count}
+            last={PLACEHOLDER_MESSAGES.last}
+            time={PLACEHOLDER_MESSAGES.time}
+            onReadFull={() =>
+              setReadFull({
+                kind: "message",
+                time: PLACEHOLDER_MESSAGES.time,
+                text: PLACEHOLDER_MESSAGES.last,
+              })
+            }
+            onViewAll={() => router.push("/chiropractor/messages")}
+          />
+          <CommRow
+            icon={<StickyNote className="size-4" />}
+            name="Note"
+            count={patient.notesList.length}
+            last={latestNote?.text ?? ""}
+            time={latestNote?.date ?? ""}
+            onReadFull={() => {
+              if (!latestNote) return;
+              setReadFull({ kind: "note", time: latestNote.date, text: latestNote.text });
+            }}
+            onViewAll={() => onOpenWorkspace("notes")}
+          />
+        </div>
+      </div>
+
       <div className="mb-4 rounded-xl border border-line bg-white px-4 py-3">
         <p className="text-[12px] font-semibold tracking-[0.05em] uppercase text-[#6B7280]">
           Sessions
@@ -158,6 +197,42 @@ export function PatientExpandedDetails({
               document.body,
             )
           : null}
+
+        {readFull
+          ? createPortal(
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#101827]/40 p-4">
+                <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
+                  <h3 className="font-serif text-lg">
+                    Latest {readFull.kind} — {patient.name}
+                  </h3>
+                  {readFull.time ? <p className="mt-1 text-xs text-[#6B7280]">{readFull.time}</p> : null}
+                  <p className="mt-3 whitespace-pre-line leading-relaxed">{readFull.text}</p>
+                  <div className="mt-5 flex items-center justify-between gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setReadFull(null)}
+                      className="rounded-full border border-line px-4 py-2 text-sm"
+                    >
+                      Close
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const kind = readFull.kind;
+                        setReadFull(null);
+                        if (kind === "note") onOpenWorkspace("notes");
+                        else router.push("/chiropractor/messages");
+                      }}
+                      className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white"
+                    >
+                      View all {readFull.kind === "note" ? "notes" : "messages"}
+                    </button>
+                  </div>
+                </div>
+              </div>,
+              document.body,
+            )
+          : null}
       </div>
 
       <DailyLogs
@@ -205,3 +280,69 @@ function toIso(display: string): string {
 function toDisplay(iso: string): string {
   return iso ? `${iso.slice(5, 7)}/${iso.slice(8)}/${iso.slice(0, 4)}` : "";
 }
+
+/**
+ * One "Messages & notes" row: count + kind, the latest item truncated, "Read
+ * full", and "View all" — the design's `comm()`.
+ */
+function CommRow({
+  icon,
+  name,
+  count,
+  last,
+  time,
+  onReadFull,
+  onViewAll,
+}: {
+  icon: React.ReactNode;
+  name: string;
+  count: number;
+  last: string;
+  time: string;
+  onReadFull: () => void;
+  onViewAll: () => void;
+}) {
+  return (
+    <div className="flex items-center gap-3 py-2">
+      <span className="flex w-28 shrink-0 items-center gap-1.5 text-sm font-semibold text-[#0B5D52]">
+        {icon}
+        {count} {count === 1 ? name : `${name}s`}
+      </span>
+      {count > 0 ? (
+        <>
+          <p className="min-w-0 flex-1 truncate text-sm text-[#101827]/80">
+            {time ? <span className="text-[#6B7280]">{time} · </span> : null}
+            {last}
+          </p>
+          <button
+            type="button"
+            onClick={onReadFull}
+            className="shrink-0 rounded-md border border-line px-2.5 py-1 text-xs font-medium hover:border-[#0B5D52] hover:text-[#0B5D52]"
+          >
+            Read full
+          </button>
+          <button
+            type="button"
+            onClick={onViewAll}
+            className="hidden shrink-0 text-xs font-medium text-[#0B5D52] hover:underline sm:block"
+          >
+            View all
+          </button>
+        </>
+      ) : (
+        <p className="flex-1 text-sm text-[#6B7280]">Nothing yet.</p>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Dummy messages row until the summary payload carries real conversation data:
+ * the design demos count 1 + a welcome message, so the count is 1 until it is
+ * confirmed against real conversations.
+ */
+const PLACEHOLDER_MESSAGES = {
+  count: 1,
+  last: "Welcome to ChiroThin Dr. I'm excited to begin my program and work with you toward my goals!",
+  time: "",
+} as const;
