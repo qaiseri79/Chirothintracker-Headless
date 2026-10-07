@@ -53,6 +53,7 @@ final class SubscriptionService {
       'cancel' => $p && !empty($p['subscription_id']) && !$p['cancel_requested'],
       'changePlan' => $p && $p['state'] === 'active' && !$p['cancel_requested'] && empty($p['pending_change']) && empty($p['review_reason']) && (int) $p['paid_until'] > $this->time->getCurrentTime() + 86400,
       'resubscribe' => (!$p || ((int) $p['paid_until'] <= $this->time->getCurrentTime() && (empty($p['subscription_id']) || $p['cancel_requested']))) && !($result['subscription']['needsReview'] ?? FALSE),
+      'resume' => $p && $p['cancel_requested'] && (int) $p['paid_until'] > $this->time->getCurrentTime() && !($result['subscription']['needsReview'] ?? FALSE),
     ];
     return $result;
   }
@@ -227,6 +228,27 @@ final class SubscriptionService {
   private function sameContext(array $purchase): void {
     if (!hash_equals($purchase['context'], $this->gateway->context())) throw new SubscriptionException('billing_account_changed', 'This purchase belongs to a different billing environment or account.', 409);
   }
+  public function resume(int $uid): array {
+    $this->requireAccount($uid);
+    $lock = 'headless_subscription.account.' . $uid;
+    if (!$this->lock->acquire($lock, 90)) throw new SubscriptionException('busy', 'A subscription operation is already in progress.', 409);
+    try {
+      $p = $this->repository->current($uid);
+      if (!$p) throw new SubscriptionException('subscription_missing', 'There is no subscription to resume.', 404);
+      $this->sameContext($p);
+      if (!$p['cancel_requested'] || (int) $p['paid_until'] <= $this->time->getCurrentTime()) throw new SubscriptionException('resume_unavailable', 'This subscription cannot be resumed.', 409);
+      if (!empty($p['pending_change'])) throw new SubscriptionException('schedule_confirmation_required', 'A pending plan change must be confirmed before resuming.', 409);
+
+      // Recreate the ARB schedule starting at the end of the paid period.
+      $p['subscription_id'] = $this->gateway->schedule($p);
+      $p['cancel_requested'] = 0;
+      $p['state'] = 'active';
+      $this->repository->save($p); $this->syncRoles($uid);
+      return $this->status($uid);
+    }
+    finally { $this->lock->release($lock); }
+  }
+
   public function cancel(int $uid): array {
     $this->requireAccount($uid);
     $lock = 'headless_subscription.account.' . $uid;

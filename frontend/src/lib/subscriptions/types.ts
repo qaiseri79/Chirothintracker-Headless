@@ -77,7 +77,7 @@ export interface SubscriptionManagement extends SubscriptionStatus {
   paymentMethodUnavailable: boolean;
   payments: { id: string; amountMinor: number; currency: string; planName: string; status: string; paidAt: number; renewal: boolean; kind?: "initial" | "renewal" | "upgrade" }[];
   history: DoctorSubscription[];
-  actions: { updatePayment: boolean; cancel: boolean; changePlan: boolean; resubscribe: boolean };
+  actions: { updatePayment: boolean; cancel: boolean; resume: boolean; changePlan: boolean; resubscribe: boolean };
 }
 
 

@@ -32,6 +32,7 @@ export const subscriptionApi = {
   management: () => request<SubscriptionManagement>("management"),
   refresh: () => request<SubscriptionManagement>("refresh", {}),
   cancel: () => request<SubscriptionStatus>("cancel", {}),
+  resume: () => request<SubscriptionStatus>("resume", {}),
   quotePlanChange: (planId: number) => request<PlanChangeQuote>("change-plan/quote", { planId }),
   planChangePatients: () => request<{ patients: PlanChangePatient[] }>("change-plan/patients"),
   archiveForPlan: (planId: number, patientIds: number[]) => request<PlanChangeQuote>("change-plan/archive", { planId, patientIds }),

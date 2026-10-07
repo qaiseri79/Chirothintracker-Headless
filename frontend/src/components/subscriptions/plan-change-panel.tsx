@@ -88,6 +88,7 @@ export function PlanChangePanel({ plans, currentPlanId, disabled, onConfirm }: {
       {quote.kind === "upgrade" ? <p className="text-sm text-muted-foreground">
         {quote.amountMinor > 0 ? "Confirming charges your saved payment method once for the amount shown." : "No additional payment is due for the remaining period."} Your additional access becomes available as soon as confirmation completes. {quote.plan.per !== quote.currentPlan.per ? "The new billing interval starts at the next renewal." : ""}
       </p> : <p className="text-sm text-muted-foreground">Your current paid features remain until renewal. Once scheduled, new enrollments must fit the lower plan allowance. No refund is issued for the remaining period.</p>}
+      {quote.kind === "downgrade" && quote.currentPlan.laser && !quote.plan.laser ? <p className="text-sm text-amber-600 font-semibold mt-2">You are downgrading to a plan without Laser access. Your Laser features will be disabled on {billingDate(quote.renewalAt)}.</p> : null}
       <p className="text-sm"><strong>{quote.enrolledCount}</strong> enrolled patients in your clinic, including patients enrolled by additional doctors.</p>
       {quote.mustArchive > 0 ? <div className="space-y-3 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950">
         <p><strong>Archive at least {quote.mustArchive} {quote.mustArchive === 1 ? "patient" : "patients"} to become eligible.</strong> Choose from all enrolled patients below. The downgrade remains unavailable until enrollment fits.</p>
