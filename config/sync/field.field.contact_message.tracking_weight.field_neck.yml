@@ -1,0 +1,23 @@
+uuid: 18499f83-4066-418e-858b-60f705807c4c
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_neck
+id: contact_message.tracking_weight.field_neck
+field_name: field_neck
+entity_type: contact_message
+bundle: tracking_weight
+label: Neck
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

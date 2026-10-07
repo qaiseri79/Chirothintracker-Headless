@@ -1,0 +1,19 @@
+jquery:
+  version: 3.7.1
+  license:
+    name: 'MIT'
+    url: 'https://raw.githubusercontent.com/jquery/jquery/3.7.1/LICENSE.txt'
+    gpl-compatible: true
+  js:
+    lib/jquery_3.7.1_jquery.min.js: { weight: -20, minified: true }
+
+jquery.once:
+    version: 2.2.3
+    license:
+      name: 'GNU-GPL-2.0-or-later'
+      url: 'https://raw.githubusercontent.com/RobLoach/jquery-once/2.2.3/LICENSE.md'
+      gpl-compatible: true
+    js:
+      lib/jquery-once-2.2.3/jquery.once.min.js: { weight: -19, minified: true }
+    dependencies:
+      - jquery_once/jquery

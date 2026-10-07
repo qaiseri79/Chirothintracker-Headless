@@ -1,0 +1,12 @@
+uuid: 107cb338-2e27-4ce4-b284-9fc21e13674f
+langcode: en
+status: true
+dependencies: {  }
+id: video_message
+label: 'Video Message - default'
+type: 'canonical_entities:video_message'
+pattern: 'manage/video/[video_message:id]'
+selection_criteria: {  }
+selection_logic: and
+weight: 0
+relationships: {  }

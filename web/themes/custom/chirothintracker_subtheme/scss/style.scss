@@ -1,0 +1,80 @@
+// Sub theme styling.
+@import "variables_drupal";
+
+// Bootstrap overridden variables.
+// @see https://getbootstrap.com/docs/5.2/customize/sass/#variable-defaults.
+@import "variables_bootstrap";
+
+// Include bootstrap.
+// @import "../../../../themes/contrib/bootstrap5/css/style.css";
+@import '../../../contrib/bootstrap5/scss/style';
+
+// Include custom styling.
+@import "./editor.scss";
+@import './media_library';
+
+.contact-message-tracking-weight-form {
+    .tabledrag-toggle-weight-wrapper,
+    .field-multiple-drag {
+        display: none;
+    }
+    .field-multiple-table tr.draggable {
+        vertical-align: middle;
+    }
+}
+
+// Order page design
+.order-admin.layout-commerce-admin {
+  .card__header {
+    @extend .card-header;
+  }
+  .card__title {
+    @extend .card-title;
+  }
+  .card__content {
+    @extend .card-body;
+  }
+  .card__footer {
+    @extend .card-footer;
+  }
+}
+
+// Order flag status badges (Picked Up / Processed / New Order indicators).
+.flag-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px !important;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #fff !important;
+  line-height: 1.4;
+
+  &.flag-status-badge--pending {
+    background-color: #777 !important;
+  }
+
+  &.flag-status-badge--done {
+    background-color: #26a769 !important;
+  }
+
+  &.flag-status-badge--alert {
+    background-color: #dc2323 !important;
+  }
+}
+
+a:has(> .flag-status-badge) {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.order-admin__details-fields .flag {
+  margin-bottom: 8px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

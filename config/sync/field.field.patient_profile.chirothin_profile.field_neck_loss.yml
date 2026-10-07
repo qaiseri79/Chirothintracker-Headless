@@ -1,0 +1,23 @@
+uuid: b1658b47-d8c9-46e3-8b28-3221948c43c0
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.chirothin_profile
+    - field.storage.patient_profile.field_neck_loss
+id: patient_profile.chirothin_profile.field_neck_loss
+field_name: field_neck_loss
+entity_type: patient_profile
+bundle: chirothin_profile
+label: 'Neck Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

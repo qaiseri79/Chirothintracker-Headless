@@ -1,0 +1,23 @@
+{
+    "name": "drupal/webform_submission_import",
+    "type": "drupal-module",
+    "description": "Import CSV records into Webform submissions data.",
+    "homepage": "https://drupal.org/project/webform_submission_import",
+    "authors": [
+        {
+            "name": "George Anderson (geoanders)",
+            "homepage": "https://www.drupal.org/u/geoanders",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/webform_submission_import",
+        "source": "https://git.drupalcode.org/project/webform_submission_import"
+    },
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "drupal/webform": "^6.0",
+        "drupal/core": "^8.8 || ^9 || ^10 || ^11"
+    },
+    "minimum-stability": "dev"
+}

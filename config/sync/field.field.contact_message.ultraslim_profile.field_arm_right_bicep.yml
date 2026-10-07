@@ -1,0 +1,23 @@
+uuid: e462d55d-ef17-4e8a-819b-e9b4a24d4a8f
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_arm_right_bicep
+id: contact_message.ultraslim_profile.field_arm_right_bicep
+field_name: field_arm_right_bicep
+entity_type: contact_message
+bundle: ultraslim_profile
+label: 'Arm - Right Bicep'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

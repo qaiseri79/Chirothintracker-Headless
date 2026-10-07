@@ -1,0 +1,12 @@
+uuid: c365ea69-cd43-4379-a9bb-e1f7ee49edd2
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: hTtXtpqIBr-_HZSAKxolH_QAufMqGW9c-o19Za-G7XI
+id: default
+label: Default
+traits: {  }
+profileType: customer
+sendConfirmation: true
+confirmationBcc: ''

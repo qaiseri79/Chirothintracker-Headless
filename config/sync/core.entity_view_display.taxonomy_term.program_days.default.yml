@@ -1,0 +1,42 @@
+uuid: f6fe39ca-080b-421d-8daf-93ac1fc48d9b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.program_days.field_message_plain
+    - field.field.taxonomy_term.program_days.field_program_day_graphic
+    - taxonomy.vocabulary.program_days
+  module:
+    - image
+    - text
+id: taxonomy_term.program_days.default
+targetEntityType: taxonomy_term
+bundle: program_days
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_message_plain:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_program_day_graphic:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 5
+    region: content
+hidden: {  }

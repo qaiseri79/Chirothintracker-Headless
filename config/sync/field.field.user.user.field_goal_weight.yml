@@ -1,0 +1,24 @@
+uuid: 7bd5adcd-ad3a-4214-a2e8-6b7e90fcf11f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_goal_weight
+  module:
+    - user
+id: user.user.field_goal_weight
+field_name: field_goal_weight
+entity_type: user
+bundle: user
+label: 'Goal Weight'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: lbs
+field_type: float

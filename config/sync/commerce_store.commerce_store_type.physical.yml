@@ -1,0 +1,9 @@
+uuid: f18657db-9f07-4656-8daa-c8680806c1c7
+langcode: en
+status: true
+dependencies: {  }
+id: physical
+label: Physical
+traits: {  }
+locked: false
+description: ''

@@ -1,0 +1,4 @@
+services:
+  ctt_gohighlevel.api:
+    class: Drupal\ctt_gohighlevel\Service\GoHighLevelApiService
+    arguments: ['@http_client', '@logger.factory', '@config.factory']

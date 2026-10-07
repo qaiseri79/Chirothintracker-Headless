@@ -1,0 +1,30 @@
+uuid: d3380aab-950e-491a-bc8b-ce71986106b4
+langcode: en
+status: true
+dependencies:
+  module:
+    - webform
+id: pin
+label: Pin
+bundles:
+  - chiropractor_notes
+entity_type: webform_submission
+global: true
+flag_short: '<span class="custom-pin"><i class="fa-solid fa-thumbtack"></i></span>'
+flag_long: ''
+flag_message: ''
+unflag_short: Unpin
+unflag_long: ''
+unflag_message: ''
+unflag_denied_text: ''
+weight: 0
+flag_type: 'entity:webform_submission'
+link_type: ajax_link
+flagTypeConfig:
+  show_in_links: {  }
+  show_as_field: true
+  show_on_form: false
+  show_contextual_link: false
+  extra_permissions:
+    owner: '0'
+linkTypeConfig: {  }

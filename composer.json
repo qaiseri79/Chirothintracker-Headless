@@ -1,0 +1,365 @@
+{
+    "name": "pantheon-upstreams/drupal-composer-managed",
+    "description": "Install Drupal 9 with Composer on Pantheon.",
+    "type": "project",
+    "license": "MIT",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        {
+            "type": "path",
+            "url": "upstream-configuration"
+        },
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "mozilla/pdf.js",
+                "version": "3.5.141",
+                "type": "drupal-library",
+                "dist": {
+                    "type": "zip",
+                    "url": "https://github.com/mozilla/pdf.js/releases/download/v3.5.141/pdfjs-3.5.141-legacy-dist.zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "jackmoore/colorbox",
+                "version": "1.6.4",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/jackmoore/colorbox/archive/refs/heads/master.zip",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "cure53/dompurify",
+                "version": "3.2.4",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/cure53/DOMPurify/archive/main.zip",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "chartjs/chartjs",
+                "version": "4.4.0",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/chartjs/Chart.js/releases/download/v4.4.0/chart.js-4.4.0.tgz",
+                    "type": "tar"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "google/charts",
+                "version": "45",
+                "type": "drupal-library",
+                "extra": {
+                    "installer-name": "google_charts"
+                },
+                "dist": {
+                    "url": "https://www.gstatic.com/charts/loader.js",
+                    "type": "file"
+                },
+                "require": {
+                    "composer/installers": "^1.0 || ^2.0"
+                }
+            }
+        }
+    ],
+    "require": {
+        "composer/installers": "^1.9",
+        "drupal/acb": "^2.0",
+        "drupal/address": "^2.0",
+        "drupal/admin_toolbar": "^3.4",
+        "drupal/better_exposed_filters": "^6.0",
+        "drupal/block_class": "^3.0",
+        "drupal/charts": "^5.2",
+        "drupal/computed_field": "^3.0",
+        "drupal/conditional_fields": "^4.0@alpha",
+        "drupal/config_view": "^9.0",
+        "drupal/core-composer-scaffold": "^10",
+        "drupal/core-recommended": "^10",
+        "cweagans/composer-patches": "^1.7",
+        "drupal/css_editor": "^2.0",
+        "drupal/ds": "^3.21",
+        "drupal/eck": "^2.0",
+        "drupal/email_registration": "^2.0@RC",
+        "drupal/entity_browser": "^2.9",
+        "drupal/entityform_block": "^1.0@alpha",
+        "drupal/exif_orientation": "^1.4",
+        "drupal/features": "^3.13",
+        "drupal/field_group": "^4.0",
+        "drupal/field_group_table": "^1.1",
+        "drupal/field_permissions": "^1.2",
+        "drupal/field_validation": "^3.0@beta",
+        "drupal/flag": "^5.0",
+        "drupal/image_effects": "^4.0",
+        "drupal/inline_entity_form": "^3.0@RC",
+        "drupal/libraries": "^4.0",
+        "drupal/mailcontrol": "^1.6",
+        "drupal/mailsystem": "^4.4",
+        "drupal/masquerade": "^2.0@RC",
+        "drupal/migrate_file_to_media": "^2.0",
+        "drupal/migrate_plus": "^6.0",
+        "drupal/migrate_upgrade": "^4.0",
+        "drupal/migrate_url2link": "^1.0",
+        "drupal/mimemail": "^1.0@alpha",
+        "drupal/module_filter": "^5.0",
+        "drupal/multiple_selects": "^1.1",
+        "drupal/multiselect": "^2.0@beta",
+        "drupal/node_view_permissions": "^1.6",
+        "drupal/path_alias_xt": "1.x-dev@dev",
+        "drupal/pathauto": "^1.11",
+        "drupal/pathologic": "^2.0@alpha",
+        "drupal/prepopulate": "^2.4",
+        "drupal/prlp": "^1.10",
+        "drupal/semanticviews": "^3.0",
+        "drupal/taxonomy_manager": "^2.0",
+        "drupal/time_field": "^2.1",
+        "drupal/token_filter": "^2.2",
+        "drupal/trim": "^2.0",
+        "drupal/ultimate_cron": "^2.0@alpha",
+        "drupal/verf": "^2.0",
+        "drupal/viewfield": "^3.0@beta",
+        "drupal/views_bulk_operations": "^4.2",
+        "drupal/views_conditional": "^1.5",
+        "drupal/views_contextual_filters_or": "^1.4",
+        "drupal/views_data_export": "^1.3",
+        "drupal/views_field_view": "^1.0@beta",
+        "drupal/views_infinite_scroll": "^2.0",
+        "drush/drush": "^11 || ^12",
+        "drupal/preserve_changed": "^2.0@alpha",
+        "drupal/entity": "^1.4",
+        "drupal/menu_item_role_access": "^2.1",
+        "drupal/webform": "^6.2@RC",
+        "drupal/webform_views": "^5.2",
+        "drupal/webform_submission_import": "^2.2",
+        "drupal/extra_body_classes": "^3.0",
+        "drupal/epp": "^1.5",
+        "drupal/eca": "^1.1",
+        "drupal/views_simple_math_field": "^3.0",
+        "drupal/eca_webform": "^1.0",
+        "drupal/eca_cm": "^1.0",
+        "drupal/bpmn_io": "^1.1",
+        "drupal/private_message": "^3.0",
+        "drupal/paragraphs": "^1.16",
+        "drupal/config_update": "^2.0@alpha",
+        "drupal/fpa": "^4.0",
+        "drupal/menu_markup": "^1.2",
+        "drupal/menu_link_attributes": "^1.3",
+        "drupal/symfony_mailer": "^1.4",
+        "drupal/smtp": "^1.2",
+        "symfony/amazon-mailer": "^7.0",
+        "drupal/user_redirect": "^2.0",
+        "drupal/multiple_select": "^2.0",
+        "drupal/message": "^1.5",
+        "drupal/migrate_tools": "^6.0",
+        "drupal/token": "^1.15",
+        "drupal/colorbox": "^2.0",
+        "drupal/colorbox_inline": "^2.0",
+        "drupal/commerce": "^3.0",
+        "drupal/commerce_recurring": "^1.0@RC",
+        "drupal/commerce_license": "^3.0",
+        "drupal/devel_entity_updates": "^4.1",
+        "drupal/commerce_product_restriction": "^1.1",
+        "drupal/fillpdf": "^5.1",
+        "drupal/commerce_xquantity": "^2.0@beta",
+        "drupal/signature_field": "^3.0",
+        "drupal/commerce_checkout_order_fields": "^3.0",
+        "drupal/commerce_stripe": "1.x-dev@dev",
+        "drupal/single_content_sync": "^1.4",
+        "drupal/bootstrap5": "^4.0",
+        "drupal/twigsuggest": "^2.0@RC",
+        "drupal/jquery_once": "^1.0",
+        "drupal/fontawesome": "^2.26",
+        "drupal/fontawesome_menu_icons": "^3.0",
+        "drupal/simplify_menu": "^3.2",
+        "drupal/faq": "^1.2",
+        "drupal/hide_preview": "^1.9",
+        "drupal/commerce_authnet": "^1.11",
+        "drupal/entity_clone": "^2.0@beta",
+        "drupal/commerce_shipping": "^2.11",
+        "drupal/quick_node_clone": "^1.20",
+        "drupal/entity_bulk_clone": "^2.0",
+        "drupal/views_accordion": "^2.0",
+        "drupal/anchor_link": "~3.0",
+        "drupal/filter_perms": "^2.0",
+        "drupal/contact_storage": "^1.4",
+        "drupal/migrate_skip_on_404": "^1.1",
+        "drupal/field_hidden": "^2.1",
+        "drupal/disable_field": "^3.0",
+        "drupal/private_files_download_permission": "^3.1",
+        "drupal/download_file": "^2.0",
+        "drupal/contact_storage_dm": "^1.0",
+        "drupal/recaptcha": "^3.4",
+        "drupal/ajax_loader": "^2.1",
+        "drupal/config_split": "^2.0",
+        "wikimedia/composer-merge-plugin": "^2.1",
+        "drupal/r4032login": "^2.2",
+        "drupal/views_bootstrap": "^5.4",
+        "drupal/commerce_cart_redirection": "^3.3",
+        "drupal/pdf": "^1.2",
+        "mozilla/pdf.js": "^3.5",
+        "drupal/entity_redirect": "^2.3",
+        "drupal/twig_tweak": "^3.4",
+        "drupal/commerce_reports": "^1.0@RC",
+        "drupal/config_ignore": "^3.3",
+        "jackmoore/colorbox": "^1.6",
+        "cure53/dompurify": "^3.2",
+        "oomphinc/composer-installers-extender": "^2.0",
+        "npm-asset/chart.js": "^4.4",
+        "npm-asset/chartjs-adapter-date-fns": "^3.0",
+        "npm-asset/chartjs-plugin-datalabels": "^2.0",
+        "google/charts": "45",
+        "drupal/jsonapi_extras": "^3.0"
+    },
+    "require-dev": {
+        "drupal/core-dev": "^10"
+    },
+    "conflict": {
+        "drupal/drupal": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "./web"
+            },
+            "file-mapping": {
+                "[project-root]/.editorconfig": false,
+                "[project-root]/.gitattributes": false
+            }
+        },
+        "installer-types": [
+            "npm-asset"
+        ],
+        "merge-plugin": {
+            "include": [
+                "web/modules/contrib/webform/composer.libraries.json",
+                "web/modules/contrib/charts/modules/charts_highcharts/composer.json"
+            ]
+        },
+        "installer-paths": {
+            "web/core": [
+                "type:drupal-core"
+            ],
+            "web/libraries/{$name}": [
+                "type:drupal-library",
+                "type:npm-asset"
+            ],
+            "web/libraries/chart.js": [
+                "npm-asset/chart.js"
+            ],
+            "web/libraries/chartjs-adapter-date-fns": [
+                "npm-asset/chartjs-adapter-date-fns"
+            ],
+            "web/libraries/chartjs-plugin-datalabels": [
+                "npm-asset/chartjs-plugin-datalabels"
+            ],
+            "web/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "web/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "web/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "drush/Commands/contrib/{$name}": [
+                "type:drupal-drush"
+            ],
+            "web/modules/custom/{$name}": [
+                "type:drupal-custom-module"
+            ],
+            "web/profiles/custom/{$name}": [
+                "type:drupal-custom-profile"
+            ],
+            "web/themes/custom/{$name}": [
+                "type:drupal-custom-theme"
+            ],
+            "web/private/scripts/quicksilver/{$name}/": [
+                "type:quicksilver-script"
+            ]
+        },
+        "composer-exit-on-patch-failure": true,
+        "patchLevel": {
+            "drupal/core": "-p2"
+        },
+        "enable-patching": true,
+            "patches": {
+                "drupal/core": {
+                    "#1699378": "https://www.drupal.org/files/issues/2024-07-07/1699378-drupal-10.3.x.patch",
+                    "#3145190": "https://www.drupal.org/files/issues/2022-08-17/php_warnings_in_array_flip_3145190.patch"
+                },
+                "drupal/commerce_license": {
+                    "commerce_license uninstall patch applied": "https://www.drupal.org/files/issues/2906694-uninstall-traits-5.patch",
+                    "3466297": "https://www.drupal.org/files/issues/2024-08-06/3466297-2.patch",
+                    "3482013": "https://www.drupal.org/files/issues/2024-11-12/3482013-3.patch"
+                },
+                "drupal/readmehelp": {
+                    "fix error in readmehelp module": "https://www.drupal.org/files/issues/2024-05-17/3412092-5.patch",
+                    "3471147": "./patches/3471147.patch"
+                },
+                "drupal/advancedqueue": {
+                    "add drush command to clear queue": "https://www.drupal.org/files/issues/2024-07-08/3389156-6.patch"
+                },
+                "drupal/commerce_recurring": {
+                    "#3047571": "https://www.drupal.org/files/issues/2024-10-10/3047571-41.patch"
+                },
+                "drupal/contact_storage": {
+                    "#3217737": "https://www.drupal.org/files/issues/2021-06-07/migrate_entityforms-3217737-1.patch"
+                },
+                "drupal/commerce_xquantity": {
+                    "#3525433": "./patches/3525433-fix-cart-block-signature.patch",
+                    "#3526406": "https://www.drupal.org/files/issues/2025-06-30/commerce-quantity-issue-3526406.patch"
+                },
+                "drupal/flag": {
+                    "#2888664": "https://www.drupal.org/files/issues/2022-12-08/flagging_views_index-2888664-41.patch"
+                }
+        }
+    },
+    "scripts": {
+        "pre-update-cmd": [
+            "DrupalComposerManaged\\ComposerScripts::preUpdate"
+        ],
+        "post-update-cmd": [
+            "DrupalComposerManaged\\ComposerScripts::postUpdate"
+        ]
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": false,
+        "platform": {
+            "php": "8.2.26"
+        },
+        "allow-plugins": {
+            "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "drupal/core-composer-scaffold": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "phpstan/extension-installer": true,
+            "php-http/discovery": true,
+            "tbachert/spi": true,
+            "wikimedia/composer-merge-plugin": true,
+            "oomphinc/composer-installers-extender": true
+        }
+    }
+}

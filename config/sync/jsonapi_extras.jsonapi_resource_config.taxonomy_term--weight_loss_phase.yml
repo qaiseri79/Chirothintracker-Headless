@@ -1,0 +1,11 @@
+uuid: b42a429f-59bb-494c-bb83-2e9e6654520b
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.weight_loss_phase
+id: taxonomy_term--weight_loss_phase
+disabled: false
+path: taxonomy_term--weight_loss_phase
+resourceType: taxonomy_term--weight_loss_phase
+resourceFields: {  }

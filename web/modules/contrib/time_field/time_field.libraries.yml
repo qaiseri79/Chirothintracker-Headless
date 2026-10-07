@@ -1,0 +1,6 @@
+field-icon-time:
+  css:
+    theme:
+      css/time_field.icon.theme.css: {}
+  dependencies:
+    - field_ui/drupal.field_ui.manage_fields

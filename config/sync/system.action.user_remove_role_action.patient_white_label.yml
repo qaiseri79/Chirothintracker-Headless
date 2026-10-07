@@ -1,0 +1,14 @@
+uuid: 379b0c2f-763c-4e5f-b86d-bea1f7ce42ea
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.patient_white_label
+  module:
+    - user
+id: user_remove_role_action.patient_white_label
+label: 'Remove the Patient - White Label role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: patient_white_label

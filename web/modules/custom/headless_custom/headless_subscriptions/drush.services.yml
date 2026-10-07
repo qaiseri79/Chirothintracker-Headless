@@ -1,0 +1,5 @@
+services:
+  headless_subscriptions.commands:
+    class: Drupal\headless_subscriptions\Commands\SubscriptionCommands
+    tags:
+      - { name: drush.command }

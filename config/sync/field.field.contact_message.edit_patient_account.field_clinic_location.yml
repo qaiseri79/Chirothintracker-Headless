@@ -1,0 +1,34 @@
+uuid: a093b232-a53a-454a-b7e7-4344649b64cc
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.edit_patient_account
+    - field.storage.contact_message.field_clinic_location
+id: contact_message.edit_patient_account.field_clinic_location
+field_name: field_clinic_location
+entity_type: contact_message
+bundle: edit_patient_account
+label: 'Clinic Location'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:clinic'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    view:
+      view_name: clinic_locations
+      display_name: entityreference_1
+      args: {  }
+    behaviors:
+      views-select-list:
+        status: 0
+      field_default_token:
+        status: true
+field_type: entity_reference

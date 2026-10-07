@@ -1,0 +1,9 @@
+name: 'Headless auth'
+type: module
+description: 'Lets patients log in with the email address they enrolled with, for accounts whose Drupal username is not their email. Resolves the identifier only; authentication stays in core.'
+package: 'ChiroThin'
+core_version_requirement: ^10.3 || ^11
+
+dependencies:
+  - drupal:user
+  - headless_mail:headless_mail

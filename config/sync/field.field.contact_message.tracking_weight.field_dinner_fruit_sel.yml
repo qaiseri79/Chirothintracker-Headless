@@ -1,0 +1,26 @@
+uuid: 8ac25ee2-d78f-4a96-836e-db6152d57776
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_dinner_fruit_sel
+    - taxonomy.vocabulary.fruit
+id: contact_message.tracking_weight.field_dinner_fruit_sel
+field_name: field_dinner_fruit_sel
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Dinner Fruit (4oz Total)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      fruit: fruit
+    sort:
+      field: _none
+field_type: entity_reference

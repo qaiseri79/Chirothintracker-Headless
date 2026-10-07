@@ -1,0 +1,30 @@
+services:
+  headless_subscriptions.repository:
+    class: Drupal\headless_subscriptions\SubscriptionRepository
+    arguments: ['@database']
+  headless_subscriptions.catalog:
+    class: Drupal\headless_subscriptions\PlanCatalog
+    arguments: ['@entity_type.manager']
+  headless_subscriptions.gateway:
+    class: Drupal\headless_subscriptions\AuthorizeNetGateway
+    arguments: ['@http_client', '@config.factory']
+  headless_subscriptions.registration:
+    class: Drupal\headless_subscriptions\Registration
+    arguments: ['@entity_type.manager', '@headless_subscriptions.repository', '@database', '@lock', '@datetime.time', '@config.factory']
+  headless_subscriptions.subscription:
+    class: Drupal\headless_subscriptions\SubscriptionService
+    arguments: ['@headless_subscriptions.repository', '@headless_subscriptions.catalog', '@headless_subscriptions.gateway', '@entity_type.manager', '@keyvalue.expirable', '@lock', '@datetime.time', '@config.factory']
+  headless_subscriptions.api_errors:
+    class: Drupal\headless_subscriptions\EventSubscriber\SubscriptionApiErrors
+    arguments: ['@current_user', '@headless_subscriptions.repository']
+    tags:
+      - { name: event_subscriber }
+  headless_subscriptions.managed_roles:
+    class: Drupal\headless_subscriptions\EventSubscriber\ManagedAccountRoles
+    arguments: ['@current_user', '@headless_subscriptions.subscription', '@entity_type.manager', '@headless_subscriptions.sponsorship']
+    tags:
+      - { name: event_subscriber }
+
+  headless_subscriptions.sponsorship:
+    class: Drupal\headless_subscriptions\Sponsorship
+    arguments: ['@headless_subscriptions.repository', '@entity_type.manager', '@datetime.time', '@config.factory', '@queue']

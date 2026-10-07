@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * Implements hook_mail().
+ */
+function headless_auth_mail($key, &$message, $params) {
+  if ($key === 'password_reset') {
+    $message['subject'] = t('Reset your ChiroThin password');
+    $message['body'][] = t("A password reset was requested for your ChiroThin account.\n\nChoose a new password using this link:\n@url\n\nThis link expires in @hours hour(s) and can be used once. If you did not request this, you can ignore this email. Your password has not changed.", [
+      '@url' => $params['url'],
+      '@hours' => $params['hours'],
+    ]);
+  }
+}

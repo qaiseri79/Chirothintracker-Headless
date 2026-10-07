@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the xnumber_test module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function xnumber_test_install() {
+  $field_manager = \Drupal::service('entity_field.manager');
+  $update_manager = \Drupal::entityDefinitionUpdateManager();
+
+  foreach (['xinteger_base', 'xdecimal_base', 'xfloat_base'] as $field) {
+    $update_manager->installFieldStorageDefinition(
+      $field, 'entity_test',
+      'entity_test',
+      $field_manager->getFieldStorageDefinitions('entity_test')[$field]
+    );
+  }
+}

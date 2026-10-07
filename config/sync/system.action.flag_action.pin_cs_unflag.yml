@@ -1,0 +1,15 @@
+uuid: 92f0b8b3-8d0f-4b87-8cfe-7db8248b7b06
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.pin_cs
+  module:
+    - flag
+id: flag_action.pin_cs_unflag
+label: Unpin
+type: contact_message
+plugin: 'flag_action:pin_cs_unflag'
+configuration:
+  flag_id: pin_cs
+  flag_action: unflag

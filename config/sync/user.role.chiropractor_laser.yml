@@ -1,0 +1,12 @@
+uuid: e0f2f37e-de15-483c-bb76-23e427d367d5
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+id: chiropractor_laser
+label: 'Chiropractor - Laser'
+weight: 9
+is_admin: null
+permissions:
+  - 'delete own files'

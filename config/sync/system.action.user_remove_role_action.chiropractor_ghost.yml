@@ -1,0 +1,14 @@
+uuid: 3b7abd5f-8d21-463a-99a1-d35586caaee4
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.chiropractor_ghost
+  module:
+    - user
+id: user_remove_role_action.chiropractor_ghost
+label: 'Remove the Chiropractor - Ghost role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: chiropractor_ghost

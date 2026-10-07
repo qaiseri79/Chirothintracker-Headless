@@ -1,0 +1,24 @@
+uuid: 6c55a917-7b5b-4108-a37b-56ff83e17978
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: activity_log.field_reference_id
+field_name: field_reference_id
+entity_type: activity_log
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

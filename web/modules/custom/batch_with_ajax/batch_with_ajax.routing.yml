@@ -1,0 +1,16 @@
+batch_with_ajax.update_form:
+  path: '/batch-form-ajax/update'
+  defaults:
+    _form: '\Drupal\batch_with_ajax\Form\UpdateNodeForm'
+    _title: 'Update Node Form'
+  requirements:
+    _permission: 'access content'
+batch_with_ajax.update_node:
+  path: '/update-submission-data/{nojs}'
+  defaults:
+    _controller: '\Drupal\batch_with_ajax\Controller\BatchExampleWithoutRedirectController::updateNodeData'
+    _title: 'Batch Example to update node data'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE

@@ -1,0 +1,31 @@
+uuid: 9f9ee8d9-ef75-4760-92f7-54eb4e89b5fd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_my_clinic
+    - node.type.training
+  module:
+    - epp
+third_party_settings:
+  epp:
+    value: "target_id: '[current-user:field_clinic:target_id]'"
+    on_update: 0
+id: node.training.field_my_clinic
+field_name: field_my_clinic
+entity_type: node
+bundle: training
+label: 'My Clinic'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: my_clinic
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

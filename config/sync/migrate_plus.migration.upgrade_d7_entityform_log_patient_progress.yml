@@ -1,0 +1,91 @@
+uuid: 56be38e3-72c7-4946-9bed-d88d612e1605
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d7_entityform_log_patient_progress
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Content
+migration_group: migrate_drupal_7
+label: 'D8 Contact message migration from D7 entityform submission ()'
+source:
+  plugin: d7_entityform
+  constants:
+    langcode: en
+    module: contact_storage
+  bundle: log_patient_progress
+process:
+  id:
+    -
+      plugin: get
+      source: entityform_id
+  contact_form:
+    -
+      plugin: get
+      source: type
+  uid:
+    -
+      plugin: get
+      source: uid
+  created:
+    -
+      plugin: get
+      source: created
+  changed:
+    -
+      plugin: get
+      source: changed
+  langcode:
+    -
+      plugin: default_value
+      source: language
+      default_value: en
+  'dependencies/module/[]':
+    -
+      plugin: get
+      source: constants/module
+  field_patient:
+    -
+      plugin: get
+      source: field_patient
+  field_date:
+    -
+      plugin: sub_process
+      source: field_date
+      process:
+        value:
+          plugin: format_date
+          from_format: 'Y-m-d H:i:s'
+          to_format: Y-m-d
+          source: value
+  field_weight:
+    -
+      plugin: get
+      source: field_weight
+  field_water_intake:
+    -
+      plugin: get
+      source: field_water_intake
+  field_blood_sugar:
+    -
+      plugin: get
+      source: field_blood_sugar
+  field_blood_pressure:
+    -
+      plugin: get
+      source: field_blood_pressure
+  field_mind_set_work:
+    -
+      plugin: get
+      source: field_mind_set_work
+destination:
+  plugin: 'entity:contact_message'
+  default_bundle: log_patient_progress
+migration_dependencies:
+  required:
+    - ''
+  optional:
+    - upgrade_d7_field_instance

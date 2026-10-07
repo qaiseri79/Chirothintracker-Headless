@@ -1,0 +1,24 @@
+uuid: 57c449d3-3462-4d61-a86d-ba371a04916f
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+    - field_permissions
+    - taxonomy
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: menu_item.field_glyphicon
+field_name: field_glyphicon
+entity_type: menu_item
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

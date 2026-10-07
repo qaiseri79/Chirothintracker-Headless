@@ -1,0 +1,23 @@
+uuid: 13beb172-fde6-46eb-90ad-cb83a772ea7c
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.chirothin_profile
+    - field.storage.patient_profile.field_profile_inches_lost
+id: patient_profile.chirothin_profile.field_profile_inches_lost
+field_name: field_profile_inches_lost
+entity_type: patient_profile
+bundle: chirothin_profile
+label: 'Profile Inches Lost'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

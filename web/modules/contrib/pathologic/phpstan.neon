@@ -1,0 +1,16 @@
+parameters:
+  level: 5
+  reportUnmatchedIgnoredErrors: false
+
+  ignoreErrors:
+    # new static() is a best practice in Drupal, so we cannot fix that.
+    - "#^Unsafe usage of new static#"
+
+    # Hide the 2 warnings about isset() checking for 'path'. Use a regexp so we
+    # catch them regardless of the specifics. This works better across all
+    # versions of core.
+    -
+      message: '#^Offset ''path'' on array\{.*\} in isset\(\) always exists and is not nullable\.$#'
+      identifier: isset.offset
+      count: 2
+      path: pathologic.module

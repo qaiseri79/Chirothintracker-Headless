@@ -1,0 +1,28 @@
+uuid: c402a8a1-ae86-44fa-8ec8-9b83d16e01b4
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.edit_patient_account
+    - field.storage.contact_message.field_laser_patient_status
+    - taxonomy.vocabulary.laser_patient_status
+id: contact_message.edit_patient_account.field_laser_patient_status
+field_name: field_laser_patient_status
+entity_type: contact_message
+bundle: edit_patient_account
+label: 'Patient Status'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    tid: '[current-page:query:l]'
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      laser_patient_status: laser_patient_status
+    sort:
+      field: _none
+field_type: entity_reference

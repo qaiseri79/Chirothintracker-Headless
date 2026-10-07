@@ -1,0 +1,1254 @@
+{
+    "form": "patient_intake",
+    "generated": "2026-09-26T16:43:33+00:00",
+    "source": "ChiroThin — Patient Intake (Redesign).html",
+    "fieldCount": 53,
+    "steps": [
+        {
+            "id": "personal",
+            "title": "Personal Details",
+            "subtitle": "Let's start with the basics.",
+            "fields": [
+                {
+                    "name": "field_first_name",
+                    "drupalField": "field_first_name",
+                    "part": null,
+                    "widget": "text",
+                    "label": "First Name",
+                    "required": true,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string",
+                    "maxLength": 255
+                },
+                {
+                    "name": "field_last_name",
+                    "drupalField": "field_last_name",
+                    "part": null,
+                    "widget": "text",
+                    "label": "Last Name",
+                    "required": true,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string",
+                    "maxLength": 255
+                },
+                {
+                    "name": "field_email_address",
+                    "drupalField": "field_email_address",
+                    "part": null,
+                    "widget": "email",
+                    "label": "Email Address",
+                    "required": true,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "email"
+                },
+                {
+                    "name": "field_phone_number",
+                    "drupalField": "field_phone_number",
+                    "part": null,
+                    "widget": "tel",
+                    "label": "Phone Number",
+                    "required": true,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "telephone"
+                },
+                {
+                    "name": "field_mailing_address[country_code]",
+                    "drupalField": "field_mailing_address",
+                    "part": "country_code",
+                    "widget": "select",
+                    "label": "Country",
+                    "required": false,
+                    "half": true,
+                    "options": [
+                        {
+                            "value": "US",
+                            "label": "United States"
+                        },
+                        {
+                            "value": "CA",
+                            "label": "Canada"
+                        }
+                    ],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "address"
+                },
+                {
+                    "name": "field_gender",
+                    "drupalField": "field_gender",
+                    "part": null,
+                    "widget": "select",
+                    "label": "Gender",
+                    "required": true,
+                    "half": true,
+                    "options": [
+                        {
+                            "value": "M",
+                            "label": "Male"
+                        },
+                        {
+                            "value": "F",
+                            "label": "Female"
+                        }
+                    ],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "list_string"
+                },
+                {
+                    "name": "field_mailing_address[address_line1]",
+                    "drupalField": "field_mailing_address",
+                    "part": "address_line1",
+                    "widget": "text",
+                    "label": "Street Address",
+                    "required": false,
+                    "half": false,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "address"
+                },
+                {
+                    "name": "field_mailing_address[locality]",
+                    "drupalField": "field_mailing_address",
+                    "part": "locality",
+                    "widget": "text",
+                    "label": "City",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "address"
+                },
+                {
+                    "name": "field_mailing_address[administrative_area]",
+                    "drupalField": "field_mailing_address",
+                    "part": "administrative_area",
+                    "widget": "text",
+                    "label": "State",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "address"
+                },
+                {
+                    "name": "field_mailing_address[postal_code]",
+                    "drupalField": "field_mailing_address",
+                    "part": "postal_code",
+                    "widget": "text",
+                    "label": "Zip Code",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "address"
+                },
+                {
+                    "name": "field_date_of_birth",
+                    "drupalField": "field_date_of_birth",
+                    "part": null,
+                    "widget": "date",
+                    "label": "Date of Birth",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "datetime"
+                },
+                {
+                    "name": "field_occupation",
+                    "drupalField": "field_occupation",
+                    "part": null,
+                    "widget": "text",
+                    "label": "Occupation",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string",
+                    "maxLength": 255
+                },
+                {
+                    "name": "field_marital_status",
+                    "drupalField": "field_marital_status",
+                    "part": null,
+                    "widget": "select",
+                    "label": "Marital Status",
+                    "required": false,
+                    "half": true,
+                    "options": [
+                        {
+                            "value": "S",
+                            "label": "Single"
+                        },
+                        {
+                            "value": "M",
+                            "label": "Married"
+                        },
+                        {
+                            "value": "D",
+                            "label": "Divorced"
+                        },
+                        {
+                            "value": "W",
+                            "label": "Widowed"
+                        }
+                    ],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "list_string"
+                },
+                {
+                    "name": "field_number_of_children",
+                    "drupalField": "field_number_of_children",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Number of Children",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "integer",
+                    "min": 0,
+                    "suffix": "children"
+                }
+            ]
+        },
+        {
+            "id": "contact",
+            "title": "Contact & Motivation",
+            "subtitle": "Who should we reach in an emergency, and why now?",
+            "fields": [
+                {
+                    "name": "field_emergency_contact_name",
+                    "drupalField": "field_emergency_contact_name",
+                    "part": null,
+                    "widget": "text",
+                    "label": "Emergency Contact Name",
+                    "required": true,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string",
+                    "maxLength": 255
+                },
+                {
+                    "name": "field_emergency_contact_phone",
+                    "drupalField": "field_emergency_contact_phone",
+                    "part": null,
+                    "widget": "tel",
+                    "label": "Emergency Contact Phone",
+                    "required": true,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "telephone"
+                },
+                {
+                    "name": "field_motivation",
+                    "drupalField": "field_motivation",
+                    "part": null,
+                    "widget": "textarea",
+                    "label": "What is your motivation for losing weight?",
+                    "required": false,
+                    "half": false,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string_long"
+                },
+                {
+                    "name": "field_programs",
+                    "drupalField": "field_programs",
+                    "part": null,
+                    "widget": "repeatable",
+                    "label": "Please list any weight loss programs you have tried in the past.",
+                    "required": false,
+                    "half": false,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "e.g. Keto, Weight Watchers...",
+                    "drupalType": "string",
+                    "maxLength": 255,
+                    "repeatable": true,
+                    "submitTransform": "joinNewline"
+                },
+                {
+                    "name": "field_program_start_date",
+                    "drupalField": "field_program_start_date",
+                    "part": null,
+                    "widget": "date",
+                    "label": "If qualified for this weight loss program, what date would you plan on starting?",
+                    "required": true,
+                    "half": false,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "datetime"
+                }
+            ]
+        },
+        {
+            "id": "diet",
+            "title": "Diet & Body",
+            "subtitle": "A few numbers to set your starting point.",
+            "fields": [
+                {
+                    "name": "field_daily_activity_level",
+                    "drupalField": "field_daily_activity_level",
+                    "part": null,
+                    "widget": "select",
+                    "label": "Daily Activity Level",
+                    "required": true,
+                    "half": false,
+                    "options": [
+                        {
+                            "value": "1",
+                            "label": "Sedentary"
+                        },
+                        {
+                            "value": "2",
+                            "label": "Lightly Active"
+                        },
+                        {
+                            "value": "3",
+                            "label": "Moderately Active"
+                        },
+                        {
+                            "value": "4",
+                            "label": "Very Active"
+                        }
+                    ],
+                    "default": "2",
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "list_string"
+                },
+                {
+                    "name": "field_weight",
+                    "drupalField": "field_weight",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Current Weight (lbs)",
+                    "required": true,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "decimal",
+                    "suffix": "lbs"
+                },
+                {
+                    "name": "field_goal_weight",
+                    "drupalField": "field_goal_weight",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Desired Weight (lbs)",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "float",
+                    "suffix": "lbs"
+                },
+                {
+                    "name": "field_height",
+                    "drupalField": "field_height",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Height (inches)",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "decimal",
+                    "suffix": "inches"
+                }
+            ]
+        },
+        {
+            "id": "medical",
+            "title": "Medical Screening",
+            "subtitle": "Standard health questions required before starting the program.",
+            "fields": [
+                {
+                    "name": "field_medical_eligibility",
+                    "drupalField": "field_medical_eligibility",
+                    "part": null,
+                    "widget": "radio",
+                    "label": "Are you currently pregnant, breast feeding, have active cancer or active gall bladder disease (cholecycstitis)?",
+                    "required": true,
+                    "half": false,
+                    "options": [
+                        {
+                            "value": "1",
+                            "label": "Yes"
+                        },
+                        {
+                            "value": "0",
+                            "label": "No"
+                        }
+                    ],
+                    "default": "0",
+                    "description": "If yes, you are not eligible to participate in this program.",
+                    "placeholder": "",
+                    "drupalType": "list_string"
+                },
+                {
+                    "name": "field_medical_eligibility_choice",
+                    "drupalField": "field_medical_eligibility_choice",
+                    "part": null,
+                    "widget": "checkbox-grid",
+                    "label": "Select all that apply.",
+                    "required": false,
+                    "half": false,
+                    "options": [
+                        {
+                            "value": "1",
+                            "label": "Pregnant"
+                        },
+                        {
+                            "value": "2",
+                            "label": "Breast Feeding"
+                        },
+                        {
+                            "value": "3",
+                            "label": "Active Cancer"
+                        },
+                        {
+                            "value": "4",
+                            "label": "Active Gall Bladder Disease (Cholecystitis)"
+                        }
+                    ],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "list_string",
+                    "visibleWhen": [
+                        {
+                            "field": "field_medical_eligibility",
+                            "op": "eq",
+                            "value": "1"
+                        }
+                    ]
+                },
+                {
+                    "name": "field_history_eating_disorder",
+                    "drupalField": "field_history_eating_disorder",
+                    "part": null,
+                    "widget": "checkbox-grid",
+                    "label": "History of Eating Disorder (Diagnosed)",
+                    "required": false,
+                    "half": false,
+                    "options": [
+                        {
+                            "value": "1",
+                            "label": "Anorexia Nervosa"
+                        },
+                        {
+                            "value": "2",
+                            "label": "Bulimia Nervosa"
+                        },
+                        {
+                            "value": "3",
+                            "label": "Binge Eating Disorder"
+                        },
+                        {
+                            "value": "4",
+                            "label": "PICA"
+                        },
+                        {
+                            "value": "5",
+                            "label": "Rumination Disorder"
+                        },
+                        {
+                            "value": "6",
+                            "label": "Avoidant or Restrictive Food Intake Disorder"
+                        },
+                        {
+                            "value": "7",
+                            "label": "Purging Disorder"
+                        },
+                        {
+                            "value": "8",
+                            "label": "Night Eating Syndrome"
+                        }
+                    ],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "list_string"
+                },
+                {
+                    "name": "field_history_bariatric_surgery",
+                    "drupalField": "field_history_bariatric_surgery",
+                    "part": null,
+                    "widget": "checkbox-grid",
+                    "label": "History of Bariatric Surgery",
+                    "required": false,
+                    "half": false,
+                    "options": [
+                        {
+                            "value": "1",
+                            "label": "Gastric Bypass (Roux-en-Y-Gastric Bypass)"
+                        },
+                        {
+                            "value": "2",
+                            "label": "Lap Band (Laparoscopic Adjustable Gastric Banding)"
+                        },
+                        {
+                            "value": "3",
+                            "label": "Sleeve Gastrectomy"
+                        },
+                        {
+                            "value": "4",
+                            "label": "Biliopancratic Diversion with Duodenal Switch"
+                        }
+                    ],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "list_string"
+                },
+                {
+                    "name": "field_surgery_weight_loss",
+                    "drupalField": "field_surgery_weight_loss",
+                    "part": null,
+                    "widget": "number",
+                    "label": "How much weight have you lost with surgery?",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "decimal",
+                    "suffix": "lbs",
+                    "visibleWhen": [
+                        {
+                            "field": "field_history_bariatric_surgery",
+                            "op": "notEmpty"
+                        }
+                    ]
+                },
+                {
+                    "name": "field_surgery_weight_gain",
+                    "drupalField": "field_surgery_weight_gain",
+                    "part": null,
+                    "widget": "number",
+                    "label": "How much weight, if any, did you put back on?",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "decimal",
+                    "suffix": "lbs",
+                    "visibleWhen": [
+                        {
+                            "field": "field_history_bariatric_surgery",
+                            "op": "notEmpty"
+                        }
+                    ]
+                },
+                {
+                    "name": "field_gall_bladder",
+                    "drupalField": "field_gall_bladder",
+                    "part": null,
+                    "widget": "radio",
+                    "label": "Have you had your gall bladder removed?",
+                    "required": true,
+                    "half": false,
+                    "options": [
+                        {
+                            "value": "1",
+                            "label": "Yes"
+                        },
+                        {
+                            "value": "0",
+                            "label": "No"
+                        }
+                    ],
+                    "default": "0",
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "list_string"
+                },
+                {
+                    "name": "field_diabetes",
+                    "drupalField": "field_diabetes",
+                    "part": null,
+                    "widget": "radio",
+                    "label": "Have you been diagnosed with diabetes?",
+                    "required": true,
+                    "half": false,
+                    "options": [
+                        {
+                            "value": "0",
+                            "label": "No"
+                        },
+                        {
+                            "value": "1",
+                            "label": "Type I"
+                        },
+                        {
+                            "value": "2",
+                            "label": "Type II"
+                        },
+                        {
+                            "value": "3",
+                            "label": "Other"
+                        }
+                    ],
+                    "default": "0",
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "list_string"
+                },
+                {
+                    "name": "field_diabetes_diagnosis_year",
+                    "drupalField": "field_diabetes_diagnosis_year",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Year Diagnosed",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "integer",
+                    "min": 1900,
+                    "max": 2100,
+                    "visibleWhen": [
+                        {
+                            "field": "field_diabetes",
+                            "op": "neq",
+                            "value": "0"
+                        }
+                    ]
+                },
+                {
+                    "name": "field_diabetes_medications",
+                    "drupalField": "field_diabetes_medications",
+                    "part": null,
+                    "widget": "text",
+                    "label": "Diabetes Medications",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string",
+                    "maxLength": 255,
+                    "visibleWhen": [
+                        {
+                            "field": "field_diabetes",
+                            "op": "neq",
+                            "value": "0"
+                        }
+                    ]
+                },
+                {
+                    "name": "field_high_blood_pressure",
+                    "drupalField": "field_high_blood_pressure",
+                    "part": null,
+                    "widget": "radio",
+                    "label": "Have you been diagnosed with high blood pressure?",
+                    "required": true,
+                    "half": false,
+                    "options": [
+                        {
+                            "value": "1",
+                            "label": "Yes"
+                        },
+                        {
+                            "value": "0",
+                            "label": "No"
+                        }
+                    ],
+                    "default": "0",
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "list_string"
+                },
+                {
+                    "name": "field_bp_diagnosis_year",
+                    "drupalField": "field_bp_diagnosis_year",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Year Diagnosed",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "integer",
+                    "min": 1900,
+                    "max": 2100,
+                    "visibleWhen": [
+                        {
+                            "field": "field_high_blood_pressure",
+                            "op": "eq",
+                            "value": "1"
+                        }
+                    ]
+                },
+                {
+                    "name": "field_blood_pressure_medications",
+                    "drupalField": "field_blood_pressure_medications",
+                    "part": null,
+                    "widget": "text",
+                    "label": "Blood Pressure Medications",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string",
+                    "maxLength": 255,
+                    "visibleWhen": [
+                        {
+                            "field": "field_high_blood_pressure",
+                            "op": "eq",
+                            "value": "1"
+                        }
+                    ]
+                },
+                {
+                    "name": "field_thyroid_condition",
+                    "drupalField": "field_thyroid_condition",
+                    "part": null,
+                    "widget": "radio",
+                    "label": "Have you been diagnosed with a thyroid condition?",
+                    "required": true,
+                    "half": false,
+                    "options": [
+                        {
+                            "value": "1",
+                            "label": "Yes"
+                        },
+                        {
+                            "value": "0",
+                            "label": "No"
+                        }
+                    ],
+                    "default": "0",
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "list_string"
+                },
+                {
+                    "name": "field_thyroid_diagnosis_year",
+                    "drupalField": "field_thyroid_diagnosis_year",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Year Diagnosed",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "integer",
+                    "min": 1900,
+                    "max": 2100,
+                    "visibleWhen": [
+                        {
+                            "field": "field_thyroid_condition",
+                            "op": "eq",
+                            "value": "1"
+                        }
+                    ]
+                },
+                {
+                    "name": "field_thyroid_medications",
+                    "drupalField": "field_thyroid_medications",
+                    "part": null,
+                    "widget": "text",
+                    "label": "Thyroid Medications",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string",
+                    "maxLength": 255,
+                    "visibleWhen": [
+                        {
+                            "field": "field_thyroid_condition",
+                            "op": "eq",
+                            "value": "1"
+                        }
+                    ]
+                },
+                {
+                    "name": "field_high_cholesterol",
+                    "drupalField": "field_high_cholesterol",
+                    "part": null,
+                    "widget": "radio",
+                    "label": "Have you been diagnosed with high cholesterol?",
+                    "required": true,
+                    "half": false,
+                    "options": [
+                        {
+                            "value": "1",
+                            "label": "Yes"
+                        },
+                        {
+                            "value": "0",
+                            "label": "No"
+                        }
+                    ],
+                    "default": "0",
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "list_string"
+                },
+                {
+                    "name": "field_cholesterol_diagnosis_year",
+                    "drupalField": "field_cholesterol_diagnosis_year",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Year Diagnosed",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "integer",
+                    "min": 1900,
+                    "max": 2100,
+                    "visibleWhen": [
+                        {
+                            "field": "field_high_cholesterol",
+                            "op": "eq",
+                            "value": "1"
+                        }
+                    ]
+                },
+                {
+                    "name": "field_cholesterol_medications",
+                    "drupalField": "field_cholesterol_medications",
+                    "part": null,
+                    "widget": "text",
+                    "label": "Cholesterol Medications",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string",
+                    "maxLength": 255,
+                    "visibleWhen": [
+                        {
+                            "field": "field_high_cholesterol",
+                            "op": "eq",
+                            "value": "1"
+                        }
+                    ]
+                },
+                {
+                    "name": "field_medical_symptoms",
+                    "drupalField": "field_medical_symptoms",
+                    "part": null,
+                    "widget": "checkbox-grid",
+                    "label": "Do you experience any of the following even if they are minor and go away on their own?",
+                    "required": false,
+                    "half": false,
+                    "options": [
+                        {
+                            "value": "1",
+                            "label": "High Blood Pressure"
+                        },
+                        {
+                            "value": "2",
+                            "label": "Heart Disease"
+                        },
+                        {
+                            "value": "3",
+                            "label": "Fibromyalgia"
+                        },
+                        {
+                            "value": "4",
+                            "label": "Hip / Knee Pain"
+                        },
+                        {
+                            "value": "5",
+                            "label": "Neck Pain"
+                        },
+                        {
+                            "value": "6",
+                            "label": "Digestive Problems"
+                        },
+                        {
+                            "value": "7",
+                            "label": "Numbness"
+                        },
+                        {
+                            "value": "8",
+                            "label": "Osteoporosis"
+                        },
+                        {
+                            "value": "9",
+                            "label": "Headaches"
+                        },
+                        {
+                            "value": "10",
+                            "label": "Upper / Low Back Pain"
+                        },
+                        {
+                            "value": "11",
+                            "label": "Arthritis"
+                        },
+                        {
+                            "value": "12",
+                            "label": "Stress / Irritability"
+                        },
+                        {
+                            "value": "13",
+                            "label": "Chronic Inflammation"
+                        },
+                        {
+                            "value": "14",
+                            "label": "Hypoglycemia"
+                        },
+                        {
+                            "value": "15",
+                            "label": "Thyroid Problems"
+                        },
+                        {
+                            "value": "16",
+                            "label": "Chronic Fatigue"
+                        },
+                        {
+                            "value": "17",
+                            "label": "Sinus / Allergy"
+                        }
+                    ],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "list_string"
+                }
+            ]
+        },
+        {
+            "id": "health",
+            "title": "Health & Lifestyle",
+            "subtitle": "Help us understand the fuller picture.",
+            "fields": [
+                {
+                    "name": "field_other_symptoms",
+                    "drupalField": "field_other_symptoms",
+                    "part": null,
+                    "widget": "repeatable",
+                    "label": "Do you experience any other problems, even if they are minor?",
+                    "required": false,
+                    "half": false,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string",
+                    "maxLength": 255,
+                    "repeatable": true,
+                    "submitTransform": "joinNewline"
+                },
+                {
+                    "name": "field_medications",
+                    "drupalField": "field_medications",
+                    "part": null,
+                    "widget": "repeatable",
+                    "label": "Are you currently on any other medications and if yes, for what?",
+                    "required": false,
+                    "half": false,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string",
+                    "maxLength": 255,
+                    "repeatable": true,
+                    "submitTransform": "joinNewline"
+                },
+                {
+                    "name": "field_health_challenge",
+                    "drupalField": "field_health_challenge",
+                    "part": null,
+                    "widget": "textarea",
+                    "label": "Do you have any other health challenge you feel is important for us to know about?",
+                    "required": false,
+                    "half": false,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string_long"
+                },
+                {
+                    "name": "field_emotional_eater",
+                    "drupalField": "field_emotional_eater",
+                    "part": null,
+                    "widget": "radio",
+                    "label": "Would you say you are an \"Emotional Eater?\"",
+                    "required": true,
+                    "half": false,
+                    "options": [
+                        {
+                            "value": "1",
+                            "label": "Yes"
+                        },
+                        {
+                            "value": "0",
+                            "label": "No"
+                        }
+                    ],
+                    "default": "0",
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "list_string"
+                },
+                {
+                    "name": "field_cravings",
+                    "drupalField": "field_cravings",
+                    "part": null,
+                    "widget": "repeatable",
+                    "label": "What foods do you crave?",
+                    "required": false,
+                    "half": false,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string",
+                    "maxLength": 255,
+                    "repeatable": true,
+                    "submitTransform": "joinNewline"
+                },
+                {
+                    "name": "field_stressors[first]",
+                    "drupalField": "field_stressors",
+                    "part": "first",
+                    "widget": "text",
+                    "label": "My greatest stressor is",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string",
+                    "maxLength": 255,
+                    "submitTransform": "joinNewline"
+                },
+                {
+                    "name": "field_stressors[second]",
+                    "drupalField": "field_stressors",
+                    "part": "second",
+                    "widget": "text",
+                    "label": "My second greatest stressor is",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string",
+                    "maxLength": 255,
+                    "submitTransform": "joinNewline"
+                },
+                {
+                    "name": "field_emotional_trauma_age",
+                    "drupalField": "field_emotional_trauma_age",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Age",
+                    "required": false,
+                    "half": false,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "e.g. 14",
+                    "drupalType": "integer"
+                },
+                {
+                    "name": "field_emotional_trauma",
+                    "drupalField": "field_emotional_trauma",
+                    "part": null,
+                    "widget": "repeatable",
+                    "label": "Emotional Trauma",
+                    "required": false,
+                    "half": false,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string",
+                    "maxLength": 255,
+                    "repeatable": true,
+                    "submitTransform": "joinNewline"
+                }
+            ]
+        },
+        {
+            "id": "consent",
+            "title": "Consent & Signature",
+            "subtitle": "Last step — please review and confirm.",
+            "fields": [
+                {
+                    "name": "field_agreement",
+                    "drupalField": "field_agreement",
+                    "part": null,
+                    "widget": "static",
+                    "label": "Informed Consent and Release of Liability",
+                    "required": false,
+                    "half": false,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string_long",
+                    "text": "I understand that my use and consumption of any [current-page:query:clinicbrand] product or engaging in any weight loss program including the type that is to be used in conjunction with [current-page:query:clinicbrand], have inherent risks to my health and well-being, including but not limited to headaches, nausea, dizziness, vomiting, fatigue, pain, loss of consciousness, shortness of breath and other ailments.\r\n\r\nI understand as well that rapid weight loss of over 1-2 lbs. per week is considered by most in the weight loss medical community to be excessive and may lead to ailments similar and in addition to those mentioned above. Therefore, I understand that my failure to follow the weight loss program exactly as described to me by my physician or chiropractor can result in severe temporary and/or permanent medical conditions in addition to those mentioned above.\r\n\r\nI understand that I am not use or consume any of the [current-page:query:clinicbrand] products if I am pregnant or think I might be pregnant.\r\n\r\nI understand that, as a dietary supplement, [current-page:query:clinicbrand] has not been approved by the FDA or any Federal or State authority.\r\n\r\nI additionally understand that the [current-page:query:clinicbrand] Weight Loss Program is not meant to diagnose, treat or cure any disease or medical condition and that I am to undergo participation in the [current-page:query:clinicbrand] Weight Loss Program only under doctor supervision.\r\n\r\nI also understand that I should consult with my doctor prior to starting ANY exercise or nutritional supplement program.\r\n\r\nI understand that, if I experience any ailment, including but not limited to headaches, nausea, dizziness, vomiting, fatigue, pain, loss of consciousness, shortness of breath and other ailments, I should immediately stop using or consuming the [current-page:query:clinicbrand] product and, if my symptoms do not resolve immediately, I should consult my physician or go to the hospital emergency room.\r\n\r\nI hereby consent to, and assume the risks associated with, the use and consumption of [current-page:query:clinicbrand] product and agree to follow the recommendations and instructions of my physician. I further agree not to use or consume any [current-page:query:clinicbrand] product without the advice, counsel, and recommendations of my physician.\r\n\r\nI understand that Neuroemotional Technique (NET) is one of the techniques that may be used during my care. NET does not make claims as to what may have happened in the past. All memory events are considered “emotional reality” because events may or may not correspond with actual or historical reality.\r\n\r\nI hereby release, discharge and agree to indemnify my physician(s) at [site:name], NET, ChiroNutraceutical, their agents, servants employees and affiliates from any and all liability, claims, causes of action and demands for personal or bodily injury or death that I or my personal representatives might have or might hereafter acquire through my use or consumption of ChiroThin products.",
+                    "textSource": "epp",
+                    "unresolvedTokens": [
+                        "current-page:query:clinicbrand",
+                        "site:name"
+                    ]
+                },
+                {
+                    "name": "field_program_agreement",
+                    "drupalField": "field_program_agreement",
+                    "part": null,
+                    "widget": "static",
+                    "label": "Program Agreement",
+                    "required": false,
+                    "half": false,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string_long",
+                    "text": "[site:name] Program Agreement \r\n\r\nI understand due to the nature of this weight loss program, although it is doctor supervised, it is up to me to follow the instructions as outlined in the training videos on [site:url] application and in my program booklets, handouts and doctor modifications as communicated to me through the [site:url] app. I understand that no results are guaranteed and that results vary from patient to patient. I understand that I may contact my doctor(s) with my questions and that they are available through the  patient portal and email or video conference for supervision and support, but they are not ultimately responsible for my actual weight or inch loss. I understand that I must follow the instructions outlined in the instruction manual, on the instructional videos and as modified by my doctor(s) and/or their team for optimal results. I understand that straying from the program in any way will negatively affect my weight loss results. I understand that there are no refunds for opened products, missed or unused appointments that are built into the programs. I agree to not sell, gift or share my product formula with another individual. I agree that if I spill or lose my product formula within the first 4 weeks of my program I may purchase one accidental replacement bottle of drops for $500.\r\n\r\nFinance and Payment Agreement\r\n\r\nI hereby authorize [site:name] to charge my credit card for the Amount Due at Signing for the products and/or programs I have selected from the online store and said amount is to be charged on the date this agreement is signed. If a financed option was chosen, I further authorize [site:name] to charge my credit card for monthly payment amounts, as outlined in the program financing options until the balance is zero. I understand and agree to the payment schedule described herein and further, I understand that the monthly amount described in the finance options will be processed automatically by our merchant processor.",
+                    "textSource": "epp",
+                    "unresolvedTokens": [
+                        "site:name",
+                        "site:url"
+                    ]
+                },
+                {
+                    "name": "field_media_release_agreement",
+                    "drupalField": "field_media_release_agreement",
+                    "part": null,
+                    "widget": "static",
+                    "label": "Media Release",
+                    "required": false,
+                    "half": false,
+                    "options": [],
+                    "default": "For good and valuable consideration, the receipt of which is hereby acknowledged, I hereby consent to the photographing of myself and/or the recording of my voice and the use of these photographs and/or recordings singularly or in conjunction with other photographs and/or recordings for advertising, publicity, commercial or other business purposes. I understand that the term “photograph” as used herein encompasses both still photographs and motion picture footage.\r\n\r\nI further consent to the reproduction and/or authorization by ChiroThin and ChiroNutraceutical to reproduce and use said photographs and recordings of my voice, for use in all domestic and foreign markets. Further, I understand that others, with or without the consent of ChiroThin and ChiroNutraceutical, may use and/or reproduce such photographs and recordings.\r\n\r\nI hereby release my ChiroThin supervising chiropractor, ChiroThin, ChiroNutraceutical, and any of its associated or affiliated companies, their directors, officers, agents, employees and customers, and appointed advertising agencies, their directors, officers, agents and employees from all claims of every kind on account of such use.",
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "string_long",
+                    "text": "For good and valuable consideration, the receipt of which is hereby acknowledged, I hereby consent to the photographing of myself and/or the recording of my voice and the use of these photographs and/or recordings singularly or in conjunction with other photographs and/or recordings for advertising, publicity, commercial or other business purposes. I understand that the term “photograph” as used herein encompasses both still photographs and motion picture footage.\r\n\r\nI further consent to the reproduction and/or authorization by ChiroThin and ChiroNutraceutical to reproduce and use said photographs and recordings of my voice, for use in all domestic and foreign markets. Further, I understand that others, with or without the consent of ChiroThin and ChiroNutraceutical, may use and/or reproduce such photographs and recordings.\r\n\r\nI hereby release my ChiroThin supervising chiropractor, ChiroThin, ChiroNutraceutical, and any of its associated or affiliated companies, their directors, officers, agents, employees and customers, and appointed advertising agencies, their directors, officers, agents and employees from all claims of every kind on account of such use.",
+                    "textSource": "default_value",
+                    "unresolvedTokens": []
+                },
+                {
+                    "name": "field_consent_consumption",
+                    "drupalField": "field_consent_consumption",
+                    "part": null,
+                    "widget": "consent",
+                    "label": "I Agree",
+                    "required": true,
+                    "half": false,
+                    "options": [],
+                    "default": "0",
+                    "description": "By checking this box, I agree to the Informed Consent and Release of Liability.",
+                    "placeholder": "",
+                    "drupalType": "boolean"
+                },
+                {
+                    "name": "field_media_release_disagree",
+                    "drupalField": "field_media_release_disagree",
+                    "part": null,
+                    "widget": "checkbox",
+                    "label": "I do not consent to the media release.",
+                    "required": false,
+                    "half": false,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "",
+                    "drupalType": "boolean"
+                },
+                {
+                    "name": "field_consent",
+                    "drupalField": "field_consent",
+                    "part": null,
+                    "widget": "text",
+                    "label": "To sign your consent to the agreement above, type your full, legal name in the box below.",
+                    "required": true,
+                    "half": false,
+                    "options": [],
+                    "default": null,
+                    "description": "",
+                    "placeholder": "Type your full legal name to sign",
+                    "drupalType": "string",
+                    "maxLength": 255
+                }
+            ]
+        }
+    ]
+}

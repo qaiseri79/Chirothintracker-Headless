@@ -1,0 +1,12 @@
+name: 'ECA Access'
+type: module
+description: 'Access events, conditions and actions'
+core_version_requirement: ^9 || ^10
+package: ECA
+dependencies:
+  - eca:eca
+
+# Information added by Drupal.org packaging script on 2025-06-02
+version: '1.1.13'
+project: 'eca'
+datestamp: 1748859341

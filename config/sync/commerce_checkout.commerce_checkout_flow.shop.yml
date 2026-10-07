@@ -1,0 +1,119 @@
+uuid: 339fc204-86c2-4195-ab67-43f8f4e45f6b
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_checkout_order_fields
+    - commerce_payment
+    - commerce_promotion
+    - commerce_shipping
+    - commerce_stripe
+    - email_registration
+label: Shop
+id: shop
+plugin: multistep_default
+configuration:
+  display_checkout_progress: true
+  display_checkout_progress_breadcrumb_links: true
+  display_sidebar_checkout_complete: false
+  guest_order_assign: false
+  guest_new_account: false
+  guest_new_account_notify: false
+  panes:
+    contact_information:
+      display_label: null
+      step: order_information
+      weight: 0
+      wrapper_element: fieldset
+      double_entry: false
+      always_display: false
+    payment_information:
+      display_label: null
+      step: order_information
+      weight: 1
+      wrapper_element: fieldset
+      always_display: false
+      require_payment_method: false
+    shipping_information:
+      display_label: null
+      step: order_information
+      weight: 2
+      wrapper_element: fieldset
+      auto_recalculate: true
+      require_shipping_profile: true
+    review:
+      display_label: null
+      step: review
+      weight: 4
+      wrapper_element: null
+    payment_process:
+      display_label: null
+      step: payment
+      weight: 5
+      wrapper_element: container
+      capture: true
+    completion_message:
+      display_label: null
+      step: complete
+      weight: 6
+      wrapper_element: null
+      message:
+        value: "Your order number is [commerce_order:order_number].\r\nYou can view your order on your account page when logged in."
+        format: plain_text
+      display_pane_summaries: false
+    order_summary:
+      display_label: null
+      step: _sidebar
+      weight: 7
+      wrapper_element: container
+      view: ''
+    login:
+      display_label: null
+      step: _disabled
+      weight: 9
+      wrapper_element: container
+      allow_guest_checkout: true
+      allow_registration: false
+      registration_form_mode: register
+    completion_register:
+      display_label: null
+      step: _disabled
+      weight: 10
+      wrapper_element: null
+    stripe_review:
+      display_label: null
+      step: _disabled
+      weight: 11
+      wrapper_element: container
+      button_id: edit-actions-next
+      auto_submit_review_form: false
+      setup_future_usage: ''
+    customer_comments:
+      display_label: null
+      step: order_information
+      weight: 3
+      wrapper_element: fieldset
+    coupon_redemption:
+      display_label: null
+      step: _sidebar
+      weight: 8
+      wrapper_element: container
+      allow_multiple: false
+    'order_fields:checkout':
+      display_label: 'Order fields'
+      step: _disabled
+      weight: 12
+      wrapper_element: container
+    email_registration_completion_registration:
+      display_label: null
+      step: _disabled
+      weight: 13
+      wrapper_element: container
+    email_registration_login:
+      display_label: null
+      step: _disabled
+      weight: 14
+      wrapper_element: container
+      allow_guest_checkout: true
+      allow_registration: false
+      registration_form_mode: register

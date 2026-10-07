@@ -1,0 +1,23 @@
+uuid: 25479e47-37ae-4c29-ba02-2da7568a2acc
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_high_blood_pressure
+  module:
+    - options
+id: contact_message.patient_intake.field_high_blood_pressure
+field_name: field_high_blood_pressure
+entity_type: contact_message
+bundle: patient_intake
+label: 'Have you been diagnosed with high blood pressure?'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: '0'
+default_value_callback: ''
+settings: {  }
+field_type: list_string

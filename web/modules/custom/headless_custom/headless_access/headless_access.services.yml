@@ -1,0 +1,4 @@
+services:
+  headless_access.portal_access:
+    class: Drupal\headless_access\PortalAccessResolver
+    arguments: ['@entity_type.manager', '@datetime.time', '@config.factory', '@?headless_subscriptions.repository', '@?headless_subscriptions.sponsorship']

@@ -1,0 +1,21 @@
+uuid: bebd22be-24b6-48c4-b58f-6bec9a02948c
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.edit_patient_account
+    - field.storage.contact_message.field_patient_mail
+id: contact_message.edit_patient_account.field_patient_mail
+field_name: field_patient_mail
+entity_type: contact_message
+bundle: edit_patient_account
+label: 'Patient Email Address'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    email: '[current-page:query:m]'
+default_value_callback: ''
+settings: {  }
+field_type: email

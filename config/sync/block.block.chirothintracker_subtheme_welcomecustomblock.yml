@@ -1,0 +1,31 @@
+uuid: 22ff1db7-833b-4623-b66d-df66f265c933
+langcode: en
+status: true
+dependencies:
+  module:
+    - custom_module
+    - user
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_welcomecustomblock
+theme: chirothintracker_subtheme
+region: content
+weight: -25
+provider: null
+plugin: welcome_block
+settings:
+  id: welcome_block
+  label: 'Welcome (Custom Block)'
+  label_display: '0'
+  provider: custom_module
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      chiropractor_active_: chiropractor_active_
+      chiropractor_inactive_: chiropractor_inactive_
+      enrolled_patient: enrolled_patient
+      archived_patient: archived_patient

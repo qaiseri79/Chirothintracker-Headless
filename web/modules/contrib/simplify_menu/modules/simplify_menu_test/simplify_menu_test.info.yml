@@ -1,0 +1,12 @@
+name: Simplify Menu Test
+description: 'Test module for Simplify menu.'
+type: module
+core_version_requirement: ^9 || ^10 || ^11
+hidden: true
+dependencies:
+  - simplify_menu:simplify_menu
+
+# Information added by Drupal.org packaging script on 2024-12-13
+version: '3.3.0'
+project: 'simplify_menu'
+datestamp: 1734105805

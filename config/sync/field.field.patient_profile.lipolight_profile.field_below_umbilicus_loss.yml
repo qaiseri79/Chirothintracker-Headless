@@ -1,0 +1,23 @@
+uuid: 65a47afd-0a1e-45d8-878d-7d4d6ed4dfeb
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.lipolight_profile
+    - field.storage.patient_profile.field_below_umbilicus_loss
+id: patient_profile.lipolight_profile.field_below_umbilicus_loss
+field_name: field_below_umbilicus_loss
+entity_type: patient_profile
+bundle: lipolight_profile
+label: 'Below Umbilicus Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

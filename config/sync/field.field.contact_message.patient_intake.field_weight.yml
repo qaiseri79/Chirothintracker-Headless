@@ -1,0 +1,23 @@
+uuid: 182c2636-de35-4688-b0a0-a0ba4428f809
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_weight
+id: contact_message.patient_intake.field_weight
+field_name: field_weight
+entity_type: contact_message
+bundle: patient_intake
+label: 'Current Weight (lbs)'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

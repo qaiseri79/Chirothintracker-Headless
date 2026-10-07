@@ -1,0 +1,34 @@
+uuid: b6706c8b-e3df-45a6-8097-9f6cd45a8eeb
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_variation_type.chironutraceutical_variations
+    - core.entity_view_mode.commerce_product_variation.summary
+    - field.field.commerce_product_variation.chironutraceutical_variations.weight
+  module:
+    - layout_builder
+    - physical
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: commerce_product_variation.chironutraceutical_variations.summary
+targetEntityType: commerce_product_variation
+bundle: chironutraceutical_variations
+mode: summary
+content:
+  weight:
+    type: physical_measurement_default
+    label: above
+    settings:
+      output_unit: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  list_price: true
+  price: true
+  product_id: true
+  sku: true
+  title: true

@@ -1,0 +1,29 @@
+uuid: 34169a0e-45b1-4b54-b15e-3e0391251ee2
+langcode: en
+status: false
+dependencies:
+  module:
+    - custom_module
+title: 'Default cron handler'
+id: custom_module_cron
+weight: 0
+module: custom_module
+callback: 'custom_module#cron'
+scheduler:
+  id: simple
+  configuration:
+    rules:
+      - '*/15+@ * * * *'
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: database
+  configuration:
+    method: '3'
+    expire: 1209600
+    retain: 1000

@@ -1,0 +1,26 @@
+uuid: de9faeda-80d5-449f-8057-02f3a08f63c1
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_treatment_protocol
+    - taxonomy.vocabulary.ultraslim_treatment_protocols
+id: contact_message.ultraslim_profile.field_treatment_protocol
+field_name: field_treatment_protocol
+entity_type: contact_message
+bundle: ultraslim_profile
+label: 'Treatment Type'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      ultraslim_treatment_protocols: ultraslim_treatment_protocols
+    sort:
+      field: _none
+field_type: entity_reference

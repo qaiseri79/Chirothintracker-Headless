@@ -1,0 +1,15 @@
+uuid: 2c941ff4-dddf-4694-86d9-1eb16971a085
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.pin
+  module:
+    - flag
+id: flag_action.pin_unflag
+label: '<span class="btn btn-xs btn-primary">Unpin</span>'
+type: webform_submission
+plugin: 'flag_action:pin_unflag'
+configuration:
+  flag_id: pin
+  flag_action: unflag

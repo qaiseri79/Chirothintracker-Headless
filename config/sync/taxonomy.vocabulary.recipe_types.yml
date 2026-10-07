@@ -1,0 +1,9 @@
+uuid: 66798f01-dddc-4742-aba6-d038fdf05b9f
+langcode: en
+status: true
+dependencies: {  }
+name: 'Recipe Types'
+vid: recipe_types
+description: null
+weight: 0
+new_revision: false

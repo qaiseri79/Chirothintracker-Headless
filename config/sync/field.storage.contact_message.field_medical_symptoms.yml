@@ -1,0 +1,76 @@
+uuid: 9077b3c3-41e2-4189-b71e-37c4bd323718
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+    - options
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: contact_message.field_medical_symptoms
+field_name: field_medical_symptoms
+entity_type: contact_message
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '1'
+      label: 'High Blood Pressure'
+    -
+      value: '2'
+      label: 'Heart Disease'
+    -
+      value: '3'
+      label: Fibromyalgia
+    -
+      value: '4'
+      label: 'Hip / Knee Pain'
+    -
+      value: '5'
+      label: 'Neck Pain'
+    -
+      value: '6'
+      label: 'Digestive Problems'
+    -
+      value: '7'
+      label: Numbness
+    -
+      value: '8'
+      label: Osteoporosis
+    -
+      value: '9'
+      label: Headaches
+    -
+      value: '10'
+      label: 'Upper / Low Back Pain'
+    -
+      value: '11'
+      label: Arthritis
+    -
+      value: '12'
+      label: 'Stress / Irritability'
+    -
+      value: '13'
+      label: 'Chronic Inflammation'
+    -
+      value: '14'
+      label: Hypoglycemia
+    -
+      value: '15'
+      label: 'Thyroid Problems'
+    -
+      value: '16'
+      label: 'Chronic Fatigue'
+    -
+      value: '17'
+      label: 'Sinus / Allergy'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,35 @@
+uuid: 3a2ff5ca-7a6b-4d65-a352-052f59d4abf6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_program_day_term
+    - taxonomy.vocabulary.program_days
+  module:
+    - disable_field
+    - user
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: user.user.field_program_day_term
+field_name: field_program_day_term
+entity_type: user
+bundle: user
+label: 'Program Day'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      program_days: program_days
+    sort:
+      field: _none
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

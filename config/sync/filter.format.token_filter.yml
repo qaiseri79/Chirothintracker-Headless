@@ -1,0 +1,17 @@
+uuid: cf4c67c1-1580-460a-a202-7fe648500717
+langcode: en
+status: true
+dependencies:
+  module:
+    - token_filter
+name: 'Token Filter'
+format: token_filter
+weight: -4
+filters:
+  token_filter:
+    id: token_filter
+    provider: token_filter
+    status: true
+    weight: 0
+    settings:
+      replace_empty: false

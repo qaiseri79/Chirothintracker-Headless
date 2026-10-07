@@ -1,0 +1,30 @@
+uuid: 1052a3af-9885-4c08-9e48-01906c155502
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.weight_loss_phase.field_class
+    - taxonomy.vocabulary.weight_loss_phase
+  module:
+    - text
+id: taxonomy_term.weight_loss_phase.default
+targetEntityType: taxonomy_term
+bundle: weight_loss_phase
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_class:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden: {  }

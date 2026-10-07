@@ -1,0 +1,26 @@
+uuid: 4c9e6df9-f059-4c8b-aa3b-46e4d6b58c09
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_chiropractor_subscribers
+  module:
+    - user
+id: user.user.field_chiropractor_subscribers
+field_name: field_chiropractor_subscribers
+entity_type: user
+bundle: user
+label: 'Chiropractor Subscribers'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: clinicians
+      display_name: entity_reference_2
+      arguments: {  }
+field_type: entity_reference

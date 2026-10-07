@@ -1,0 +1,27 @@
+uuid: 6f59c57c-da8c-4162-9044-4519e2a81162
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.training
+    - field.storage.contact_message.field_video
+  module:
+    - file
+id: contact_message.training.field_video
+field_name: field_video
+entity_type: contact_message
+bundle: training
+label: Video
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: ''
+  file_extensions: ''
+  max_filesize: ''
+  description_field: true
+field_type: file

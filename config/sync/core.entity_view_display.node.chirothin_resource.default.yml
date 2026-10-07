@@ -1,0 +1,45 @@
+uuid: 315f489c-b45a-4970-b457-b079c76e4f5e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.chirothin_resource.field_description
+    - field.field.node.chirothin_resource.field_my_clinic
+    - field.field.node.chirothin_resource.field_published_to
+    - field.field.node.chirothin_resource.field_resource
+    - field.field.node.chirothin_resource.field_resource_type
+    - node.type.chirothin_resource
+  module:
+    - file
+    - text
+    - user
+id: node.chirothin_resource.default
+targetEntityType: node
+bundle: chirothin_resource
+mode: default
+content:
+  field_description:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_resource:
+    type: file_table
+    label: hidden
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  field_my_clinic: true
+  field_published_to: true
+  field_resource_type: true
+  private_message_link: true

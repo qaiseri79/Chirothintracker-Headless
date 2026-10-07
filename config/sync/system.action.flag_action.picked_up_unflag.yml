@@ -1,0 +1,15 @@
+uuid: daf5261c-e038-4337-9957-19dbfcff3c24
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.picked_up
+  module:
+    - flag
+id: flag_action.picked_up_unflag
+label: Shipped
+type: commerce_order
+plugin: 'flag_action:picked_up_unflag'
+configuration:
+  flag_id: picked_up
+  flag_action: unflag

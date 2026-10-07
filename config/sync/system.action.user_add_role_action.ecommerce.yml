@@ -1,0 +1,14 @@
+uuid: 903278c2-3be8-40ee-b8bd-3ead838dd03a
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.ecommerce
+  module:
+    - user
+id: user_add_role_action.ecommerce
+label: 'Add the eCommerce role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: ecommerce

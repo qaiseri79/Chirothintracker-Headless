@@ -1,0 +1,293 @@
+uuid: 3d179777-95ac-4e91-a748-26329acb446b
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.zerona_profile
+    - field.field.contact_message.zerona_profile.field_abdomen
+    - field.field.contact_message.zerona_profile.field_above_umbilicus
+    - field.field.contact_message.zerona_profile.field_arm_left_bicep
+    - field.field.contact_message.zerona_profile.field_arm_right_bicep
+    - field.field.contact_message.zerona_profile.field_author
+    - field.field.contact_message.zerona_profile.field_back_bra_line
+    - field.field.contact_message.zerona_profile.field_before_and_after_photos
+    - field.field.contact_message.zerona_profile.field_below_umbilicus
+    - field.field.contact_message.zerona_profile.field_blood_pressure
+    - field.field.contact_message.zerona_profile.field_calf_left
+    - field.field.contact_message.zerona_profile.field_calf_right
+    - field.field.contact_message.zerona_profile.field_chest
+    - field.field.contact_message.zerona_profile.field_date
+    - field.field.contact_message.zerona_profile.field_hips
+    - field.field.contact_message.zerona_profile.field_neck
+    - field.field.contact_message.zerona_profile.field_notes
+    - field.field.contact_message.zerona_profile.field_patient_profile
+    - field.field.contact_message.zerona_profile.field_shoulders
+    - field.field.contact_message.zerona_profile.field_thigh_left
+    - field.field.contact_message.zerona_profile.field_thigh_right
+    - field.field.contact_message.zerona_profile.field_treatment_area
+    - field.field.contact_message.zerona_profile.field_weight
+    - image.style.thumbnail
+  module:
+    - datetime
+    - field_group
+    - image
+third_party_settings:
+  field_group:
+    group_session_details:
+      children:
+        - group_vitals
+        - group_treatment_areas
+        - group_notes
+        - group_body_measurements
+      label: 'Session Details'
+      region: content
+      parent_name: ''
+      weight: 1
+      format_type: tabs
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        direction: vertical
+        width_breakpoint: 640
+    group_vitals:
+      children:
+        - field_date
+        - field_weight
+        - field_blood_pressure
+      label: Vitals
+      region: content
+      parent_name: group_session_details
+      weight: 22
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: false
+    group_treatment_areas:
+      children:
+        - field_treatment_area
+      label: 'Treatment Areas'
+      region: content
+      parent_name: group_session_details
+      weight: 23
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: false
+    group_notes:
+      children:
+        - field_notes
+        - field_before_and_after_photos
+      label: Notes
+      region: content
+      parent_name: group_session_details
+      weight: 24
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: false
+    group_body_measurements:
+      children:
+        - field_neck
+        - field_shoulders
+        - field_arm_left_bicep
+        - field_arm_right_bicep
+        - field_chest
+        - field_back_bra_line
+        - field_above_umbilicus
+        - field_below_umbilicus
+        - field_abdomen
+        - field_hips
+        - field_thigh_left
+        - field_thigh_right
+        - field_calf_left
+        - field_calf_right
+      label: 'Body Measurements'
+      region: content
+      parent_name: group_session_details
+      weight: 25
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: false
+id: contact_message.zerona_profile.default
+targetEntityType: contact_message
+bundle: zerona_profile
+mode: default
+content:
+  field_abdomen:
+    type: number
+    weight: 14
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_above_umbilicus:
+    type: number
+    weight: 12
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_arm_left_bicep:
+    type: number
+    weight: 8
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_arm_right_bicep:
+    type: number
+    weight: 9
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_back_bra_line:
+    type: number
+    weight: 11
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_before_and_after_photos:
+    type: image_image
+    weight: 5
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_below_umbilicus:
+    type: number
+    weight: 13
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_blood_pressure:
+    type: string_textfield
+    weight: 25
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_calf_left:
+    type: number
+    weight: 18
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_calf_right:
+    type: number
+    weight: 19
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_chest:
+    type: number
+    weight: 10
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_date:
+    type: datetime_default
+    weight: 23
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_hips:
+    type: number
+    weight: 15
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_neck:
+    type: number
+    weight: 6
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_notes:
+    type: string_textarea
+    weight: 4
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_patient_profile:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_shoulders:
+    type: number
+    weight: 7
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_thigh_left:
+    type: number
+    weight: 16
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_thigh_right:
+    type: number
+    weight: 17
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_treatment_area:
+    type: options_buttons
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_weight:
+    type: number
+    weight: 24
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  copy: true
+  field_author: true
+  mail: true
+  message: true
+  name: true
+  preview: true
+  subject: true

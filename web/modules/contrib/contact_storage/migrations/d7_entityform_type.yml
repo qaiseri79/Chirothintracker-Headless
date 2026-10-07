@@ -1,0 +1,29 @@
+id: d7_entityform_type
+label: D8 contact storage configuration from D7 entityform type configuration
+migration_tags:
+  - Drupal 7
+  - Configuration
+source:
+  plugin: d7_entityform_type
+  constants:
+    description: 'Migrated from entityform'
+    multiple: false
+    use_revisions: false
+process:
+  id: 
+    -
+      plugin: machine_name
+      source: type
+    -
+      plugin: make_unique_entity_field
+      entity_type: contact_form
+      field: id
+      length: 50
+  label: label
+  weight: weight
+  uid: uid
+  created: created
+  langcode: constants/langcode
+  status: status
+destination:
+  plugin: entity:contact_form

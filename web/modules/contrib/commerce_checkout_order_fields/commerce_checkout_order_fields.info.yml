@@ -1,0 +1,14 @@
+name: 'Commerce checkout order fields'
+type: module
+description: 'Exposes a form display for orders to be collected during checkout'
+core_version_requirement: ^10.3 || ^11
+package: 'Commerce'
+dependencies:
+  - commerce:commerce(>=3)
+  - commerce:commerce_checkout
+  - drupal:field_ui
+
+# Information added by Drupal.org packaging script on 2024-08-23
+version: '3.0.0'
+project: 'commerce_checkout_order_fields'
+datestamp: 1724409882

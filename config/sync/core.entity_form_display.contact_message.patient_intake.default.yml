@@ -1,0 +1,660 @@
+uuid: bf2c16bf-48a5-4cbe-8877-0ba1825f8782
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.field.contact_message.patient_intake.field_agreement
+    - field.field.contact_message.patient_intake.field_blood_pressure_medications
+    - field.field.contact_message.patient_intake.field_bp_diagnosis_year
+    - field.field.contact_message.patient_intake.field_cholesterol_diagnosis_year
+    - field.field.contact_message.patient_intake.field_cholesterol_medications
+    - field.field.contact_message.patient_intake.field_clinic
+    - field.field.contact_message.patient_intake.field_consent
+    - field.field.contact_message.patient_intake.field_consent_consumption
+    - field.field.contact_message.patient_intake.field_cravings
+    - field.field.contact_message.patient_intake.field_daily_activity_level
+    - field.field.contact_message.patient_intake.field_date_of_birth
+    - field.field.contact_message.patient_intake.field_diabetes
+    - field.field.contact_message.patient_intake.field_diabetes_diagnosis_year
+    - field.field.contact_message.patient_intake.field_diabetes_medications
+    - field.field.contact_message.patient_intake.field_domain
+    - field.field.contact_message.patient_intake.field_email_address
+    - field.field.contact_message.patient_intake.field_emergency_contact_name
+    - field.field.contact_message.patient_intake.field_emergency_contact_phone
+    - field.field.contact_message.patient_intake.field_emotional_eater
+    - field.field.contact_message.patient_intake.field_emotional_trauma
+    - field.field.contact_message.patient_intake.field_emotional_trauma_age
+    - field.field.contact_message.patient_intake.field_first_name
+    - field.field.contact_message.patient_intake.field_gall_bladder
+    - field.field.contact_message.patient_intake.field_gender
+    - field.field.contact_message.patient_intake.field_goal_weight
+    - field.field.contact_message.patient_intake.field_health_challenge
+    - field.field.contact_message.patient_intake.field_height
+    - field.field.contact_message.patient_intake.field_high_blood_pressure
+    - field.field.contact_message.patient_intake.field_high_cholesterol
+    - field.field.contact_message.patient_intake.field_history_bariatric_surgery
+    - field.field.contact_message.patient_intake.field_history_eating_disorder
+    - field.field.contact_message.patient_intake.field_last_name
+    - field.field.contact_message.patient_intake.field_mailing_address
+    - field.field.contact_message.patient_intake.field_marital_status
+    - field.field.contact_message.patient_intake.field_media_release_agreement
+    - field.field.contact_message.patient_intake.field_media_release_disagree
+    - field.field.contact_message.patient_intake.field_medical_eligibility
+    - field.field.contact_message.patient_intake.field_medical_eligibility_choice
+    - field.field.contact_message.patient_intake.field_medical_symptoms
+    - field.field.contact_message.patient_intake.field_medications
+    - field.field.contact_message.patient_intake.field_motivation
+    - field.field.contact_message.patient_intake.field_number_of_children
+    - field.field.contact_message.patient_intake.field_occupation
+    - field.field.contact_message.patient_intake.field_other_symptoms
+    - field.field.contact_message.patient_intake.field_phone_number
+    - field.field.contact_message.patient_intake.field_program_agreement
+    - field.field.contact_message.patient_intake.field_program_start_date
+    - field.field.contact_message.patient_intake.field_programs
+    - field.field.contact_message.patient_intake.field_stressors
+    - field.field.contact_message.patient_intake.field_surgery_weight_gain
+    - field.field.contact_message.patient_intake.field_surgery_weight_loss
+    - field.field.contact_message.patient_intake.field_thyroid_condition
+    - field.field.contact_message.patient_intake.field_thyroid_diagnosis_year
+    - field.field.contact_message.patient_intake.field_thyroid_medications
+    - field.field.contact_message.patient_intake.field_weight
+  module:
+    - address
+    - datetime
+    - field_group
+    - telephone
+third_party_settings:
+  field_group:
+    group_demographics:
+      children:
+        - field_first_name
+        - field_last_name
+        - field_email_address
+        - field_phone_number
+      label: Demographics
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+        required_fields: false
+    group_emergencycontact_informat:
+      children:
+        - field_emergency_contact_name
+        - field_emergency_contact_phone
+      label: 'Emergency Contact Information'
+      region: content
+      parent_name: ''
+      weight: 7
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+        required_fields: false
+    group_motivation:
+      children:
+        - field_motivation
+        - field_programs
+      label: Motivation
+      region: content
+      parent_name: ''
+      weight: 8
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+        required_fields: false
+    group_diet:
+      children:
+        - field_daily_activity_level
+        - field_weight
+        - field_goal_weight
+        - field_height
+      label: Diet
+      region: content
+      parent_name: ''
+      weight: 10
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+        required_fields: false
+    group_medical:
+      children:
+        - field_medical_eligibility
+        - field_medical_eligibility_choice
+      label: Medical
+      region: content
+      parent_name: ''
+      weight: 11
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+        required_fields: false
+    group_surgery:
+      children:
+        - field_history_bariatric_surgery
+        - field_surgery_weight_loss
+        - field_surgery_weight_gain
+      label: Surgery
+      region: content
+      parent_name: ''
+      weight: 13
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+        required_fields: false
+    group_diabetes:
+      children:
+        - field_diabetes
+        - field_diabetes_diagnosis_year
+        - field_diabetes_medications
+      label: Diabetes
+      region: content
+      parent_name: ''
+      weight: 15
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+        required_fields: false
+    group_blood_pressure:
+      children:
+        - field_high_blood_pressure
+        - field_bp_diagnosis_year
+        - field_blood_pressure_medications
+      label: 'Blood Pressure'
+      region: content
+      parent_name: ''
+      weight: 16
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+        required_fields: false
+    group_thyroid_condition:
+      children:
+        - field_thyroid_condition
+        - field_thyroid_diagnosis_year
+        - field_thyroid_medications
+      label: 'Thyroid Condition'
+      region: content
+      parent_name: ''
+      weight: 17
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+        required_fields: false
+    group_cholesterol:
+      children:
+        - field_high_cholesterol
+        - field_cholesterol_diagnosis_year
+        - field_cholesterol_medications
+      label: Cholesterol
+      region: content
+      parent_name: ''
+      weight: 18
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+        required_fields: false
+    group_significant_emotional_trau:
+      children:
+        - field_emotional_trauma_age
+        - field_emotional_trauma
+      label: 'Significant Emotional Trauma'
+      region: content
+      parent_name: ''
+      weight: 26
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+        required_fields: false
+    group_informed_consent_and_relea:
+      children:
+        - field_agreement
+        - field_program_agreement
+        - field_media_release_agreement
+      label: 'Informed Consent and Release of Liability'
+      region: content
+      parent_name: ''
+      weight: 27
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+        required_fields: false
+id: contact_message.patient_intake.default
+targetEntityType: contact_message
+bundle: patient_intake
+mode: default
+content:
+  field_agreement:
+    type: string_textarea
+    weight: 28
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_blood_pressure_medications:
+    type: string_textfield
+    weight: 19
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_bp_diagnosis_year:
+    type: number
+    weight: 18
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_cholesterol_diagnosis_year:
+    type: number
+    weight: 20
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_cholesterol_medications:
+    type: string_textfield
+    weight: 21
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_consent:
+    type: string_textfield
+    weight: 29
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_consent_consumption:
+    type: boolean_checkbox
+    weight: 28
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_cravings:
+    type: string_textfield
+    weight: 24
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_daily_activity_level:
+    type: options_select
+    weight: 11
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_date_of_birth:
+    type: datetime_default
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_diabetes:
+    type: options_buttons
+    weight: 16
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_diabetes_diagnosis_year:
+    type: number
+    weight: 17
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_diabetes_medications:
+    type: string_textfield
+    weight: 18
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_email_address:
+    type: email_default
+    weight: 3
+    region: content
+    settings:
+      placeholder: ''
+      size: 60
+    third_party_settings: {  }
+  field_emergency_contact_name:
+    type: string_textfield
+    weight: 8
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_emergency_contact_phone:
+    type: telephone_default
+    weight: 9
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_emotional_eater:
+    type: options_buttons
+    weight: 23
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_emotional_trauma:
+    type: string_textfield
+    weight: 28
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_emotional_trauma_age:
+    type: number
+    weight: 27
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_first_name:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_gall_bladder:
+    type: options_buttons
+    weight: 14
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_gender:
+    type: options_buttons
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_goal_weight:
+    type: number
+    weight: 13
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_health_challenge:
+    type: string_textarea
+    weight: 22
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_height:
+    type: number
+    weight: 14
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_high_blood_pressure:
+    type: options_buttons
+    weight: 17
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_high_cholesterol:
+    type: options_buttons
+    weight: 19
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_history_bariatric_surgery:
+    type: options_buttons
+    weight: 14
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_history_eating_disorder:
+    type: options_buttons
+    weight: 12
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_last_name:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_mailing_address:
+    type: address_default
+    weight: 1
+    region: content
+    settings:
+      wrapper_type: fieldset
+    third_party_settings: {  }
+  field_marital_status:
+    type: options_select
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_media_release_agreement:
+    type: string_textarea
+    weight: 30
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_media_release_disagree:
+    type: boolean_checkbox
+    weight: 30
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_medical_eligibility:
+    type: options_buttons
+    weight: 12
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_medical_eligibility_choice:
+    type: options_buttons
+    weight: 13
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_medical_symptoms:
+    type: options_buttons
+    weight: 19
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_medications:
+    type: string_textfield
+    weight: 21
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_motivation:
+    type: string_textarea
+    weight: 9
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_number_of_children:
+    type: number
+    weight: 6
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_occupation:
+    type: string_textfield
+    weight: 4
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_other_symptoms:
+    type: string_textfield
+    weight: 20
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_phone_number:
+    type: telephone_default
+    weight: 4
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_program_agreement:
+    type: string_textarea
+    weight: 29
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_program_start_date:
+    type: datetime_default
+    weight: 9
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_programs:
+    type: string_textfield
+    weight: 10
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_stressors:
+    type: string_textfield
+    weight: 25
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_surgery_weight_gain:
+    type: number
+    weight: 16
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_surgery_weight_loss:
+    type: number
+    weight: 15
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_thyroid_condition:
+    type: options_buttons
+    weight: 18
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_thyroid_diagnosis_year:
+    type: number
+    weight: 20
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_thyroid_medications:
+    type: string_textfield
+    weight: 21
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_weight:
+    type: number
+    weight: 12
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  copy: true
+  field_clinic: true
+  field_domain: true
+  mail: true
+  message: true
+  name: true
+  preview: true
+  subject: true

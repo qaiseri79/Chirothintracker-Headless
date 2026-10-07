@@ -1,0 +1,21 @@
+name: 'Headless intake'
+type: module
+description: 'The permanent per-clinic intake link, anonymous JSON endpoints and the legacy clinician link manager behind the headless patient intake. Part of the headless API module family in custom/headless_custom.'
+package: 'ChiroThin'
+core_version_requirement: ^10 || ^11
+configure: headless_intake.settings
+dependencies:
+  - drupal:contact
+  - drupal:user
+  - eck:eck
+  # headless_access for the role policies that gate the headless endpoints.
+  # Declared rather than assumed: an undeclared service injection fails at
+  # request time rather than at enable time.
+  #
+  # headless_patients is deliberately *not* a dependency even though the clinic's
+  # intake-link controller needs ClinicScope. That dependency runs the other way —
+  # headless_patients depends on this module — so declaring it here too makes the
+  # two modules depend on each other, which Drupal reports as a circular
+  # dependency and refuses to install. The controller lives in headless_patients
+  # for the same reason.
+  - headless_custom:headless_access

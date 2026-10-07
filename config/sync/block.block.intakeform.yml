@@ -1,0 +1,33 @@
+uuid: d7b0f7b3-f5a3-41aa-a135-fa37df62d501
+langcode: en
+status: false
+dependencies:
+  content:
+    - 'block_content:basic:ff891f1d-1908-4a15-a09c-672868a9a46a'
+  module:
+    - block_content
+    - user
+  theme:
+    - olivero
+id: intakeform
+theme: olivero
+region: hero
+weight: -17
+provider: null
+plugin: 'block_content:ff891f1d-1908-4a15-a09c-672868a9a46a'
+settings:
+  id: 'block_content:ff891f1d-1908-4a15-a09c-672868a9a46a'
+  label: 'Intake Form'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      chiropractor_active_: chiropractor_active_

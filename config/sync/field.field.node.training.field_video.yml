@@ -1,0 +1,27 @@
+uuid: a8f3a731-3a08-45b4-bfe7-b844516f9103
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_video
+    - node.type.training
+  module:
+    - file
+id: node.training.field_video
+field_name: field_video
+entity_type: node
+bundle: training
+label: Video
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: ''
+  file_extensions: mp4
+  max_filesize: 100MB
+  description_field: false
+field_type: file

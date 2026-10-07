@@ -1,0 +1,9 @@
+uuid: 6fe303dd-2d81-43e3-a0f4-44b6eb50e105
+langcode: en
+status: true
+dependencies: {  }
+name: 'Weight Loss Phase'
+vid: weight_loss_phase
+description: null
+weight: 0
+new_revision: false

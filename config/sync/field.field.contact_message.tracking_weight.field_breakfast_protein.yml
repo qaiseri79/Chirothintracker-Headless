@@ -1,0 +1,26 @@
+uuid: 5d27d456-d8be-43d1-964d-d935db2ca8ba
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_breakfast_protein
+    - taxonomy.vocabulary.protein
+id: contact_message.tracking_weight.field_breakfast_protein
+field_name: field_breakfast_protein
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Breakfast Protein'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      protein: protein
+    sort:
+      field: _none
+field_type: entity_reference

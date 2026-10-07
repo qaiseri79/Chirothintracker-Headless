@@ -1,0 +1,63 @@
+uuid: a3e16310-e8db-472a-a6a2-1d19cfe87ba3
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.menu_item.menu_item
+    - field.field.menu_item.menu_item.field_assigned_clinic
+    - field.field.menu_item.menu_item.field_glyphicon
+    - field.field.menu_item.menu_item.field_link
+    - field.field.menu_item.menu_item.field_my_clinic
+id: menu_item.menu_item.default
+targetEntityType: menu_item
+bundle: menu_item
+mode: default
+content:
+  field_assigned_clinic:
+    type: options_select
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_glyphicon:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_link:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_my_clinic:
+    type: options_select
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  uid: true

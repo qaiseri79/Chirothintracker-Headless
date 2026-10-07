@@ -1,0 +1,22 @@
+uuid: dd1ebb4a-6ef1-4838-b552-0e51d0b3dfa8
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: clinic.field_intake_forms_enabled
+field_name: field_intake_forms_enabled
+entity_type: clinic
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

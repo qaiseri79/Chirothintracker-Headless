@@ -1,0 +1,11 @@
+name: 'Xnumber test module'
+type: module
+package: Testing
+# version: VERSION
+dependencies:
+  - xnumber:xnumber
+
+# Information added by Drupal.org packaging script on 2023-09-13
+version: '2.0.0-beta2'
+project: 'xnumber'
+datestamp: 1694615389

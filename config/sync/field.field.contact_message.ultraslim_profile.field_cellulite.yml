@@ -1,0 +1,26 @@
+uuid: f8406742-e470-4105-974b-c92b7c1f7981
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_cellulite
+    - taxonomy.vocabulary.cellulite
+id: contact_message.ultraslim_profile.field_cellulite
+field_name: field_cellulite
+entity_type: contact_message
+bundle: ultraslim_profile
+label: Cellulite
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      cellulite: cellulite
+    sort:
+      field: _none
+field_type: entity_reference

@@ -1,0 +1,3 @@
+intake_base_url: ''
+token_default_max_uses: 1
+token_default_expiry_days: 7

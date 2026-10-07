@@ -1,0 +1,23 @@
+uuid: b01c773f-c488-463f-8180-4d63fc8bfefc
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_all_measurements
+id: contact_message.ultraslim_profile.field_all_measurements
+field_name: field_all_measurements
+entity_type: contact_message
+bundle: ultraslim_profile
+label: 'Show All Measurements'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: ''
+  off_label: ''
+field_type: boolean

@@ -1,0 +1,23 @@
+uuid: 73ead21b-f3fa-4f76-87c8-3dfd9670af8c
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_weight_loss_to_date
+id: contact_message.tracking_weight.field_weight_loss_to_date
+field_name: field_weight_loss_to_date
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Weight Loss To Date'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

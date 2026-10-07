@@ -1,0 +1,24 @@
+uuid: 70afa5a2-f9d8-48d6-a78a-1eb4cd69d0c6
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_variation_type.chironutraceutical_ns
+    - core.entity_view_mode.commerce_product_variation.summary
+  module:
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: commerce_product_variation.chironutraceutical_ns.summary
+targetEntityType: commerce_product_variation
+bundle: chironutraceutical_ns
+mode: summary
+content: {  }
+hidden:
+  list_price: true
+  price: true
+  product_id: true
+  sku: true
+  title: true

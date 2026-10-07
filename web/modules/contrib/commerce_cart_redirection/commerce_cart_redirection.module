@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @file
+ * Contains commerce_cart_redirection.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Form\FormStateInterface;
+/**
+ * Implements hook_help().
+ */
+function commerce_cart_redirection_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the commerce_cart_redirection module.
+    case 'help.page.commerce_cart_redirection':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Redirect to your cart, checkout or other url when a user adds a selected product variation bundle to their cart.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function commerce_cart_redirection_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  /** @var \Drupal\commerce_product\Entity\Product $product */
+  if ($product = $form_state->get('product')) {
+    // Load module config and see if there is text in the
+    // 'Modify Add to Cart button text' field. Skip this whole thing if
+    // there is not.
+    $config = \Drupal::configFactory()->get('commerce_cart_redirection.settings');
+    if (!empty($config->get('add_to_cart_replacement_text'))) {
+      // Load the Product Variation types this module is redirecting.
+      // If the current variation is one of them then go ahead and
+      // change the button text.
+      $active_bundles = $config->get('product_bundles');
+      $negate = $config->get('negate_product_bundles');
+      $redirect = FALSE;
+
+      if ($purchasable_bundle = $form_state->getFormObject()->getEntity()->get('purchased_entity')?->referencedEntities()[0]?->bundle()) {
+        if (isset($active_bundles[$purchasable_bundle]) && $active_bundles[$purchasable_bundle] !== 0) {
+          if (!$negate) {
+            $redirect = TRUE;
+          }
+        }
+        else {
+          if ($negate) {
+            $redirect = TRUE;
+          }
+        }
+        if ($redirect) {
+          $form['actions']['submit']['#value'] = t($config->get('add_to_cart_replacement_text'));
+        }
+      }
+    }
+  }
+}

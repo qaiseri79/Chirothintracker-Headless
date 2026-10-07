@@ -1,0 +1,6 @@
+langcode: en
+path: 'public://css_editor/claro.css'
+enabled: true
+css: "ul.action-links {\r\n    margin: 20px 0 10px;\r\n    list-style-type: none;\r\n    display: inline-block;\r\n    list-style-type: none;\r\n}\r\nul.action-links li {\r\n    float: left;\r\n    margin: 0 1em 0 0;\r\n}"
+plaintext_enabled: false
+autopreview_enabled: false

@@ -1,0 +1,21 @@
+uuid: 51e157f3-f637-4072-9bfa-d260417d0e15
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_weight_loss_phase
+  module:
+    - options
+    - user
+id: user.user.field_weight_loss_phase
+field_name: field_weight_loss_phase
+entity_type: user
+bundle: user
+label: 'Weight Loss Phase'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

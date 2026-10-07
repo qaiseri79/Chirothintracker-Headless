@@ -1,0 +1,52 @@
+uuid: 14691f11-ce9c-48df-a552-2b95398f0498
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.enrollment_package.enrollment_package
+    - field.field.enrollment_package.enrollment_package.field_enrollment_hard_limit
+    - field.field.enrollment_package.enrollment_package.field_enrollment_soft_limit
+id: enrollment_package.enrollment_package.default
+targetEntityType: enrollment_package
+bundle: enrollment_package
+mode: default
+content:
+  created:
+    type: datetime_timestamp
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_enrollment_hard_limit:
+    type: number
+    weight: 2
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_enrollment_soft_limit:
+    type: number
+    weight: 1
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 5
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }

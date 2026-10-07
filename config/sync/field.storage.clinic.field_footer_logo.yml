@@ -1,0 +1,30 @@
+uuid: 3da5d9f2-3c27-4199-8518-a0edb61e7da1
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+    - field_permissions
+    - file
+    - image
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: clinic.field_footer_logo
+field_name: field_footer_logo
+entity_type: clinic
+type: image
+settings:
+  target_type: file
+  display_field: false
+  display_default: false
+  uri_scheme: public
+  default_image:
+    uuid: ''
+module: image
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

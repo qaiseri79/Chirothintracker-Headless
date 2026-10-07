@@ -1,0 +1,15 @@
+uuid: b24a07b9-e41e-406f-9a7d-080bd894bc25
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.favorites
+  module:
+    - flag
+id: flag_action.favorites_unflag
+label: '<span class="glyphicon glyphicon-star"></span>'
+type: node
+plugin: 'flag_action:favorites_unflag'
+configuration:
+  flag_id: favorites
+  flag_action: unflag

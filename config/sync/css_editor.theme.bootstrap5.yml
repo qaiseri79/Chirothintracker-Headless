@@ -1,0 +1,5 @@
+path: 'public://css_editor/bootstrap5.css'
+enabled: false
+css: ''
+plaintext_enabled: false
+autopreview_enabled: false

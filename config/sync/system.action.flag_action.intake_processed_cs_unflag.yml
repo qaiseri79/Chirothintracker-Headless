@@ -1,0 +1,15 @@
+uuid: 19f12cb0-349b-4bbc-9bac-e5d814d38c04
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.intake_processed_cs
+  module:
+    - flag
+id: flag_action.intake_processed_cs_unflag
+label: '<i class="fa-solid fa-circle-check"></i>'
+type: contact_message
+plugin: 'flag_action:intake_processed_cs_unflag'
+configuration:
+  flag_id: intake_processed_cs
+  flag_action: unflag

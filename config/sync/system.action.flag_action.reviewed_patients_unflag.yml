@@ -1,0 +1,15 @@
+uuid: 2cb96a14-5388-442e-b440-99e29a5a794c
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.reviewed_patients
+  module:
+    - flag
+id: flag_action.reviewed_patients_unflag
+label: 'Unflag this item'
+type: user
+plugin: 'flag_action:reviewed_patients_unflag'
+configuration:
+  flag_id: reviewed_patients
+  flag_action: unflag

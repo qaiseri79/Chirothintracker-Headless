@@ -1,0 +1,19 @@
+uuid: 19b32b5a-7c79-43c8-99f4-88a81ffdba1a
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: U02Wab4V6J9J8gEyT5tlBu47GwnGCYpgd3CBhXrrWU0
+id: default
+label: Default
+backend: database
+backend_configuration:
+  lease_time: 300
+processor: cron
+processing_time: 90
+locked: false
+stop_when_empty: true
+threshold:
+  type: 0
+  limit: 0
+  state: all

@@ -1,0 +1,23 @@
+uuid: 340f0797-20d8-4e1b-827a-ec62b0f3d8d9
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.ultraslim_profile
+    - field.storage.patient_profile.field_waistbuster_zone_5_loss
+id: patient_profile.ultraslim_profile.field_waistbuster_zone_5_loss
+field_name: field_waistbuster_zone_5_loss
+entity_type: patient_profile
+bundle: ultraslim_profile
+label: 'WaistBuster Zone 5 Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

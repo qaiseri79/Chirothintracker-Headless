@@ -1,0 +1,3337 @@
+<?php
+
+use Drupal\block\Entity\Block;
+use Drupal\commerce_order\Entity\Order;
+use Drupal\commerce_order\Entity\OrderInterface;
+use Drupal\commerce_shipping\Entity\ShippingMethodInterface;
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Component\Serialization\Json;
+use Drupal\contact\Entity\Message;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\CloseModalDialogCommand;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Render\Markup;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
+use Drupal\custom_module\Controller\AddOrUpdateSession;
+use Drupal\custom_module\Controller\EnrollmentLimit;
+use Drupal\custom_module\Controller\LogYourProgross;
+use Drupal\custom_module\Controller\UserCurrentProgramDay;
+use Drupal\user\Entity\User;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Views;
+use Drupal\webform\Entity\WebformSubmission;
+
+/**
+ * Implements hook_cron().
+ *
+ * TWO-QUEUE SEQUENCING:
+ *
+ * Queue 1: set_user_current_program_day
+ *   - Queued once per day. Updates field_program_day etc. for all patients.
+ *   - Uses isolated state keys: program_day_total_users, program_day_users_processed.
+ *   - When complete, sets ready_to_send_daily_messages = TRUE.
+ *
+ * Queue 2: send_standard_daily_messages
+ *   - Only queued after Queue 1 fully completes (ready flag = TRUE).
+ *   - Uses isolated state keys: daily_msg_* (never overlaps with Queue 1 counters).
+ *   - On completion, logs 4 summary rows.
+ */
+function custom_module_cron()
+{
+  $state = \Drupal::state();
+  $drupal_timezone = \Drupal::config('system.date')->get('timezone.default');
+  $date = new DrupalDateTime('now', new \DateTimeZone($drupal_timezone));
+  $today = $date->format('Y-m-d');
+
+  // ---------------------------------------------------------------------------
+  // STEP 1 — PROGRAM DAY UPDATE QUEUE
+  // ---------------------------------------------------------------------------
+
+  $last_queued_date = $state->get('custom_module.last_queued_date', '');
+  if ($last_queued_date !== $today) {
+    // New day — reset all daily flags and clear log tracking lists.
+    $state->set('custom_module.users_queued_today', FALSE);
+    $state->set('custom_module.ready_to_send_daily_messages', FALSE);
+    $state->set('custom_module.last_queued_date', $today);
+
+    foreach ([
+      'custom_module.custom_sent_emails',
+      'custom_module.custom_failed_emails',
+      'custom_module.custom_skipped_reasons',
+      'custom_module.standard_sent_emails',
+      'custom_module.standard_failed_emails',
+      'custom_module.standard_skipped_reasons',
+      'custom_module.general_skipped_reasons',
+    ] as $key) {
+      $state->delete($key);
+    }
+  }
+
+  $already_queued = $state->get('custom_module.users_queued_today', FALSE);
+  if (!$already_queued) {
+    $query = \Drupal::entityQuery('user')
+      ->condition('status', 1)
+      ->condition('roles', 'enrolled_patient')
+      ->exists('field_program_start_date')
+      ->accessCheck(FALSE);
+
+    $uids = $query->execute();
+
+    if (!empty($uids)) {
+      $queue = \Drupal::service('queue')->get('set_user_current_program_day');
+      foreach ($uids as $uid) {
+        $queue->createItem(['uid' => $uid]);
+      }
+
+      $state->set('custom_module.users_queued_today', TRUE);
+
+      // Isolated counters for Queue 1 only.
+      $state->set('custom_module.program_day_total_users', count($uids));
+      $state->set('custom_module.program_day_users_processed', 0);
+
+      \Drupal::logger('custom_module')->notice(
+        '@count users queued for program day update.',
+        ['@count' => count($uids)]
+      );
+    } else {
+      \Drupal::logger('custom_module')->notice('No enrolled_patient users found for program day update.');
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // STEP 2 — DAILY MESSAGES QUEUE
+  // Only runs once Queue 1 is fully complete (ready flag = TRUE).
+  // Guarded by daily_messages_sent_date so it only queues once per day.
+  // ---------------------------------------------------------------------------
+
+  $ready = $state->get('custom_module.ready_to_send_daily_messages', FALSE);
+  $last_sent_date = $state->get('custom_module.daily_messages_sent_date', '');
+
+  if ($ready && $last_sent_date !== $today) {
+    $query = \Drupal::entityQuery('user')
+      ->condition('status', 1)
+      ->condition('roles', 'enrolled_patient')
+      ->exists('field_program_start_date')
+      ->accessCheck(FALSE);
+
+    // Only users who have not opted out of email.
+    $group = $query->orConditionGroup()
+      ->notExists('field_email_optout')
+      ->condition('field_email_optout', 0);
+
+    $query->condition($group);
+    $uids = $query->execute();
+
+    \Drupal::logger('daily_messages_uids')->notice(
+      'Daily messages UIDs: @uids',
+      ['@uids' => !empty($uids) ? implode(', ', $uids) : 'none']
+    );
+
+    if (!empty($uids)) {
+      $queue = \Drupal::service('queue')->get('send_standard_daily_messages');
+      foreach ($uids as $uid) {
+        $queue->createItem(['uid' => $uid]);
+      }
+
+      // Close the gate and stamp the date immediately so a second cron run
+      // mid-batch doesn't re-queue the same users.
+      $state->set('custom_module.ready_to_send_daily_messages', FALSE);
+      $state->set('custom_module.daily_messages_sent_date', $today);
+
+      // Isolated counters for Queue 2 only.
+      $state->set('custom_module.daily_msg_total_users', count($uids));
+      $state->set('custom_module.daily_msg_users_processed', 0);
+      $state->set('custom_module.daily_msg_users_sent', 0);
+      $state->set('custom_module.daily_msg_users_skipped', 0);
+      $state->set('custom_module.daily_msg_skipped_no_custom', 0);
+      $state->set('custom_module.daily_msg_skipped_no_term', 0);
+
+      // Reset categorized log tracking lists for the new batch.
+      foreach ([
+        'custom_module.custom_sent_emails',
+        'custom_module.custom_failed_emails',
+        'custom_module.custom_skipped_reasons',
+        'custom_module.standard_sent_emails',
+        'custom_module.standard_failed_emails',
+        'custom_module.standard_skipped_reasons',
+        'custom_module.general_skipped_reasons',
+      ] as $key) {
+        $state->delete($key);
+      }
+
+      \Drupal::logger('daily_messages')->notice(
+        '@count users queued for standard daily messages.',
+        ['@count' => count($uids)]
+      );
+    } else {
+      \Drupal::logger('daily_messages')->notice('No users found for daily messages.');
+    }
+  }
+}
+
+function custom_module_mail_alter(&$message)
+{
+  switch ($message['key']) {
+    case 'register_admin_created':
+    case 'register_no_approval_required':
+    case 'register_pending_approval':
+    case 'register_pending_approval_admin':
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed; delsp=yes';
+      foreach ($message['body'] as $key => $body) {
+        $message['body'][$key] = new FormattableMarkup($body, []);
+      }
+      break;
+
+  }
+}
+
+/**
+ * Implements hook_mail().
+ */
+function custom_module_mail($key, &$message, $params)
+{
+  $options = [
+    'langcode' => $message['langcode'],
+  ];
+  switch ($key) {
+    case 'message_email':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('@subject', ['@subject' => $params['subject']], $options);
+      $message['body'][] = $params['message'];
+      break;
+
+    case 'order_notification':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('@subject', ['@subject' => $params['subject']], $options);
+      $message['body'][] = $params['message'];
+      break;
+
+    case 'subscription_trial_ending':
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed; delsp=yes';
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('@subject', ['@subject' => $params['subject']], $options);
+      $message['body'][] = new FormattableMarkup($params['body'], []);
+      break;
+  }
+}
+
+function custom_module_form_commerce_order_item_add_to_cart_form_alter(&$form, FormStateInterface $form_state, $form_id)
+{
+  $current_user = \Drupal::currentUser();
+  $user_id = $current_user->id();
+  if ($current_user->hasRole('chiropractor_active_') && $current_user->hasRole('chiropractor_inactive_')) {
+    $selectedVariationId = $form_state->get('selected_variation');
+    $subscription_storage = \Drupal::entityTypeManager()->getStorage('commerce_subscription');
+    $query = $subscription_storage->getQuery();
+    $query
+      ->condition('uid', $user_id)
+      ->condition('state', 'active')
+      ->accessCheck(FALSE);
+    $subscription_ids = $query->execute();
+    $subscription_id = reset($subscription_ids);
+    $subscription = $subscription_storage->load($subscription_id);
+    if ($subscription) {
+      $purchased_product = $subscription->get("purchased_entity")->getValue()[0]["target_id"];
+      if ($purchased_product == $selectedVariationId) {
+        $form['actions']['submit']['#attributes']['disabled'] = 'disabled';
+      }
+    }
+  } else if (!$current_user->hasRole('chiropractor_active_') && $current_user->hasRole('chiropractor_inactive_')) {
+    $form['#validate'][] = 'custom_module_add_to_cart_custom_validation';
+  }
+  if ($current_user->hasRole('enrolled_patient')) {
+    $form['#validate'][] = 'custom_module_add_to_cart_subscriber_payment_method_validation';
+    // Add redirect submit handler only for enrolled_patient.
+    $form['actions']['submit']['#submit'][] = 'custom_module_add_to_cart_submit';
+  }
+}
+function custom_module_add_to_cart_subscriber_payment_method_validation(array &$form, FormStateInterface $form_state)
+{
+  $account = User::load(\Drupal::currentUser()->id());
+  $chiropractor_id = $account->get("field_chiropractor")->getValue()[0]['target_id'];
+  $chiropractor_account = User::load($chiropractor_id);
+  if ($chiropractor_account->get('field_payment_machine_name')->isEmpty()) {
+    $form_state->setErrorByName('', t("It appears that your chiropractor has not set up a payment method. As a result, purchasing products is currently unavailable. Please contact your chiropractor to configure a payment method and enable product purchases."));
+  }
+}
+function custom_module_add_to_cart_custom_validation(array &$form, FormStateInterface $form_state)
+{
+  $selectedVariationId = $form_state->get('selected_variation');
+  $chiropractor = User::load(\Drupal::currentUser()->id());
+  $clinic = $chiropractor->get("field_clinic")->getValue();
+  $enrolledPatient = "";
+  if ($clinic) {
+    $clinic_id = $clinic[0]["target_id"];
+    $storage = \Drupal::service('entity_type.manager')->getStorage('clinic');
+    if ($clinic_id) {
+      $enrolled_patient_count = Views::getView('report_patients');
+      $enrolled_patient_count->setDisplay('block_1');
+      //$enrolled_patient_count->setArguments([443]);
+      $enrolled_patient_count->setArguments([$clinic_id]);
+      $enrolled_patient_count->execute();
+      $enrolled_patient_count_result = $enrolled_patient_count->result;
+      if ($enrolled_patient_count_result) {
+        $enrolledPatient = count($enrolled_patient_count_result);
+      } else {
+        $enrolledPatient = 0;
+      }
+    }
+  }
+  $product_limits = [
+    '1' => 4,
+    '2' => 10,
+    '3' => 'unlimited',
+    '4' => 'unlimited',
+  ];
+  if (isset($product_limits[$selectedVariationId])) {
+    $current_user_count = $enrolledPatient;
+    $result = checkDowngradeLimit($current_user_count, $selectedVariationId, $product_limits);
+    if (!$result['can_downgrade']) {
+      $form_state->setErrorByName('', t($result['message']));
+    }
+  }
+}
+
+/**
+ * Custom submit handler: redirects enrolled_patient back to previous page after add to cart.
+ */
+function custom_module_add_to_cart_submit(&$form, FormStateInterface $form_state)
+{
+  $form_state->setRedirect('view.commerce_products.page_3');
+}
+
+function checkDowngradeLimit($current_user_count, $target_product, $product_limits)
+{
+  $product_title = [
+    '1' => "NEWBIE - Enrolled Patient Limit: 4",
+    '2' => "ROOKIE - Enrolled Patient Limit:10",
+    '3' => 'VETERAN - Enrolled Patient Limit: Unlimited',
+    '4' => 'ALL PRO - Adds Red Light Tracker - Enrolled Patient Limit: Unlimited',
+  ];
+  if ($product_limits[$target_product] !== 'unlimited') {
+    $target_limit = $product_limits[$target_product];
+    if ($current_user_count > $target_limit) {
+      $users_to_archive = $current_user_count - $target_limit;
+      $archive_url = '/archive/enrollred-patients';
+      $link = "<a href=\"$archive_url\" target='_blank'>here</a>";
+      return [
+        'can_downgrade' => false,
+        'message' => "You need to archive $users_to_archive user(s) before downgrading to $product_title[$target_product]. Click $link to archive.",
+      ];
+    }
+  }
+  return [
+    'can_downgrade' => true,
+    'message' => "You can safely downgrade to $target_product.",
+  ];
+}
+
+
+
+function custom_module_form_alter(&$form, FormStateInterface $form_state, $form_id)
+{
+
+  // global current user.
+  $current_user = \Drupal::currentUser();
+  if ($form_id === 'views_exposed_form' && $form['#id'] === 'views-exposed-form-patients-page-1') {
+    if (isset($form['field_clinic_location_target_id_verf'])) {
+
+      $user = User::load(\Drupal::currentUser()->id());
+      $clinic = $user->get("field_clinic")->getValue();
+      if ($clinic) {
+        $clinic_id = $clinic[0]["target_id"];
+      }
+      $clinic_location = Views::getView('my_clinic');
+      $clinic_location->setDisplay('entity_reference_3');
+      $clinic_location->setArguments([$clinic_id]);
+      $clinic_location->execute();
+      $clinic_location_result = $clinic_location->result;
+      $allowed_options = [];
+      if (!empty($clinic_location_result)) {
+        foreach ($clinic_location_result as $row) {
+          $allowed_options[] = $row->_entity->id();
+        }
+      }
+      $allowed_options[] = 'All';
+      if (!empty($form['field_clinic_location_target_id_verf']['#options'])) {
+        foreach ($form['field_clinic_location_target_id_verf']['#options'] as $key => $value) {
+          if (!in_array((string) $key, array_map('strval', $allowed_options), true)) {
+            unset($form['field_clinic_location_target_id_verf']['#options'][$key]);
+          }
+        }
+      }
+    }
+  }
+  if ($form_id == "webform_submission_unsubscribe_add_form") {
+    if (in_array('enrolled_patient', $current_user->getRoles())) {
+      $user = User::load(\Drupal::currentUser()->id());
+      $field_email_optout = $user->get("field_email_optout")->getValue()[0]["value"];
+      if ($field_email_optout == 1) {
+        $form["elements"]["unsubscribe_daily_email"]["#default_value"] = TRUE;
+      }
+    }
+  }
+  if ($form_id == "clinic_clinic_location_form" || $form_id == "clinic_clinic_location_edit_form") {
+    if (in_array('chiropractor_active_', $current_user->getRoles())) {
+      $form['field_clinic']['#disabled'] = TRUE;
+      $form['uid']['#disabled'] = TRUE;
+    }
+  }
+  if ($form_id == "webform_submission_patient_account_add_form") {
+    $g_purchased = GlobalPurchasedEntity();
+    $options = $form["elements"]["patient_status"]["#options"];
+    if ($g_purchased == 1) {
+      unset($options['401']);
+      unset($options['400']);
+      $form["elements"]["patient_status"]["#options"] = $options;
+    } else if ($g_purchased == 4) {
+      unset($options['402']);
+      $form["elements"]["patient_status"]["#options"] = $options;
+    }
+  }
+  if ($form_id == "node_recipe_form" || $form_id == "node_daily_message_form" || $form_id == "node_chirothin_resource_form" || $form_id == "node_training_form" || $form_id == "node_review_messages_form" || $form_id == "node_recipe_edit_form" || $form_id == "node_chirothin_resource_edit_form" || $form_id == "node_training_edit_form" || $form_id == "node_daily_message_edit_form" || $form_id == "node_review_messages_edit_form") {
+    if (in_array('chiropractor_active_', $current_user->getRoles())) {
+      $user = User::load(\Drupal::currentUser()->id());
+      $clinic = $user->get("field_clinic")->getValue();
+      if ($clinic) {
+        $clinic_id = $clinic[0]["target_id"];
+        $form['field_published_to']['widget']["#default_value"][] = $clinic_id;
+      }
+      $form['#attached']['drupalSettings']['custom_js']['user_role'] = "chiropractor_active_";
+      $form['field_published_to']['#attributes']['class'][] = 'hidden';
+      $form['revision_information']['#access'] = FALSE;
+    } else if (in_array('administrator', $current_user->getRoles())) {
+      $form['field_published_to']['widget']['#required'] = TRUE;
+    }
+  }
+  if ($form_id == "node_daily_message_form" || $form_id == "node_daily_message_edit_form") {
+    $form['title']['widget'][0]['value']['#required'] = TRUE;
+    $form['title']['widget']['#required'] = TRUE;
+    $form['title']['#required'] = TRUE;
+  }
+  if ($form_id == "webform_submission_patient_message_add_form") {
+    if (in_array('archived_patient', $current_user->getRoles())) {
+      foreach (array_keys($form["elements"]) as $key) {
+        unset($form["elements"][$key]);
+      }
+      unset($form["actions"]);
+      $form["elements"]['message'] = [
+        '#type' => 'item',
+        '#markup' => t('You are not authorized to access this page.'),
+      ];
+    }
+  }
+  if ($form_id == "webform_submission_payment_method_edit_form") {
+    if (!in_array('administrator', $current_user->getRoles())) {
+      $message = t('<strong>Caution:</strong> If you will update the <strong>Merchant ID API Credentials</strong>, will be reviewed by an administrator, who may update this information as needed. The administrator will update your Merchant ID API Credentials. If credentials are wrong, it may prevent your patients from purchasing your products. Please ensure all details are accurate, as changes may affect your payment processing.');
+      \Drupal::messenger()->addWarning($message);
+    }
+  }
+  if ($form_id == "commerce_checkout_flow_multistep_default") {
+    $order_arg = $form_state->getBuildInfo()['args'][0];
+    if ($order_arg == "order_information") {
+      if (array_key_exists("order_fields:checkout", $form)) {
+        $form['order_fields:checkout']['field_agreement']['widget']['value']['#default_value'] = false;
+        $form['order_fields:checkout']['field_signature']['widget'][0]['value']['#states'] = array(
+          'visible' => array(
+            ':input[name="order_fields:checkout[field_agreement][value]"]' => array(
+              'checked' => true,
+            ),
+          ),
+        );
+        $file = "/modules/custom/custom_module/files/2025 CTT - SaaS.pdf";
+        $order_id = $form['sidebar']['order_summary']['summary']['#arguments'][0] ?? NULL;
+        if ($order_id) {
+          $order = Order::load($order_id);
+          // Now you can access order items
+          foreach ($order->getItems() as $order_item) {
+            $variation = $order_item->getPurchasedEntity();
+            if ($variation && $variation->hasField('billing_schedule') && !$variation->get('billing_schedule')->isEmpty()) {
+              $billing_schedule = $variation->get('billing_schedule')->target_id;
+              if ($billing_schedule == 'yearly') {
+                $file = "/modules/custom/custom_module/files/2025 CTT - SaaS Annual.pdf";
+              }
+            }
+          }
+        }
+        $form['order_fields:checkout']['agreement_condition'] = [
+          '#type' => 'markup',
+          '#markup' => '<div class="custom-html-class"><a href="' . $file . '" target="_blank">Terms & conditions</a></div>',
+          '#weight' => -1
+        ];
+      }
+      if (isset($form['payment_information']['payment_method'])) {
+        $current_user = \Drupal::currentUser();
+        $user_payment_methods = \Drupal::entityTypeManager()
+          ->getStorage('commerce_payment_method')
+          ->loadByProperties(['uid' => $current_user->id()]);
+
+        $user_payment_method_ids = [];
+        foreach ($user_payment_methods as $payment_method) {
+          $user_payment_method_ids[] = $payment_method->id();
+        }
+
+        if ($current_user->hasRole('enrolled_patient')) {
+          $account = User::load($current_user->id());
+          $chiropractor_id = $account->get('field_chiropractor')->getValue()[0]['target_id'];
+          $chiropractor_account = User::load($chiropractor_id);
+
+          $field_value = $chiropractor_account->get('field_payment_machine_name')->getValue();
+
+          if (empty($field_value) || empty($field_value[0]['value'])) {
+            throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('You are not allowed to access this form.');
+          }
+
+          $raw_name = $field_value[0]['value'];
+          $prefixed_name = "new--credit_card--" . $raw_name;
+          $options = $form['payment_information']['payment_method']['#options'];
+
+          // Check prefixed key first, then fall back to raw value
+          if (array_key_exists($prefixed_name, $options)) {
+            $payment_machine_name = $prefixed_name;
+          } elseif (array_key_exists($raw_name, $options)) {
+            $payment_machine_name = $raw_name;
+          } else {
+            throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('You are not allowed to access this form.');
+          }
+
+          foreach ($form['payment_information']['payment_method']['#options'] as $key => $value) {
+            if ($key !== $payment_machine_name && !in_array($key, $user_payment_method_ids)) {
+              unset($form['payment_information']['payment_method']['#options'][$key]);
+            }
+          }
+
+          if (isset($form['payment_information']['payment_method']['#options'][$payment_machine_name])) {
+            $form['payment_information']['payment_method']['#default_value'] = $payment_machine_name;
+            $form['#attached']['drupalSettings']['custom_module'] = [
+              'selected_payment_method' => $payment_machine_name,
+              'is_initial_load' => TRUE,
+            ];
+          }
+
+          $form['#attached']['library'][] = 'custom_module/payment_method_preselect';
+        }
+      }
+    }
+  }
+  if ($form_id == "commerce_payment_gateway_add_form") {
+    $sid = \Drupal::request()->query->get('sid');
+    if ($sid) {
+      $submission = WebformSubmission::load($sid);
+      $data = $submission->getData();
+      $form['label']['#default_value'] = $data['name'];
+    }
+    array_unshift($form['actions']['submit']['#submit'], 'custom_payment_alter_submit_handler');
+  }
+  if ($form_id == "commerce_product_chironutraceutical_add_form" || $form_id == "commerce_product_chironutraceutical_edit_form") {
+    if (in_array('chiropractor_active_', $current_user->getRoles())) {
+      $form['changed']['#access'] = FALSE;
+      $form['author']['#access'] = FALSE;
+      $form['field_product_type']['#access'] = FALSE;
+      $form['stores']['widget']['target_id']['#default_value'] = [2];
+    }
+
+    $form['body']['widget']['#after_build'][] = 'custom_module_remove_textarea_help';
+    $form['field_short_detail']['widget']['#after_build'][] = 'custom_module_remove_textarea_help';
+  }
+  if ($form_id == "commerce_payment_method_add_form") {
+    $payment_machine_name = "";
+    if ($current_user->hasRole('enrolled_patient')) {
+      $user_id = $current_user->id();
+      $account = User::load($user_id);
+      $chiropractor_id = $account->get("field_chiropractor")->getValue()[0]['target_id'];
+      $chiropractor_account = User::load($chiropractor_id);
+      $payment_machine_name = $chiropractor_account->get('field_payment_machine_name')->getValue();
+      if (!empty($payment_machine_name)) {
+        $payment_machine_name = "new--credit_card--" . $payment_machine_name[0]["value"];
+      }
+    }
+    if ($current_user->hasRole('chiropractor_active_') || $current_user->hasRole('chiropractor_inactive_')) {
+      $payment_machine_name = "new--credit_card--authorize_net";
+    }
+    //if(array_key_exists($payment_machine_name, $form['payment_method']['#options'])){
+    if (is_string($payment_machine_name) && array_key_exists($payment_machine_name, $form['payment_method']['#options'])) {
+      foreach ($form['payment_method']['#options'] as $key => $value) {
+        if ($key != $payment_machine_name) {
+          unset($form['payment_method']['#options'][$key]);
+        }
+      }
+      $form['payment_method']['#default_value'] = $payment_machine_name;
+      $form['#attached']['drupalSettings']['custom_module_add_payment'] = [
+        'payment_machine_name' => $payment_machine_name,
+        'is_initial_load' => TRUE,
+      ];
+      $form['#attached']['library'][] = 'custom_module/add_payment_method_preselect';
+    } else {
+      //  foreach ($form['payment_method']['#options'] as $key => $value) {
+      //          unset($form['payment_method']['#options'][$key]);
+      //   }
+      //   $form['add_payment_method']['payment_details'] = array();
+      //   $form['payment_method']['no_payment_message'] = [
+      //       '#type' => 'markup',
+      //       '#markup' => t('<div class="alert alert-danger" role="alert">No payment methods are available. Please contact your chiropractor.</div>'),
+      //       '#weight' => -10,
+      //   ];
+      // $form['actions']['submit_payment_method']['#attributes']['disabled']  = 'disabled';
+      throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException();
+    }
+  }
+
+  // Continue Shopping button on cart forms
+  if (strpos($form_id, 'views_form_commerce_cart_form') !== FALSE && $current_user->hasRole('enrolled_patient')) {
+    $form['actions']['continue_shopping'] = [
+      '#type' => 'link',
+      '#title' => t('Continue Shopping'),
+      '#url' => Url::fromRoute('view.commerce_products.page_3'),
+      '#attributes' => [
+        'class' => ['btn', 'btn-success', 'rounded-pill', 'btn-continue-shopping'],
+      ],
+      '#weight' => 5,
+    ];
+  }
+
+  $contact_forms = array(
+    'contact_message_ultraslim_profile_form',
+    'contact_message_zerona_profile_form',
+    'contact_message_patient_photos_form',
+    'contact_message_patient_enrollment_form',
+    'contact_message_patient_attachments_form',
+    'contact_message_patient_account_form',
+    'contact_message_new_patient_account_form',
+    'contact_message_tracking_weight_form',
+    'contact_message_log_patient_progress_form',
+    'contact_message_lipolight_profile_form',
+    'contact_message_chiropractor_notes_form',
+  );
+  if (\Drupal::currentUser()->isAnonymous() && in_array($form_id, $contact_forms)) {
+    throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException();
+  }
+
+// [headless_progress]   if ($form_id == "contact_message_tracking_weight_edit_form") {
+// [headless_progress]     $current_user = \Drupal::currentUser();
+// [headless_progress]     $uid = \Drupal::request()->query->get('uid');
+// [headless_progress]     if ($uid && is_numeric($uid)) {
+// [headless_progress]       if (isset($form['field_author'])) {
+// [headless_progress]         $form['field_author']['widget']['target_id']['#default_value'] = $uid;
+// [headless_progress]       }
+// [headless_progress]     }
+// [headless_progress]     // Remove filter format and help.
+// [headless_progress]     $form['field_question']['widget']['#after_build'][] = 'custom_module_remove_textarea_help';
+// [headless_progress] 
+// [headless_progress]   } elseif ($form_id == "contact_message_tracking_weight_form") {
+// [headless_progress]     $current_user_uid = \Drupal::currentUser()->id();
+// [headless_progress]     if ($current_user_uid && is_numeric($current_user_uid)) {
+// [headless_progress]       if (isset($form['field_author'])) {
+// [headless_progress]         $form['field_author']['widget']['target_id']['#default_value'] = $current_user_uid;
+// [headless_progress]       }
+// [headless_progress]     }
+// [headless_progress]     // Remove filter format and help.
+// [headless_progress]     $form['field_question']['widget']['#after_build'][] = 'custom_module_remove_textarea_help';
+// [headless_progress] 
+  }
+  if ($form_id == "contact_message_chiropractor_message_form") {
+    $form['#prefix'] = '<div id="contact-message-wrapper">';
+    $form['#suffix'] = '</div>';
+    // Add AJAX to the default submit button.
+    $form['actions']['submit']['#ajax'] = [
+      'callback' => 'custom_module_ajax_refresh_form',
+      'wrapper' => 'contact-message-wrapper',
+      'effect' => 'fade',
+      'progress' => [
+        'type' => 'throbber',
+        'message' => t('Sending...'),
+      ],
+    ];
+  }
+
+  // Patient Message
+  if ($form_id == "contact_message_patient_message_form") {
+    // Remove filter format and help.
+    $form['field_message']['widget']['#after_build'][] = 'custom_module_remove_textarea_help';
+  }
+
+  if ($form_id == "contact_message_patient_intake_form" || $form_id = "contact_message_patient_intake_form_edit_form") {
+    $form['field_surgery_weight_loss']['#states'] = [
+      'visible' => [
+        ':input[name^="field_history_bariatric_surgery"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_diabetes_diagnosis_year']['#states'] = [
+      'invisible' => [
+        ':input[name="field_diabetes"]' => ['value' => '0'],
+      ],
+    ];
+    $form['field_diabetes_medications']['#states'] = [
+      'invisible' => [
+        ':input[name="field_diabetes"]' => ['value' => '0'],
+      ],
+    ];
+    $form['field_bp_diagnosis_year']['#states'] = [
+      'visible' => [
+        ':input[name="field_high_blood_pressure"]' => ['value' => '1'],
+      ],
+    ];
+    $form['field_blood_pressure_medications']['#states'] = [
+      'visible' => [
+        ':input[name="field_high_blood_pressure"]' => ['value' => '1'],
+      ],
+    ];
+    $form['field_thyroid_diagnosis_year']['#states'] = [
+      'visible' => [
+        ':input[name="field_thyroid_condition"]' => ['value' => '1'],
+      ],
+    ];
+    $form['field_thyroid_medications']['#states'] = [
+      'visible' => [
+        ':input[name="field_thyroid_condition"]' => ['value' => '1'],
+      ],
+    ];
+    $form['field_cholesterol_diagnosis_year']['#states'] = [
+      'visible' => [
+        ':input[name="field_high_cholesterol"]' => ['value' => '1'],
+      ],
+    ];
+    $form['field_cholesterol_medications']['#states'] = [
+      'visible' => [
+        ':input[name="field_high_cholesterol"]' => ['value' => '1'],
+      ],
+    ];
+  }
+  if ($form_id == "contact_message_ultraslim_profile_form" || $form_id = "contact_message_ultraslim_profile_form_edit_form") {
+    $form['field_subcutaneous_fat']['#states'] = [
+      'visible' => [
+        ':input[name="field_treatment_protocol[362]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_subcutaneous_fat_protocol']['#states'] = [
+      'visible' => [
+        ':input[name="field_treatment_protocol[362]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_cellulite']['#states'] = [
+      'visible' => [
+        ':input[name="field_treatment_protocol[364]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_cellulite_protocol']['#states'] = [
+      'visible' => [
+        ':input[name="field_treatment_protocol[364]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_facial_rejuvenation_protoc']['#states'] = [
+      'visible' => [
+        ':input[name="field_treatment_protocol[365]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_skin_tightening']['#states'] = [
+      'visible' => [
+        ':input[name="field_treatment_protocol[363]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_skin_tightening_protocol']['#states'] = [
+      'visible' => [
+        ':input[name="field_treatment_protocol[363]"]' => ['checked' => TRUE],
+      ],
+    ];
+
+    $form['field_visceral_fat_protocol']['#states'] = [
+      'visible' => [
+        ':input[name="field_treatment_protocol[361]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_waistbuster_protocol']['#states'] = [
+      'visible' => [
+        ':input[name="field_treatment_protocol[360]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_neck']['#states'] = [
+      'visible' => [
+        ':input[name="field_all_measurements[value]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_arm_left_bicep']['#states'] = [
+      'visible' => [
+        ':input[name="field_all_measurements[value]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_arm_right_bicep']['#states'] = [
+      'visible' => [
+        ':input[name="field_all_measurements[value]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_back_bra_line']['#states'] = [
+      'visible' => [
+        ':input[name="field_all_measurements[value]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_abdomen']['#states'] = [
+      'visible' => [
+        ':input[name="field_all_measurements[value]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_hips']['#states'] = [
+      'visible' => [
+        ':input[name="field_all_measurements[value]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_buttocks']['#states'] = [
+      'visible' => [
+        ':input[name="field_all_measurements[value]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_thigh_left']['#states'] = [
+      'visible' => [
+        ':input[name="field_all_measurements[value]"]' => ['checked' => TRUE],
+      ],
+    ];
+    $form['field_thigh_right']['#states'] = [
+      'visible' => [
+        ':input[name="field_all_measurements[value]"]' => ['checked' => TRUE],
+      ],
+    ];
+
+  }
+}
+
+function custom_module_ajax_refresh_form(array &$form, FormStateInterface $form_state)
+{
+  // Check if there are errors
+  if ($form_state->getErrors()) {
+    // Return updated form (with error messages)
+    return $form;
+  } else {
+    // No errors, send AjaxResponse (e.g., close modal + message)
+    $response = new AjaxResponse();
+    $response->addCommand(new HtmlCommand('#ajax-success-message', '<div class="messages messages--status">Your message has been sent successfully.</div>'));
+    $response->addCommand(new CloseModalDialogCommand());
+    return $response;
+  }
+}
+
+
+function custom_payment_alter_submit_handler(array &$form, FormStateInterface $form_state)
+{
+  $machine_name = $form['id']['#value'];
+  $uid = \Drupal::request()->query->get('uid');
+  if ($uid) {
+    $account = User::load($uid);
+    $account->set('field_payment_machine_name', $machine_name);
+    $account->save();
+  }
+  $sid = \Drupal::request()->query->get('sid');
+  if ($sid) {
+    $submission = WebformSubmission::load($sid);
+    $data = $submission->getData();
+    $data['status'] = 'created';
+    $submission->setData($data);
+    $submission->save();
+  }
+}
+
+/**
+ * Removes the text format help and guidelines under a textarea.
+ *
+ * This function modifies the render array of a textarea field to hide
+ * the text format selector, formatting guidelines, and help text that
+ * normally appear below textareas using the Text Format module.
+ *
+ * @param array $form_element
+ *   The render array element of the textarea field.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ *
+ * @return array
+ *   The modified render array with the text format UI elements removed.
+ */
+function custom_module_remove_textarea_help(array $form_element, FormStateInterface $form_state)
+{
+  // Check if the textarea uses a text format and it exists in the render array.
+  if (isset($form_element[0]['format'])) {
+
+    // Remove formatting guidelines and help text.
+    unset($form_element[0]['format']['guidelines']);
+    unset($form_element[0]['format']['help']);
+
+    // Remove type and theme wrappers to avoid empty containers.
+    unset($form_element[0]['format']['#type']);
+    unset($form_element[0]['format']['#theme_wrappers']);
+
+    // Hide the format selector dropdown (e.g., Filtered HTML, Full HTML).
+    $form_element[0]['format']['format']['#access'] = FALSE;
+  }
+
+  return $form_element;
+}
+
+function custom_module_page_attachments(array &$page)
+{
+  $page['#attached']['library'][] = 'custom_module/custom_js';
+}
+
+
+function custom_module_webform_submission_presave(WebformSubmission $submission)
+{
+// [headless_progress]   if ($submission->getWebform()->id() == 'tracking_weight') {
+// [headless_progress] 
+// [headless_progress] 
+// [headless_progress]     /******************************************************************************************************/
+// [headless_progress]     $data = $submission->getData();
+// [headless_progress]     $account = User::load($submission->getOwnerId());
+// [headless_progress]     // $start_date_substr =  substr($account->get('field_program_start_date')->getValue()[0]['value'],0,10);
+// [headless_progress]     // $field_program_start_date = new DateTime(date("Y-m-d", strtotime($start_date_substr)));
+// [headless_progress]     // $substr =  substr($data["field_date"],0,10);
+// [headless_progress]     // $field_date = new DateTime(date("Y-m-d", strtotime($substr)));
+// [headless_progress]     // $program_day = $field_date->diff($field_program_start_date)->days + 1;
+// [headless_progress]     // $program_day_invert = $field_date->diff($field_program_start_date)->invert;
+// [headless_progress]     // $output = ($program_day_invert<>1)?(($field_program_start_date==$field_date)?1:0):$program_day;
+// [headless_progress]     $field_program_start_date = $account->get('field_program_start_date')->getValue();
+// [headless_progress]     if ($field_program_start_date) {
+// [headless_progress]       $field_program_start_date = $field_program_start_date[0]['value'];
+// [headless_progress]       $cMServices = \Drupal::service('custom_module.services');
+// [headless_progress]       $output = $cMServices->computeProgramStartDate($field_program_start_date, $data["field_date"]);
+// [headless_progress]       $data['field_program_day_computed'] = $output;
+// [headless_progress]     }
+// [headless_progress] 
+// [headless_progress] 
+// [headless_progress]     //weight
+// [headless_progress]     $field_program_start_weight = $account->get('field_program_start_weight')->getValue();
+// [headless_progress]     if ($field_program_start_weight) {
+// [headless_progress]       $program_start_weight = $field_program_start_weight[0]['value'];
+// [headless_progress]       $weight_output = bcsub($program_start_weight, $data["field_weight"], 2);
+// [headless_progress]       if ($weight_output < 0) {
+// [headless_progress]         $weight_output = 0.00;
+// [headless_progress]       }
+// [headless_progress]       $data['field_weight_loss_computed'] = $weight_output;
+// [headless_progress]     }
+// [headless_progress]     $submission->setData($data);
+// [headless_progress]   }
+// [headless_progress] 
+// [headless_progress]   // if ($submission->getWebform()->id() == 'subscriber_s_chiropractor') {
+// [headless_progress]   //     createChiropractor($submission->getData(),$submission->id());
+// [headless_progress]   // }
+// [headless_progress] 
+// [headless_progress] 
+// [headless_progress] }
+
+function custom_module_entity_presave(EntityInterface $entity)
+{
+  if ($entity->getEntityTypeId() === 'contact_message') {
+// [headless_progress]     if ($entity->bundle() == "tracking_weight") {
+// [headless_progress]       if ($entity->isNew()) {
+// [headless_progress]         $owner_id = $entity->get('uid')->getValue()[0]['target_id'];
+// [headless_progress]         $account = User::load($owner_id);
+// [headless_progress]         $date = $entity->get('field_date')->getValue()[0]['value'];
+// [headless_progress]         $weight = $entity->get('field_weight')->getValue()[0]['value'];
+// [headless_progress]         $field_program_start_date = $account->get('field_program_start_date')->getValue();
+// [headless_progress]         if ($field_program_start_date) {
+// [headless_progress]           $field_program_start_date = $field_program_start_date[0]['value'];
+// [headless_progress]           $cMServices = \Drupal::service('custom_module.services');
+// [headless_progress]           $output = $cMServices->computeProgramStartDate($field_program_start_date, $date);
+// [headless_progress]           $entity->set('field_program_day_computed', $output);
+// [headless_progress]         }
+// [headless_progress]         //weight
+// [headless_progress]         $field_program_start_weight = $account->get('field_program_start_weight')->getValue();
+// [headless_progress]         if ($field_program_start_weight) {
+// [headless_progress]           $program_start_weight = $field_program_start_weight[0]['value'];
+// [headless_progress]           $weight_output = bcsub($program_start_weight, $weight, 2);
+// [headless_progress]           if ($weight_output < 0) {
+// [headless_progress]             $weight_output = 0.00;
+// [headless_progress]           }
+// [headless_progress]           $entity->set('field_weight_loss_computed', $weight_output);
+// [headless_progress]         }
+// [headless_progress]       } else {
+// [headless_progress] 
+// [headless_progress]         $owner_id = $entity->get('uid')->getValue()[0]['target_id'];
+// [headless_progress]         $account = User::load($owner_id);
+// [headless_progress]         $date = $entity->get('field_date')->getValue()[0]['value'];
+// [headless_progress]         $weight = $entity->get('field_weight')->getValue()[0]['value'];
+// [headless_progress]         $field_program_start_date = $account->get('field_program_start_date')->getValue();
+// [headless_progress]         if ($field_program_start_date) {
+// [headless_progress]           $field_program_start_date = $field_program_start_date[0]['value'];
+// [headless_progress]           $cMServices = \Drupal::service('custom_module.services');
+// [headless_progress]           $output = $cMServices->computeProgramStartDate($field_program_start_date, $date);
+          $entity->set('field_program_day_computed', $output);
+        }
+        //weight
+        $field_program_start_weight = $account->get('field_program_start_weight')->getValue();
+        if ($field_program_start_weight) {
+          $program_start_weight = $field_program_start_weight[0]['value'];
+          $weight_output = bcsub($program_start_weight, $weight, 2);
+          if ($weight_output < 0) {
+            $weight_output = 0.00;
+          }
+          $entity->set('field_weight_loss_computed', $weight_output);
+        }
+
+        ////////////////////////////////////////////////
+        $log_your_progross = new LogYourProgross;
+        // Log Your Progress (Inches)
+        $total = $log_your_progross->CalculateTotalInches($entity);
+        $entity->set('field_total_measurements', $total);
+
+        // $owner_id = $entity->get('uid')->getValue()[0]['target_id'];
+        $field_archive = $entity->get('field_archive')->getValue();
+        if ($field_archive[0]['value'] != true) {
+          // $user_entity = User::load($owner_id);
+          // Log Your Progress (Evaluations)  
+          // $user_current_program_day = new UserCurrentProgramDay;
+          // $user_current_program_day->userRoles($user_entity->id());
+          // $user_current_program_day->userProfile($user_entity->id());
+          // $user_current_program_day->UserClinician($user_entity->id());
+          // $user_current_program_day->Evaluations($user_entity->id());
+          // $user_current_program_day->CalculateGoal($user_entity->id());
+
+          // compute program day   
+          $field_program_day_computed = $entity->get('field_program_day_computed')->getValue();
+          if (!empty($field_program_day_computed)) {
+            if ($field_program_day_computed[0]['value'] < 1) {
+              $entity->set('field_program_day', 0);
+            } else {
+              $entity->set('field_program_day', $field_program_day_computed[0]['value']);
+            }
+          }
+          // compute weight loss to date.
+          $field_weight_loss_computed = $entity->get('field_weight_loss_computed')->getValue();
+          if (!empty($field_weight_loss_computed)) {
+            $entity->set('field_weight_loss_to_date', $field_weight_loss_computed[0]['value']);
+          }
+
+        }//end of archive
+      }
+    }
+  }
+}
+
+
+
+
+function custom_module_webform_submission_update(WebformSubmission $submission)
+{
+  if ($submission->getWebform()->id() == 'payment_method') {
+    // global $base_url;
+    // $submission_data = $submission->getData();
+    // $submission_data['status'] = "updated";
+    // $submission->setData($submission_data);
+    // $submission->resave();
+    // // inform administrator abou the update.
+    // $host = \Drupal::request()->getSchemeAndHttpHost();    
+    // $mailManager = \Drupal::service('plugin.manager.mail');
+    // $module = 'custom_module';
+    // $key = 'subscription_trial_ending';
+    // $to = \Drupal::config('system.site')->get('mail');
+    // $params['subject'] = "Notification: Payment Method Updated";
+    // $email_body = '<table style="background-color:#f9f9f9;border:1px solid #eaeaea;margin:0 auto;max-width:600px;padding:20px;width:100%;">
+    //         <tbody>
+    //             <tr>
+    //                 <td>
+    //                    <h2 style="color:#333;">
+    //                     New <strong>Payment Method update</strong> Request
+    //                   </h2>
+    //                     <p>
+    //                         A Clinican has recently updated their payment method credentials. Please review the changes <a href="'.$base_url.'/admin/people/payment-methods"><span>Here</span></a><span>.</span>
+    //                     </p>
+    //                     <p>
+    //                         <br>
+    //                         &nbsp;
+    //                     </p>
+    //                     <p>
+    //                         Thank you,
+    //                     </p>
+    //                 </td>
+    //             </tr>
+    //         </tbody>
+    //     </table>';
+    // $params['body'] = $email_body;
+    // $langcode = \Drupal::currentUser()->getPreferredLangcode();
+    // $send = true;
+    // $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+  }
+
+}
+
+
+
+function custom_module_webform_submission_insert(WebformSubmission $submission)
+{
+
+  if ($submission->getWebform()->id() == 'patient_message') {
+    sendPatientMessage($submission);
+  }
+  if ($submission->getWebform()->id() == 'chiropractor_message') {
+    sendChiropractorMessage($submission);
+  }
+  if ($submission->getWebform()->id() == 'last_seen') {
+    UpdateLastSeen($submission->getData(), $submission->id());
+  }
+  if ($submission->getWebform()->id() == 'log_patient_progress') {
+    LogPatientProgress($submission->getData(), $submission->id());
+  }
+  if ($submission->getWebform()->id() == 'unsubscribe') {
+    UnsubscribePatient($submission->getData(), $submission->id());
+  }
+  if ($submission->getWebform()->id() == 'patient_account') {
+    CreateUser($submission->getData(), $submission->id(), $submission->getOwnerId());
+    $patient_account_submission = WebformSubmission::load($submission->id());
+    if (!empty($patient_account_submission)) {
+      $patient_account_submission->delete();
+    }
+    \Drupal::messenger()->addMessage("You have successfully added a new patient.", "status", TRUE);
+  }
+  if ($submission->getWebform()->id() == 'patient_enrollment') {
+    EnrollPatientAgain($submission->getData(), $submission->id(), $submission->getOwnerId());
+    $enroll_patient_submission = WebformSubmission::load($submission->id());
+    if (!empty($enroll_patient_submission)) {
+      $enroll_patient_submission->delete();
+    }
+    \Drupal::messenger()->addMessage("You have successfully re-enrolled the patient.", "status", TRUE);
+  }
+
+  if ($submission->getWebform()->id() == 'edit_patient_account') {
+    UpatePatientData($submission->getData(), $submission->id(), $submission->getOwnerId());
+    $edit_patient_account_submission = WebformSubmission::load($submission->id());
+    if (!empty($edit_patient_account_submission)) {
+      $edit_patient_account_submission->delete();
+    }
+  }
+  if ($submission->getWebform()->id() == 'subscriber_s_chiropractor') {
+    createChiropractor($submission->getData(), $submission->id());
+    $subscriber_s_chiropractor = WebformSubmission::load($submission->id());
+    if (!empty($subscriber_s_chiropractor)) {
+      $subscriber_s_chiropractor->delete();
+    }
+  }
+  if ($submission->getWebform()->id() == 'detach') {
+    detachChiropractor($submission->getData(), $submission->id());
+    $detachChiropractor_submission = WebformSubmission::load($submission->id());
+    if (!empty($detachChiropractor_submission)) {
+      $detachChiropractor_submission->delete();
+    }
+  }
+
+}
+
+function detachChiropractor($submission_data, $submission_id)
+{
+  $detach = $submission_data["are_you_sure_you_wants_to_detach_from_the_primary_subscriber"];
+  $uid = \Drupal::currentUser()->id();
+  if ($detach == 1) {
+    $user = User::load($uid);
+    $field_chiropractor_subscribers = $user->get("field_chiropractor_subscribers")->getValue();
+    if (!empty($field_chiropractor_subscribers)) {
+      $user->addRole('chiropractor_inactive_');
+      $user->removeRole('chiropractor_active_');
+      $user->set('field_chiropractor_subscribers', []);
+      $user->changed->preserve = TRUE;
+      $user->save();
+    }
+  }
+}
+
+function createChiropractor($submission_data, $submission_id)
+{
+  $clinic_location = $submission_data["clinic_location"];
+  $chiropractor_full_name = $submission_data["chiropractor_full_name"];
+  $chiropractor_email = $submission_data["chiropractor_email"];
+
+  $uid = \Drupal::currentUser()->id();
+  $user = \Drupal::service('entity_type.manager')->getStorage('user')->load($uid);
+  $clinic_id = $user->field_clinic->target_id;
+
+  $chiropractor_user = User::create();
+  $chiropractor_user->setUsername($chiropractor_email);
+  $chiropractor_user->setEmail($chiropractor_email);
+  $chiropractor_user->set('field_full_name', $chiropractor_full_name);
+  $chiropractor_user->addRole('chiropractor_active_');
+  $chiropractor_user->addRole('chiropractor_inactive_');
+  $chiropractor_user->set('field_clinic', ['target_id' => $clinic_id]);
+  $chiropractor_user->set('field_clinic_location', ['target_id' => $clinic_location]);
+  $chiropractor_user->set('field_chiropractor_subscribers', ['target_id' => $uid]);
+  $chiropractor_user->enforceIsNew();
+  $chiropractor_user->activate();
+  $chiropractor_user->save();
+}
+
+
+function UpatePatientData($submission_data, $submission_id, $ownerId)
+{
+  $full_name = $submission_data["full_name"];
+  $patient_email_address = $submission_data["patient_email_address"];
+  $goal_weight = $submission_data["goal_weight"];
+  $disable_daily_email_notifications = $submission_data["disable_daily_email_notifications"];
+  $patient_status = $submission_data["patient_status"];
+  $program_start_date = $submission_data["program_start_date"];
+  $clinic_location = $submission_data["clinic_location"];
+  $phone_number = $submission_data["phone_number"];
+  $field_patient_id = $submission_data["field_patient_id"];
+
+  $account = User::load($field_patient_id);
+  if ($account) {
+    $account->setEmail($patient_email_address);
+    // $account->set("name",$patient_email_address);
+    $account->set("field_full_name", $full_name);
+    $account->set('field_goal_weight', $goal_weight);
+    $account->set('field_phone_number', $phone_number);
+    if ($disable_daily_email_notifications) {
+      $account->set('field_email_optout', $disable_daily_email_notifications);
+    }
+    $account->set('field_chiropractor', array("target_id" => $ownerId));
+    $account->set('field_laser_patient_status', array("target_id" => $patient_status));
+
+    if ($program_start_date) {
+      $dateTime = new DateTime($program_start_date);
+      // $dateTime->add(new DateInterval('P1D'));
+      $formattedDate = $dateTime->format('Y-m-d');
+      $account->set('field_program_start_date', $formattedDate);
+    }
+
+    if ($clinic_location) {
+      $account->set('field_clinic_location', array("target_id" => $clinic_location));
+    }
+
+    $account->changed->preserve = TRUE;
+    $account->save();
+
+    if ($program_start_date) {
+      // update user current program date
+      $user_current_program_day = new UserCurrentProgramDay;
+      $user_current_program_day->userRoles($account->id());
+      $user_current_program_day->userProfile($account->id());
+      $user_current_program_day->UserClinician($account->id());
+      $user_current_program_day->Evaluations($account->id());
+
+    }
+
+  }
+
+}
+
+function ZeroProgramDays($user_id)
+{
+  $user_submission = Views::getView('user_submissions');
+  $user_submission->setDisplay('default');
+  $user_submission->setArguments([$user_id]);
+  $user_submission->execute();
+  $user_submission_result = $user_submission->result;
+  if ($user_submission_result) {
+    foreach ($user_submission_result as $key => $value) {
+      $submission_id = $user_submission_result[$key]->_entity->id();
+      $webform_submission = WebformSubmission::load($submission_id);
+      $data = $webform_submission->getData();
+      // $data['field_weight'] = 164.5;
+      $webform_submission->setData($data);
+      $webform_submission->save();
+    }
+  }
+}
+
+function EnrollPatientAgain($submission_data, $submission_id, $ownerId)
+{
+  $new_patient_id = $submission_data["new_patient"];
+  $program_start_date = $submission_data["program_start_date"];
+  $goal_weight = $submission_data["goal_weight"];
+  $disable_daily_email_notifications = $submission_data["disable_daily_email_notifications"];
+  $patient_status = $submission_data["patient_status"];
+
+  $new_patient = User::load($new_patient_id);
+  $patient_clinic = $new_patient->get("field_clinic")->getValue();
+  $current_chiropractor = User::load($ownerId);
+  $current_chiropractor_clinic = $current_chiropractor->get("field_clinic")->getValue();
+  if ($current_chiropractor_clinic) {
+    $current_chiropractor_clinic_id = $current_chiropractor_clinic[0]["target_id"];
+  }
+
+  if ($patient_clinic) {
+    $patient_clinic_id = $patient_clinic[0]["target_id"];
+  }
+
+  if ($current_chiropractor_clinic_id == $patient_clinic_id) {
+    $new_patient->addRole('enrolled_patient');
+    $new_patient->removeRole('archived_patient');
+    $new_patient->set('field_chiropractor', array("target_id" => $ownerId));
+    $new_patient->set('field_clinic', array("target_id" => $current_chiropractor_clinic_id));
+
+    if ($program_start_date) {
+      $dateTime = new DateTime($program_start_date);
+      $formattedDate = $dateTime->format('Y-m-d');
+      $new_patient->set('field_program_start_date', $formattedDate);
+    }
+    $new_patient->set('field_goal_weight', $goal_weight);
+    $new_patient->set('field_weight_loss_phase', "phase-1");
+    $new_patient->set('field_laser_patient_status', array("target_id" => $patient_status));
+    if ($disable_daily_email_notifications) {
+      $new_patient->set('field_email_optout', $disable_daily_email_notifications);
+    }
+    _user_mail_notify("register_admin_created", $new_patient);
+    $new_patient->changed->preserve = TRUE;
+    $new_patient->save();
+
+    $user_current_program_day = new UserCurrentProgramDay;
+    $user_current_program_day->userRoles($new_patient_id);
+    $user_current_program_day->userProfile($new_patient_id);
+    $user_current_program_day->UserClinician($new_patient_id);
+    $user_current_program_day->Evaluations($new_patient_id);
+    $user_current_program_day->CalculateGoal($new_patient_id);
+
+  }
+}
+
+function CreateUser($submission_data, $submission_id, $ownerId)
+{
+  $enrollment_limit = new EnrollmentLimit;
+  $result = $enrollment_limit->Limit();
+  if ($result) {
+    if (array_key_exists("enrollment_status", $result)) {
+      if ($result["enrollment_status"] == 0) {
+        createNewPatient($submission_data, $submission_id, $ownerId);
+      } else if ($result["enrollment_status"] == 1) {
+        createNewPatient($submission_data, $submission_id, $ownerId);
+      }
+    }
+  }
+}
+
+
+function createNewPatient($submission_data, $submission_id, $ownerId)
+{
+  $fullname = $submission_data["patient_full_name"];
+  $patient_email_address = $submission_data["patient_email_address"];
+  $phone_number = $submission_data["phone_number"];
+  $program_start_date = $submission_data["program_start_date"];
+  $goal_weight = $submission_data["goal_weight"];
+  $clinic_location_ = $submission_data["clinic_location_"];
+  $patient_status = $submission_data["patient_status"];
+  $intake_form_id = $submission_data["intake_form"];
+  $disable_daily_email_notifications = $submission_data["disable_daily_email_notifications"];
+
+  $user = User::create();
+  $user->setUsername($patient_email_address);
+  $user->setEmail($patient_email_address);
+  $user->set('field_phone_number', $phone_number);
+  //$user->setPassword('password');
+  $user->addRole('enrolled_patient'); // E.g: authenticated.
+  $user->enforceIsNew();
+  $user->activate();
+  $user->save();
+  $new_user_id = $user->id();
+  if ($new_user_id) {
+    $new_user = User::load($new_user_id);
+    // set program start date from intake form.
+    if ($program_start_date) {
+      $dateTime = new DateTime($program_start_date);
+      $formattedDate = $dateTime->format('Y-m-d');
+      $new_user->set('field_program_start_date', $formattedDate);
+    } else {
+      $currentDate = date('Y-m-d');
+      $nextSaturdayTimestamp = strtotime('next Saturday', strtotime($currentDate));
+      $nextSaturdayDate = date('Y-m-d', $nextSaturdayTimestamp);
+      $new_user->set('field_program_start_date', $nextSaturdayDate);
+    }
+    // Set Intake Form ID
+    if ($intake_form_id) {
+      $new_user->set('field_intake_form', $intake_form_id);
+      FlagIntakeForm($intake_form_id, $ownerId);
+    }
+    $new_user->set('field_goal_weight', $goal_weight);
+    $new_user->set('field_weight_loss_phase', "phase-1");
+    $new_user->set('field_chiropractor', array("target_id" => $ownerId));
+
+    $chiropractor = User::load($ownerId);
+    $clinic = $chiropractor->get("field_clinic")->getValue();
+    if ($clinic) {
+      $clinic_id = $clinic[0]["target_id"];
+      $new_user->set('field_clinic', array("target_id" => $clinic_id));
+    }
+    if ($clinic_location_) {
+      $new_user->set('field_clinic_location', array("target_id" => $clinic_location_));
+    }
+    $new_user->set('field_full_name', $fullname);
+    if ($disable_daily_email_notifications) {
+      $new_user->set('field_email_optout', $disable_daily_email_notifications);
+    }
+    if (in_array('chiropractor_mind_set', $chiropractor->getRoles())) {
+      $new_user->addRole('patient_mind_set');
+    }
+    $new_user->set('field_laser_patient_status', array("target_id" => $patient_status));
+    $new_user->set('field_locked', false);
+    $new_user->changed->preserve = TRUE;
+    $new_user->save();
+    // current program day 
+    $current_program_day = new UserCurrentProgramDay;
+    $current_program_day->userRoles($new_user_id);
+    $current_program_day->userProfile($new_user_id);
+    $current_program_day->UserClinician($new_user_id);
+    $current_program_day->Evaluations($new_user_id);
+    $current_program_day->CalculateGoal($new_user_id);
+    _user_mail_notify("register_admin_created", $new_user);
+  }
+
+}
+
+function FlagIntakeForm($intake_submission_id, $user_id)
+{
+  $intake_submission = Message::load($intake_submission_id);
+  if ($intake_submission) {
+    $flag_service = \Drupal::service('flag');
+    $flag = $flag_service->getFlagById('intake_processed_cs');
+    $account = User::load($user_id);
+    $flagging = $flag_service->getFlagging($flag, $intake_submission, $account);
+    if (!$flagging) {
+      $flag_service->flag($flag, $intake_submission, $account);
+    }
+  }
+}
+
+
+function sendPatientMessage($entity)
+{
+  $field_chiropractor = $entity->get("field_chiropractor")->getValue()[0]['target_id'];
+  $field_message = $entity->get("field_message")->getValue()[0]['value'];
+  $owner_id = $entity->get('uid')->getValue()[0]['target_id'];
+  $attachment = $entity->get("field_attachments")->getValue();
+
+  $message_value = [
+    'value' => $field_message,
+    'format' => "basic_html"
+  ];
+  $message = Message::create([
+    'contact_form' => 'message',
+    'uid' => $owner_id,
+    'field_from' => $owner_id,
+    'field_to' => $field_chiropractor,
+    'field_message' => $message_value,
+    'field_attachments' => !empty($attachment) ? $entity->get('field_attachments')->getValue()[0]['target_id'] : "",
+    'field_patient_uid' => $owner_id,
+    // 'field_timestamp' => $current_time,
+  ]);
+  $message->save();
+  $new_message = Message::load($message->id());
+  $flag_service = \Drupal::service('flag');
+  $flag = $flag_service->getFlagById('clinician_message_status_cs');
+  $account = User::load($field_chiropractor);
+  $flagging = $flag_service->getFlagging($flag, $new_message, $account);
+  if (!$flagging) {
+    $flag_service->flag($flag, $new_message, $account);
+  }
+
+  // Delete the patient submission
+  $patient_message = Message::load($entity->id());
+  if (!empty($patient_message)) {
+    $patient_message->delete();
+  }
+  sentEmailPatient($field_chiropractor, $owner_id);
+}
+
+function sentEmailPatient($chiropractor_id, $patient_id)
+{
+  $patient = User::load($patient_id);
+  $clinician = User::load($chiropractor_id);
+  $clinician_clinic = $clinician->get("field_clinic")->getValue();
+  $clinician_full_name = $clinician->get("field_full_name")->getValue();
+  $fullname = $clinician_full_name[0]["value"];
+  if ($clinician_clinic) {
+    $clinic_id = $clinician_clinic[0]["target_id"];
+    $storage = \Drupal::service('entity_type.manager')->getStorage('clinic');
+    $clinic_entity = $storage->load($clinic_id);
+    if ($clinic_entity) {
+      $clinic_title_field = $clinic_entity->get("title")->getValue();
+      if ($clinic_title_field) {
+        $clinic_title = $clinic_title_field[0]["value"];
+      }
+    }
+  }
+  $patient_full_name = $patient->get("field_full_name")->getValue();
+  $patient_fullname = $patient_full_name[0]["value"];
+
+  $host = \Drupal::request()->getSchemeAndHttpHost();
+  $mailManager = \Drupal::service('plugin.manager.mail');
+  $module = 'custom_module';
+  $key = 'message_email';
+  $to = $clinician->getEmail();
+  ;
+  $params['subject'] = "You have a new message at " . $clinic_title . "";
+  $params['message'] = 'You have received a new message from ' . $patient_fullname . ' at ' . $clinic_title . '. Please log in at ' . $host . ' to review your messages.';
+  $langcode = \Drupal::currentUser()->getPreferredLangcode();
+  $send = true;
+  $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+  if ($result['result'] !== true) {
+    $message = 'Your message was not sent to "' . $fullname . '"';
+    \Drupal::logger('custom_module')->error($message);
+  } else {
+    $message = 'Your message has been sent to "' . $fullname . '"';
+    \Drupal::logger('custom_module')->notice($message);
+  }
+}
+
+function sendChiropractorMessage($entity)
+{
+  $field_patient = $entity->get("field_patient")->getValue()[0]['target_id'];
+  $field_message = $entity->get("field_message")->getValue()[0]['value'];
+  $owner_id = $entity->get('uid')->getValue()[0]['target_id'];
+  $attachment = $entity->get("field_attachments")->getValue();
+  $message_value = [
+    'value' => $field_message,
+    'format' => "basic_html"
+  ];
+  $message = Message::create([
+    'contact_form' => 'message',
+    'uid' => $field_patient,
+    'field_from' => $owner_id,
+    'field_to' => $field_patient,
+    'field_message' => $message_value,
+    'field_attachments' => !empty($attachment) ? $entity->get('field_attachments')->getValue()[0]['target_id'] : "",
+    'field_patient_uid' => $field_patient,
+    //'field_timestamp' => $current_time,
+  ]);
+
+  $message->save();
+  $new_message = Message::load($message->id());
+  $flag_service = \Drupal::service('flag');
+  $flag = $flag_service->getFlagById('message_status_contact_storage');
+  $account = User::load($new_message->get('uid')->getValue()[0]['target_id']);
+  $flagging = $flag_service->getFlagging($flag, $new_message, $account);
+  if (!$flagging) {
+    $flag_service->flag($flag, $new_message, $account);
+  }
+  // Delete the patient submission
+  $chiropractor_message = Message::load($entity->id());
+  if (!empty($chiropractor_message)) {
+    $chiropractor_message->delete();
+  }
+
+  // Send email to the user.
+  messageEmail($field_patient);
+
+}
+
+
+function messageEmail($patient_id)
+{
+  $patient = User::load($patient_id);
+  $clinician = User::load(\Drupal::currentUser()->id());
+  $clinician_clinic = $clinician->get("field_clinic")->getValue();
+  $clinician_full_name = $clinician->get("field_full_name")->getValue();
+  $fullname = $clinician_full_name[0]["value"];
+  if ($clinician_clinic) {
+    $clinic_id = $clinician_clinic[0]["target_id"];
+    $storage = \Drupal::service('entity_type.manager')->getStorage('clinic');
+    $clinic_entity = $storage->load($clinic_id);
+    if ($clinic_entity) {
+      $clinic_title_field = $clinic_entity->get("title")->getValue();
+      if ($clinic_title_field) {
+        $clinic_title = $clinic_title_field[0]["value"];
+      }
+    }
+  }
+  $field_email_optout = $patient->get("field_email_optout")->getValue();
+  if ($field_email_optout) {
+    $emailoutput = $field_email_optout[0]["value"];
+    if ($emailoutput == 0) {
+      $host = \Drupal::request()->getSchemeAndHttpHost();
+      $mailManager = \Drupal::service('plugin.manager.mail');
+      $module = 'custom_module';
+      $key = 'message_email';
+      $to = $patient->getEmail();
+      $params['subject'] = "You have a new message from " . $clinic_title . "";
+      $params['message'] = 'You have received a new message from ' . $fullname . ' at ' . $clinic_title . '. Please log in at ' . $host . ' to review your messages.';
+      $langcode = \Drupal::currentUser()->getPreferredLangcode();
+      $send = true;
+      $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+      if ($result['result'] !== true) {
+        $message = 'Your message was not sent to "' . $patient->get("field_full_name")->getValue()[0]["value"] . '"';
+        \Drupal::logger('custom_module')->error($message);
+      } else {
+        $message = 'Your message has been sent to "' . $patient->get("field_full_name")->getValue()[0]["value"] . '"';
+        \Drupal::logger('custom_module')->notice($message);
+      }
+
+    }
+  }
+}
+function DecrementLaserSession($submission_data, $submission_id)
+{
+  $patient_profile_id = $submission_data->get('field_patient_profile')->getValue()[0]['target_id'];
+  $storage = \Drupal::service('entity_type.manager')->getStorage('patient_profile');
+  if ($patient_profile_id) {
+    $profile_entity = $storage->load($patient_profile_id);
+    $session_available = $profile_entity->get('field_sessions_available')->getValue();
+    if ($session_available) {
+      $session_value = $session_available[0]['value'];
+      $new_session_value = (int) $session_value - 1;
+      $profile_entity->set('field_sessions_available', $new_session_value);
+      $profile_entity->save();
+
+    }
+  }
+
+}
+// function UnsubscribePatient($submission_data, $submission_id){
+//     $patient = user_load_by_mail($submission_data["email_address"]);
+
+//     if($submission_data["also_cancel_my_account"] ==  1){
+//         if($patient){
+//             if(in_array('enrolled_patient', $patient->getRoles())) {
+//               // $patient->removeRole('archived_patient');
+//               // $patient->addRole('enrolled_patient');
+//                 $patient->removeRole('enrolled_patient');
+//                 $patient->addRole('archived_patient');
+//                 $patient->changed->preserve = TRUE;
+//                 $patient->save();
+//             }
+//         }
+//     }
+// }
+
+function UnsubscribePatient($submission_data, $submission_id)
+{
+  $unsubscribe_daily_email = $submission_data["unsubscribe_daily_email"];
+  $current_user = \Drupal::currentUser();
+  if (in_array('enrolled_patient', $current_user->getRoles())) {
+    $user = User::load(\Drupal::currentUser()->id());
+    $user->set('field_email_optout', $unsubscribe_daily_email);
+    $user->changed->preserve = TRUE;
+    $user->save();
+  }
+}
+
+
+function LogPatientProgress($submission_data, $submission_id)
+{
+  $roles = \Drupal::currentUser()->getRoles();
+  if (in_array('chiropractor_active_', $roles)) {
+    $log_your_progress_message = Message::create([
+      'contact_form' => 'tracking_weight',
+      'uid' => $submission_data['patient'],
+      'created' => strtotime($submission_data['date']),
+      'field_grade' => 5,
+      'field_date' => $submission_data['date'],
+      'field_weight' => $submission_data['today_s_weight'],
+      'field_water_intake' => $submission_data['yesterday_s_water_intake'],
+      'field_blood_sugar' => $submission_data['morning_blood_sugar'],
+      'field_blood_pressure' => $submission_data['blood_pressure'],
+      'field_mind_set_work' => $submission_data['mind_set_work'],
+      'field_author' => $submission_data['patient'],
+    ]);
+    $log_your_progress_message->save();
+    if ($log_your_progress_message->id()) {
+      $log_patient_progross = WebformSubmission::load($submission_id);
+      if (!empty($log_patient_progross)) {
+        $log_patient_progross->delete();
+      }
+    }
+  }
+
+}
+
+function UpdateLastSeen($submission_data, $submission_id)
+{
+  $last_seen = $submission_data["last_seen"];
+  $patient_id = $submission_data["patient"];
+  $user = User::load($patient_id);
+  $user->set('field_last_seen', $last_seen);
+  $user->changed->preserve = TRUE;
+  $user->save();
+  // Delete the Last Seen submission
+  $last_seen_submission = WebformSubmission::load($submission_id);
+  if (!empty($last_seen_submission)) {
+    $last_seen_submission->delete();
+  }
+}
+
+
+
+function custom_module_user_login(\Drupal\user\UserInterface $account)
+{
+  $clinic = $account->get("field_clinic")->getValue();
+  if ($clinic) {
+    $clinic_id = $clinic[0]["target_id"];
+    $storage = \Drupal::service('entity_type.manager')->getStorage('clinic');
+    $clinic_entity = $storage->load($clinic_id);
+    if ($clinic_entity->hasField('field_ecommerce_enabled') == true) {
+      $ecommerce_enabled = $clinic_entity->get('field_ecommerce_enabled')->getValue();
+      if ($ecommerce_enabled) {
+        $ecommerce_enabled_value = $ecommerce_enabled[0]["value"];
+        if ($ecommerce_enabled_value == true) {
+          if (in_array('chiropractor_active_', $account->getRoles())) {
+            if (!in_array('ecommerce_manager', $account->getRoles())) {
+              //$user->removeRole('archived_patient');
+              $account->addRole('ecommerce_manager');
+              $account->changed->preserve = TRUE;
+              $account->save();
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+function custom_module_entity_update(EntityInterface $entity)
+{
+  if ($entity->getEntityTypeId() === 'contact_message') {
+// [headless_progress]     if ($entity->bundle() == "tracking_weight") {
+// [headless_progress]       if (!$entity->field_archive->value) {
+// [headless_progress]         // Log Your Progress (Evaluations)  
+// [headless_progress]         $uid = $entity->get('uid')->target_id;
+// [headless_progress]         $user_current_program_day = new UserCurrentProgramDay;
+// [headless_progress]         $user_current_program_day->userRoles($uid);
+// [headless_progress]         $user_current_program_day->userProfile($uid);
+// [headless_progress]         $user_current_program_day->UserClinician($uid);
+// [headless_progress]         $user_current_program_day->Evaluations($uid);
+// [headless_progress]         $user_current_program_day->CalculateGoal($uid);
+// [headless_progress]       }
+// [headless_progress]     }
+    // Update Red Light profile.
+    if ($entity->bundle() == "ultraslim_profile") {
+      $AddOrUpdateSession = new AddOrUpdateSession;
+      $AddOrUpdateSession->AddorUpdateSession_UltraSlim($entity, $entity->id());
+    }
+    if ($entity->bundle() == "zerona_profile") {
+      $AddOrUpdateSession = new AddOrUpdateSession;
+      $AddOrUpdateSession->AddorUpdateSession_zerona($entity);
+    }
+    if ($entity->bundle() == "lipolight_profile") {
+      $AddOrUpdateSession = new AddOrUpdateSession;
+      $AddOrUpdateSession->AddorUpdateSession_lipolight($entity, $entity->id());
+    }
+
+  }
+
+  if ($entity->getEntityTypeId() == "menu_item" && $entity->bundle() == "menu_item") {
+    $account = User::load(\Drupal::currentUser()->id());
+    if (in_array('administrator', $account->getRoles()) || in_array('system_manager', $account->getRoles())) {
+      EditMenuItem($entity);
+    }
+  }
+  if ($entity->getEntityTypeId() == "commerce_subscription" && $entity->bundle() == "license") {
+    $status = $entity->getState()->getId();
+    if ($status == "canceled") {
+      //deleteLicenses($entity->getOwnerId());
+    }
+  }
+}
+
+
+function deleteLicenses($ownerId)
+{
+  $commerce_licenses = Views::getView('commerce_licenses');
+  $commerce_licenses->setDisplay('block_1');
+  $commerce_licenses->setArguments([$ownerId]);
+  $commerce_licenses->execute();
+  $commerce_licenses_result = $commerce_licenses->result;
+  if ($commerce_licenses_result) {
+    foreach ($commerce_licenses_result as $key => $value) {
+      $value->_entity->delete();
+      \Drupal::logger('custom_module')->notice('License ID @id Deleted by custom module.', [
+        '@id' => $value->_entity->id()
+      ]);
+    }
+  }
+}
+
+
+function custom_module_entity_insert(EntityInterface $entity)
+{
+  if ($entity->getEntityTypeId() == "menu_item" && $entity->bundle() == "menu_item") {
+    $account = User::load(\Drupal::currentUser()->id());
+    if (in_array('administrator', $account->getRoles()) || in_array('system_manager', $account->getRoles())) {
+      EditMenuItem($entity);
+    }
+  }
+
+  // User entity
+  if ($entity->bundle() == "user") {
+    if (in_array('chiropractor_active_', $entity->getRoles())) {
+      _user_mail_notify("register_no_approval_required", $entity);
+    }
+  }
+
+  // Clinic entity
+  if ($entity->getEntityTypeId() == "clinic" && $entity->bundle() == "clinic") {
+    $account_switcher = \Drupal::service('account_switcher');
+    $admin_user = User::load(1);
+    $account_switcher->switchTo($admin_user);
+    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+    // 'recipe' nodes published to clinic id 1
+    $query = $node_storage->getQuery()
+      ->accessCheck(TRUE)
+      ->condition('type', 'recipe')
+      ->condition('field_published_to', 1);
+    $nids = $query->execute();
+
+    // 'chirothin_resource' and 'training' created by any admin user
+    $admin_uids = \Drupal::entityQuery('user')
+      ->accessCheck(FALSE)
+      ->condition('roles', 'administrator')
+      ->execute();
+
+    if (!empty($admin_uids)) {
+      $admin_query = $node_storage->getQuery()
+        ->accessCheck(TRUE)
+        ->condition('type', ['chirothin_resource', 'training'], 'IN')
+        ->condition('uid', $admin_uids, 'IN');
+      $admin_nids = $admin_query->execute();
+
+      // Merge both result sets, avoiding duplicates
+      $nids = array_unique(array_merge($nids, $admin_nids));
+    }
+
+    // Add clinic to Recipe, Training and Resources
+    if (!empty($nids)) {
+      $nodes = $node_storage->loadMultiple($nids);
+      foreach ($nodes as $node) {
+        $node->field_published_to[] = ['target_id' => $entity->id()];
+        $node->save();
+      }
+    }
+    $account_switcher->switchBack();
+  }
+
+  // Contact Message entity
+  if ($entity->getEntityTypeId() === 'contact_message') {
+// [headless_progress]     if ($entity->bundle() == "tracking_weight") {
+// [headless_progress]       //\Drupal::logger('custom_module')->notice('Tracking weight Insert hook called..');
+// [headless_progress]       $owner_id = $entity->get('uid')->getValue()[0]['target_id'];
+// [headless_progress]       //flag the owner of the submission.
+// [headless_progress]       $log_your_progross = new LogYourProgross;
+// [headless_progress]       $log_your_progross->MarkasNew($owner_id);
+// [headless_progress] 
+// [headless_progress]       $field_question = $entity->get('field_question')->getValue();
+// [headless_progress]       $date = $entity->get('field_date')->getValue()[0]['value'];
+// [headless_progress]       if (!empty($field_question)) {
+// [headless_progress]         createEntity($owner_id, $date, $field_question[0]['value']);
+// [headless_progress]       }
+// [headless_progress]       // Log Your Progress (Inches)
+// [headless_progress]       $total = $log_your_progross->CalculateTotalInches($entity);
+// [headless_progress]       $entity->set('field_total_measurements', $total);
+// [headless_progress] 
+// [headless_progress]       $field_archive = $entity->get('field_archive')->getValue();
+// [headless_progress]       if ($field_archive[0]['value'] != true) {
+// [headless_progress]         $user_entity = User::load($owner_id);
+// [headless_progress]         // Log Your Progress (Evaluations)  
+// [headless_progress]         $user_current_program_day = new UserCurrentProgramDay;
+// [headless_progress]         $user_current_program_day->userRoles($user_entity->id());
+// [headless_progress]         $user_current_program_day->userProfile($user_entity->id());
+// [headless_progress]         $user_current_program_day->UserClinician($user_entity->id());
+// [headless_progress]         $user_current_program_day->Evaluations($user_entity->id());
+// [headless_progress]         $user_current_program_day->CalculateGoal($user_entity->id());
+// [headless_progress]         // compute program day   
+// [headless_progress]         $field_program_day_computed = $entity->get('field_program_day_computed')->getValue();
+// [headless_progress]         if (!empty($field_program_day_computed)) {
+// [headless_progress]           if ($field_program_day_computed[0]['value'] < 1) {
+// [headless_progress]             $entity->set('field_program_day', 0);
+// [headless_progress]           } else {
+// [headless_progress]             $entity->set('field_program_day', $field_program_day_computed[0]['value']);
+// [headless_progress]           }
+// [headless_progress]         }
+// [headless_progress]         // compute weight loss to date.
+// [headless_progress]         $field_weight_loss_computed = $entity->get('field_weight_loss_computed')->getValue();
+// [headless_progress]         if (!empty($field_weight_loss_computed)) {
+// [headless_progress]           $entity->set('field_weight_loss_to_date', $field_weight_loss_computed[0]['value']);
+        }
+
+      }//end of archive
+      $entity->save();
+    }
+    if ($entity->bundle() == "ultraslim_profile") {
+      $AddOrUpdateSession = new AddOrUpdateSession;
+      $AddOrUpdateSession->AddorUpdateSession_UltraSlim($entity, $entity->id());
+      DecrementLaserSession($entity, $entity->id());
+    }
+    if ($entity->bundle() == "zerona_profile") {
+      $AddOrUpdateSession = new AddOrUpdateSession;
+      // Pass TRUE to indicate this is an insert (should decrement)
+      $AddOrUpdateSession->AddorUpdateSession_zerona($entity, TRUE);
+    }
+    if ($entity->bundle() == "lipolight_profile") {
+      $AddOrUpdateSession = new AddOrUpdateSession;
+      $AddOrUpdateSession->AddorUpdateSession_lipolight($entity, $entity->id());
+      DecrementLaserSession($entity, $entity->id());
+    }
+    if ($entity->bundle() == 'patient_message') {
+      sendPatientMessage($entity);
+    }
+    if ($entity->bundle() == 'chiropractor_message') {
+      sendChiropractorMessage($entity);
+    }
+  }
+}
+
+function createEntity($submittedby, $created, $question)
+{
+  $user = User::load($submittedby);
+  $chiropractor = $user->get("field_chiropractor")->getValue()[0]["target_id"];
+  $message_value = [
+    'value' => $question,
+    'format' => "filtered_html"
+  ];
+  $patient_message = Message::create([
+    'contact_form' => 'patient_message',
+    'uid' => $submittedby,
+    'field_chiropractor' => $chiropractor,
+    'field_message' => $message_value,
+  ]);
+  $patient_message->save();
+}
+
+function EditMenuItem($entity)
+{
+  $field_assigned_clinic = $entity->get("field_assigned_clinic")->getValue();
+  if ($field_assigned_clinic) {
+    $entity->set("field_my_clinic", array("target_id" => $field_assigned_clinic[0]["target_id"]));
+    $entity->save();
+  }
+
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function custom_module_user_presave(EntityInterface $entity)
+{
+  // Set field_chiropractor if user has the role.
+  if (in_array('chiropractor_active_', $entity->getRoles())) {
+    $entity->set('field_chiropractor', $entity->id());
+  }
+
+  // Set program day fields if program start date is available.
+  $start_date = $entity->get('field_program_start_date')->value;
+  if ($start_date) {
+    $cMServices = \Drupal::service('custom_module.services');
+    $day = $cMServices->computeProgramStartDate($start_date);
+
+    $entity->set('field_user_current_program_day_c', $day);
+    $entity->set('field_current_program_day', $day);
+    $entity->set('field_program_day', $day);
+  }
+
+  // Handle new user registration logic.
+  if ($entity->isNew()) {
+    $roles = $entity->getRoles();
+
+    if (in_array('anonymous', $roles) && !in_array('enrolled_patient', $roles)) {
+      $fullname = $entity->get('field_full_name')->value;
+      $subscribers = $entity->get('field_chiropractor_subscribers')->getValue();
+
+      if (!in_array('chiropractor_active_', $roles) && empty($subscribers)) {
+        // Create new clinic and location.
+        $entity_result = createClinicAndClinicLocation($fullname, $entity->getEmail(), $entity->id());
+
+        if (!empty($entity_result['new_clinic_id'])) {
+          $entity->set('field_clinic', ['target_id' => $entity_result['new_clinic_id']]);
+        }
+
+        // Add default inactive chiropractor and subscriber role.
+        $entity->addRole('subscriber');
+        $entity->addRole('chiropractor_inactive_');
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function custom_module_user_insert(EntityInterface $entity)
+{
+  // Only proceed if user has chiropractor_inactive_ role
+  if (!in_array('chiropractor_inactive_', $entity->getRoles())) {
+    return;
+  }
+
+  // Update clinic ownership if clinic was created during presave.
+  $clinic_id = $entity->get('field_clinic')->target_id;
+
+  if (!empty($clinic_id)) {
+    // Load and update clinic owner using entity type manager.
+    $storage = \Drupal::entityTypeManager()->getStorage('clinic');
+    $clinic = $storage->load($clinic_id);
+
+    if ($clinic) {
+      $current_owner = $clinic->getOwnerId();
+      // Only update if owner is 1 or NULL
+      if ($current_owner == 1 || is_null($current_owner)) {
+        $clinic->setOwnerId($entity->id());
+        $clinic->save();
+      }
+
+      // Find and update associated clinic location.
+      $query = \Drupal::entityQuery('clinic')
+        ->condition('type', 'clinic_location')
+        ->condition('field_clinic', $clinic_id)
+        ->accessCheck(FALSE);
+      $location_ids = $query->execute();
+
+      if (!empty($location_ids)) {
+        $location = $storage->load(reset($location_ids));
+        if ($location) {
+          $location_owner = $location->getOwnerId();
+          // Only update if owner is 1 or NULL
+          if ($location_owner == 1 || is_null($location_owner)) {
+            $location->setOwnerId($entity->id());
+            $location->save();
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for views-view.html.twig.
+ */
+
+function custom_module_preprocess_views_view(&$variables)
+{
+  $view = $variables['view'];
+  if ($view->id() == 'summary_laser_sessions' && $view->current_display == 'embed_1' || $view->id() == 'summary_laser_sessions' && $view->current_display == 'embed_2' || $view->id() == 'summary_laser_sessions' && $view->current_display == 'embed_3') {
+    $output = \Drupal::service('renderer')->render($variables['rows']);
+    $variables['rows'] = [
+      '#markup' => '<div class="custom-wrapper row">' . $output . '</div>',
+    ];
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for views-view-field.html.twig.
+ */
+function custom_module_preprocess_views_view_field(&$variables)
+{
+  $view = $variables['view'];
+  $field = $variables['field'];
+
+  if ($view->id() == 'commerce_products' && $view->current_display == 'page_3' && $field->options['id'] == 'type') {
+    $badges = [
+      'chironutraceutical_variations' => ['shipping', 'Shipping Available'],
+      'chironutraceutical_ns' => ['pickup', 'Pickup Only'],
+    ];
+
+    $variation_type = $field->getValue($variables['row']);
+    $variables['output'] = '';
+
+    if (isset($badges[$variation_type])) {
+      [$modifier, $label] = $badges[$variation_type];
+      $variables['output'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'span',
+        '#value' => $label,
+        '#attributes' => [
+          'class' => ['product-badge', 'product-badge--' . $modifier],
+        ],
+      ];
+    }
+  }
+
+  // Each row of this view represents a single product variation (joined via
+  // the variations_target_id relationship). The default "Add to cart form"
+  // formatter operates on the product's full variations field, which falls
+  // back to a "Please select" dropdown whenever the product has variations
+  // of more than one type. Replace it with a form scoped to this row's
+  // specific variation, so no selector is shown.
+  if ($view->id() == 'commerce_products' && $view->current_display == 'page_3' && $field->options['id'] == 'variations_target_id') {
+    $row = $variables['row'];
+    $variation = $row->_relationship_entities['variations_target_id'] ?? NULL;
+
+    if ($variation) {
+      $variables['output'] = [
+        '#lazy_builder' => [
+          'custom_module.product_variation_lazy_builders:addToCartForm', [
+            $variation->id(),
+            (bool) ($field->options['settings']['combine'] ?? FALSE),
+            $variation->language()->getId(),
+          ],
+        ],
+        '#create_placeholder' => TRUE,
+      ];
+    }
+  }
+}
+
+function custom_module_block_access(Block $block, $operation, AccountInterface $account)
+{
+  $hero_image_exists = "";
+  if ($operation === 'view' && $block->getPluginId() === 'views_block:recipes-block_3') {
+    $user = User::load(\Drupal::currentUser()->id());
+    $clinic = $user->get("field_clinic")->getValue();
+    if ($clinic) {
+      $clinic_id = $clinic[0]["target_id"];
+      $storage = \Drupal::service('entity_type.manager')->getStorage('clinic');
+      $clinic_entity = $storage->load($clinic_id);
+      $field_hide_shared_resources = $clinic_entity->get('field_hide_shared_resources')->getValue();
+      if ($field_hide_shared_resources) {
+        if ($field_hide_shared_resources[0]["value"] == 0) {
+          $hero_image_exists = true;
+        } else {
+          $hero_image_exists = false;
+        }
+      }
+    }
+    return AccessResult::forbiddenIf($hero_image_exists == FALSE)->addCacheableDependency($block);
+  }
+
+  if ($operation === 'view' && $block->getPluginId() === 'views_block:recipes-block_2') {
+    $user = User::load(\Drupal::currentUser()->id());
+    $clinic = $user->get("field_clinic")->getValue();
+    if ($clinic) {
+      $clinic_id = $clinic[0]["target_id"];
+      $storage = \Drupal::service('entity_type.manager')->getStorage('clinic');
+      $clinic_entity = $storage->load($clinic_id);
+      $field_hide_shared_resources = $clinic_entity->get('field_hide_shared_resources')->getValue();
+      if ($field_hide_shared_resources) {
+        if ($field_hide_shared_resources[0]["value"] == 1) {
+          $hero_image_exists = true;
+        } else {
+          $hero_image_exists = false;
+        }
+      }
+    }
+    return AccessResult::forbiddenIf($hero_image_exists == FALSE)->addCacheableDependency($block);
+  }
+  if ($operation === 'view' && $block->getPluginId() === 'views_block:training-block_1') {
+    $user = User::load(\Drupal::currentUser()->id());
+    $clinic = $user->get("field_clinic")->getValue();
+    if ($clinic) {
+      $clinic_id = $clinic[0]["target_id"];
+      $storage = \Drupal::service('entity_type.manager')->getStorage('clinic');
+      $clinic_entity = $storage->load($clinic_id);
+      $field_hide_shared_resources = $clinic_entity->get('field_hide_shared_resources')->getValue();
+      if ($field_hide_shared_resources) {
+        if ($field_hide_shared_resources[0]["value"] == 0) {
+          $hero_image_exists = true;
+        } else {
+          $hero_image_exists = false;
+        }
+      }
+    }
+    return AccessResult::forbiddenIf($hero_image_exists == FALSE)->addCacheableDependency($block);
+  }
+
+  if ($operation === 'view' && $block->getPluginId() === 'views_block:training-block_2') {
+    $user = User::load(\Drupal::currentUser()->id());
+    $clinic = $user->get("field_clinic")->getValue();
+    if ($clinic) {
+      $clinic_id = $clinic[0]["target_id"];
+      $storage = \Drupal::service('entity_type.manager')->getStorage('clinic');
+      $clinic_entity = $storage->load($clinic_id);
+      $field_hide_shared_resources = $clinic_entity->get('field_hide_shared_resources')->getValue();
+      if ($field_hide_shared_resources) {
+        if ($field_hide_shared_resources[0]["value"] == 1) {
+          $hero_image_exists = true;
+        } else {
+          $hero_image_exists = false;
+        }
+      }
+    }
+    return AccessResult::forbiddenIf($hero_image_exists == FALSE)->addCacheableDependency($block);
+  }
+
+  return AccessResult::neutral();
+}
+
+
+/**
+ * Implements hook_commerce_order_update().
+ */
+function custom_module_commerce_order_update($order)
+{
+  \Drupal::service('custom_module.services')->updateEnrollment($order);
+}
+
+function custom_module_user_logout(AccountInterface $account)
+{
+  $current_user = \Drupal::currentUser();
+  $roles = $account->getRoles();
+  if (in_array('chiropractor_inactive_', $roles) || in_array('chiropractor_active_', $roles)) {
+    $cart_manager = \Drupal::service('commerce_cart.cart_manager');
+    $current_user = \Drupal::currentUser();
+    $store_ids = \Drupal::entityTypeManager()->getStorage('commerce_store')->getQuery()->accessCheck(TRUE)->execute();
+    if (
+      $carts = \Drupal::entityTypeManager()->getStorage('commerce_order')->loadByProperties([
+        'cart' => TRUE,
+        'uid' => $current_user->id(),
+      ])
+    ) {
+      foreach ($carts as $cart) {
+        $cart_manager->emptyCart($cart);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+
+function custom_module_views_data_alter(array &$data)
+{
+  $data['commerce_product']['already_purchased'] = [
+    'title' => t('Exclude already purchased products'),
+    'help' => t('Exclude products that the current user has already purchased.'),
+    'filter' => [
+      'title' => t('Exclude already purchased products'),
+      'help' => t('Exclude products that the current user has already purchased.'),
+      'id' => 'custom_views_filter',
+    ],
+  ];
+
+  $data['users_field_data']['red_light_therapy_profile'] = [
+    'title' => t('Red Light Therapy Profile'),
+    'help' => t('Displays Red Light Therapy Profile management buttons.'),
+    'field' => [
+      'id' => 'red_light_therapy_profile',
+    ],
+  ];
+}
+
+
+function custom_module_preprocess_status_messages(&$variables)
+{
+  if (isset($variables['message_list']['error'])) {
+    $error_messages = $variables['message_list']['error'];
+    foreach ($error_messages as $delta => $message) {
+      if (strpos((string) $message, 'You already have the Chiropractor (Active) role.') !== FALSE) {
+        $current_user = \Drupal::currentUser();
+        $uid = $current_user->id();
+        $url = Url::fromRoute('entity.user.canonical', ['user' => $uid]);
+        $x = $url->toString();
+        $subscription_link = "<a href='" . $x . "/subscriptions' target='_blank'>here</a>";
+        $video_link = "<a href=/video/explaination target='_blank'>here</a>";
+        $user = User::load($uid);
+        $field_chiropractor_subscribers = $user->get("field_chiropractor_subscribers")->getValue();
+        if (empty($field_chiropractor_subscribers)) {
+          $html = "To upgrade or downgrade your subscription, you must first cancel your existing subscription and then purchase the new subscription. No patient data will be lost by performing this action. If you are downgrading, you must archive enough enrolled patients to meet the criteria for the subscription level you are requesting (for NEWBIE you must have 3 or fewer enrolled patients to downgrade - For ROOKIE you must have 9 or fewer enrolled patients to downgrade.) When upgrading, you will be charged a pro-rated amount if you are upgrading mid billing cycle. To get started please cancel your current subscription click " . $subscription_link . ". To watch a video on how to perform an upgrade/downgrade click " . $video_link . ".";
+        } else {
+          $primary_subscriber_id = $field_chiropractor_subscribers[0]['target_id'];
+          $primary_subscriber = User::load($primary_subscriber_id);
+          $primary_subscriber_full_name = $primary_subscriber->get("field_full_name")->getValue();
+          $fullname = $primary_subscriber_full_name[0]["value"];
+          $current_path = \Drupal::service('path.current')->getPath();
+          $path_args = explode('/', $current_path);
+          $product_id = isset($path_args[2]) ? $path_args[2] : NULL;
+          $detach_link = "<a href=/detach?product_id=" . $product_id . "&name=" . $fullname . " target='_blank'>Click here to detach your account</a>";
+          $html = "You are linked to a primary user account. To subscribe this product, please detach yourself from the primary account. " . $detach_link . " or contact support for assistance.";
+        }
+        $html = Markup::create($html);
+        $variables['message_list']['error'][$delta] = $html;
+      }
+    }
+  }
+}
+
+
+
+function custom_module_preprocess_menu(&$variables)
+{
+  if ($variables['menu_name'] == "menu-header-right") {
+    $current_user = \Drupal::currentUser();
+    $user_id = $current_user->id();
+    if (in_array('chiropractor_active_', $current_user->getRoles())) {
+      $user = User::load($user_id);
+      $field_chiropractor_subscribers = $user->get("field_chiropractor_subscribers")->getValue();
+      if (empty($field_chiropractor_subscribers)) {
+        $result = PurchasedEntity();
+        // if(!$result){
+        foreach ($variables['items'] as &$item) {
+          if (!empty($item['below'])) {
+            foreach ($item['below'] as $child_key => $child_item) {
+              //if ($child_item['title'] == 'My Chiropractors' || $child_item['title'] == 'My Clinic Locations') {
+              if ($child_item['title'] == 'My Clinic Locations') {
+                // unset($item['below'][$child_key]);
+                // \Drupal::cache('menu')->invalidateAll();
+              }
+            }
+          }
+        }
+        // }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_webform_access().
+ */
+// function custom_module_webform_access(\Drupal\webform\WebformInterface $webform, $operation, \Drupal\Core\Session\AccountInterface $account) {
+//       $current_user = \Drupal::currentUser();
+//       $user_id = $current_user->id();
+//      if(!in_array('administrator', $current_user->getRoles())){
+//           if ($webform->id() == 'subscriber_s_chiropractor') {
+//             if ($current_user->hasRole('chiropractor_active_')) {
+//                  $user = User::load($user_id);
+//                 $field_chiropractor_subscribers = $user->get("field_chiropractor_subscribers")->getValue();
+//                  if(empty($field_chiropractor_subscribers)){
+//                       $result = PurchasedEntity();
+//                        if($result){
+//                         return AccessResult::neutral();
+//                        }
+//                  }
+//             }
+//              return AccessResult::forbidden();
+//       }
+//  }
+
+// }
+
+
+/**
+ * Implements hook_form_FORM_ID_alter() for 'commerce_payment_method_credit_card_delete_form'.
+ */
+function custom_module_form_commerce_payment_method_credit_card_delete_form_alter(array &$form, FormStateInterface $form_state)
+{
+  if (empty($form_state->getUserInput()) && !$form_state->isRebuilding()) {
+    /** @var \Drupal\commerce_payment\Entity\PaymentMethodInterface $payment_method */
+    $payment_method = $form_state->getFormObject()->getEntity();
+    $commerce_subscription_storage_handler = \Drupal::entityTypeManager()
+      ->getStorage('commerce_subscription');
+    $query = $commerce_subscription_storage_handler->getQuery()->accessCheck(TRUE)
+      ->condition('payment_method', $payment_method->id());
+    $subscription_ids = $query->execute();
+    if ($subscription_ids) {
+      $subscriptions = $commerce_subscription_storage_handler->loadMultiple($subscription_ids);
+      foreach ($subscriptions as $subscription) {
+        // \Drupal::messenger()->addWarning(t('Deleting this payment method may cause issues with the associated subscription %subscription. <a href=":url">Please update the payment method for the subscription</a> prior to deletion.', [
+        //   '%subscription' => $subscription->label(),
+        //   ':url' => $subscription->toUrl('customer-edit-form')->toString(),
+        // ]));
+        throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('You are not allowed to access this form.');
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function custom_module_form_contact_message_patient_photos_edit_form_alter(array &$form, FormStateInterface $form_state, $form_id)
+{
+  // Change the form title
+  $form['#title'] = t('Update Patient Photos');
+}
+
+/**
+ * Implements hook_link_alter().
+ */
+
+function custom_module_link_alter(&$variables)
+{
+  $current_user = \Drupal::currentUser();
+  $user_id = $current_user->id();
+  if ($current_user->hasRole('chiropractor_active_')) {
+    if (isset($variables['url'])) {
+      $url = $variables['url']->toString();
+      if (strpos($url, 'payment-methods') !== false && strpos($url, 'delete') !== false) {
+        $parsed_url = parse_url($url);
+        $query = [];
+        if (isset($parsed_url['query'])) {
+          parse_str($parsed_url['query'], $query);
+        }
+        if (isset($query['destination']) && strpos($query['destination'], 'payment-methods') !== false) {
+          if (isset($variables['options']['attributes']['class'])) {
+            $variables['options']['attributes']['class'] = array_diff($variables['options']['attributes']['class'], ['use-ajax']);
+          }
+          unset($variables['options']['attributes']['data-dialog-type']);
+          unset($variables['options']['attributes']['data-dialog-options']);
+          unset($variables['options']['attributes']['data-once']);
+        }
+      }
+
+    }
+  }
+
+}
+
+
+
+function PurchasedEntity()
+{
+  $subscription_storage = \Drupal::entityTypeManager()->getStorage('commerce_subscription');
+  $query = $subscription_storage->getQuery();
+  $query
+    ->condition('uid', \Drupal::currentUser()->id())
+    ->condition('state', 'active')
+    ->accessCheck(FALSE);
+  $subscription_ids = $query->execute();
+  if (!empty($subscription_ids)) {
+    $subscription_id = reset($subscription_ids);
+    $subscription = $subscription_storage->load($subscription_id);
+    if ($subscription) {
+      $purchased_product = $subscription->get("purchased_entity")->getValue()[0]["target_id"];
+      if ($purchased_product == 3 || $purchased_product == 4) {
+        return TRUE;
+      } else {
+        return FALSE;
+      }
+    }
+  }
+}
+
+function GlobalPurchasedEntity()
+{
+  $subscription_storage = \Drupal::entityTypeManager()->getStorage('commerce_subscription');
+  $query = $subscription_storage->getQuery();
+  $query
+    ->condition('uid', \Drupal::currentUser()->id())
+    ->condition('state', 'active')
+    ->accessCheck(FALSE);
+  $subscription_ids = $query->execute();
+  if (!empty($subscription_ids)) {
+    $subscription_id = reset($subscription_ids);
+    $subscription = $subscription_storage->load($subscription_id);
+    if ($subscription) {
+      $purchased_product = $subscription->get("purchased_entity")->getValue()[0]["target_id"];
+      return $purchased_product;
+    }
+  }
+}
+
+
+
+function createClinicAndClinicLocation($clinic_title, $chiropractor_email, $uid = NULL)
+{
+  $uid = $uid ?? 1;
+  $eck = [
+    'entity_type' => 'clinic',
+    'type' => 'clinic',
+    'title' => $clinic_title,
+    'field_clinic_mail' => $chiropractor_email
+  ];
+  $clinic_entity = \Drupal\eck\Entity\EckEntity::create($eck);
+  $clinic_entity->setOwnerId($uid);
+  $clinic_entity->save();
+  $new_clinic_id = $clinic_entity->id();
+  $clinic_location_eck = [
+    'entity_type' => 'clinic',
+    'type' => 'clinic_location',
+    'title' => $clinic_title . " (Location)",
+    'field_clinic' => array('target_id' => $new_clinic_id)
+  ];
+  $clinic_location_entity = \Drupal\eck\Entity\EckEntity::create($clinic_location_eck);
+  $clinic_location_entity->setOwnerId($uid);
+  $clinic_location_entity->save();
+  $new_clinic_location_id = $clinic_location_entity->id();
+  return ["new_clinic_id" => $new_clinic_id, "new_clinic_location_id" => $new_clinic_location_id];
+}
+
+
+function custom_module_theme_suggestions_views_view_alter(array &$suggestions, array $variables)
+{
+  $view = $variables['view'];
+  $display_id = $view->current_display;
+  $suggestions[] = 'views_view__' . $view->id() . '__' . $display_id;
+}
+
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function custom_module_entity_operation_alter(array &$operations, EntityInterface $entity)
+{
+  if ($entity->getEntityTypeId() === 'commerce_license' && $entity->get('state')->value !== 'expired') {
+    $url = Url::fromRoute('custom_module.expire_license_confirm', ['commerce_license' => $entity->id()]);
+    $url->setOptions([
+      'attributes' => [
+        'class' => ['use-ajax'],
+        'data-dialog-type' => 'modal',
+        'data-dialog-options' => json_encode(['width' => 800]),
+      ],
+    ]);
+
+    $operations['expire'] = [
+      'title' => t('Expire'),
+      'weight' => 20,
+      'url' => $url,
+    ];
+  }
+}
+
+
+/**
+ * Implements hook_entity_access().
+ */
+function custom_module_entity_access(EntityInterface $entity, $operation, AccountInterface $account)
+{
+  // Apply only to contact messages.
+  if ($entity->getEntityTypeId() === 'contact_message') {
+    // Apply only to 'tracking_weight' contact messages.
+    if ($entity->bundle() === 'tracking_weight') {
+
+      // Apply the same rule to both update and delete operations.
+      if ($operation === 'update' || $operation === 'delete') {
+        $current_uid = $account->id();
+        $owner_id = $entity->get('uid')->target_id ?? NULL;
+
+        // Check if the message has an owner.
+        if ($owner_id) {
+          // Allow if current user is the message owner.
+          if ($owner_id == $current_uid) {
+            return AccessResult::allowed()->cachePerUser();
+          }
+
+          // Otherwise, check if current user is the chiropractor of the owner.
+          if (
+            ($owner = User::load($owner_id)) &&
+            ($current_user = User::load($current_uid)) &&
+            $account->hasRole('chiropractor_active_')
+          ) {
+            $owner_chiropractor = $owner->get('field_chiropractor')->target_id ?? NULL;
+            $owner_clinic = $owner->get('field_clinic')->target_id ?? NULL;
+            $current_clinic = $current_user->get('field_clinic')->target_id ?? NULL;
+
+            if (
+              ($owner_chiropractor == $current_uid) ||
+              ($owner_clinic && $owner_clinic == $current_clinic)
+            ) {
+              return AccessResult::allowed()->cachePerUser();
+            }
+          }
+        }
+      }
+    }
+
+    // Apply only to 'patient_intake' contact messages.
+    if (
+      $entity->bundle() === 'patient_intake' &&
+      ($operation === 'view' || $operation === 'delete') &&
+      ($current_user = User::load($account->id())) &&
+      $account->hasRole('chiropractor_active_')
+    ) {
+      $entity_clinic = $entity->get('field_clinic')->target_id ?? NULL;
+      $current_clinic = $current_user->get('field_clinic')->target_id ?? NULL;
+
+      // Grant access if both clinics match.
+      if ($entity_clinic && $current_clinic && $entity_clinic == $current_clinic) {
+        return AccessResult::allowed()->cachePerUser();
+      }
+    }
+
+    // Apply only to 'patient_attachments' & 'chiropractor_notes' contact messages.
+    // View access.
+    if (
+      in_array($entity->bundle(), ['patient_attachments', 'chiropractor_notes'], TRUE) &&
+      $operation === 'view'
+    ) {
+      $owner_id = $entity->get('uid')->target_id ?? NULL;
+      $current_uid = $account->id();
+
+      // Grant access if the owner and current user match.
+      if ($owner_id && $owner_id == $current_uid) {
+        return AccessResult::allowed()->cachePerUser();
+      }
+
+      // Check for clinic-based access if the current user is an active chiropractor.
+      if (($owner = User::load($owner_id)) && ($current_owner = User::load($current_uid))) {
+        $owner_clinic = $owner->get('field_clinic')->target_id ?? NULL;
+        $current_clinic = $current_owner->get('field_clinic')->target_id ?? NULL;
+
+        if ($owner_clinic && $current_clinic && $owner_clinic == $current_clinic) {
+          return AccessResult::allowed()->cachePerUser();
+        }
+      }
+    }
+    // Update and Delete access to chiropractor Active only. 
+    if (
+      in_array($entity->bundle(), ['patient_attachments', 'chiropractor_notes'], TRUE) &&
+      in_array($operation, ['update', 'delete'], TRUE) && $account->hasRole('chiropractor_active_')
+    ) {
+      $owner_id = $entity->get('uid')->target_id ?? NULL;
+      $current_uid = $account->id();
+
+      // Grant access if the owner and current user match.
+      if ($owner_id && $owner_id == $current_uid) {
+        return AccessResult::allowed()->cachePerUser();
+      }
+
+      // Check for clinic-based access if the current user is an active chiropractor.
+      if (($owner = User::load($owner_id)) && ($current_owner = User::load($current_uid))) {
+        $owner_clinic = $owner->get('field_clinic')->target_id ?? NULL;
+        $current_clinic = $current_owner->get('field_clinic')->target_id ?? NULL;
+
+        if ($owner_clinic && $current_clinic && $owner_clinic == $current_clinic) {
+          return AccessResult::allowed()->cachePerUser();
+        }
+      }
+    }
+
+    if ($entity->bundle() === 'ultraslim_profile' || $entity->bundle() === 'zerona_profile' || $entity->bundle() === 'lipolight_profile') {
+      // Apply the same rule to both update and delete operations.
+      if (($operation === 'update' || $operation === 'delete') && $account->hasRole('chiropractor_active_')) {
+        $current_uid = $account->id();
+        $owner_id = $entity->get('uid')->target_id ?? NULL;
+
+        // Grant access if the owner and current user match.
+        if ($owner_id && $owner_id == $current_uid) {
+          return AccessResult::allowed()->cachePerUser();
+        }
+
+        // -------------------------------------------------------------
+        // check entity created by subscriber and edit by chiropractor.
+        // -------------------------------------------------------------
+        $chiropractor = User::load($current_uid);
+        if ($chiropractor && $chiropractor->hasField('field_chiropractor_subscribers') && !$chiropractor->get('field_chiropractor_subscribers')->isEmpty()) {
+          foreach ($chiropractor->get('field_chiropractor_subscribers')->referencedEntities() as $subscriber) {
+            if ($subscriber->id() == $owner_id) {
+              return AccessResult::allowed()->cachePerUser();
+            }
+          }
+        }
+
+        // -------------------------------------------------------------
+        // check entity created by chiropractor and edit by subscriber.
+        // -------------------------------------------------------------
+        $owner = User::load($owner_id);
+        if ($owner && $owner->hasField('field_chiropractor_subscribers') && !$owner->get('field_chiropractor_subscribers')->isEmpty()) {
+          foreach ($owner->get('field_chiropractor_subscribers')->referencedEntities() as $subscriber) {
+            if ($subscriber->id() == $current_uid) {
+              return AccessResult::allowed()->cachePerUser();
+            }
+          }
+        }
+      }
+    }
+
+    // Update Patient Photos.
+    if ($entity->bundle() === 'patient_photos') {
+      // Apply the same rule to both update and delete operations.
+      if (($operation === 'update' || $operation === 'view') && $account->hasRole('chiropractor_active_')) {
+        $current_uid = $account->id();
+        $owner_id = $entity->get('uid')->target_id ?? NULL;
+
+        // Grant access if the owner and current user match.
+        if ($owner_id && $owner_id == $current_uid) {
+          return AccessResult::allowed()->cachePerUser();
+        }
+
+        // -------------------------------------------------------------
+        // check entity created by subscriber and edit by chiropractor.
+        // -------------------------------------------------------------
+        $chiropractor = User::load($current_uid);
+        if ($chiropractor && $chiropractor->hasField('field_chiropractor_subscribers') && !$chiropractor->get('field_chiropractor_subscribers')->isEmpty()) {
+          foreach ($chiropractor->get('field_chiropractor_subscribers')->referencedEntities() as $subscriber) {
+            if ($subscriber->id() == $owner_id) {
+              return AccessResult::allowed()->cachePerUser();
+            }
+          }
+        }
+
+        // -------------------------------------------------------------
+        // check entity created by chiropractor and edit by subscriber.
+        // -------------------------------------------------------------
+        $owner = User::load($owner_id);
+        if ($owner && $owner->hasField('field_chiropractor_subscribers') && !$owner->get('field_chiropractor_subscribers')->isEmpty()) {
+          foreach ($owner->get('field_chiropractor_subscribers')->referencedEntities() as $subscriber) {
+            if ($subscriber->id() == $current_uid) {
+              return AccessResult::allowed()->cachePerUser();
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Return neutral for other entity types or operations.
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function custom_module_views_query_alter(ViewExecutable $view, QueryPluginBase $query)
+{
+  if ($view->id() === 'rules_maximum_weight_cs' && $view->current_display === 'block_2') {
+    if (!empty($view->args[0])) {
+      $uid = $view->args[0];
+      $user = User::load($uid);
+      if ($user && !$user->get('field_program_start_date')->isEmpty()) {
+        $user_date = $user->get('field_program_start_date')->value;
+        $alias = $query->ensureTable('contact_message__field_date', 'contact_message');
+        $query->addWhere(0, "$alias.field_date_value", $user_date, '>=');
+      }
+    }
+  }
+  if ($view->id() == 'new_patients' && $view->current_display == 'page_2') {
+    // Enable pure distinct for better performance
+    $query->distinct = TRUE;
+  }
+}
+
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function custom_module_views_pre_render(ViewExecutable $view)
+{
+  if ($view->id() === 'laser_patient_details' && $view->current_display === 'page_1') {
+    $path = \Drupal::request()->getPathInfo();
+    $parts = explode('/', trim($path, '/'));
+    $patient_id = NULL;
+    if (isset($parts[0]) && $parts[0] === 'details' && isset($parts[1]) && is_numeric($parts[1])) {
+      $patient_id = (int) $parts[1];
+    }
+
+    $user = \Drupal::currentUser();
+    $buttons = '';
+    $baseDialogOptions = [
+      'attributes' => [
+        'class' => ['use-ajax', 'btn', 'btn-success'],
+        'data-dialog-type' => "modal",
+        'data-dialog-options' => Json::encode([
+          'width' => 800,
+          'position' => ['my' => 'center', 'at' => 'center'],
+          'dialogClass' => "confirmation-dialog",
+        ]),
+      ]
+    ];
+    // $url = Url::fromRoute('custom_module.ultraslim_profile', ['user' => $patient_id], $baseDialogOptions);
+    // if ($url->access($user)) {
+    //   $buttons .= Link::fromTextAndUrl(t('<span class="fa-solid fa-plus"></span> Add UltraSlim Profile'), $url)->toString();
+    // }
+
+    $url = Url::fromRoute('custom_module.red_light_therapy_profile', ['user' => $patient_id], $baseDialogOptions);
+    if ($url->access($user)) {
+      $buttons .= Link::fromTextAndUrl(t('<span class="fa-solid fa-plus"></span> Add Red Light Therapy Profile'), $url)->toString();
+    }
+
+    // Update the header plugin content.
+    foreach ($view->header as $handler) {
+      if ($handler->getPluginId() === 'text') {
+        $handler->options['content']['value'] = $buttons;
+        $handler->options['content']['format'] = 'full_html';
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for contact_message_patient_intake_delete_form.
+ */
+function custom_module_form_contact_message_patient_intake_delete_form_alter(&$form, FormStateInterface $form_state, $form_id)
+{
+  $entity = $form_state->getFormObject()->getEntity();
+
+  if ($entity && $entity->getEntityTypeId() === 'contact_message') {
+    $first_name = $entity->get('field_first_name')->value ?? '';
+    $last_name = $entity->get('field_last_name')->value ?? '';
+    $full_name = trim($first_name . ' ' . $last_name);
+
+    // Update the confirmation question
+    $form['#title'] = t('Are you sure you want to delete @name?', [
+      '@name' => $full_name ?: 'this contact message'
+    ]);
+  }
+}
+
+// user Shipping methode.
+/**
+ * Alter add shipping method form.
+ */
+function custom_module_form_commerce_shipping_method_add_form_alter(&$form, FormStateInterface $form_state, $form_id)
+{
+  $form['stores']['#access'] = False;
+  $form['conditions']['#access'] = False;
+  $form['condition_operator']['#access'] = False;
+  // dump($form);
+}
+
+/**
+ * Alter edit shipping method form.
+ */
+function custom_module_form_commerce_shipping_method_edit_form_alter(&$form, FormStateInterface $form_state, $form_id)
+{
+  $form['stores']['#access'] = False;
+  $form['conditions']['#access'] = False;
+  $form['condition_operator']['#access'] = False;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave() for commerce_shipping_method.
+ */
+function custom_module_commerce_shipping_method_presave(ShippingMethodInterface $entity)
+{
+  // Only for NEW entity.
+  if (!$entity->isNew()) {
+    return;
+  }
+
+  // Check user role.
+  $current_user = \Drupal::currentUser();
+  if (!in_array('chiropractor_active_', $current_user->getRoles())) {
+    return;
+  }
+
+  // Set store (store ID = 2)
+  $entity->set('stores', [
+    ['target_id' => 2],
+  ]);
+
+  // Set condition: order_product_type = chironutraceutical
+  $entity->set('conditions', [
+    [
+      'target_plugin_id' => 'order_product_type',
+      'target_plugin_configuration' => [
+        'product_types' => ['chironutraceutical'],
+      ],
+    ],
+  ]);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for commerce_shipping_method.
+ */
+function custom_module_commerce_shipping_method_insert(ShippingMethodInterface $entity)
+{
+
+  // Check user role.
+  $current_user = \Drupal::currentUser();
+  if (!in_array('chiropractor_active_', $current_user->getRoles())) {
+    return;
+  }
+  $subscriber = \Drupal::service('custom_module.services')->getSubscriberByChiropractor($current_user->id());
+
+  // Load full user entity.
+  if (!$subscriber) {
+    return;
+  }
+
+  // Get existing values.
+  $existing = $subscriber->get('field_shipping_methods')->getValue();
+
+  // Add new shipping method reference.
+  $existing[] = [
+    'target_id' => $entity->id(),
+  ];
+
+  // Set back and save user.
+  $subscriber->set('field_shipping_methods', $existing);
+  $subscriber->save();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access() for commerce_shipping_method.
+ */
+function custom_module_commerce_shipping_method_access(ShippingMethodInterface $entity, $operation, AccountInterface $account)
+{
+
+  // Apply only to view & update.
+  if (!in_array($operation, ['view', 'update'])) {
+    return AccessResult::neutral();
+  }
+
+  // Apply ONLY to chiropractor_active_ role.
+  if (!in_array('chiropractor_active_', $account->getRoles())) {
+    return AccessResult::neutral();
+  }
+
+  // Resolve subscriber via service.
+  $subscriber = \Drupal::service('custom_module.services')
+    ->getSubscriberByChiropractor($account->id());
+
+  if (!$subscriber) {
+    return AccessResult::forbidden()->cachePerUser();
+  }
+
+  // Get subscriber's shipping method IDs.
+  $ids = array_column(
+    $subscriber->get('field_shipping_methods')->getValue(),
+    'target_id'
+  );
+
+  // Allow only if subscriber owns this shipping method.
+  return in_array($entity->id(), $ids)
+    ? AccessResult::allowed()->cachePerUser()
+    : AccessResult::forbidden()->cachePerUser();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete() for commerce_shipping_method.
+ */
+function custom_module_commerce_shipping_method_delete(ShippingMethodInterface $entity)
+{
+
+  $shipping_method_id = $entity->id();
+
+  // Load users who reference this shipping method.
+  $uids = \Drupal::entityQuery('user')
+    ->condition('field_shipping_methods.target_id', $shipping_method_id)
+    ->accessCheck(FALSE)
+    ->execute();
+
+  if (empty($uids)) {
+    return;
+  }
+
+  $users = User::loadMultiple($uids);
+
+  foreach ($users as $user) {
+    $values = $user->get('field_shipping_methods')->getValue();
+
+    // Remove matching shipping method.
+    $filtered = array_filter($values, function ($item) use ($shipping_method_id) {
+      return $item['target_id'] != $shipping_method_id;
+    });
+
+    // Re-index array.
+    $filtered = array_values($filtered);
+
+    $user->set('field_shipping_methods', $filtered);
+    $user->save();
+  }
+}
+
+/**
+ * Alter a view at the very beginning of Views processing.
+ *
+ * Output can be added to the view by setting $view->attachment_before
+ * and $view->attachment_after.
+ *
+ * @param \Drupal\views\ViewExecutable $view
+ *   The view object about to be processed.
+ * @param string $display_id
+ *   The machine name of the active display.
+ * @param array $args
+ *   An array of arguments passed into the view.
+ *
+ * @see \Drupal\views\ViewExecutable
+ */
+function custom_module_views_pre_view(ViewExecutable $view, $display_id, array &$args)
+{
+
+  if ($view->id() === 'export_patients') {
+    $current_user = \Drupal::currentUser();
+    $user = User::load($current_user->id());
+    $clinic_id = $user->get('field_clinic')->target_id;
+    if ($clinic_id) {
+      $args[0] = $clinic_id;
+    }
+    return;
+  }
+
+  if ($view->id() == 'commerce_products' && $display_id == 'page_3') {
+    // Resolve subscriber via service.
+    $subscriber = \Drupal::service('custom_module.services')
+      ->getSubscriberByPatient(\Drupal::currentUser()->id());
+
+    if (!$subscriber) {
+      return;
+    }
+    $args[0] = $subscriber->id();
+
+    // set product fullfillment by clinic.
+    $clinic = $subscriber->get('field_clinic')->entity;
+    if ($clinic && $clinic->hasField('field_fulfillment_type') && !$clinic->get('field_fulfillment_type')->isEmpty()) {
+      $fulfillment_type = $clinic->get('field_fulfillment_type')->value;
+      if ($fulfillment_type == 'shipping') {
+        $args[1] = 'chironutraceutical_variations';
+      } elseif ($fulfillment_type == 'pickup') {
+        $args[1] = 'chironutraceutical_ns';
+      } else {
+        $args[1] = 'all';
+      }
+    }
+  }
+
+  if ($view->id() !== 'shipping_methods' || $display_id !== 'page_1') {
+    return;
+  }
+
+  $current_user = \Drupal::currentUser();
+
+  // Apply only for chiropractor_active_ role.
+  if (!in_array('chiropractor_active_', $current_user->getRoles())) {
+    return;
+  }
+
+  // Resolve subscriber via service.
+  $subscriber = \Drupal::service('custom_module.services')
+    ->getSubscriberByChiropractor($current_user->id());
+
+  if (!$subscriber) {
+    return;
+  }
+
+  // Get shipping method IDs from subscriber.
+  $shipping_ids = array_column(
+    $subscriber->get('field_shipping_methods')->getValue(),
+    'target_id'
+  );
+
+  // Remove duplicates.
+  $shipping_ids = array_unique($shipping_ids);
+
+  // Concatenate with "+" for contextual filter.
+  if (!empty($shipping_ids)) {
+    $args[0] = implode('+', $shipping_ids);
+  }
+}
+
+/**
+ * Implements hook_form_alter() for the Commerce checkout form.
+ *
+ * Filters shipping methods shown to a patient to only those
+ * owned by their assigned chiropractor (subscriber).
+ */
+function custom_module_form_commerce_checkout_flow_multistep_default_alter(&$form, FormStateInterface $form_state, $form_id)
+{
+  $current_user = \Drupal::currentUser();
+  $user = User::load($current_user->id());
+
+  if (
+    !$user ||
+    !$user->hasRole('enrolled_patient') ||
+    !$user->hasField('field_chiropractor') ||
+    $user->get('field_chiropractor')->isEmpty()
+  ) {
+    return;
+  }
+
+  $chiropractor_id = $user->get('field_chiropractor')->target_id;
+  $subscriber = \Drupal::service('custom_module.services')
+    ->getSubscriberByChiropractor($chiropractor_id);
+
+  // No subscriber found OR subscriber has no shipping methods
+  if (
+    !$subscriber ||
+    !$subscriber->hasField('field_shipping_methods') ||
+    $subscriber->get('field_shipping_methods')->isEmpty()
+  ) {
+    _custom_module_clear_shipping_options($form);
+    _custom_module_block_checkout($form);
+    return;
+  }
+
+  $allowed_ids = array_map('intval', array_column(
+    $subscriber->get('field_shipping_methods')->getValue(),
+    'target_id'
+  ));
+
+  // KEY FIX: Load order and fix stored shipment BEFORE form renders
+  // so Order summary reads the correct shipping amount.
+  $checkout_flow = $form_state->getFormObject();
+  if (method_exists($checkout_flow, 'getOrder')) {
+    $order = $checkout_flow->getOrder();
+
+    if ($order) {
+      $shipment_entities = $order->get('shipments')->referencedEntities();
+      $order_needs_save = FALSE;
+
+      foreach ($shipment_entities as $shipment) {
+        $current_method_id = (int) $shipment->get('shipping_method')->target_id;
+
+        // Shipment has a disallowed method — fix it.
+        if ($current_method_id && !in_array($current_method_id, $allowed_ids, TRUE)) {
+
+          // Load all rates for allowed methods to get the first valid rate.
+          /** @var \Drupal\commerce_shipping\ShippingRate[] $valid_rates */
+          $valid_rates = [];
+
+          foreach ($allowed_ids as $allowed_method_id) {
+            $shipping_method = \Drupal::entityTypeManager()
+              ->getStorage('commerce_shipping_method')
+              ->load($allowed_method_id);
+
+            if (!$shipping_method) {
+              continue;
+            }
+
+            /** @var \Drupal\commerce_shipping\Plugin\Commerce\ShippingMethod\ShippingMethodInterface $plugin */
+            $plugin = $shipping_method->getPlugin();
+            $rates = $plugin->calculateRates($shipment);
+
+            if (!empty($rates)) {
+              $valid_rates = array_merge($valid_rates, $rates);
+            }
+          }
+
+          if (!empty($valid_rates)) {
+            $first_rate = reset($valid_rates);
+            $shipment->set('shipping_method', $first_rate->getShippingMethodId());
+            // FIX: call ->getId() to get string instead of passing object directly.
+            $shipment->setShippingService($first_rate->getService()->getId());
+            $shipment->setAmount($first_rate->getAmount());
+          } else {
+            // No valid rates — clear shipment amount.
+            $shipment->setAmount(NULL);
+            $shipment->set('shipping_method', NULL);
+            $shipment->setShippingService(NULL);
+          }
+
+          $shipment->save();
+          $order_needs_save = TRUE;
+        }
+      }
+
+      // Recalculate order total once after all shipments updated.
+      if ($order_needs_save) {
+        $order->recalculateTotalPrice();
+        $order->save();
+      }
+    }
+  }
+
+  // Now filter form radios display.
+  if (empty($form['shipping_information']['shipments'])) {
+    return;
+  }
+
+  $shipments = &$form['shipping_information']['shipments'];
+
+  foreach (Element::children($shipments) as $shipment_index) {
+    if (empty($shipments[$shipment_index]['shipping_method'])) {
+      continue;
+    }
+
+    foreach (Element::children($shipments[$shipment_index]['shipping_method']) as $method_group_key) {
+      $radios = &$form['shipping_information']['shipments'][$shipment_index]['shipping_method'][$method_group_key][0];
+
+      foreach (Element::children($radios) as $option_key) {
+        $method_id = (int) explode('--', $option_key)[0];
+        if (!in_array($method_id, $allowed_ids, TRUE)) {
+          unset($radios[$option_key]);
+          unset($radios['#options'][$option_key]);
+        }
+      }
+
+      // Reverse options order — preserving keys so values stay mapped correctly.
+      $radios['#options'] = array_reverse($radios['#options'], TRUE);
+
+      // Always set default to first option after reversing.
+      $radios['#default_value'] = array_key_first($radios['#options'] ?? []) ?: NULL;
+    }
+  }
+}
+
+/**
+ * Helper: shows error message and disables checkout submit button.
+ */
+function _custom_module_block_checkout(&$form)
+{
+  $form['shipping_information']['no_shipping_warning'] = [
+    '#type' => 'markup',
+    '#markup' => '<div class="alert alert-danger alert-dismissible fade show" role="alert">' .
+      '<p><b>' . t('No shipping method has been added by Chiropractor.') . '</b></p>' .
+      '<p>' . t('Please ask them to add at least one shipping method before placing an order.') . '</p>' .
+      '<span type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></span></div>',
+    '#weight' => -10,
+  ];
+
+  $form['actions']['next']['#disabled'] = TRUE;
+  $form['#validate'][] = 'custom_module_checkout_no_shipping_validate';
+}
+
+/**
+ * Validation handler: server-side safety net.
+ */
+function custom_module_checkout_no_shipping_validate(&$form, FormStateInterface $form_state)
+{
+  $form_state->setErrorByName(
+    'shipping_information',
+    t('No shipping method has been added by Chiropractor. Please ask them to add at least one shipping method before placing an order.')
+  );
+}
+
+/**
+ * Helper: removes ALL shipping method options from the form.
+ * Prevents other subscribers' methods from leaking through.
+ */
+function _custom_module_clear_shipping_options(&$form)
+{
+  if (empty($form['shipping_information']['shipments'])) {
+    return;
+  }
+
+  $shipments = &$form['shipping_information']['shipments'];
+
+  foreach (Element::children($shipments) as $shipment_index) {
+    if (empty($shipments[$shipment_index]['shipping_method'])) {
+      continue;
+    }
+
+    $shipping_method = &$shipments[$shipment_index]['shipping_method'];
+
+    foreach (Element::children($shipping_method) as $method_group_key) {
+      $radios = &$form['shipping_information']['shipments'][$shipment_index]['shipping_method'][$method_group_key][0];
+
+      // Wipe every radio option.
+      foreach (Element::children($radios) as $option_key) {
+        unset($radios[$option_key]);
+      }
+
+      // Wipe #options array entirely.
+      $radios['#options'] = [];
+      $radios['#default_value'] = NULL;
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access() for commerce_order.
+ */
+function custom_module_commerce_order_access(
+  OrderInterface $entity,
+  string $operation,
+  AccountInterface $account
+): AccessResult {
+
+  // Only apply logic for chiropractor_active_ role.
+  $roles = $account->getRoles();
+  if (!in_array('chiropractor_active_', $roles)) {
+    return AccessResult::neutral();
+  }
+
+  // Only handle view and update operations.
+  if (!in_array($operation, ['view', 'update'])) {
+    return AccessResult::forbidden()->cachePerUser();
+  }
+
+  // Only apply to "shop" order type.
+  if ($entity->bundle() !== 'shop') {
+    return AccessResult::forbidden()
+      ->cachePerUser()
+      ->addCacheableDependency($entity);
+  }
+
+  // Check if any item belongs to a product owned by this user.
+  foreach ($entity->getItems() as $order_item) {
+    $purchased_entity = $order_item->getPurchasedEntity();
+
+    if (!$purchased_entity) {
+      continue;
+    }
+
+    $product = $purchased_entity->getProduct();
+
+    if ($product && (int) $product->getOwnerId() === (int) $account->id()) {
+      // ✅ Own product found — allow view or update.
+      return AccessResult::allowed()
+        ->cachePerUser()
+        ->addCacheableDependency($entity);
+    }
+  }
+
+  // ❌ No own product in this order — explicitly deny.
+  return AccessResult::forbidden()
+    ->cachePerUser()
+    ->addCacheableDependency($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access() for commerce_shipment.
+ */
+function custom_module_commerce_shipment_access(
+  EntityInterface $entity,
+  string $operation,
+  AccountInterface $account
+): AccessResult {
+
+  $roles = $account->getRoles();
+  if (!in_array('chiropractor_active_', $roles)) {
+    return AccessResult::neutral();
+  }
+
+  if (!in_array($operation, ['view', 'update'])) {
+    return AccessResult::forbidden()->cachePerUser();
+  }
+
+  // Get the parent order from the shipment.
+  /** @var \Drupal\commerce_shipping\Entity\ShipmentInterface $entity */
+  $order = $entity->getOrder();
+
+  if (!$order || $order->bundle() !== 'shop') {
+    return AccessResult::forbidden()
+      ->cachePerUser()
+      ->addCacheableDependency($entity);
+  }
+
+  // Check if any order item belongs to a product owned by this user.
+  foreach ($order->getItems() as $order_item) {
+    $purchased_entity = $order_item->getPurchasedEntity();
+
+    if (!$purchased_entity) {
+      continue;
+    }
+
+    $product = $purchased_entity->getProduct();
+
+    if ($product && (int) $product->getOwnerId() === (int) $account->id()) {
+      return AccessResult::allowed()
+        ->cachePerUser()
+        ->addCacheableDependency($entity)
+        ->addCacheableDependency($order);
+    }
+  }
+
+  return AccessResult::forbidden()
+    ->cachePerUser()
+    ->addCacheableDependency($entity)
+    ->addCacheableDependency($order);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access() for commerce_payment.
+ */
+function custom_module_commerce_payment_access(
+  EntityInterface $entity,
+  string $operation,
+  AccountInterface $account
+): AccessResult {
+
+  $roles = $account->getRoles();
+  if (!in_array('chiropractor_active_', $roles)) {
+    return AccessResult::neutral();
+  }
+
+  if (!in_array($operation, ['view', 'update', 'receive'])) {
+    return AccessResult::forbidden()->cachePerUser();
+  }
+
+  // Get the parent order from the payment.
+  /** @var \Drupal\commerce_payment\Entity\PaymentInterface $entity */
+  $order = $entity->getOrder();
+
+  if (!$order || $order->bundle() !== 'shop') {
+    return AccessResult::forbidden()
+      ->cachePerUser()
+      ->addCacheableDependency($entity);
+  }
+
+  // Check if any order item belongs to a product owned by this user.
+  foreach ($order->getItems() as $order_item) {
+    $purchased_entity = $order_item->getPurchasedEntity();
+
+    if (!$purchased_entity) {
+      continue;
+    }
+
+    $product = $purchased_entity->getProduct();
+
+    if ($product && (int) $product->getOwnerId() === (int) $account->id()) {
+      return AccessResult::allowed()
+        ->cachePerUser()
+        ->addCacheableDependency($entity)
+        ->addCacheableDependency($order);
+    }
+  }
+
+  return AccessResult::forbidden()
+    ->cachePerUser()
+    ->addCacheableDependency($entity)
+    ->addCacheableDependency($order);
+}
+
+/**
+ * Implements hook_menu_local_actions_alter().
+ */
+function custom_module_menu_local_actions_alter(&$local_actions)
+{
+  // Remove the default Commerce "Add variation" button.
+  unset($local_actions['entity.commerce_product_variation.add_page']);
+}

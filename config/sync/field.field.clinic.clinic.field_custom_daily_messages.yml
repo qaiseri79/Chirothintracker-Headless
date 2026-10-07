@@ -1,0 +1,23 @@
+uuid: 4dc5ee39-32bb-4c29-9e29-3827bade147f
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.clinic.clinic
+    - field.storage.clinic.field_custom_daily_messages
+id: clinic.clinic.field_custom_daily_messages
+field_name: field_custom_daily_messages
+entity_type: clinic
+bundle: clinic
+label: 'Custom Daily Messages'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: ''
+  off_label: ''
+field_type: boolean

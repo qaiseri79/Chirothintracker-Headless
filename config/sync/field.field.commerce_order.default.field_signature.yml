@@ -1,0 +1,21 @@
+uuid: 960e20fd-fe44-46c8-baf0-9868423067f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_order.commerce_order_type.default
+    - field.storage.commerce_order.field_signature
+  module:
+    - signature_field
+id: commerce_order.default.field_signature
+field_name: field_signature
+entity_type: commerce_order
+bundle: default
+label: 'Please Sign here'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: field_signature

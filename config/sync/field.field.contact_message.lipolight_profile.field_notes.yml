@@ -1,0 +1,19 @@
+uuid: eb237e6a-86d4-45a1-bb49-8b3329107d52
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.lipolight_profile
+    - field.storage.contact_message.field_notes
+id: contact_message.lipolight_profile.field_notes
+field_name: field_notes
+entity_type: contact_message
+bundle: lipolight_profile
+label: Notes
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

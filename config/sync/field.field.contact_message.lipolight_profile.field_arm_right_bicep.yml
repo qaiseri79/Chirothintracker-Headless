@@ -1,0 +1,23 @@
+uuid: 71ae2e6a-99ab-4bc4-a20e-c1e7fab3ca5a
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.lipolight_profile
+    - field.storage.contact_message.field_arm_right_bicep
+id: contact_message.lipolight_profile.field_arm_right_bicep
+field_name: field_arm_right_bicep
+entity_type: contact_message
+bundle: lipolight_profile
+label: 'Arm - Right Bicep'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

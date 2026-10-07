@@ -1,0 +1,24 @@
+uuid: bc3d4030-87e3-4afe-b6ab-d9ec99fcc171
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+    - taxonomy
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: contact_message.field_dinner_vegetables
+field_name: field_dinner_vegetables
+entity_type: contact_message
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

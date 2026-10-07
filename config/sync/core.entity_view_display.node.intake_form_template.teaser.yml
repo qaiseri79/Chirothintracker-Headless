@@ -1,0 +1,31 @@
+uuid: 237886a3-b2e3-437c-8e20-8dcb7ee5e73d
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.intake_form_template.body
+    - node.type.intake_form_template
+  module:
+    - text
+    - user
+id: node.intake_form_template.teaser
+targetEntityType: node
+bundle: intake_form_template
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  private_message_link: true

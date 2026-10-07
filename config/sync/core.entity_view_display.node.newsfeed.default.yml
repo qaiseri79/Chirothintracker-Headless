@@ -1,0 +1,29 @@
+uuid: a9d39fb4-75d5-43be-950a-b87658c8d174
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.newsfeed.body
+    - node.type.newsfeed
+  module:
+    - text
+    - user
+id: node.newsfeed.default
+targetEntityType: node
+bundle: newsfeed
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  private_message_link: true

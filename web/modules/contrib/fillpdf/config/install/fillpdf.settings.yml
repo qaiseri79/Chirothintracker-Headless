@@ -1,0 +1,7 @@
+allowed_schemes:
+  - private
+template_scheme: ''
+
+shell_locale: en_US.UTF-8
+
+remote_protocol: https

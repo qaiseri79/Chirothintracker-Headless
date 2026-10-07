@@ -1,0 +1,22 @@
+uuid: 1e3e52be-9138-44c0-950c-338cfd56477a
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: contact_message.field_email_address
+field_name: field_email_address
+entity_type: contact_message
+type: email
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

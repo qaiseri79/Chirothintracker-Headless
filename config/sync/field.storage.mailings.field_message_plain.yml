@@ -1,0 +1,23 @@
+uuid: 31bb4374-fa57-4ff4-8b21-71a8ba9a4e7f
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: mailings.field_message_plain
+field_name: field_message_plain
+entity_type: mailings
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

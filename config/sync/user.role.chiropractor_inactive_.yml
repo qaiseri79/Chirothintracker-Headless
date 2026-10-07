@@ -1,0 +1,40 @@
+uuid: 5b606497-d196-4486-b9d7-cfbaea1a028e
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.basic_html
+    - filter.format.filtered_html
+    - filter.format.full_html
+    - filter.format.html
+    - filter.format.restricted_html
+  module:
+    - field_permissions
+    - file
+    - filter
+    - headless_messages
+    - headless_progress
+    - node
+    - node_view_permissions
+    - system
+id: chiropractor_inactive_
+label: 'Chiropractor (Inactive)'
+weight: 5
+is_admin: null
+permissions:
+  - 'access content'
+  - 'access headless messages'
+  - 'access headless progress'
+  - 'access user profiles'
+  - 'delete own files'
+  - 'use text format basic_html'
+  - 'use text format filtered_html'
+  - 'use text format full_html'
+  - 'use text format html'
+  - 'use text format restricted_html'
+  - 'view any page content'
+  - 'view any recipe content'
+  - 'view field_net_inches_lost'
+  - 'view field_net_weight_loss'
+  - 'view own unpublished content'
+  - 'view user email addresses'

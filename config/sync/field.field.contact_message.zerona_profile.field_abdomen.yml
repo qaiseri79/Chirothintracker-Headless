@@ -1,0 +1,23 @@
+uuid: 4f9cce18-6a5a-4501-b389-3127c45bfd8e
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.zerona_profile
+    - field.storage.contact_message.field_abdomen
+id: contact_message.zerona_profile.field_abdomen
+field_name: field_abdomen
+entity_type: contact_message
+bundle: zerona_profile
+label: Abdomen
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

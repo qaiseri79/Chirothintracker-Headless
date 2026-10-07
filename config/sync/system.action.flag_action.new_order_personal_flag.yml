@@ -1,0 +1,15 @@
+uuid: ea99bde5-0e6b-416d-86a8-d74d7a84244f
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.new_order_personal
+  module:
+    - flag
+id: flag_action.new_order_personal_flag
+label: Processed
+type: commerce_order
+plugin: 'flag_action:new_order_personal_flag'
+configuration:
+  flag_id: new_order_personal
+  flag_action: flag

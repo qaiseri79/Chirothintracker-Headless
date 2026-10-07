@@ -1,0 +1,30 @@
+uuid: 7635b077-5090-4410-bb95-de6611283af3
+langcode: und
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - file
+    - image
+    - taxonomy
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: taxonomy_term.field_program_day_graphic
+field_name: field_program_day_graphic
+entity_type: taxonomy_term
+type: image
+settings:
+  target_type: file
+  display_field: false
+  display_default: false
+  uri_scheme: public
+  default_image:
+    uuid: ''
+module: image
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,16 @@
+uuid: 2a38f184-4afa-4070-a087-c7106ba49039
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    parent: 'main-menu:0:'
+name: 'Authenticated Content'
+type: authenticated_content
+description: null
+help: null
+new_revision: false
+preview_mode: 1
+display_submitted: false

@@ -1,0 +1,14 @@
+uuid: 154f5b24-3e79-470c-a677-3221ed950c48
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.chiropractor_active_
+  module:
+    - user
+id: user_add_role_action.chiropractor_active_
+label: 'Add the Chiropractor (Active) role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: chiropractor_active_

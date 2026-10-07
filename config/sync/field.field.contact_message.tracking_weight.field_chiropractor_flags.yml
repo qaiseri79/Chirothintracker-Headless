@@ -1,0 +1,29 @@
+uuid: cf9333c5-4d15-4aee-b721-2584f212c9bf
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_chiropractor_flags
+    - taxonomy.vocabulary.chiropractor_flags
+id: contact_message.tracking_weight.field_chiropractor_flags
+field_name: field_chiropractor_flags
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Chiropractor Flags'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      chiropractor_flags: chiropractor_flags
+    sort:
+      field: _none
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

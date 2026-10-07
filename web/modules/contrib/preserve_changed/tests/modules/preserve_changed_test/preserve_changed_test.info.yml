@@ -1,0 +1,12 @@
+type: module
+name: 'Preserve changed testing'
+description: 'Provides a testing module to test the PreservedChangedItem class.'
+package: Testing
+dependecies:
+  - drupal:entity_test
+  - preserve_changed:preserve_changed
+
+# Information added by Drupal.org packaging script on 2022-10-04
+version: '2.0.0-alpha2'
+project: 'preserve_changed'
+datestamp: 1664892441

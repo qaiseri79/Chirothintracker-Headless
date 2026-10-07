@@ -1,0 +1,11 @@
+name: Headless Clinic
+type: module
+description: Real clinic locations and primary-managed sponsored doctor accounts.
+core_version_requirement: ^10 || ^11
+package: Headless API
+dependencies:
+  - headless_access:headless_access
+  - headless_subscriptions:headless_subscriptions
+  - headless_mail:headless_mail
+  - drupal:user
+  - eck:eck

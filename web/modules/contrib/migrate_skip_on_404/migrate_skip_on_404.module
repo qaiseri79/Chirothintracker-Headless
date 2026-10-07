@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Primary hook implementations for Migrate: Skip On 404.
+ */
+
+/**
+ * Implements hook_migration_plugins_alter().
+ */
+function migrate_skip_on_404_migration_plugins_alter(array &$migrations) {
+  $file_migrations = [
+    // Core migrations - public files and private files are separate.
+    'd7_file',
+    'd7_file_private',
+    // Core file migrations triggered by Migrate Upgrade.
+    'upgrade_d7_file',
+    'upgrade_d7_file_private',
+  ];
+
+  // Look for each supported file migration and modify it.
+  foreach ($file_migrations as $file_migration) {
+    if (isset($migrations[$file_migration])) {
+      $migrations[$file_migration]['process']['source_full_path'][1] = [
+        'plugin' => 'skip_on_404',
+        'method' => 'row',
+        'message' => 'File does not exist',
+      ];
+      $migrations[$file_migration]['process']['source_full_path'][2] = [
+        'plugin' => 'urlencode',
+      ];
+    }
+  }
+}

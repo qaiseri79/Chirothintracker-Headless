@@ -1,0 +1,50 @@
+uuid: 8da34313-0cf2-4145-acab-7bb91f9b6630
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_mailing_address
+  module:
+    - address
+id: contact_message.patient_intake.field_mailing_address
+field_name: field_mailing_address
+entity_type: contact_message
+bundle: patient_intake
+label: 'Mailing Address'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    langcode: null
+    country_code: US
+    administrative_area: ''
+    locality: ''
+    dependent_locality: null
+    postal_code: ''
+    sorting_code: null
+    address_line1: ''
+    address_line2: ''
+    address_line3: ''
+    organization: ''
+    given_name: ''
+    additional_name: null
+    family_name: ''
+default_value_callback: ''
+settings:
+  available_countries:
+    CA: CA
+    US: US
+  langcode_override: ''
+  field_overrides:
+    givenName:
+      override: hidden
+    additionalName:
+      override: hidden
+    familyName:
+      override: hidden
+    organization:
+      override: hidden
+  fields: {  }
+field_type: address

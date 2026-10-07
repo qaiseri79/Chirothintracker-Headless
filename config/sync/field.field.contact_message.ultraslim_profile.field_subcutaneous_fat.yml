@@ -1,0 +1,26 @@
+uuid: d2c953af-5959-4cb0-958c-2b4ac9e57046
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_subcutaneous_fat
+    - taxonomy.vocabulary.subcutaneous_fat
+id: contact_message.ultraslim_profile.field_subcutaneous_fat
+field_name: field_subcutaneous_fat
+entity_type: contact_message
+bundle: ultraslim_profile
+label: 'Subcutaneous Fat'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      subcutaneous_fat: subcutaneous_fat
+    sort:
+      field: _none
+field_type: entity_reference

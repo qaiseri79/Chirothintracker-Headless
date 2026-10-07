@@ -1,0 +1,21 @@
+uuid: 71653aec-47d1-46a8-8a6f-22446db87f23
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_skin_tightening_protocol
+id: contact_message.ultraslim_profile.field_skin_tightening_protocol
+field_name: field_skin_tightening_protocol
+entity_type: contact_message
+bundle: ultraslim_profile
+label: 'Skin Tightening Protocol'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: "Distance: 6 inches\r\nTime: 20 minutes\r\n\r\nYou may treat two separate areas for a total of 40 minutes."
+default_value_callback: ''
+settings: {  }
+field_type: string_long

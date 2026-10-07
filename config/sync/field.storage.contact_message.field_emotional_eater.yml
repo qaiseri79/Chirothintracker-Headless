@@ -1,0 +1,31 @@
+uuid: ea400856-679e-4bde-97ba-6a35dfa2b4c2
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+    - options
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: contact_message.field_emotional_eater
+field_name: field_emotional_eater
+entity_type: contact_message
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '1'
+      label: 'Yes'
+    -
+      value: '0'
+      label: 'No'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

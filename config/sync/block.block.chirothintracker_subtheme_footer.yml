@@ -1,0 +1,27 @@
+uuid: ebfebb21-444a-4f52-9752-cfd58bdf136f
+langcode: en
+status: false
+dependencies:
+  config:
+    - system.menu.footer
+  module:
+    - system
+  theme:
+    - chirothintracker_subtheme
+_core:
+  default_config_hash: 8YPo2okyqXm2cZ-pnH0dmiUT9OJXBnt0DtpZjcva6lY
+id: chirothintracker_subtheme_footer
+theme: chirothintracker_subtheme
+region: footer
+weight: -6
+provider: null
+plugin: 'system_menu_block:footer'
+settings:
+  id: 'system_menu_block:footer'
+  label: Footer
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility: {  }

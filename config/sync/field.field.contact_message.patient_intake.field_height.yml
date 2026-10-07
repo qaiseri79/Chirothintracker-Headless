@@ -1,0 +1,23 @@
+uuid: fd47faee-bbce-44c1-81f8-ba0f819ba3e6
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_height
+id: contact_message.patient_intake.field_height
+field_name: field_height
+entity_type: contact_message
+bundle: patient_intake
+label: 'Height (inches)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

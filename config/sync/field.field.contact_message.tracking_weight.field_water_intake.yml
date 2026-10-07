@@ -1,0 +1,23 @@
+uuid: 1c60f219-6a4d-4b08-b48d-53e02ee4cda5
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_water_intake
+id: contact_message.tracking_weight.field_water_intake
+field_name: field_water_intake
+entity_type: contact_message
+bundle: tracking_weight
+label: "Yesterday's Water Intake"
+description: "Yesterday's total water intake"
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: oz
+field_type: decimal

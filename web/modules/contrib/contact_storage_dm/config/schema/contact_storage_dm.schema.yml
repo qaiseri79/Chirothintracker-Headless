@@ -1,0 +1,7 @@
+contact.form.*.third_party.contact_storage_dm:
+  type: mapping
+  label: 'Contact form disable mail'
+  mapping:
+    disabled:
+      type: boolean
+      label: 'Disable Mail Send'

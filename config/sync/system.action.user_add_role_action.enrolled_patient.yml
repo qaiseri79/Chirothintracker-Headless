@@ -1,0 +1,14 @@
+uuid: f825d4df-8cd1-4714-9b13-b6ab48c69429
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.enrolled_patient
+  module:
+    - user
+id: user_add_role_action.enrolled_patient
+label: 'Add the Enrolled Patient role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: enrolled_patient

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>ChiroThin — Add a recipe</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={theme:{extend:{colors:{canvas:"#F3F4F1",surface:"#FFFFFF",ink:"#101827",muted:"#6B7280",line:"#E4E2DC",primary:{DEFAULT:"#0B5D52",soft:"#E4EEEC",dark:"#08423A"},accent:{DEFAULT:"#C7522A",soft:"#F6E4DC"}},fontFamily:{serif:["Newsreader","Georgia","serif"],sans:["Inter","system-ui","sans-serif"]},boxShadow:{panel:"0 1px 2px rgba(16,24,39,.04),0 8px 24px -12px rgba(16,24,39,.08)"}}}};
+</script>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{height:100%}
+.field{width:100%;border:1px solid #E4E2DC;background:#fff;border-radius:.75rem;padding:.7rem .9rem;font-size:.875rem;transition:border-color .15s,box-shadow .15s}
+.field:focus{outline:none;border-color:#0B5D52;box-shadow:0 0 0 4px #E4EEEC}
+.field.bad{border-color:#C7522A;box-shadow:0 0 0 4px #F6E4DC}
+.lbl{display:block;font-size:.8125rem;font-weight:600}
+.hint{font-size:.75rem;color:#6B7280;margin-top:.15rem}
+.err{display:none;margin-top:.4rem;font-size:.75rem;color:#C7522A}.show{display:block}
+.chip{display:inline-flex;align-items:center;gap:.35rem;border:1px solid #E4E2DC;background:#fff;border-radius:9999px;padding:.4rem .85rem;font-size:.8125rem;font-weight:500;color:#374151;transition:.15s;cursor:pointer}
+.chip:hover{border-color:#0B5D52}
+.chip[aria-pressed=true]{background:#0B5D52;border-color:#0B5D52;color:#fff}
+.chip[disabled]{opacity:.4;cursor:not-allowed}
+.chip .ck{display:none;width:12px;height:12px}.chip[aria-pressed=true] .ck{display:block}
+</style>
+</head>
+<body class="bg-canvas font-sans text-ink antialiased">
+
+<!-- page behind -->
+<div class="mx-auto max-w-5xl px-4 py-8">
+  <div class="flex items-end justify-between gap-4">
+    <div><h1 class="font-serif text-2xl">Recipes</h1><p class="mt-1 text-sm text-muted">Shared with everyone on your clinic's plan.</p></div>
+    <button id="open" class="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark">
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>Add recipe</button>
+  </div>
+  <div id="list" class="mt-6 grid gap-3 sm:grid-cols-2"></div>
+</div>
+
+<!-- modal -->
+<div id="ov" class="fixed inset-0 z-50 flex items-end justify-center bg-ink/40 p-0 backdrop-blur-[2px] sm:items-center sm:p-4">
+  <div role="dialog" aria-modal="true" aria-labelledby="mt" class="flex max-h-[94vh] w-full max-w-2xl flex-col overflow-hidden rounded-t-3xl bg-surface shadow-2xl sm:rounded-2xl">
+    <div class="flex items-start justify-between gap-4 border-b border-line px-6 py-5 sm:px-8">
+      <div>
+        <h2 id="mt" class="font-serif text-2xl">Add a recipe</h2>
+        <p class="mt-1 flex items-start gap-1.5 text-sm text-muted">
+          <svg class="mt-0.5 h-4 w-4 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Shared with everyone on your clinic's plan. Published immediately.</p>
+      </div>
+      <button id="x" aria-label="Close" class="rounded-lg p-1.5 text-muted hover:bg-canvas"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+
+    <form id="f" novalidate class="flex min-h-0 flex-1 flex-col">
+      <div class="flex-1 space-y-7 overflow-y-auto px-6 py-6 sm:px-8">
+
+        <div>
+          <label class="lbl mb-1.5" for="title">Title <span class="text-accent">*</span></label>
+          <input id="title" class="field" maxlength="90" placeholder="e.g. Herb-roasted chicken with greens" />
+          <p class="err" id="e-title">Give your recipe a title.</p>
+        </div>
+
+        <div>
+          <div class="flex items-baseline justify-between">
+            <span class="lbl">Recipe category <span class="text-accent">*</span></span>
+            <span id="catCount" class="rounded-full bg-primary-soft px-2 py-0.5 text-[11px] font-semibold text-primary">0 / 2</span>
+          </div>
+          <p class="hint mb-3">Choose up to 2. Each recipe sits under one of these headings.</p>
+          <div id="cats" class="flex flex-wrap gap-2"></div>
+          <p class="err" id="e-cat">Pick at least one category.</p>
+        </div>
+
+        <div>
+          <div class="flex items-baseline justify-between">
+            <label class="lbl" for="ing">Ingredients <span class="text-accent">*</span></label>
+            <span id="ingCount" class="text-[11px] font-medium text-muted">0 items</span>
+          </div>
+          <p class="hint mb-2">One ingredient per line.</p>
+          <textarea id="ing" rows="5" class="field resize-y leading-6" placeholder="Chicken breast&#10;Olive oil&#10;Lemon, juiced"></textarea>
+          <p class="err" id="e-ing">Add at least one ingredient.</p>
+        </div>
+
+        <div>
+          <label class="lbl mb-1.5" for="ins">Instructions <span class="text-accent">*</span></label>
+          <textarea id="ins" rows="5" class="field resize-y leading-6" placeholder="How to prepare and serve it."></textarea>
+          <p class="err" id="e-ins">Add the preparation steps.</p>
+        </div>
+
+        <div>
+          <span class="lbl">Recipe type</span>
+          <p class="hint mb-3">Choose any number of types.</p>
+          <div id="types" class="flex flex-wrap gap-2"></div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 border-t border-line bg-surface px-6 py-4 sm:px-8">
+        <button type="button" id="cancel" class="rounded-xl border border-line px-5 py-2.5 text-sm font-semibold hover:bg-canvas">Cancel</button>
+        <button class="rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark">Create recipe</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="toast" class="pointer-events-none fixed bottom-6 left-1/2 z-[70] -translate-x-1/2 translate-y-4 rounded-xl bg-ink px-4 py-2.5 text-sm font-medium text-white opacity-0 shadow-lg transition">Recipe published</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const CATS=["Beef","Fruit Salads & Desserts","Indian","Lifetime Phase","Losing Phase","Poultry","Sauces, Seasonings and Dressings","Seafood","Soups","Vegetables and Salads","Vegetarian"];
+const TYPES=["Beef","Free Item","Fruit","Poultry","Seafood","Vegetables"];
+const ck='<svg class="ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 12 5 5 9-10"/></svg>';
+const selC=new Set(), selT=new Set(), recipes=[];
+
+function chips(el,items,set,max){
+  el.innerHTML=items.map(n=>`<button type="button" class="chip" aria-pressed="false" data-n="${n}">${ck}${n.replace(/&/g,'&amp;')}</button>`).join('');
+  el.onclick=e=>{const b=e.target.closest('.chip');if(!b||b.disabled)return;const n=b.dataset.n;
+    set.has(n)?set.delete(n):set.add(n);sync(el,set,max);if(max)$('catCount').textContent=set.size+' / '+max;if(max&&set.size)$('e-cat').classList.remove('show')};
+}
+function sync(el,set,max){el.querySelectorAll('.chip').forEach(b=>{const on=set.has(b.dataset.n);b.setAttribute('aria-pressed',on);b.disabled=!!max&&!on&&set.size>=max})}
+chips($('cats'),CATS,selC,2); chips($('types'),TYPES,selT,0);
+
+$('ing').addEventListener('input',()=>{const n=$('ing').value.split('\n').filter(l=>l.trim()).length;$('ingCount').textContent=n+(n===1?' item':' items')});
+['title','ing','ins'].forEach(id=>$(id).addEventListener('input',()=>{$(id).classList.remove('bad');$('e-'+id).classList.remove('show')}));
+
+const open=()=>{$('ov').classList.remove('hidden');$('ov').classList.add('flex');setTimeout(()=>$('title').focus(),50)};
+const close=()=>{$('ov').classList.add('hidden');$('ov').classList.remove('flex')};
+function reset(){$('f').reset();selC.clear();selT.clear();sync($('cats'),selC,2);sync($('types'),selT,0);$('catCount').textContent='0 / 2';$('ingCount').textContent='0 items';document.querySelectorAll('.err').forEach(e=>e.classList.remove('show'));document.querySelectorAll('.bad').forEach(e=>e.classList.remove('bad'))}
+$('open').onclick=open;$('x').onclick=$('cancel').onclick=close;
+$('ov').addEventListener('mousedown',e=>{if(e.target===$('ov'))close()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+
+$('f').onsubmit=e=>{e.preventDefault();let ok=true,first=null;
+  const chk=(id,bad)=>{$(id).classList.toggle('bad',bad);$('e-'+id).classList.toggle('show',bad);if(bad){ok=false;first=first||$(id)}};
+  chk('title',!$('title').value.trim());
+  if(!selC.size){$('e-cat').classList.add('show');ok=false;first=first||$('cats')}
+  chk('ing',!$('ing').value.trim());chk('ins',!$('ins').value.trim());
+  if(!ok){first.scrollIntoView({behavior:'smooth',block:'center'});return}
+  recipes.unshift({t:$('title').value.trim(),c:[...selC],ty:[...selT],n:$('ing').value.split('\n').filter(l=>l.trim()).length});
+  render();close();reset();const t=$('toast');t.classList.remove('opacity-0','translate-y-4');setTimeout(()=>t.classList.add('opacity-0','translate-y-4'),2200)};
+
+function render(){$('list').innerHTML=recipes.map(r=>`<div class="rounded-2xl border border-line bg-surface p-5 shadow-panel"><h3 class="font-serif text-lg">${r.t.replace(/</g,'&lt;')}</h3><p class="mt-1 text-xs text-muted">${r.n} ingredients</p><div class="mt-3 flex flex-wrap gap-1.5">${[...r.c.map(c=>[c,1]),...r.ty.map(c=>[c,0])].map(([c,p])=>`<span class="rounded-full px-2.5 py-0.5 text-[11px] font-medium ${p?'bg-primary-soft text-primary':'bg-canvas text-muted'}">${c.replace(/&/g,'&amp;')}</span>`).join('')}</div></div>`).join('')}
+</script>
+</body>
+</html>

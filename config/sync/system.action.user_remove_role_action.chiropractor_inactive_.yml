@@ -1,0 +1,14 @@
+uuid: c1fa542b-954b-416f-bf30-4f78bbe2e58a
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.chiropractor_inactive_
+  module:
+    - user
+id: user_remove_role_action.chiropractor_inactive_
+label: 'Remove the Chiropractor (Inactive) role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: chiropractor_inactive_

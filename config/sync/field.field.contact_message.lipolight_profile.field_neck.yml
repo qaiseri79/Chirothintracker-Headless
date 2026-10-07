@@ -1,0 +1,23 @@
+uuid: a105a2b3-6b6a-4a09-9afd-0d3fe4529308
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.lipolight_profile
+    - field.storage.contact_message.field_neck
+id: contact_message.lipolight_profile.field_neck
+field_name: field_neck
+entity_type: contact_message
+bundle: lipolight_profile
+label: Neck
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

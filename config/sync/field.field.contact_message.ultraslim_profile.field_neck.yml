@@ -1,0 +1,23 @@
+uuid: 1532da98-dc4b-45e2-8aac-c8d16e278050
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_neck
+id: contact_message.ultraslim_profile.field_neck
+field_name: field_neck
+entity_type: contact_message
+bundle: ultraslim_profile
+label: Neck
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

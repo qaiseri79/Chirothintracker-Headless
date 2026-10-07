@@ -1,0 +1,33 @@
+uuid: dabeeaff-1f4c-4d8c-a92a-bcf46d500a65
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.block_footer
+  module:
+    - user
+    - views
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_views_block__block_footer_block_3
+theme: chirothintracker_subtheme
+region: header_top
+weight: -22
+provider: null
+plugin: 'views_block:block_footer-block_3'
+settings:
+  id: 'views_block:block_footer-block_3'
+  label: 'Clinic logo for patient'
+  label_display: '0'
+  provider: views
+  views_label: 'Clinic logo for patient'
+  items_per_page: none
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      enrolled_patient: enrolled_patient
+      archived_patient: archived_patient

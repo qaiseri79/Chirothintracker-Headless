@@ -1,0 +1,29 @@
+uuid: 1df16274-827d-4d9a-836e-710588181905
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_flags
+    - taxonomy.vocabulary.patient_flags
+id: contact_message.tracking_weight.field_flags
+field_name: field_flags
+entity_type: contact_message
+bundle: tracking_weight
+label: Flags
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      patient_flags: patient_flags
+    sort:
+      field: _none
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

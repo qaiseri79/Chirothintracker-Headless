@@ -1,0 +1,38 @@
+uuid: ebaf5d84-8b7a-4d02-9f28-b01175766032
+langcode: en
+status: false
+dependencies:
+  content:
+    - 'block_content:basic:3de44b6e-8903-4da4-a92b-64e792544821'
+  module:
+    - block_content
+    - system
+    - user
+  theme:
+    - olivero
+id: chirothin_sass_block_7
+theme: olivero
+region: content
+weight: -9
+provider: null
+plugin: 'block_content:3de44b6e-8903-4da4-a92b-64e792544821'
+settings:
+  id: 'block_content:3de44b6e-8903-4da4-a92b-64e792544821'
+  label: ''
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      anonymous: anonymous
+  request_path:
+    id: request_path
+    negate: true
+    pages: /unsubscribe

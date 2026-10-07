@@ -1,0 +1,38 @@
+uuid: 53ec61e5-1acd-4bea-938d-c545d3d2df86
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:686c3fc3-62a4-40c3-a057-13ef01ac9c9e'
+  module:
+    - block_content
+    - system
+    - user
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_newlinkspatient
+theme: chirothintracker_subtheme
+region: content
+weight: -11
+provider: null
+plugin: 'block_content:686c3fc3-62a4-40c3-a057-13ef01ac9c9e'
+settings:
+  id: 'block_content:686c3fc3-62a4-40c3-a057-13ef01ac9c9e'
+  label: 'New Links (Patient)'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /my-messages
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      enrolled_patient: enrolled_patient

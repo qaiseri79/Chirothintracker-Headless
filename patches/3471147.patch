@@ -1,0 +1,36 @@
+From a56fafb7be946cc922a96f365579e8e4910acd8e Mon Sep 17 00:00:00 2001
+From: sarwan <sarwan>
+Date: Wed, 16 Oct 2024 16:20:53 +0530
+Subject: [PATCH] Fixed  CKEditor text formats issue
+
+---
+ config/schema/readmehelp.schema.yml | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
+
+diff --git a/config/schema/readmehelp.schema.yml b/config/schema/readmehelp.schema.yml
+index 5ca7d1b..eccd2d5 100644
+--- a/config/schema/readmehelp.schema.yml
++++ b/config/schema/readmehelp.schema.yml
+@@ -1,11 +1,10 @@
+ # Schema for the configuration files of the README Help module.
+-readmehelp.settings:
+-  type: config_object
+-  label: 'README Help settings'
++
++filter_settings.readmehelp_markdown:
++  type: filter
++  label: 'readmehelp Filter'
+   mapping:
+-    readmehelp_modules:
+-      type: sequence
+-      label: 'README Help modules'
+-      sequence:
+-        type: string
+-        label: 'README Help module'
++    quick_tips:
++      type: string
++      label: 'Quick Tips '
++
+-- 
+GitLab
+

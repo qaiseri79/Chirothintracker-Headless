@@ -1,0 +1,23 @@
+uuid: 993cb52a-fcce-47cb-ab83-2ba3a0f7a191
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.message
+    - field.storage.contact_message.field_patient_uid
+id: contact_message.message.field_patient_uid
+field_name: field_patient_uid
+entity_type: contact_message
+bundle: message
+label: 'Patient UID'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

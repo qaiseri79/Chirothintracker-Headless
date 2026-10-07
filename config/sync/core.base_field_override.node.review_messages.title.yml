@@ -1,0 +1,18 @@
+uuid: 4d08d02a-9403-4a8a-a476-ae9527bc001f
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.review_messages
+id: node.review_messages.title
+field_name: title
+entity_type: node
+bundle: review_messages
+label: Subject
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

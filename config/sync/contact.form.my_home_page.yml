@@ -1,0 +1,11 @@
+uuid: 245ed0d0-4c46-4d56-bd76-60de49fb2eb6
+langcode: en
+status: true
+dependencies: {  }
+id: my_home_page
+label: 'My Home Page'
+recipients: {  }
+reply: ''
+weight: 0
+message: null
+redirect: null

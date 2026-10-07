@@ -1,0 +1,27 @@
+uuid: 2d765960-c132-44ff-a6d4-5758e166a30b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_resource
+    - node.type.chirothin_resource
+  module:
+    - file
+id: node.chirothin_resource.field_resource
+field_name: field_resource
+entity_type: node
+bundle: chirothin_resource
+label: Resource
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: resources
+  file_extensions: 'jpg jpeg gif png txt doc docx xls xlsx pdf ppt pptx pps ppsx odt ods odp mp3 mov mp4 m4a m4v mpeg avi ogg oga ogv weba webp webm'
+  max_filesize: ''
+  description_field: true
+field_type: file

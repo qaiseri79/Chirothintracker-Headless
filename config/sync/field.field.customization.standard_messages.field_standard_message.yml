@@ -1,0 +1,21 @@
+uuid: b5c3b3b4-e096-4e99-91d8-0ce1e8e6e226
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.customization.standard_messages
+    - field.storage.customization.field_standard_message
+  module:
+    - text
+id: customization.standard_messages.field_standard_message
+field_name: field_standard_message
+entity_type: customization
+bundle: standard_messages
+label: Message
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

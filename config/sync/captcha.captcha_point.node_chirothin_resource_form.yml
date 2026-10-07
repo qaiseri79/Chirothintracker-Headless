@@ -1,0 +1,7 @@
+uuid: 9e5d2df6-dff6-42ce-85f1-7773d498d281
+langcode: en
+status: false
+dependencies: {  }
+formId: node_chirothin_resource_form
+captchaType: default
+label: node_chirothin_resource_form

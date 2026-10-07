@@ -1,0 +1,19 @@
+uuid: c18064bd-3b11-4e7d-8543-8ebc7b1f274a
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_stressors
+id: contact_message.patient_intake.field_stressors
+field_name: field_stressors
+entity_type: contact_message
+bundle: patient_intake
+label: 'My two greatest stressors are'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

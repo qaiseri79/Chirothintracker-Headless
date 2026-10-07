@@ -1,0 +1,34 @@
+uuid: 7fc60f4b-b341-419d-90cc-a162f7ae67c5
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.customization.standard_messages
+    - field.storage.customization.field_my_clinic
+id: customization.standard_messages.field_my_clinic
+field_name: field_my_clinic
+entity_type: customization
+bundle: standard_messages
+label: 'My Clinic'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:clinic'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    view:
+      view_name: my_clinic
+      display_name: entityreference_1
+      args: {  }
+    behaviors:
+      field_default_token:
+        status: true
+      views-select-list:
+        status: 0
+field_type: entity_reference

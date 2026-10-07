@@ -1,0 +1,86 @@
+uuid: 2879dcac-def6-4a31-9efb-51760b69e70d
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.patient_profile.ief_table
+    - eck.eck_type.patient_profile.zerona_profile
+    - field.field.patient_profile.zerona_profile.field_abdomen_loss
+    - field.field.patient_profile.zerona_profile.field_above_umbilicus_loss
+    - field.field.patient_profile.zerona_profile.field_arm_left_bicep_loss
+    - field.field.patient_profile.zerona_profile.field_arm_right_bicep_loss
+    - field.field.patient_profile.zerona_profile.field_back_bra_line_loss
+    - field.field.patient_profile.zerona_profile.field_below_umbilicus_loss
+    - field.field.patient_profile.zerona_profile.field_calf_left_loss
+    - field.field.patient_profile.zerona_profile.field_calf_right_loss
+    - field.field.patient_profile.zerona_profile.field_chest_loss
+    - field.field.patient_profile.zerona_profile.field_hips_loss
+    - field.field.patient_profile.zerona_profile.field_neck_loss
+    - field.field.patient_profile.zerona_profile.field_patient
+    - field.field.patient_profile.zerona_profile.field_profile_inches_lost
+    - field.field.patient_profile.zerona_profile.field_program_start_date
+    - field.field.patient_profile.zerona_profile.field_sessions_available
+    - field.field.patient_profile.zerona_profile.field_shoulders_loss
+    - field.field.patient_profile.zerona_profile.field_thigh_left_loss
+    - field.field.patient_profile.zerona_profile.field_thigh_right_loss
+  module:
+    - datetime
+id: patient_profile.zerona_profile.ief_table
+targetEntityType: patient_profile
+bundle: zerona_profile
+mode: ief_table
+content:
+  created:
+    type: timestamp
+    label: hidden
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_program_start_date:
+    type: datetime_default
+    label: hidden
+    settings:
+      timezone_override: ''
+      format_type: long
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_sessions_available:
+    type: number_integer
+    label: hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  field_abdomen_loss: true
+  field_above_umbilicus_loss: true
+  field_arm_left_bicep_loss: true
+  field_arm_right_bicep_loss: true
+  field_back_bra_line_loss: true
+  field_below_umbilicus_loss: true
+  field_calf_left_loss: true
+  field_calf_right_loss: true
+  field_chest_loss: true
+  field_hips_loss: true
+  field_neck_loss: true
+  field_patient: true
+  field_profile_inches_lost: true
+  field_shoulders_loss: true
+  field_thigh_left_loss: true
+  field_thigh_right_loss: true

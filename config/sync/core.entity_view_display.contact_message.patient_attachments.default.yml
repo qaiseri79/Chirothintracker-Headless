@@ -1,0 +1,56 @@
+uuid: 4784e971-6b12-463e-8b28-8b4a99f22805
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_attachments
+    - field.field.contact_message.patient_attachments.field_attachments
+    - field.field.contact_message.patient_attachments.field_author
+    - field.field.contact_message.patient_attachments.field_patient
+id: contact_message.patient_attachments.default
+targetEntityType: contact_message
+bundle: patient_attachments
+mode: default
+content:
+  field_author:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  mail:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: -2
+    region: content
+  message:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -3
+    region: content
+  subject:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -1
+    region: content
+hidden:
+  field_attachments: true
+  field_patient: true

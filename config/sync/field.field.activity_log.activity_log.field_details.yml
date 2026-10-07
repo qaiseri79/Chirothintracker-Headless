@@ -1,0 +1,19 @@
+uuid: 6cfc6fb1-1dae-43a8-88c7-f28c5a01723a
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.activity_log.activity_log
+    - field.storage.activity_log.field_details
+id: activity_log.activity_log.field_details
+field_name: field_details
+entity_type: activity_log
+bundle: activity_log
+label: Details
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

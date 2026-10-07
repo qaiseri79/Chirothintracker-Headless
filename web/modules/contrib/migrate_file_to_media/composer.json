@@ -1,0 +1,36 @@
+{
+    "name": "drupal/migrate_file_to_media",
+    "description": "Migrate file fields to media fields.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "dev",
+    "homepage": "https://drupal.org/project/migrate_file_to_media",
+    "authors": [
+        {
+            "name": "Jon (ayalon)",
+            "homepage": "https://www.drupal.org/u/ayalon",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/migrate_file_to_media",
+        "source": "https://git.drupalcode.org/project/migrate_file_to_media"
+    },
+    "extra": {
+        "drush": {
+            "services": {
+                "drush.services.yml": "^10 || ^11"
+            }
+        }
+    },
+    "require": {
+        "php": ">=8.1.0",
+        "drupal/migrate_tools": "^6",
+        "drupal/migrate_plus": "^6",
+        "drupal/core": "^10.2 || ^11"
+    },
+    "require-dev": {
+        "drupal/paragraphs": "^1.10",
+        "drupal/crop": "^2.0"
+    }
+}

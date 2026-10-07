@@ -1,0 +1,19 @@
+uuid: f34d7d2a-2101-41b4-8588-a0f95ceb1e87
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_class
+    - taxonomy.vocabulary.weight_loss_phase
+id: taxonomy_term.weight_loss_phase.field_class
+field_name: field_class
+entity_type: taxonomy_term
+bundle: weight_loss_phase
+label: class
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

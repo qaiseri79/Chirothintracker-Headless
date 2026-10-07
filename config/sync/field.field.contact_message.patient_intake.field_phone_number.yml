@@ -1,0 +1,21 @@
+uuid: ab6f7970-6a95-4698-a22f-3bc38f47fd91
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_phone_number
+  module:
+    - telephone
+id: contact_message.patient_intake.field_phone_number
+field_name: field_phone_number
+entity_type: contact_message
+bundle: patient_intake
+label: 'Phone Number'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: telephone

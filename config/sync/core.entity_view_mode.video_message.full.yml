@@ -1,0 +1,11 @@
+uuid: b2f7aacf-41f4-49e0-a86a-77f84032013f
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+id: video_message.full
+label: Full
+description: ''
+targetEntityType: video_message
+cache: true

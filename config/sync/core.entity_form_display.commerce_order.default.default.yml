@@ -1,0 +1,86 @@
+uuid: 9ba51df3-c5ca-4381-8741-1e44c3284caf
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_order.commerce_order_type.default
+    - field.field.commerce_order.default.field_agreement
+    - field.field.commerce_order.default.field_signature
+  module:
+    - commerce_order
+    - inline_entity_form
+    - signature_field
+_core:
+  default_config_hash: OxAaChovIat28naja81fSKWGZHYQHv6xrrmhnK-bXUI
+id: commerce_order.default.default
+targetEntityType: commerce_order
+bundle: default
+mode: default
+content:
+  adjustments:
+    type: commerce_adjustment_default
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  billing_profile:
+    type: commerce_billing_profile
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  cart:
+    type: boolean_checkbox
+    weight: 20
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_agreement:
+    type: boolean_checkbox
+    weight: 22
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_signature:
+    type: field_signature_field_widget
+    weight: 21
+    region: content
+    settings:
+      show_data_box: false
+      show_thumb: true
+      canvas_width: 400
+      canvas_height: 200
+      min_line_width: 1
+      max_line_width: 2
+      pen_color: ''
+      background_color: ''
+    third_party_settings: {  }
+  order_items:
+    type: inline_entity_form_complex
+    weight: 1
+    region: content
+    settings:
+      form_mode: default
+      override_labels: true
+      label_singular: 'order item'
+      label_plural: 'order items'
+      allow_new: true
+      allow_existing: false
+      match_operator: CONTAINS
+      allow_duplicate: false
+      collapsible: false
+      collapsed: false
+      revision: false
+      removed_reference: delete
+    third_party_settings: {  }
+hidden:
+  created: true
+  customer_comments: true
+  ip_address: true
+  mail: true
+  order_number: true
+  state: true
+  store_id: true
+  uid: true

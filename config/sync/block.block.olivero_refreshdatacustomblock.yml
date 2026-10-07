@@ -1,0 +1,25 @@
+uuid: a72a6cfa-243f-4137-9b58-9d955ef27982
+langcode: en
+status: true
+dependencies:
+  module:
+    - custom_module
+    - system
+  theme:
+    - olivero
+id: olivero_refreshdatacustomblock
+theme: olivero
+region: content
+weight: -19
+provider: null
+plugin: refresh_data_block
+settings:
+  id: refresh_data_block
+  label: 'Refresh Data (Custom Block)'
+  label_display: '0'
+  provider: custom_module
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /history

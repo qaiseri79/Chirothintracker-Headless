@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * @file
+ * Signature field module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function signature_field_help($route_name, RouteMatchInterface $route_match) {
+  if ($route_name == 'help.page.signature_field') {
+    $text = file_get_contents(__DIR__ . '/README.md');
+    if (!Drupal::moduleHandler()->moduleExists('markdown')) {
+      return '<pre>' . $text . '</pre>';
+    }
+    else {
+      /** @var \Drupal\markdown\PluginManager\ParserManagerInterface $parser_manager */
+      $parser_manager = \Drupal::service('plugin.manager.markdown.parser');
+      $parser = $parser_manager->getDefaultParser([
+        'render_strategy' => ['type' => 'none'],
+      ]);
+      return $parser->parse($text);
+    }
+  }
+  return NULL;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function signature_field_theme($existing, $type, $theme, $path) {
+  return [
+    'signature' => [
+      'render element' => 'element',
+      'variables' => [
+        'canvas_width' => NULL,
+        'canvas_height' => NULL,
+        'signature_src' => NULL,
+        'min_line_width' => NULL,
+        'max_line_width' => NULL,
+        'pen_color' => NULL,
+        'bg_color' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Converts a hex color into an RGB triplet.
+ */
+function _signature_field_color_unpack($hex, $normalize = FALSE) {
+  $hex = substr($hex, 1);
+  if (strlen($hex) == 3) {
+    $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+  }
+  $c = hexdec($hex);
+  for ($i = 16; $i >= 0; $i -= 8) {
+    $out[] = (($c >> $i) & 0xFF) / ($normalize ? 255 : 1);
+  }
+
+  return $out;
+}

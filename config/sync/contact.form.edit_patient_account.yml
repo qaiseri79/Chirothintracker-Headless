@@ -1,0 +1,11 @@
+uuid: 17727e3a-b23e-4d16-b8ec-50bbbea91a46
+langcode: en
+status: true
+dependencies: {  }
+id: edit_patient_account
+label: 'Edit Patient Account'
+recipients: {  }
+reply: ''
+weight: 0
+message: null
+redirect: null

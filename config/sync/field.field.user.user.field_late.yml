@@ -1,0 +1,23 @@
+uuid: 6ed35ffb-9a10-4305-8e8f-874396811a61
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_late
+  module:
+    - options
+    - user
+id: user.user.field_late
+field_name: field_late
+entity_type: user
+bundle: user
+label: Late
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: '1'
+default_value_callback: ''
+settings: {  }
+field_type: list_string

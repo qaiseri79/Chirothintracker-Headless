@@ -1,0 +1,15 @@
+uuid: 8bcd2c77-471d-4d18-a343-863b47cfdcb7
+langcode: en
+status: true
+dependencies: {  }
+name: clinic_logo
+label: 'Clinic Logo (height 50px)'
+effects:
+  dacd4426-fa5f-4f4c-a6f5-1f88417ce1d4:
+    uuid: dacd4426-fa5f-4f4c-a6f5-1f88417ce1d4
+    id: image_scale
+    weight: 1
+    data:
+      width: null
+      height: 50
+      upscale: true

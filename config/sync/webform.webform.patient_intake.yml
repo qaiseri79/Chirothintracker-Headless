@@ -1,0 +1,672 @@
+uuid: ccf9f649-9796-4f31-9cd4-43d777636883
+langcode: en
+status: open
+dependencies: {  }
+weight: 0
+open: null
+close: null
+uid: 1
+template: false
+archive: false
+id: patient_intake
+title: 'Patient Intake'
+description: ''
+categories: {  }
+elements: |-
+  demographics:
+    '#type': webform_section
+    '#title': Demographics
+    first_name:
+      '#type': textfield
+      '#title': 'First Name'
+      '#required': true
+    last_name:
+      '#type': textfield
+      '#title': 'Last Name'
+      '#required': true
+    email_address:
+      '#type': email
+      '#title': 'Email Address'
+      '#required': true
+    phone_number:
+      '#type': tel
+      '#title': 'Phone Number'
+      '#required': true
+  mailing_address:
+    '#type': fieldset
+    '#title': 'Mailing Address'
+    '#open': true
+    '#align_items': flex-end
+    mailing_address_:
+      '#type': address
+      '#title': 'Mailing Address'
+      '#default_value':
+        country_code: US
+        langcode: ''
+        address_line1: ''
+        address_line2: ''
+        locality: ''
+        administrative_area: ''
+        postal_code: ''
+        given_name: null
+        additional_name: null
+        family_name: null
+        organization: null
+        sorting_code: null
+        dependent_locality: null
+      '#available_countries':
+        - CA
+        - US
+      '#field_overrides':
+        givenName: hidden
+        additionalName: hidden
+        familyName: hidden
+        organization: hidden
+  field_gender:
+    '#type': radios
+    '#title': Gender
+    '#options':
+      M: Male
+      F: Female
+    '#wrapper_type': form_element
+    '#required': true
+  date_of_birth:
+    '#type': date
+    '#title': 'Date of Birth'
+    '#default_value': '-30 years'
+  occupation:
+    '#type': textfield
+    '#title': Occupation
+  marital_status:
+    '#type': select
+    '#title': 'Marital Status'
+    '#options':
+      S: Single
+      M: Married
+      D: Divorced
+      W: Widowed
+  number_of_children:
+    '#type': number
+    '#title': 'Number of Children'
+    '#field_suffix': children
+  group_emergency_contact_information:
+    '#type': fieldset
+    '#title': 'Emergency Contact Information'
+    emergency_contact_name:
+      '#type': textfield
+      '#title': 'Emergency Contact Name'
+    emergency_contact_phone:
+      '#type': tel
+      '#title': 'Emergency Contact Phone'
+  motivation:
+    '#type': webform_section
+    '#title': Motivation
+    what_is_your_motivation_for_losing_weight_:
+      '#type': textarea
+      '#title': 'What is your motivation for losing weight?'
+    field_programs:
+      '#type': textfield
+      '#title': 'Please list any weight loss programs you have tried in the past.'
+      '#multiple': true
+  field_program_start_date:
+    '#type': date
+    '#title': 'If qualified for this weight loss program, what date would you plan on starting?'
+    '#default_value': 'next saturday'
+    '#date_date_min': '-3 years'
+    '#date_date_max': '+3 years'
+  group_diet:
+    '#type': webform_section
+    '#title': Diet
+    daily_activity_level:
+      '#type': select
+      '#title': 'Daily Activity Level'
+      '#options':
+        1: Sedentary
+        2: 'Lightly Active'
+        3: 'Moderately Active'
+        4: 'Very Active'
+      '#default_value': '2'
+      '#required': true
+    current_weight_lbs_:
+      '#type': number
+      '#title': 'Current Weight (lbs)'
+      '#required': true
+    desired_weight_lbs_:
+      '#type': number
+      '#title': 'Desired Weight (lbs)'
+    height_inches_:
+      '#type': number
+      '#title': 'Height (inches)'
+  group_medical:
+    '#type': webform_section
+    '#title': Medical
+    field_medical_eligibility:
+      '#type': radios
+      '#title': 'Are you currently pregnant, breast feeding, have active cancer or active gall bladder disease (cholecycstitis)?'
+      '#help_title': 'If yes, you are not eligible to participate in this program.'
+      '#options':
+        1: 'Yes'
+        0: 'No'
+      '#default_value': '0'
+      '#wrapper_type': form_element
+    field_medical_eligibility_choice:
+      '#type': checkboxes
+      '#title': 'Select all that apply.'
+      '#options':
+        1: Pregnant
+        2: 'Breast Feeding'
+        3: 'Active Cancer'
+        4: 'Active Gall Bladder Disease (Cholecystitis)'
+      '#wrapper_type': form_element
+  field_history_eating_disorder:
+    '#type': checkboxes
+    '#title': 'History of Eating Disorder (Diagnosed)'
+    '#options':
+      1: 'Anorexia Nervosa'
+      2: 'Bulimia Nervosa'
+      3: 'Binge Eating Disorder'
+      4: PICA
+      5: 'Rumination Disorder'
+      6: 'Avoidant or Restrictive Food Intake Disorder'
+      7: 'Purging Disorder'
+      8: 'Night Eating Syndrome'
+    '#wrapper_type': form_element
+  group_surgery:
+    '#type': fieldset
+    '#title': Surgery
+    field_history_bariatric_surgery:
+      '#type': checkboxes
+      '#title': 'History of Bariatric Surgery'
+      '#options':
+        1: 'Gastric Bypass (Roux-en-Y-Gastric Bypass)'
+        2: 'Lap Band (Laparoscopic Adjustable Gastric Banding)'
+        3: 'Sleeve Gastrectomy'
+        4: 'Biliopancratic Diversion with Duodenal Switch'
+      '#wrapper_type': form_element
+    field_surgery_weight_loss:
+      '#type': number
+      '#title': 'How much weight have you lost with surgery?'
+      '#states':
+        visible:
+          - ':input[name="field_history_bariatric_surgery[1]"]':
+              checked: true
+          - or
+          - ':input[name="field_history_bariatric_surgery[2]"]':
+              checked: true
+          - or
+          - ':input[name="field_history_bariatric_surgery[3]"]':
+              checked: true
+          - or
+          - ':input[name="field_history_bariatric_surgery[4]"]':
+              checked: true
+    field_surgery_weight_gain:
+      '#type': number
+      '#title': 'How much weight, if any, did you put back on?'
+  field_gall_bladder:
+    '#type': radios
+    '#title': 'Have you had your gall bladder removed?'
+    '#options':
+      1: 'Yes'
+      0: 'No'
+    '#default_value': '0'
+    '#wrapper_type': form_element
+    '#required': true
+  group_diabetes:
+    '#type': fieldset
+    '#title': Diabetes
+    field_diabetes:
+      '#type': radios
+      '#title': 'Have you been diagnosed with diabetes?'
+      '#options':
+        - 'No'
+        - 'Type I'
+        - 'Type II'
+        - Other
+      '#required': true
+      '#default_value': '0'
+      '#wrapper_type': form_element
+    year_diagnosed:
+      '#type': number
+      '#title': 'Year Diagnosed'
+      '#states':
+        visible:
+          ':input[name="field_diabetes"]':
+            '!value': '0'
+    diabetes_medications:
+      '#type': textfield
+      '#title': 'Diabetes Medications'
+      '#states':
+        visible:
+          ':input[name="field_diabetes"]':
+            '!value': '0'
+  group_blood_pressure:
+    '#type': fieldset
+    '#title': 'Blood Pressure'
+    field_high_blood_pressure:
+      '#type': radios
+      '#title': 'Have you been diagnosed with high blood pressure?'
+      '#options':
+        1: 'Yes'
+        0: 'No'
+      '#default_value': '0'
+      '#wrapper_type': form_element
+      '#required': true
+    field_bp_diagnosis_year:
+      '#type': number
+      '#title': 'Year Diagnosed'
+      '#states':
+        visible:
+          ':input[name="field_high_blood_pressure"]':
+            value: '1'
+    field_blood_pressure_medications:
+      '#type': textfield
+      '#title': 'Blood Pressure Medications'
+      '#multiple': true
+      '#states':
+        visible:
+          ':input[name="field_high_blood_pressure"]':
+            value: '1'
+  group_thyroid_condition:
+    '#type': fieldset
+    '#title': 'Thyroid Condition'
+    field_thyroid_condition:
+      '#type': radios
+      '#title': 'Have you been diagnosed with a thyroid condition?'
+      '#options':
+        1: 'Yes'
+        0: 'No'
+      '#default_value': '0'
+      '#wrapper_type': form_element
+      '#required': true
+    field_thyroid_diagnosis_year:
+      '#type': number
+      '#title': 'Year Diagnosed'
+      '#states':
+        visible:
+          ':input[name="field_thyroid_condition"]':
+            value: '1'
+    field_thyroid_medications:
+      '#type': textfield
+      '#title': 'Thyroid Medications'
+      '#multiple': true
+      '#states':
+        visible:
+          ':input[name="field_thyroid_condition"]':
+            value: '1'
+  group_cholesterol:
+    '#type': fieldset
+    '#title': Cholesterol
+    field_high_cholesterol:
+      '#type': radios
+      '#title': 'Have you been diagnosed with high cholesterol?'
+      '#options':
+        1: 'Yes'
+        0: 'No'
+      '#default_value': '0'
+      '#wrapper_type': form_element
+      '#required': true
+    field_cholesterol_diagnosis_year:
+      '#type': number
+      '#title': 'Year Diagnosed'
+      '#states':
+        visible:
+          ':input[name="field_high_cholesterol"]':
+            value: '1'
+    field_cholesterol_medications:
+      '#type': textfield
+      '#title': 'Cholesterol Medications'
+      '#multiple': true
+      '#states':
+        visible:
+          ':input[name="field_high_cholesterol"]':
+            value: '1'
+  field_medical_symptoms:
+    '#type': checkboxes
+    '#title': 'Do you experience any of the following even if they are minor and go away on their own?'
+    '#options':
+      1: 'High Blood Pressure'
+      2: 'Heart Disease'
+      3: Fibromyalgia
+      4: 'Hip / Knee Pain'
+      5: 'Neck Pain'
+      6: 'Digestive Problems'
+      7: Numbness
+      8: Osteoporosis
+      9: Headaches
+      10: 'Upper / Low Back Pain'
+      11: Arthritis
+      12: 'Stress / Irritability'
+      13: 'Chronic Inflammation'
+      14: Hypoglycemia
+      15: 'Thyroid Problems'
+      16: 'Chronic Fatigue'
+      17: 'Sinus / Allergy'
+    '#wrapper_type': form_element
+  field_other_symptoms:
+    '#type': textfield
+    '#title': 'Do you experience any other problems, even if they are minor?'
+    '#multiple': true
+  field_medications:
+    '#type': textfield
+    '#title': 'Are you currently on any other medications and if yes, for what?'
+    '#multiple': true
+  field_health_challenge:
+    '#type': textarea
+    '#title': 'Do you have any other health challenge you feel is important for us to know about?'
+  group_emotional:
+    '#type': webform_section
+    '#title': Emotional
+    field_emotional_eater:
+      '#type': radios
+      '#title': 'Would you say you are an "Emotional Eater?"'
+      '#options':
+        1: 'Yes'
+        0: 'No'
+      '#default_value': '0'
+      '#wrapper_type': form_element
+      '#required': true
+    field_cravings:
+      '#type': textfield
+      '#title': 'What foods do you crave?'
+      '#multiple': true
+    field_stressors:
+      '#type': textfield
+      '#title': 'My two greatest stressors are'
+      '#multiple': 2
+      '#size': 60
+  significant_emotional_trauma:
+    '#type': fieldset
+    '#title': 'Significant Emotional Trauma'
+    significant_emotional_trauma_:
+      '#type': webform_custom_composite
+      '#title': 'Significant Emotional Trauma'
+      '#description': "<p>Describe any Significant Emotional Traumas you've experienced.</p>"
+      '#title_display': invisible
+      '#description_display': before
+      '#element':
+        emotional_trauma:
+          '#type': textfield
+          '#title': 'Emotional Trauma'
+        age:
+          '#type': number
+          '#title': Age
+  informed_consent_and_release_of_liability:
+    '#type': webform_section
+    '#title': 'Informed Consent and Release of Liability'
+    field_agreement:
+      '#type': textarea
+      '#title': 'Informed Consent and Release of Liability'
+      '#rows': 15
+      '#default_value': |-
+        I understand that my use and consumption of any [current-page:query:clinicbrand] product or engaging in any weight loss program including the type that is to be used in conjunction with [current-page:query:clinicbrand], have inherent risks to my health and well-being, including but not limited to headaches, nausea, dizziness, vomiting, fatigue, pain, loss of consciousness, shortness of breath and other ailments.
+
+        I understand as well that rapid weight loss of over 1-2 lbs. per week is considered by most in the weight loss medical community to be excessive and may lead to ailments similar and in addition to those mentioned above. Therefore, I understand that my failure to follow the weight loss program exactly as described to me by my physician or chiropractor can result in severe temporary and/or permanent medical conditions in addition to those mentioned above.
+
+        I understand that I am not use or consume any of the [current-page:query:clinicbrand] products if I am pregnant or think I might be pregnant.
+
+        I understand that, as a dietary supplement, [current-page:query:clinicbrand] has not been approved by the FDA or any Federal or State authority.
+
+        I additionally understand that the [current-page:query:clinicbrand] Weight Loss Program is not meant to diagnose, treat or cure any disease or medical condition and that I am to undergo participation in the [current-page:query:clinicbrand] Weight Loss Program only under doctor supervision.
+
+        I also understand that I should consult with my doctor prior to starting ANY exercise or nutritional supplement program.
+
+        I understand that, if I experience any ailment, including but not limited to headaches, nausea, dizziness, vomiting, fatigue, pain, loss of consciousness, shortness of breath and other ailments, I should immediately stop using or consuming the [current-page:query:clinicbrand] product and, if my symptoms do not resolve immediately, I should consult my physician or go to the hospital emergency room.
+
+        I hereby consent to, and assume the risks associated with, the use and consumption of [current-page:query:clinicbrand] product and agree to follow the recommendations and instructions of my physician. I further agree not to use or consume any [current-page:query:clinicbrand] product without the advice, counsel, and recommendations of my physician.
+
+        I understand that Neuroemotional Technique (NET) is one of the techniques that may be used during my care. NET does not make claims as to what may have happened in the past. All memory events are considered “emotional reality” because events may or may not correspond with actual or historical reality.
+
+        I hereby release, discharge and agree to indemnify my physician(s) at , NET, ChiroNutraceutical, their agents, servants employees and affiliates from any and all liability, claims, causes of action and demands for personal or bodily injury or death that I or my personal representatives might have or might hereafter acquire through my use or consumption of ChiroThin products.
+    field_program_agreement:
+      '#type': textarea
+      '#title': 'Program Agreement'
+      '#rows': 15
+      '#default_value': |-
+        [site:name] Program Agreement 
+
+        I understand due to the nature of this weight loss program, although it is doctor supervised, it is up to me to follow the instructions as outlined in the training videos on [site:url] application and in my program booklets, handouts and doctor modifications as communicated to me through the [site:url] app. I understand that no results are guaranteed and that results vary from patient to patient. I understand that I may contact my doctor(s) with my questions and that they are available through the  patient portal and email or video conference for supervision and support, but they are not ultimately responsible for my actual weight or inch loss. I understand that I must follow the instructions outlined in the instruction manual, on the instructional videos and as modified by my doctor(s) and/or their team for optimal results. I understand that straying from the program in any way will negatively affect my weight loss results. I understand that there are no refunds for opened products, missed or unused appointments that are built into the programs. I agree to not sell, gift or share my product formula with another individual. I agree that if I spill or lose my product formula within the first 4 weeks of my program I may purchase one accidental replacement bottle of drops for $500.
+
+        Finance and Payment Agreement
+
+        I hereby authorize [site:name] to charge my credit card for the Amount Due at Signing for the products and/or programs I have selected from the online store and said amount is to be charged on the date this agreement is signed. If a financed option was chosen, I further authorize [site:name] to charge my credit card for monthly payment amounts, as outlined in the program financing options until the balance is zero. I understand and agree to the payment schedule described herein and further, I understand that the monthly amount described in the finance options will be processed automatically by our merchant processor.
+    field_media_release_agreement:
+      '#type': textarea
+      '#title': 'Media Release'
+      '#rows': 15
+      '#default_value': |-
+        For good and valuable consideration, the receipt of which is hereby acknowledged, I hereby consent to the photographing of myself and/or the recording of my voice and the use of these photographs and/or recordings singularly or in conjunction with other photographs and/or recordings for advertising, publicity, commercial or other business purposes. I understand that the term “photograph” as used herein encompasses both still photographs and motion picture footage.
+
+        I further consent to the reproduction and/or authorization by ChiroThin and ChiroNutraceutical to reproduce and use said photographs and recordings of my voice, for use in all domestic and foreign markets. Further, I understand that others, with or without the consent of ChiroThin and ChiroNutraceutical, may use and/or reproduce such photographs and recordings.
+
+        I hereby release my ChiroThin supervising chiropractor, ChiroThin, ChiroNutraceutical, and any of its associated or affiliated companies, their directors, officers, agents, employees and customers, and appointed advertising agencies, their directors, officers, agents and employees from all claims of every kind on account of such use.
+  field_consent_consumption:
+    '#type': checkbox
+    '#title': 'I agree to the Informed Consent and Release of Liability as outlined above'
+    '#required': true
+  media_consent:
+    '#type': radios
+    '#title': 'Media Consent'
+    '#title_display': none
+    '#options':
+      1: 'I do consent to the Media Release'
+      0: 'I do not consent to the Media Release'
+    '#required': true
+    '#default_value': '1'
+    '#wrapper_type': form_element
+  field_consent:
+    '#type': textfield
+    '#title': 'To sign your consent to the agreement above, type your full, legal name in the box below.'
+    '#required': true
+  clinic:
+    '#type': entity_autocomplete
+    '#title': Clinic
+    '#multiple': true
+    '#default_value': '[current-page:query:clinic_id]'
+    '#format': value
+    '#target_type': clinic
+    '#selection_handler': views
+    '#selection_settings':
+      view:
+        view_name: my_clinic
+        display_name: entity_reference_4
+        arguments: {  }
+  custom_operations:
+    '#type': processed_text
+    '#display_on': view
+    '#text': '<div class="custom-operations-intake-submission"><a class="use-ajax btn btn-primary btn-sm" href="/form/patient-account?m=[webform_submission:values:email_address]&amp;n=[webform_submission:values:first_name]%20[webform_submission:values:last_name]&amp;g=[webform_submission:values:current_weight_lbs_]&amp;p=[webform_submission:values:phone_number]&amp;i=[webform_submission:sid]&amp;s_date=[webform_submission:values:field_program_start_date:c]" data-dialog-type="modal" data-dialog-options="{&quot;width&quot;:700}">Enroll</a></div>'
+    '#format': full_html
+css: ''
+javascript: ''
+settings:
+  ajax: false
+  ajax_scroll_top: form
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: /intake_old
+  page_confirm_path: ''
+  page_theme_name: ''
+  form_title: source_entity_webform
+  form_submit_once: false
+  form_open_message: ''
+  form_close_message: ''
+  form_exception_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_disable_remote_addr: false
+  form_convert_anonymous: false
+  form_prepopulate: true
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_unsaved: false
+  form_disable_back: false
+  form_submit_back: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_reset: false
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  form_attributes: {  }
+  form_method: ''
+  form_action: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
+  submission_label: ''
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_log: false
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: false
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_auto_forward: true
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: false
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  wizard_page_type: container
+  wizard_page_title_tag: h2
+  preview: 0
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: page
+  confirmation_url: ''
+  confirmation_title: ''
+  confirmation_message: ''
+  confirmation_attributes: {  }
+  confirmation_back: false
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  token_delete: false
+  serial_disabled: false
+access:
+  create:
+    roles:
+      - anonymous
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles:
+      - administrator
+      - chiropractor_active_
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles:
+      - enrolled_patient
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles:
+      - administrator
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles:
+      - administrator
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles:
+      - enrolled_patient
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles:
+      - enrolled_patient
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles:
+      - enrolled_patient
+    users: {  }
+    permissions: {  }
+  administer:
+    roles:
+      - administrator
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles:
+      - administrator
+    users: {  }
+    permissions: {  }
+handlers: {  }
+variants: {  }

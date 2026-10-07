@@ -1,0 +1,127 @@
+{#
+/**
+ * @file
+ * Theme override to display a menu.
+ *
+ * Available variables:
+ * - menu_name: The machine name of the menu.
+ * - items: A nested list of menu items. Each menu item contains:
+ *   - attributes: HTML attributes for the menu item.
+ *   - below: The menu item child items.
+ *   - title: The menu link title.
+ *   - url: The menu link URL, instance of \Drupal\Core\Url
+ *   - localized_options: Menu link localized options.
+ *   - is_expanded: TRUE if the link has visible children within the current
+ *     menu tree.
+ *   - is_collapsed: TRUE if the link has children within the current menu tree
+ *     that are not currently visible.
+ *   - in_active_trail: TRUE if the link is in the active trail.
+ */
+#}
+{% import _self as menus %}
+
+{#
+  We call a macro which calls itself to render the full tree.
+  @see https://twig.symfony.com/doc/3.x/tags/macro.html
+#}
+{{ menus.menu_links(items, attributes, 0) }}
+
+{% macro menu_links(items, attributes, menu_level) %}
+  {% import _self as menus %}
+  {% if items %}
+    {% if menu_level == 0 %}
+      <ul{{ attributes.addClass(['nav navbar-nav']) }}>
+    {% else %}
+      <ul>
+    {% endif %}
+    {% for item in items %}
+      {%
+        set classes_link = [
+          'nav-link',
+          item.is_expanded ? 'dropdown-toggle',
+          item.is_collapsed ? 'dropdown-toggle',
+          item.in_active_trail ? 'active',
+        ]
+      %}
+      
+      {% set title_text = item.title|striptags %}
+      {% set title = title_text|trim %}
+      
+      {# Initialize variables for counts #}
+      {% set doctor_message_count = item.attributes['doctor-message-count']  %}
+      {% set patient_message_count = item.attributes['patient-message-count']  %}
+      {% set intake_count = item.attributes['intake-count'] %}
+      {% set task_count = item.attributes['task-count'] %}
+      {% set order_count = item.attributes['order-count'] %}
+
+      <li{{ item.attributes.addClass('nav-item') }}>
+      
+        {% if title == 'Messages' and item.url and item.url.toString() == '/my-messages' %}
+          <a href="{{ item.url }}" class="{{ classes_link|join(' ')|escape }}">
+            <i class="fa-solid fa-message"></i>{{ title|raw }}<span class="{{ patient_message_count is empty ? '' : 'message-count ' }} patient-count">{{ patient_message_count }}</span>
+          </a>
+        {% elseif title == 'Messages' and (not item.url or item.url.toString() == '') %}
+          <span class="{{ classes_link|join(' ')|escape }}">
+            <i class="fa-solid fa-message"></i>{{ title|raw }}<span class="{{ doctor_message_count is empty ? '' : 'message-count ' }} doctor-count">{{ doctor_message_count }}</span>
+          </span>
+        {% elseif title == 'Patients' and item.url and item.url.toString() == '' %}
+          <span class="{{ classes_link|join(' ')|escape }}">
+           <i class="fa-solid fa-head-side-mask"></i>{{ title|raw }}<span class="{{ intake_count is empty ? '' : 'message-count ' }} doctor-count">{{ intake_count }}</span>
+          </span>
+         {% elseif title == 'My Clinic Page' and item.url and item.url.toString() == '' %}
+          <span class="{{ classes_link|join(' ')|escape }}">
+            <i class="fa-solid fa-house-chimney-medical"></i>{{ title|raw }}<span class="{{ task_count is empty ? '' : 'message-count' }} doctor-count">{{ task_count }}</span><span class="{{ order_count is empty ? '' : 'message-count' }} doctor-count">{{ order_count }}</span>
+          </span>  
+        {% else %}
+          {{ link(item.title, item.url, { 'class': classes_link }) }}
+        {% endif %}
+
+
+        {# Render children if present #}
+        {% if item.below %}
+         <ul>
+              {% for child_item in item.below %}
+                {% set child_title = child_item.title|striptags %}
+                {% set child_url = child_item.url.toString() %}
+                
+                {% if child_title == 'New Messages' and child_url == '/new-messages' %}
+                  <li class="nav-item">
+                    <a href="{{ child_item.url }}" class="nav-link">
+                      {{ child_item.title }}<span class="{{ doctor_message_count is empty ? '' : 'message-count ' }} doctor-count">{{ doctor_message_count }}</span>
+                    </a>
+                  </li>
+                {% elseif child_title == 'Intake Forms' and child_url == '/manage/intake' %}
+                <li class="nav-item">
+                    <a href="{{ child_item.url }}" class="nav-link">
+                      {{ child_item.title }}<span class="{{ intake_count is empty ? '' : 'message-count ' }} doctor-count">{{ intake_count }}</span>
+                    </a>
+                  </li>
+                {% elseif child_title == 'My Tasks' and child_url == '/tasks' %}
+                  <li class="nav-item">
+                    <a href="{{ child_item.url }}" class="nav-link">
+                      {{ child_item.title }}<span class="{{ task_count is empty ? '' : 'message-count ' }} doctor-count">{{ task_count }}</span>
+                    </a>
+                  </li>
+                {% elseif child_title == 'My Orders' and child_url == '/clinican/orders' %}
+                  <li class="nav-item">
+                    <a href="{{ child_item.url }}" class="nav-link">
+                      {{ child_item.title }}<span class="{{ order_count is empty ? '' : 'message-count ' }} doctor-count">{{ order_count }}</span>
+                    </a>
+                  </li>
+                {% else %}
+                  <li class="nav-item">
+                    <a href="{{ child_item.url }}" class="nav-link">{{ child_item.title }}</a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          
+        {% endif %}
+
+      </li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endmacro %}
+
+

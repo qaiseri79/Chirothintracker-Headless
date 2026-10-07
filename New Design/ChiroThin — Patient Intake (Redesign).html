@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>ChiroThin — Patient Intake</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          canvas: "#F3F4F1",
+          surface: "#FFFFFF",
+          ink: "#101827",
+          muted: "#6B7280",
+          line: "#E4E2DC",
+          primary: { DEFAULT: "#0B5D52", soft: "#E4EEEC", dark: "#08423A" },
+          accent: { DEFAULT: "#C7522A", soft: "#F6E4DC" },
+          success: { DEFAULT: "#3D8361", soft: "#E4F0E9" },
+        },
+        fontFamily: {
+          serif: ["Newsreader", "Georgia", "serif"],
+          sans: ["Inter", "system-ui", "sans-serif"],
+        },
+        boxShadow: {
+          panel: "0 1px 2px rgba(16,24,39,0.04), 0 8px 24px -12px rgba(16,24,39,0.08)",
+        },
+      },
+    },
+  };
+</script>
+<style>
+  :root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  html, body { height: 100%; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #E4E2DC; border-radius: 8px; }
+  input[type="radio"], input[type="checkbox"] { accent-color: #0B5D52; width: 16px; height: 16px; }
+</style>
+</head>
+<body class="h-full bg-canvas font-sans text-ink antialiased">
+
+<div class="flex min-h-full flex-col md:flex-row">
+
+  <!-- STEPPER SIDEBAR (desktop) -->
+  <aside class="hidden w-72 shrink-0 border-r border-line bg-surface px-8 py-10 md:block">
+    <div class="mb-10 flex items-center gap-2">
+      <svg class="h-6 w-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <div>
+        <p class="font-serif text-lg leading-none text-ink">ChiroThin</p>
+        <p class="text-[10px] tracking-wide text-muted">Patient Intake</p>
+      </div>
+    </div>
+    <div id="stepperList"></div>
+  </aside>
+
+  <!-- MOBILE TOP BAR -->
+  <header class="sticky top-0 z-20 border-b border-line bg-surface/95 px-5 py-4 backdrop-blur md:hidden">
+    <div class="mb-2 flex items-center justify-between">
+      <span class="font-serif text-base text-ink" id="mobileStepTitle"></span>
+      <span class="text-xs font-medium text-muted" id="mobileStepCounter"></span>
+    </div>
+    <div class="h-1.5 w-full overflow-hidden rounded-full bg-line">
+      <div id="mobileProgressBar" class="h-full rounded-full bg-primary transition-all duration-300"></div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="flex-1 px-5 py-8 sm:px-10 sm:py-12">
+    <div class="mx-auto max-w-2xl">
+
+      <div class="mb-8 hidden items-center justify-between md:flex">
+        <div>
+          <h1 class="font-serif text-2xl text-ink" id="stepTitle"></h1>
+          <p class="mt-1 text-sm text-muted" id="stepSubtitle"></p>
+        </div>
+        <span class="text-sm font-medium text-muted" id="stepCounter"></span>
+      </div>
+
+      <div id="formCard" class="rounded-xl border border-line bg-surface p-6 shadow-panel sm:p-8">
+        <div id="fieldsContainer"></div>
+
+        <div class="mt-8 flex items-center justify-between border-t border-line pt-6">
+          <button id="backBtn" type="button" class="rounded-lg px-4 py-2.5 text-sm font-medium text-ink/70 transition-colors hover:bg-canvas">
+            Back
+          </button>
+          <button id="nextBtn" type="button" class="rounded-lg bg-primary px-6 py-2.5 text-sm font-semibold text-white shadow-panel transition-colors hover:bg-primary-dark">
+            Continue
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+const STEPS = [
+  {
+    title: "Personal Details",
+    subtitle: "Let's start with the basics.",
+    fields: [
+      { type: "text", label: "First Name", required: true, half: true },
+      { type: "text", label: "Last Name", required: true, half: true },
+      { type: "email", label: "Email Address", required: true, half: true },
+      { type: "tel", label: "Phone Number", required: true, half: true },
+      { type: "select", label: "Country", options: ["United States", "Canada"], half: true },
+      { type: "select", label: "Gender", options: ["Male", "Female"], half: true },
+      { type: "text", label: "Street Address", required: true },
+      { type: "text", label: "City", required: true, half: true },
+      { type: "select", label: "State", options: ["- Select -", "AK", "AL", "CA", "NY", "TX"], required: true, half: true },
+      { type: "text", label: "Zip Code", required: true, half: true },
+      { type: "date", label: "Date of Birth", half: true },
+      { type: "text", label: "Occupation", half: true },
+      { type: "select", label: "Marital Status", options: ["- None -", "Single", "Married", "Divorced", "Widowed"], half: true },
+      { type: "number", label: "Number of Children", suffix: "children", half: true },
+    ],
+  },
+  {
+    title: "Contact & Motivation",
+    subtitle: "Who should we reach in an emergency, and why now?",
+    fields: [
+      { type: "text", label: "Emergency Contact Name", required: true, half: true },
+      { type: "tel", label: "Emergency Contact Phone", required: true, half: true },
+      { type: "textarea", label: "What is your motivation for losing weight?" },
+      { type: "repeatable", name: "programs", label: "Please list any weight loss programs you have tried in the past", placeholder: "e.g. Keto, Weight Watchers..." },
+      { type: "date", label: "If qualified for this program, what date would you plan on starting?" },
+    ],
+  },
+  {
+    title: "Diet & Body",
+    subtitle: "A few numbers to set your starting point.",
+    fields: [
+      { type: "select", label: "Daily Activity Level", options: ["Lightly Active", "Sedentary", "Moderately Active", "Very Active"] },
+      { type: "number", label: "Current Weight", suffix: "lbs", half: true },
+      { type: "number", label: "Desired Weight", suffix: "lbs", half: true },
+      { type: "number", label: "Height", suffix: "inches", half: true },
+    ],
+  },
+  {
+    title: "Medical Screening",
+    subtitle: "Standard health questions required before starting the program.",
+    fields: [
+      { type: "radio", name: "q_disqualify", label: "Are you currently pregnant, breast feeding, have active cancer, or active gall bladder disease (cholecystitis)?", options: ["Yes", "No"] },
+      { type: "checkbox-grid", label: "If yes, select all that apply", options: ["Pregnant", "Breast Feeding", "Active Cancer", "Active Gall Bladder Disease"] },
+      { type: "checkbox-grid", label: "History of eating disorder (diagnosed)", options: ["Anorexia Nervosa", "Bulimia Nervosa", "Binge Eating Disorder", "PICA", "Rumination Disorder", "Avoidant / Restrictive Food Intake Disorder", "Purging Disorder", "Night Eating Syndrome"] },
+      { type: "checkbox-grid", label: "History of bariatric surgery", options: ["Gastric Bypass (Roux-en-Y Gastric Bypass)", "Lap Band (Laparoscopic Adjustable Gastric Banding)", "Sleeve Gastrectomy", "Biliopancreatic Diversion with Duodenal Switch"] },
+      { type: "number", label: "How much weight, if any, did you put back on?", suffix: "lbs", half: true },
+      { type: "radio", name: "q_gallbladder", label: "Have you had your gall bladder removed?", options: ["Yes", "No"] },
+      { type: "radio", name: "q_diabetes", label: "Have you been diagnosed with diabetes?", options: ["No", "Type I", "Type II", "Other"] },
+      { type: "radio", name: "q_bp", label: "Have you been diagnosed with high blood pressure?", options: ["Yes", "No"] },
+      { type: "radio", name: "q_thyroid", label: "Have you been diagnosed with a thyroid condition?", options: ["Yes", "No"] },
+      { type: "radio", name: "q_chol", label: "Have you been diagnosed with high cholesterol?", options: ["Yes", "No"] },
+      { type: "checkbox-grid", label: "Do you experience any of the following, even if they are minor and go away on their own?", options: ["High Blood Pressure", "Heart Disease", "Fibromyalgia", "Hip / Knee Pain", "Neck Pain", "Digestive Problems", "Numbness", "Osteoporosis", "Headaches", "Upper / Low Back Pain", "Arthritis", "Stress / Irritability", "Chronic Inflammation", "Hypoglycemia", "Thyroid Problems", "Chronic Fatigue", "Sinus / Allergy"] },
+    ],
+  },
+  {
+    title: "Health & Lifestyle",
+    subtitle: "Help us understand the fuller picture.",
+    fields: [
+      { type: "repeatable", name: "otherProblems", label: "Do you experience any other problems, even if minor?" },
+      { type: "repeatable", name: "medications", label: "Are you currently on any other medications, and if yes, for what?" },
+      { type: "textarea", label: "Do you have any other health challenges you feel is important for us to know about?" },
+      { type: "radio", name: "q_emotional", label: 'Would you say you are an "emotional eater"?', options: ["Yes", "No"] },
+      { type: "repeatable", name: "cravings", label: "What foods do you crave?" },
+      { type: "text", label: "My greatest stressor is", half: true },
+      { type: "text", label: "My second greatest stressor is", half: true },
+      { type: "repeatable", name: "traumaAge", label: "Significant emotional trauma — age it occurred", placeholder: "e.g. 14" },
+      { type: "repeatable", name: "traumaDetail", label: "Combined trauma — brief description" },
+    ],
+  },
+  {
+    title: "Consent & Signature",
+    subtitle: "Last step — please review and confirm.",
+    fields: [
+      { type: "static", label: "Informed Consent and Release of Liability", text: "I understand that my use and consumption of any ChiroThin product, or engaging in any weight loss program including the type that is used in conjunction with ChiroThin, have inherent risks to my health and well-being, including but not limited to headaches, dizziness, vomiting, fatigue, pain, loss of consciousness, shortness of breath, and other ailments. I understand that a rapid weight loss of 1–2 lbs per week is considered by most in the weight loss medical community to be excessive, and may lead to ailments similar to and in addition to those mentioned above. I understand that my failure to follow the weight loss program exactly as described to me by my physician or chiropractor may result in..." },
+      { type: "static", label: "ChiroThinTracker Program Agreement", text: "I understand that due to the nature of this weight loss program, although it is doctor supervised, it is up to me to follow the instructions as outlined in the training videos on https://chirothintracker.com/app and in my program booklets, handouts, and doctor modifications as communicated to me through the app. I understand that no results are guaranteed and that results vary from patient to patient. I understand that I may contact my doctor(s) with my questions and that they are available through the patient portal and/or video conference for supervision and support." },
+      { type: "static", label: "Media Release", text: "For good and valuable consideration, the receipt of which is hereby acknowledged, I hereby consent to the photographing of myself and/or the recording of my voice and the use of these photographs and/or recordings singularly or in conjunction with other photographs and/or recordings for advertising, publicity, commercial or other lawful purposes, and I understand that the term \"photograph\" as used herein encompasses both still photographs and motion picture footage." },
+      { type: "consent", label: "I agree to the Informed Consent and Release of Liability, Program Agreement, and Media Release above." },
+      { type: "text", label: "Type your full legal name to sign", required: true },
+    ],
+  },
+];
+
+let currentStep = 0;
+
+function renderStepperSidebar() {
+  const el = document.getElementById("stepperList");
+  el.innerHTML = STEPS.map((s, i) => {
+    const state = i < currentStep ? "done" : i === currentStep ? "active" : "upcoming";
+    const isLast = i === STEPS.length - 1;
+    return `
+      <div class="relative flex items-start gap-3 ${isLast ? "" : "pb-7"}">
+        ${!isLast ? `<span class="absolute left-[15px] top-8 h-full w-px ${state === "done" ? "bg-primary" : "bg-line"}"></span>` : ""}
+        <span class="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
+          state === "done" ? "bg-primary text-white" : state === "active" ? "border-2 border-primary bg-white text-primary" : "border border-line bg-white text-muted"
+        }">${state === "done" ? "✓" : i + 1}</span>
+        <p class="pt-1.5 text-sm font-medium ${state === "upcoming" ? "text-muted" : "text-ink"}">${s.title}</p>
+      </div>`;
+  }).join("");
+}
+
+function fieldWrapClass(f) {
+  if (f.type === "text" || f.type === "email" || f.type === "tel" || f.type === "number" || f.type === "date" || f.type === "select") {
+    return f.half ? "sm:col-span-1" : "sm:col-span-2";
+  }
+  return "sm:col-span-2";
+}
+
+function renderField(f) {
+  const req = f.required ? '<span class="text-accent">*</span>' : "";
+  const base = "w-full rounded-lg border border-line bg-canvas px-3.5 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary";
+  switch (f.type) {
+    case "text":
+    case "email":
+    case "tel":
+    case "date":
+      return `<div class="${fieldWrapClass(f)}">
+        <label class="mb-1.5 block text-sm font-medium text-ink">${f.label} ${req}</label>
+        <input type="${f.type}" class="${base}" />
+      </div>`;
+    case "number":
+      return `<div class="${fieldWrapClass(f)}">
+        <label class="mb-1.5 block text-sm font-medium text-ink">${f.label} ${req}</label>
+        <div class="flex items-center gap-2">
+          <input type="number" class="${base}" />
+          ${f.suffix ? `<span class="whitespace-nowrap text-sm text-muted">${f.suffix}</span>` : ""}
+        </div>
+      </div>`;
+    case "select":
+      return `<div class="${fieldWrapClass(f)}">
+        <label class="mb-1.5 block text-sm font-medium text-ink">${f.label} ${req}</label>
+        <select class="${base}">${f.options.map((o) => `<option>${o}</option>`).join("")}</select>
+      </div>`;
+    case "textarea":
+      return `<div class="sm:col-span-2">
+        <label class="mb-1.5 block text-sm font-medium text-ink">${f.label} ${req}</label>
+        <textarea rows="4" class="${base}"></textarea>
+      </div>`;
+    case "radio":
+      return `<div class="sm:col-span-2">
+        <label class="mb-2 block text-sm font-medium text-ink">${f.label} ${req}</label>
+        <div class="flex flex-wrap gap-2.5">
+          ${f.options.map((o) => `
+            <label class="flex cursor-pointer items-center gap-2 rounded-lg border border-line bg-canvas px-4 py-2.5 text-sm transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary-soft has-[:checked]:text-primary">
+              <input type="radio" name="${f.name}" />${o}
+            </label>`).join("")}
+        </div>
+      </div>`;
+    case "checkbox-grid":
+      return `<div class="sm:col-span-2">
+        <label class="mb-2 block text-sm font-medium text-ink">${f.label}</label>
+        <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          ${f.options.map((o) => `
+            <label class="flex cursor-pointer items-center gap-2 rounded-lg border border-line bg-canvas px-3 py-2.5 text-sm transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary-soft">
+              <input type="checkbox" />${o}
+            </label>`).join("")}
+        </div>
+      </div>`;
+    case "repeatable":
+      return `<div class="sm:col-span-2 rounded-lg border border-accent/30 bg-accent-soft/60 p-4" data-repeatable="${f.name}">
+        <p class="mb-3 text-sm font-medium text-ink">${f.label}</p>
+        <div class="repeatable-rows space-y-2">
+          <div class="repeatable-row flex items-center gap-2">
+            <input type="text" placeholder="${f.placeholder || ""}" class="flex-1 rounded-lg border border-line bg-surface px-3.5 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" />
+            <button type="button" class="remove-row shrink-0 rounded-lg border border-line bg-surface px-3 py-2 text-xs font-medium text-muted hover:bg-canvas">Remove</button>
+          </div>
+        </div>
+        <button type="button" class="add-row mt-3 rounded-lg border border-dashed border-accent px-3.5 py-1.5 text-sm font-medium text-accent hover:bg-surface">+ Add another</button>
+      </div>`;
+    case "static":
+      return `<div class="sm:col-span-2">
+        <p class="mb-1.5 text-sm font-semibold text-ink">${f.label}</p>
+        <div class="max-h-36 overflow-y-auto rounded-lg border border-line bg-canvas p-4 text-sm leading-relaxed text-ink/70">${f.text}</div>
+      </div>`;
+    case "consent":
+      return `<div class="sm:col-span-2">
+        <label class="flex items-start gap-3 rounded-lg border border-line bg-canvas p-4 text-sm text-ink">
+          <input type="checkbox" class="mt-0.5" />${f.label}
+        </label>
+      </div>`;
+    default:
+      return "";
+  }
+}
+
+function renderStep() {
+  const step = STEPS[currentStep];
+  document.getElementById("stepTitle").textContent = step.title;
+  document.getElementById("stepSubtitle").textContent = step.subtitle || "";
+  document.getElementById("stepCounter").textContent = `Step ${currentStep + 1} of ${STEPS.length}`;
+  document.getElementById("mobileStepTitle").textContent = step.title;
+  document.getElementById("mobileStepCounter").textContent = `${currentStep + 1} / ${STEPS.length}`;
+  document.getElementById("mobileProgressBar").style.width = `${((currentStep + 1) / STEPS.length) * 100}%`;
+  document.getElementById("fieldsContainer").innerHTML = `<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">${step.fields.map(renderField).join("")}</div>`;
+  document.getElementById("backBtn").classList.toggle("invisible", currentStep === 0);
+  document.getElementById("nextBtn").textContent = currentStep === STEPS.length - 1 ? "Submit" : "Continue";
+  renderStepperSidebar();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+document.getElementById("backBtn").addEventListener("click", () => {
+  if (currentStep > 0) { currentStep--; renderStep(); }
+});
+
+document.getElementById("nextBtn").addEventListener("click", () => {
+  if (currentStep < STEPS.length - 1) {
+    currentStep++;
+    renderStep();
+  } else {
+    document.getElementById("formCard").innerHTML = `
+      <div class="flex flex-col items-center py-10 text-center">
+        <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-success-soft text-success">
+          <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
+        </div>
+        <h2 class="font-serif text-2xl text-ink">Intake received</h2>
+        <p class="mt-2 max-w-sm text-sm text-muted">Thank you — your ChiroThin clinician will review your intake and reach out to confirm your program start date.</p>
+      </div>`;
+  }
+});
+
+document.getElementById("fieldsContainer").addEventListener("click", (e) => {
+  const group = e.target.closest("[data-repeatable]");
+  if (!group) return;
+  if (e.target.matches(".add-row")) {
+    const rows = group.querySelector(".repeatable-rows");
+    const clone = rows.firstElementChild.cloneNode(true);
+    clone.querySelector("input").value = "";
+    rows.appendChild(clone);
+  }
+  if (e.target.matches(".remove-row")) {
+    const rows = group.querySelector(".repeatable-rows");
+    if (rows.children.length > 1) e.target.closest(".repeatable-row").remove();
+  }
+});
+
+renderStep();
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+uuid: cbef4260-32dc-48e0-8163-fdcecbc57bed
+langcode: en
+status: true
+dependencies: {  }
+id: monthly
+label: Monthly
+displayLabel: Monthly
+billingType: prepaid
+combineSubscriptions: false
+retrySchedule:
+  - 1
+  - 2
+  - 3
+unpaidSubscriptionState: canceled
+plugin: rolling
+configuration:
+  trial_interval: {  }
+  interval:
+    number: 1
+    unit: month
+prorater: proportional
+proraterConfiguration: {  }

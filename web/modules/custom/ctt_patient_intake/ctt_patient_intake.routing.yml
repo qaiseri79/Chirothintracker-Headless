@@ -1,0 +1,7 @@
+ctt_patient_intake.settings:
+  path: '/admin/config/ctt-patient-intake/settings'
+  defaults:
+    _form: '\Drupal\ctt_patient_intake\Form\PatientIntakeSettingsForm'
+    _title: 'Patient Intake Email Settings'
+  requirements:
+    _permission: 'administer site configuration'

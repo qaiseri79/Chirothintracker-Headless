@@ -1,0 +1,9 @@
+uuid: e857908e-ee86-4b79-9fc8-bcf9a1ad4c52
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_entity_type.clinic
+name: Clinic
+type: clinic
+description: Clinic

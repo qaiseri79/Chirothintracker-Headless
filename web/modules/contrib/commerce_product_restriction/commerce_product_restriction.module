@@ -1,0 +1,138 @@
+<?php
+
+/**
+ * @file
+ * Provides commerce product restrictions functionality.
+ */
+
+use Drupal\commerce\Context;
+use Drupal\commerce\PurchasableEntityInterface;
+use Drupal\commerce_cart\Form\AddToCartFormInterface;
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_form_alter().
+ */
+function commerce_product_restriction_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_state->getBuildInfo()['callback_object'] instanceof AddToCartFormInterface) {
+    /** @var \Drupal\commerce_product\Entity\Product $product */
+    $product = $form_state->get('product');
+    // Get the product variation.
+    /** @var \Drupal\commerce_product\Entity\ProductVariation $selected_variation_id */
+    $selected_variation_id = $form_state->get('selected_variation');
+    if ($selected_variation_id) {
+      /** @var \Drupal\commerce_product\Entity\ProductVariation $selected_variation */
+      $selected_variation = Drupal::entityTypeManager()
+        ->getStorage('commerce_product_variation')
+        ->load($selected_variation_id);
+    }
+    else {
+      /** @var \Drupal\commerce_product\Entity\ProductVariation $selected_variation */
+      $selected_variation = $product->getDefaultVariation();
+    }
+    commerce_product_restriction_check_and_alter_form_for_variation($form, $form_state, $selected_variation);
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function commerce_product_restriction_form_views_form_commerce_cart_form_default_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // @todo test form views form.
+
+  /** @var \Drupal\views\ViewExecutable $view */
+  $view = reset($form_state->getBuildInfo()['args']);
+  // Only add limitation for quantity if the cart form view has order items.
+  if ($view->storage->get('tag') == 'commerce_cart_form' && !empty($view->result)) {
+    // Load order items.
+    $id = $view->argument['order_id']->value[0];
+    $storage = Drupal::entityTypeManager()->getStorage('commerce_order');
+    /** @var \Drupal\commerce_order\Entity\Order */
+    $order = $storage->load($id);
+    $order_items = $order->getItems();
+    foreach ($order_items as $key => $order_item) {
+      $selected_variation = $order_item->getPurchasedEntity();
+      commerce_product_restriction_check_and_alter_form_for_variation($form, $form_state, $selected_variation);
+    }
+  }
+}
+
+/**
+ * Alter variation cart form.
+ */
+function commerce_product_restriction_check_and_alter_form_for_variation(&$form, FormStateInterface $form_state, PurchasableEntityInterface $purchased_entity) {
+  /** @var \Drupal\commerce_product_restriction\AvailabilityChecker $availability_checker */
+  $availability_checker = Drupal::service('commerce_product_restriction.availability_checker');
+
+  $current_user = Drupal::currentUser();
+  $current_store = Drupal::service('commerce_store.current_store')->getStore();
+  $context = new Context($current_user, $current_store, FALSE, ['form' => $form]);
+
+  // $variation = $order_item->getPurchasedEntity();
+  $availability = $availability_checker->checkVariation($purchased_entity, $context);
+
+  if ($availability && $availability->isUnavailable()) {
+    /*
+    $form['actions']['submit']['#value'] = t('Restricted');
+    $form['actions']['submit']['#disabled'] = TRUE;
+     */
+    $failingPlugins = $availability_checker->checkVariation($purchased_entity, $context, TRUE);
+    foreach ($failingPlugins as $entity_type => $plugins) {
+      foreach ($plugins as $plugin) {
+        $plugin->alterCartForm($form, $form_state);
+      }
+    }
+
+    $message = '<div class="messages messages--product-restriction">' . $availability->getReason() . '</div>';
+
+    $form['restriction-message'] =
+      [
+        '#type' => 'markup',
+        '#markup' => $message,
+        '#weight' => 0,
+      ];
+
+    $button = isset($form['actions']['checkout']) ? 'checkout' : 'submit';
+
+    $form['actions'][$button]['#disabled'] = 'true';
+    if ($button == 'checkout') {
+      $form['actions'][$button]['#value'] = t('Cannot check out - see message above');
+    }
+    else {
+      $form['actions'][$button]['#value'] = t('Cannot add to cart - see message above');
+
+      if (Drupal::moduleHandler()->moduleExists('commerce_cart_webform')) {
+        commerce_cart_webform_remove_extended_fields($form);
+      }
+
+    }
+
+    /* $form['actions']['submit']['#type'] = 'hidden'; */
+  }
+}
+
+/**
+ * Implements hook_help().
+ */
+function commerce_product_restriction_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.commerce_product_restriction':
+      $text = file_get_contents(__DIR__ . '/README.md');
+      if (!Drupal::moduleHandler()->moduleExists('markdown')) {
+        return '<pre>' . Html::escape($text) . '</pre>';
+      }
+      else {
+        // Use the Markdown filter to render the README.
+        $filter_manager = Drupal::service('plugin.manager.filter');
+        $settings = Drupal::configFactory()
+          ->get('markdown.settings')
+          ->getRawData();
+        $config = ['settings' => $settings];
+        $filter = $filter_manager->createInstance('markdown', $config);
+        return $filter->process($text, 'en');
+      }
+  }
+  return NULL;
+}

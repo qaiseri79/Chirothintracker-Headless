@@ -1,0 +1,27 @@
+uuid: 0d52e26a-d3ad-4c08-914b-20c6e0ee5c50
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.chironutraceutical
+    - field.storage.commerce_product.field_description_file
+  module:
+    - file
+id: commerce_product.chironutraceutical.field_description_file
+field_name: field_description_file
+entity_type: commerce_product
+bundle: chironutraceutical
+label: 'Description File'
+description: 'Use this field to add description in file instead of text'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'txt pdf docx'
+  max_filesize: ''
+  description_field: false
+field_type: file

@@ -1,0 +1,26 @@
+uuid: 452078ae-f03f-43ad-bc34-33c5e3334c2c
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.zerona_profile
+    - field.storage.contact_message.field_treatment_area
+    - taxonomy.vocabulary.laser_treatment_area
+id: contact_message.zerona_profile.field_treatment_area
+field_name: field_treatment_area
+entity_type: contact_message
+bundle: zerona_profile
+label: 'Treatment Area'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      laser_treatment_area: laser_treatment_area
+    sort:
+      field: _none
+field_type: entity_reference

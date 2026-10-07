@@ -1,0 +1,15 @@
+uuid: cddb9bf4-ae18-42eb-90d6-321eec8c1f31
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.message_status_contact_storage
+  module:
+    - flag
+id: flag_action.message_status_contact_storage_flag
+label: '<span class="button--primary button">Mark as New</span>'
+type: contact_message
+plugin: 'flag_action:message_status_contact_storage_flag'
+configuration:
+  flag_id: message_status_contact_storage
+  flag_action: flag

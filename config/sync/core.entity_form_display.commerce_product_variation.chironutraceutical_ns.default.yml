@@ -1,0 +1,43 @@
+uuid: f7f92743-424c-401a-ad65-f1e9fcede48f
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_variation_type.chironutraceutical_ns
+  module:
+    - commerce_price
+id: commerce_product_variation.chironutraceutical_ns.default
+targetEntityType: commerce_product_variation
+bundle: chironutraceutical_ns
+mode: default
+content:
+  list_price:
+    type: commerce_list_price
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  price:
+    type: commerce_price_default
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  sku:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden:
+  created: true
+  uid: true

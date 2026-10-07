@@ -1,0 +1,237 @@
+uuid: a283b15a-0177-486f-a3e7-c272dd5ce3eb
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d7_entityform_ultraslim_profile
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Content
+migration_group: migrate_drupal_7
+label: 'D8 Contact message migration from D7 entityform submission ()'
+source:
+  plugin: d7_entityform
+  constants:
+    langcode: en
+    module: contact_storage
+  bundle: ultraslim_profile
+process:
+  id:
+    -
+      plugin: get
+      source: entityform_id
+  contact_form:
+    -
+      plugin: get
+      source: type
+  uid:
+    -
+      plugin: get
+      source: uid
+  created:
+    -
+      plugin: get
+      source: created
+  changed:
+    -
+      plugin: get
+      source: changed
+  langcode:
+    -
+      plugin: default_value
+      source: language
+      default_value: en
+  'dependencies/module/[]':
+    -
+      plugin: get
+      source: constants/module
+  field_date:
+    -
+      plugin: sub_process
+      source: field_date
+      process:
+        value:
+          plugin: format_date
+          from_format: 'Y-m-d H:i:s'
+          to_format: Y-m-d
+          source: value
+  field_weight:
+    -
+      plugin: get
+      source: field_weight
+  field_blood_pressure:
+    -
+      plugin: get
+      source: field_blood_pressure
+  field_subcutaneous_fat:
+    -
+      plugin: sub_process
+      source: field_subcutaneous_fat
+      process:
+        target_id: tid
+  field_skin_tightening:
+    -
+      plugin: sub_process
+      source: field_skin_tightening
+      process:
+        target_id: tid
+  field_cellulite:
+    -
+      plugin: sub_process
+      source: field_cellulite
+      process:
+        target_id: tid
+  field_notes:
+    -
+      plugin: get
+      source: field_notes
+  field_neck:
+    -
+      plugin: get
+      source: field_neck
+  field_arm_left_bicep:
+    -
+      plugin: get
+      source: field_arm_left_bicep
+  field_arm_right_bicep:
+    -
+      plugin: get
+      source: field_arm_right_bicep
+  field_back_bra_line:
+    -
+      plugin: get
+      source: field_back_bra_line
+  field_abdomen:
+    -
+      plugin: get
+      source: field_abdomen
+  field_hips:
+    -
+      plugin: get
+      source: field_hips
+  field_buttocks:
+    -
+      plugin: get
+      source: field_buttocks
+  field_thigh_left:
+    -
+      plugin: get
+      source: field_thigh_left
+  field_thigh_right:
+    -
+      plugin: get
+      source: field_thigh_right
+  field_patient_profile:
+    -
+      plugin: get
+      source: field_patient_profile
+  field_treatment_protocol:
+    -
+      plugin: sub_process
+      source: field_treatment_protocol
+      process:
+        target_id: tid
+  field_waistbuster_protocol:
+    -
+      plugin: get
+      source: field_waistbuster_protocol
+  field_visceral_fat_protocol:
+    -
+      plugin: get
+      source: field_visceral_fat_protocol
+  field_subcutaneous_fat_protocol:
+    -
+      plugin: get
+      source: field_subcutaneous_fat_protocol
+  field_skin_tightening_protocol:
+    -
+      plugin: get
+      source: field_skin_tightening_protocol
+  field_cellulite_protocol:
+    -
+      plugin: get
+      source: field_cellulite_protocol
+  field_facial_rejuvenation_protoc:
+    -
+      plugin: get
+      source: field_facial_rejuvenation_protoc
+  field_waistbuster_zone_1:
+    -
+      plugin: get
+      source: field_waistbuster_zone_1
+  field_waistbuster_zone_2:
+    -
+      plugin: get
+      source: field_waistbuster_zone_2
+  field_waistbuster_zone_3:
+    -
+      plugin: get
+      source: field_waistbuster_zone_3
+  field_waistbuster_zone_4:
+    -
+      plugin: get
+      source: field_waistbuster_zone_4
+  field_waistbuster_zone_5:
+    -
+      plugin: get
+      source: field_waistbuster_zone_5
+  field_waistbuster_zone_6:
+    -
+      plugin: get
+      source: field_waistbuster_zone_6
+  field_visceral_fat_zone_1:
+    -
+      plugin: get
+      source: field_visceral_fat_zone_1
+  field_visceral_fat_zone_2:
+    -
+      plugin: get
+      source: field_visceral_fat_zone_2
+  field_visceral_fat_zone_3:
+    -
+      plugin: get
+      source: field_visceral_fat_zone_3
+  field_visceral_fat_zone_4:
+    -
+      plugin: get
+      source: field_visceral_fat_zone_4
+  field_visceral_fat_zone_5:
+    -
+      plugin: get
+      source: field_visceral_fat_zone_5
+  field_visceral_fat_zone_6:
+    -
+      plugin: get
+      source: field_visceral_fat_zone_6
+  field_all_measurements:
+    -
+      plugin: get
+      source: field_all_measurements
+  field_before_and_after_photos:
+    -
+      plugin: sub_process
+      source: field_before_and_after_photos
+      process:
+        target_id: fid
+        alt: alt
+        title: title
+        width: width
+        height: height
+  field_waist_buster_zone_6l:
+    -
+      plugin: get
+      source: field_waist_buster_zone_6l
+  field_author:
+    -
+      plugin: get
+      source: uid
+destination:
+  plugin: 'entity:contact_message'
+  default_bundle: ultraslim_profile
+migration_dependencies:
+  required:
+    - ''
+  optional:
+    - upgrade_d7_field_instance

@@ -1,0 +1,19 @@
+# No permissions are declared here on purpose.
+#
+# This module used to declare `access headless patients` and `manage headless
+# patients`, granted them to the chiropractor roles in hook_install(), and required
+# them on its routes. That arrangement did not work:
+#
+#   - The routing file put `_permission` under `defaults`, where Drupal never reads
+#     it, so the routes enforced nothing at all and both permission strings were
+#     inert route defaults.
+#   - A permission per module means the same question — who is a chiropractor, who
+#     is a patient — gets answered again in every module, and the answers drift.
+#
+# Access now comes from the shared policy classes in the headless_access module,
+# which hold the role machine names in one place. See
+# headless_access/src/PortalRoles.php for the model they encode.
+#
+# Deleting the permission definitions also removes the ability to grant them by
+# hand, which is the point: the roles are now the only thing that decides who may
+# reach these endpoints.

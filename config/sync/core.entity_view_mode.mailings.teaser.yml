@@ -1,0 +1,11 @@
+uuid: b2c509b6-5532-4ee7-b461-60f8e3d618a0
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+id: mailings.teaser
+label: Teaser
+description: ''
+targetEntityType: mailings
+cache: true

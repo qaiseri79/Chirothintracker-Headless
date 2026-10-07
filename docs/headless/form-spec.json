@@ -1,0 +1,2256 @@
+{
+    "patient_intake": {
+        "label": "Patient Intake",
+        "status": "open",
+        "redirect": "/",
+        "confirmation_message": "Thank you for submitting the Form.",
+        "submission_count": 8656,
+        "contact_storage": {
+            "submit_text": "Submit",
+            "show_preview": true,
+            "disabled_form_message": "This contact form has been disabled.",
+            "maximum_submissions_user": 0,
+            "page_autoreply_format": "plain_text"
+        },
+        "hidden_components": [
+            "copy",
+            "field_clinic",
+            "field_domain",
+            "mail",
+            "message",
+            "name",
+            "preview",
+            "subject"
+        ],
+        "field_groups": [
+            {
+                "id": "group_demographics",
+                "label": "Demographics",
+                "weight": 0,
+                "format_type": "fieldset",
+                "fields": [
+                    "field_first_name",
+                    "field_last_name",
+                    "field_email_address",
+                    "field_phone_number"
+                ]
+            },
+            {
+                "id": "group_emergencycontact_informat",
+                "label": "Emergency Contact Information",
+                "weight": 7,
+                "format_type": "fieldset",
+                "fields": [
+                    "field_emergency_contact_name",
+                    "field_emergency_contact_phone"
+                ]
+            },
+            {
+                "id": "group_motivation",
+                "label": "Motivation",
+                "weight": 8,
+                "format_type": "fieldset",
+                "fields": [
+                    "field_motivation",
+                    "field_programs"
+                ]
+            },
+            {
+                "id": "group_diet",
+                "label": "Diet",
+                "weight": 10,
+                "format_type": "fieldset",
+                "fields": [
+                    "field_daily_activity_level",
+                    "field_weight",
+                    "field_goal_weight",
+                    "field_height"
+                ]
+            },
+            {
+                "id": "group_medical",
+                "label": "Medical",
+                "weight": 11,
+                "format_type": "fieldset",
+                "fields": [
+                    "field_medical_eligibility",
+                    "field_medical_eligibility_choice"
+                ]
+            },
+            {
+                "id": "group_surgery",
+                "label": "Surgery",
+                "weight": 13,
+                "format_type": "fieldset",
+                "fields": [
+                    "field_history_bariatric_surgery",
+                    "field_surgery_weight_loss",
+                    "field_surgery_weight_gain"
+                ]
+            },
+            {
+                "id": "group_diabetes",
+                "label": "Diabetes",
+                "weight": 15,
+                "format_type": "fieldset",
+                "fields": [
+                    "field_diabetes",
+                    "field_diabetes_diagnosis_year",
+                    "field_diabetes_medications"
+                ]
+            },
+            {
+                "id": "group_blood_pressure",
+                "label": "Blood Pressure",
+                "weight": 16,
+                "format_type": "fieldset",
+                "fields": [
+                    "field_high_blood_pressure",
+                    "field_bp_diagnosis_year",
+                    "field_blood_pressure_medications"
+                ]
+            },
+            {
+                "id": "group_thyroid_condition",
+                "label": "Thyroid Condition",
+                "weight": 17,
+                "format_type": "fieldset",
+                "fields": [
+                    "field_thyroid_condition",
+                    "field_thyroid_diagnosis_year",
+                    "field_thyroid_medications"
+                ]
+            },
+            {
+                "id": "group_cholesterol",
+                "label": "Cholesterol",
+                "weight": 18,
+                "format_type": "fieldset",
+                "fields": [
+                    "field_high_cholesterol",
+                    "field_cholesterol_diagnosis_year",
+                    "field_cholesterol_medications"
+                ]
+            },
+            {
+                "id": "group_significant_emotional_trau",
+                "label": "Significant Emotional Trauma",
+                "weight": 26,
+                "format_type": "fieldset",
+                "fields": [
+                    "field_emotional_trauma_age",
+                    "field_emotional_trauma"
+                ]
+            },
+            {
+                "id": "group_informed_consent_and_relea",
+                "label": "Informed Consent and Release of Liability",
+                "weight": 27,
+                "format_type": "fieldset",
+                "fields": [
+                    "field_agreement",
+                    "field_program_agreement",
+                    "field_media_release_agreement"
+                ]
+            }
+        ],
+        "field_count": 55,
+        "fields": [
+            {
+                "name": "field_first_name",
+                "label": "First Name",
+                "type": "string",
+                "required": true,
+                "cardinality": 1,
+                "weight": 1,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_demographics",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_mailing_address",
+                "label": "Mailing Address",
+                "type": "address",
+                "required": false,
+                "cardinality": 1,
+                "weight": 1,
+                "widget": "address_default",
+                "widget_settings": {
+                    "wrapper_type": "fieldset"
+                },
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [
+                    {
+                        "langcode": null,
+                        "country_code": "US",
+                        "administrative_area": "",
+                        "locality": "",
+                        "dependent_locality": null,
+                        "postal_code": "",
+                        "sorting_code": null,
+                        "address_line1": "",
+                        "address_line2": "",
+                        "address_line3": "",
+                        "organization": "",
+                        "given_name": "",
+                        "additional_name": null,
+                        "family_name": ""
+                    }
+                ],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_gender",
+                "label": "Gender",
+                "type": "list_string",
+                "required": true,
+                "cardinality": 1,
+                "weight": 2,
+                "widget": "options_buttons",
+                "widget_settings": [],
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "allowed_values": []
+            },
+            {
+                "name": "field_last_name",
+                "label": "Last Name",
+                "type": "string",
+                "required": true,
+                "cardinality": 1,
+                "weight": 2,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_demographics",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_date_of_birth",
+                "label": "Date of Birth",
+                "type": "datetime",
+                "required": false,
+                "cardinality": 1,
+                "weight": 3,
+                "widget": "datetime_default",
+                "widget_settings": [],
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [
+                    {
+                        "default_date_type": "relative",
+                        "default_date": "-30 years"
+                    }
+                ],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_email_address",
+                "label": "Email Address",
+                "type": "email",
+                "required": true,
+                "cardinality": 1,
+                "weight": 3,
+                "widget": "email_default",
+                "widget_settings": {
+                    "placeholder": "",
+                    "size": 60
+                },
+                "hidden": false,
+                "group": "group_demographics",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_occupation",
+                "label": "Occupation",
+                "type": "string",
+                "required": false,
+                "cardinality": 1,
+                "weight": 4,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_phone_number",
+                "label": "Phone Number",
+                "type": "telephone",
+                "required": true,
+                "cardinality": 1,
+                "weight": 4,
+                "widget": "telephone_default",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_demographics",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_marital_status",
+                "label": "Marital Status",
+                "type": "list_string",
+                "required": false,
+                "cardinality": 1,
+                "weight": 5,
+                "widget": "options_select",
+                "widget_settings": [],
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "allowed_values": []
+            },
+            {
+                "name": "field_number_of_children",
+                "label": "Number of Children",
+                "type": "integer",
+                "required": false,
+                "cardinality": 1,
+                "weight": 6,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_emergency_contact_name",
+                "label": "Emergency Contact Name",
+                "type": "string",
+                "required": false,
+                "cardinality": 1,
+                "weight": 8,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_emergencycontact_informat",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_emergency_contact_phone",
+                "label": "Emergency Contact Phone",
+                "type": "telephone",
+                "required": false,
+                "cardinality": 1,
+                "weight": 9,
+                "widget": "telephone_default",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_emergencycontact_informat",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_motivation",
+                "label": "What is your motivation for losing weight?",
+                "type": "string_long",
+                "required": false,
+                "cardinality": 1,
+                "weight": 9,
+                "widget": "string_textarea",
+                "widget_settings": {
+                    "rows": 5,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_motivation",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_program_start_date",
+                "label": "If qualified for this weight loss program, what date would you plan on starting?",
+                "type": "datetime",
+                "required": true,
+                "cardinality": 1,
+                "weight": 9,
+                "widget": "datetime_default",
+                "widget_settings": [],
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_programs",
+                "label": "Please list any weight loss programs you have tried in the past.",
+                "type": "string",
+                "required": false,
+                "cardinality": -1,
+                "weight": 10,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_motivation",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_daily_activity_level",
+                "label": "Daily Activity Level",
+                "type": "list_string",
+                "required": true,
+                "cardinality": 1,
+                "weight": 11,
+                "widget": "options_select",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_diet",
+                "description": "",
+                "default_value": [
+                    {
+                        "value": "2"
+                    }
+                ],
+                "third_party_settings": [],
+                "allowed_values": []
+            },
+            {
+                "name": "field_history_eating_disorder",
+                "label": "History of Eating Disorder (Diagnosed)",
+                "type": "list_string",
+                "required": false,
+                "cardinality": -1,
+                "weight": 12,
+                "widget": "options_buttons",
+                "widget_settings": [],
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "allowed_values": []
+            },
+            {
+                "name": "field_medical_eligibility",
+                "label": "Are you currently pregnant, breast feeding, have active cancer or active gall bladder disease (cholecycstitis)?",
+                "type": "list_string",
+                "required": true,
+                "cardinality": 1,
+                "weight": 12,
+                "widget": "options_buttons",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_medical",
+                "description": "If yes, you are not eligible to participate in this program.",
+                "default_value": [
+                    {
+                        "value": "0"
+                    }
+                ],
+                "third_party_settings": [],
+                "allowed_values": []
+            },
+            {
+                "name": "field_weight",
+                "label": "Current Weight (lbs)",
+                "type": "decimal",
+                "required": true,
+                "cardinality": 1,
+                "weight": 12,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_diet",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_goal_weight",
+                "label": "Desired Weight (lbs)",
+                "type": "float",
+                "required": false,
+                "cardinality": 1,
+                "weight": 13,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_diet",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_medical_eligibility_choice",
+                "label": "Select all that apply.",
+                "type": "list_string",
+                "required": false,
+                "cardinality": -1,
+                "weight": 13,
+                "widget": "options_buttons",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_medical",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "allowed_values": []
+            },
+            {
+                "name": "field_gall_bladder",
+                "label": "Have you had your gall bladder removed?",
+                "type": "list_string",
+                "required": true,
+                "cardinality": 1,
+                "weight": 14,
+                "widget": "options_buttons",
+                "widget_settings": [],
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [
+                    {
+                        "value": "0"
+                    }
+                ],
+                "third_party_settings": [],
+                "allowed_values": []
+            },
+            {
+                "name": "field_height",
+                "label": "Height (inches)",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": 14,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_diet",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_history_bariatric_surgery",
+                "label": "History of Bariatric Surgery",
+                "type": "list_string",
+                "required": false,
+                "cardinality": -1,
+                "weight": 14,
+                "widget": "options_buttons",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_surgery",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "allowed_values": []
+            },
+            {
+                "name": "field_surgery_weight_loss",
+                "label": "How much weight have you lost with surgery?",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": 15,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_surgery",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_diabetes",
+                "label": "Have you been diagnosed with diabetes?",
+                "type": "list_string",
+                "required": true,
+                "cardinality": 1,
+                "weight": 16,
+                "widget": "options_buttons",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_diabetes",
+                "description": "",
+                "default_value": [
+                    {
+                        "value": "0"
+                    }
+                ],
+                "third_party_settings": [],
+                "allowed_values": []
+            },
+            {
+                "name": "field_surgery_weight_gain",
+                "label": "How much weight, if any, did you put back on?",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": 16,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_surgery",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_diabetes_diagnosis_year",
+                "label": "Year Diagnosed",
+                "type": "integer",
+                "required": false,
+                "cardinality": 1,
+                "weight": 17,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_diabetes",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_high_blood_pressure",
+                "label": "Have you been diagnosed with high blood pressure?",
+                "type": "list_string",
+                "required": true,
+                "cardinality": 1,
+                "weight": 17,
+                "widget": "options_buttons",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_blood_pressure",
+                "description": "",
+                "default_value": [
+                    {
+                        "value": "0"
+                    }
+                ],
+                "third_party_settings": [],
+                "allowed_values": []
+            },
+            {
+                "name": "field_bp_diagnosis_year",
+                "label": "Year Diagnosed",
+                "type": "integer",
+                "required": false,
+                "cardinality": 1,
+                "weight": 18,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_blood_pressure",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_diabetes_medications",
+                "label": "Diabetes Medications",
+                "type": "string",
+                "required": false,
+                "cardinality": -1,
+                "weight": 18,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_diabetes",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_thyroid_condition",
+                "label": "Have you been diagnosed with a thyroid condition?",
+                "type": "list_string",
+                "required": true,
+                "cardinality": 1,
+                "weight": 18,
+                "widget": "options_buttons",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_thyroid_condition",
+                "description": "",
+                "default_value": [
+                    {
+                        "value": "0"
+                    }
+                ],
+                "third_party_settings": [],
+                "allowed_values": []
+            },
+            {
+                "name": "field_blood_pressure_medications",
+                "label": "Blood Pressure Medications",
+                "type": "string",
+                "required": false,
+                "cardinality": -1,
+                "weight": 19,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_blood_pressure",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_high_cholesterol",
+                "label": "Have you been diagnosed with high cholesterol?",
+                "type": "list_string",
+                "required": true,
+                "cardinality": 1,
+                "weight": 19,
+                "widget": "options_buttons",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_cholesterol",
+                "description": "",
+                "default_value": [
+                    {
+                        "value": "0"
+                    }
+                ],
+                "third_party_settings": [],
+                "allowed_values": []
+            },
+            {
+                "name": "field_medical_symptoms",
+                "label": "Do you experience any of the following even if they are minor and go away on their own?",
+                "type": "list_string",
+                "required": false,
+                "cardinality": -1,
+                "weight": 19,
+                "widget": "options_buttons",
+                "widget_settings": [],
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "allowed_values": []
+            },
+            {
+                "name": "field_cholesterol_diagnosis_year",
+                "label": "Year Diagnosed",
+                "type": "integer",
+                "required": false,
+                "cardinality": 1,
+                "weight": 20,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_cholesterol",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_other_symptoms",
+                "label": "Do you experience any other problems, even if they are minor?",
+                "type": "string",
+                "required": false,
+                "cardinality": -1,
+                "weight": 20,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_thyroid_diagnosis_year",
+                "label": "Year Diagnosed",
+                "type": "integer",
+                "required": false,
+                "cardinality": 1,
+                "weight": 20,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_thyroid_condition",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_cholesterol_medications",
+                "label": "Cholesterol Medications",
+                "type": "string",
+                "required": false,
+                "cardinality": -1,
+                "weight": 21,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_cholesterol",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_medications",
+                "label": "Are you currently on any other medications and if yes, for what?",
+                "type": "string",
+                "required": false,
+                "cardinality": -1,
+                "weight": 21,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_thyroid_medications",
+                "label": "Thyroid Medications",
+                "type": "string",
+                "required": false,
+                "cardinality": -1,
+                "weight": 21,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_thyroid_condition",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_health_challenge",
+                "label": "Do you have any other health challenge you feel is important for us to know about?",
+                "type": "string_long",
+                "required": false,
+                "cardinality": 1,
+                "weight": 22,
+                "widget": "string_textarea",
+                "widget_settings": {
+                    "rows": 5,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_emotional_eater",
+                "label": "Would you say you are an \"Emotional Eater?\"",
+                "type": "list_string",
+                "required": true,
+                "cardinality": 1,
+                "weight": 23,
+                "widget": "options_buttons",
+                "widget_settings": [],
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [
+                    {
+                        "value": "0"
+                    }
+                ],
+                "third_party_settings": [],
+                "allowed_values": []
+            },
+            {
+                "name": "field_cravings",
+                "label": "What foods do you crave?",
+                "type": "string",
+                "required": false,
+                "cardinality": -1,
+                "weight": 24,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_stressors",
+                "label": "My two greatest stressors are",
+                "type": "string",
+                "required": false,
+                "cardinality": 2,
+                "weight": 25,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_emotional_trauma_age",
+                "label": "Age",
+                "type": "integer",
+                "required": false,
+                "cardinality": -1,
+                "weight": 27,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_significant_emotional_trau",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_agreement",
+                "label": "Informed Consent and Release of Liability",
+                "type": "string_long",
+                "required": false,
+                "cardinality": 1,
+                "weight": 28,
+                "widget": "string_textarea",
+                "widget_settings": {
+                    "rows": 5,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_informed_consent_and_relea",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": {
+                    "epp": {
+                        "value": "I understand that my use and consumption of any [current-page:query:clinicbrand] product or engaging in any weight loss program including the type that is to be used in conjunction with [current-page:query:clinicbrand], have inherent risks to my health and well-being, including but not limited to headaches, nausea, dizziness, vomiting, fatigue, pain, loss of consciousness, shortness of breath and other ailments.\r\n\r\nI understand as well that rapid weight loss of over 1-2 lbs. per week is considered by most in the weight loss medical community to be excessive and may lead to ailments similar and in addition to those mentioned above. Therefore, I understand that my failure to follow the weight loss program exactly as described to me by my physician or chiropractor can result in severe temporary and/or permanent medical conditions in addition to those mentioned above.\r\n\r\nI understand that I am not use or consume any of the [current-page:query:clinicbrand] products if I am pregnant or think I might be pregnant.\r\n\r\nI understand that, as a dietary supplement, [current-page:query:clinicbrand] has not been approved by the FDA or any Federal or State authority.\r\n\r\nI additionally understand that the [current-page:query:clinicbrand] Weight Loss Program is not meant to diagnose, treat or cure any disease or medical condition and that I am to undergo participation in the [current-page:query:clinicbrand] Weight Loss Program only under doctor supervision.\r\n\r\nI also understand that I should consult with my doctor prior to starting ANY exercise or nutritional supplement program.\r\n\r\nI understand that, if I experience any ailment, including but not limited to headaches, nausea, dizziness, vomiting, fatigue, pain, loss of consciousness, shortness of breath and other ailments, I should immediately stop using or consuming the [current-page:query:clinicbrand] product and, if my symptoms do not resolve immediately, I should consult my physician or go to the hospital emergency room.\r\n\r\nI hereby consent to, and assume the risks associated with, the use and consumption of [current-page:query:clinicbrand] product and agree to follow the recommendations and instructions of my physician. I further agree not to use or consume any [current-page:query:clinicbrand] product without the advice, counsel, and recommendations of my physician.\r\n\r\nI understand that Neuroemotional Technique (NET) is one of the techniques that may be used during my care. NET does not make claims as to what may have happened in the past. All memory events are considered \u201cemotional reality\u201d because events may or may not correspond with actual or historical reality.\r\n\r\nI hereby release, discharge and agree to indemnify my physician(s) at [site:name], NET, ChiroNutraceutical, their agents, servants employees and affiliates from any and all liability, claims, causes of action and demands for personal or bodily injury or death that I or my personal representatives might have or might hereafter acquire through my use or consumption of ChiroThin products.",
+                        "on_update": 0
+                    }
+                }
+            },
+            {
+                "name": "field_consent_consumption",
+                "label": "I Agree",
+                "type": "boolean",
+                "required": true,
+                "cardinality": 1,
+                "weight": 28,
+                "widget": "boolean_checkbox",
+                "widget_settings": {
+                    "display_label": true
+                },
+                "hidden": false,
+                "group": null,
+                "description": "By checking this box, I agree to the Informed Consent and Release of Liability.",
+                "default_value": [
+                    {
+                        "value": 0
+                    }
+                ],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_emotional_trauma",
+                "label": "Emotional Trauma",
+                "type": "string",
+                "required": false,
+                "cardinality": -1,
+                "weight": 28,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_significant_emotional_trau",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_consent",
+                "label": "To sign your consent to the agreement above, type your full, legal name in the box below.",
+                "type": "string",
+                "required": true,
+                "cardinality": 1,
+                "weight": 29,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_program_agreement",
+                "label": "Program Agreement",
+                "type": "string_long",
+                "required": false,
+                "cardinality": 1,
+                "weight": 29,
+                "widget": "string_textarea",
+                "widget_settings": {
+                    "rows": 5,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_informed_consent_and_relea",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": {
+                    "epp": {
+                        "value": "[site:name] Program Agreement \r\n\r\nI understand due to the nature of this weight loss program, although it is doctor supervised, it is up to me to follow the instructions as outlined in the training videos on [site:url] application and in my program booklets, handouts and doctor modifications as communicated to me through the [site:url] app. I understand that no results are guaranteed and that results vary from patient to patient. I understand that I may contact my doctor(s) with my questions and that they are available through the  patient portal and email or video conference for supervision and support, but they are not ultimately responsible for my actual weight or inch loss. I understand that I must follow the instructions outlined in the instruction manual, on the instructional videos and as modified by my doctor(s) and/or their team for optimal results. I understand that straying from the program in any way will negatively affect my weight loss results. I understand that there are no refunds for opened products, missed or unused appointments that are built into the programs. I agree to not sell, gift or share my product formula with another individual. I agree that if I spill or lose my product formula within the first 4 weeks of my program I may purchase one accidental replacement bottle of drops for $500.\r\n\r\nFinance and Payment Agreement\r\n\r\nI hereby authorize [site:name] to charge my credit card for the Amount Due at Signing for the products and/or programs I have selected from the online store and said amount is to be charged on the date this agreement is signed. If a financed option was chosen, I further authorize [site:name] to charge my credit card for monthly payment amounts, as outlined in the program financing options until the balance is zero. I understand and agree to the payment schedule described herein and further, I understand that the monthly amount described in the finance options will be processed automatically by our merchant processor.",
+                        "on_update": 0
+                    }
+                }
+            },
+            {
+                "name": "field_media_release_agreement",
+                "label": "Media Release",
+                "type": "string_long",
+                "required": false,
+                "cardinality": 1,
+                "weight": 30,
+                "widget": "string_textarea",
+                "widget_settings": {
+                    "rows": 5,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_informed_consent_and_relea",
+                "description": "",
+                "default_value": [
+                    {
+                        "value": "For good and valuable consideration, the receipt of which is hereby acknowledged, I hereby consent to the photographing of myself and/or the recording of my voice and the use of these photographs and/or recordings singularly or in conjunction with other photographs and/or recordings for advertising, publicity, commercial or other business purposes. I understand that the term \u201cphotograph\u201d as used herein encompasses both still photographs and motion picture footage.\r\n\r\nI further consent to the reproduction and/or authorization by ChiroThin and ChiroNutraceutical to reproduce and use said photographs and recordings of my voice, for use in all domestic and foreign markets. Further, I understand that others, with or without the consent of ChiroThin and ChiroNutraceutical, may use and/or reproduce such photographs and recordings.\r\n\r\nI hereby release my ChiroThin supervising chiropractor, ChiroThin, ChiroNutraceutical, and any of its associated or affiliated companies, their directors, officers, agents, employees and customers, and appointed advertising agencies, their directors, officers, agents and employees from all claims of every kind on account of such use."
+                    }
+                ],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_media_release_disagree",
+                "label": "I do not consent to the media release.",
+                "type": "boolean",
+                "required": false,
+                "cardinality": 1,
+                "weight": 30,
+                "widget": "boolean_checkbox",
+                "widget_settings": {
+                    "display_label": true
+                },
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_clinic",
+                "label": "Clinic",
+                "type": "entity_reference",
+                "required": true,
+                "cardinality": -1,
+                "weight": null,
+                "widget": null,
+                "widget_settings": [],
+                "hidden": true,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": {
+                    "epp": {
+                        "value": "[current-page:query:clinic_id]",
+                        "on_update": 0
+                    }
+                },
+                "target_type": "clinic",
+                "reference_view": {
+                    "view_name": "my_clinic",
+                    "display_name": "entity_reference_4",
+                    "arguments": []
+                }
+            },
+            {
+                "name": "field_domain",
+                "label": "Domain",
+                "type": "string",
+                "required": false,
+                "cardinality": 1,
+                "weight": null,
+                "widget": null,
+                "widget_settings": [],
+                "hidden": true,
+                "group": null,
+                "description": "",
+                "default_value": [
+                    {
+                        "value": "[current-domain:id]"
+                    }
+                ],
+                "third_party_settings": []
+            }
+        ]
+    },
+    "tracking_weight": {
+        "label": "Log Your Progress",
+        "status": "open",
+        "redirect": "",
+        "confirmation_message": "You have submitted your Daily Log successfully.",
+        "submission_count": 1364022,
+        "contact_storage": {
+            "submit_text": "Submit",
+            "show_preview": true,
+            "disabled_form_message": "This contact form has been disabled.",
+            "maximum_submissions_user": 0,
+            "page_autoreply_format": "plain_text"
+        },
+        "hidden_components": [
+            "copy",
+            "field_archive",
+            "field_program_day",
+            "field_program_day_computed",
+            "field_total_measurements",
+            "field_weight_loss_computed",
+            "field_weight_loss_to_date",
+            "mail",
+            "message",
+            "name",
+            "preview",
+            "subject"
+        ],
+        "field_groups": [
+            {
+                "id": "group_weight_body",
+                "label": "Weight and Water",
+                "weight": 0,
+                "format_type": "fieldset",
+                "fields": [
+                    "field_grade",
+                    "field_date",
+                    "field_weight",
+                    "field_water_intake",
+                    "field_sleep_hours",
+                    "field_mind_set_work",
+                    "field_chiroburst_bend",
+                    "field_aggr"
+                ]
+            },
+            {
+                "id": "group_food_log_yesterday",
+                "label": "Food Log (Yesterday)",
+                "weight": 1,
+                "format_type": "details",
+                "fields": [
+                    "group_breakfast",
+                    "group_lunch",
+                    "group_dinner",
+                    "group_other"
+                ]
+            },
+            {
+                "id": "group_breakfast",
+                "label": "Breakfast (Lock In Phase Only)",
+                "weight": 2,
+                "format_type": "details",
+                "fields": [
+                    "field_breakfast_protein",
+                    "field_breakfast_fruit_sel",
+                    "field_breakfast_other"
+                ]
+            },
+            {
+                "id": "group_notes",
+                "label": "Flags and Notes",
+                "weight": 2,
+                "format_type": "details",
+                "fields": [
+                    "field_flags",
+                    "field_chiropractor_flags",
+                    "field_notes"
+                ]
+            },
+            {
+                "id": "group_lunch",
+                "label": "Lunch",
+                "weight": 3,
+                "format_type": "details",
+                "fields": [
+                    "field_lunch_protein",
+                    "field_lunch_vegetables",
+                    "field_lunch_fruit_sel",
+                    "field_lunch_fruit",
+                    "field_lunch_bread",
+                    "field_lunch_vegetables_free",
+                    "field_lunch_other"
+                ]
+            },
+            {
+                "id": "group_diabetes",
+                "label": "Blood Sugar (Today)",
+                "weight": 3,
+                "format_type": "details",
+                "fields": [
+                    "field_blood_sugar"
+                ]
+            },
+            {
+                "id": "group_dinner",
+                "label": "Dinner",
+                "weight": 4,
+                "format_type": "details",
+                "fields": [
+                    "field_dinner_protein",
+                    "field_dinner_vegetables",
+                    "field_dinner_fruit_sel",
+                    "field_dinner_fruit",
+                    "field_dinner_bread",
+                    "field_dinner_vegetables_free",
+                    "field_dinner_other"
+                ]
+            },
+            {
+                "id": "group_hypertension",
+                "label": "Blood Pressure (Today)",
+                "weight": 4,
+                "format_type": "details",
+                "fields": [
+                    "field_blood_pressure"
+                ]
+            },
+            {
+                "id": "group_other",
+                "label": "Other",
+                "weight": 5,
+                "format_type": "details",
+                "fields": [
+                    "field_other_food"
+                ]
+            },
+            {
+                "id": "group_measurements",
+                "label": "Body Measurements (Today)",
+                "weight": 5,
+                "format_type": "details",
+                "fields": [
+                    "field_neck",
+                    "field_shoulders",
+                    "field_chest",
+                    "field_arm_left_bicep",
+                    "field_arm_right_bicep",
+                    "field_abdomen",
+                    "field_hips",
+                    "field_thigh_left",
+                    "field_thigh_right",
+                    "field_calf_left",
+                    "field_calf_right"
+                ]
+            },
+            {
+                "id": "group_markup",
+                "label": "Watch Video: Taking your body measurements",
+                "weight": 8,
+                "format_type": "html_element",
+                "fields": []
+            }
+        ],
+        "field_count": 51,
+        "fields": [
+            {
+                "name": "field_other_food",
+                "label": "Other Foods",
+                "type": "string",
+                "required": false,
+                "cardinality": -1,
+                "weight": 3,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_other",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_blood_pressure",
+                "label": "Blood Pressure",
+                "type": "string",
+                "required": false,
+                "cardinality": 1,
+                "weight": 5,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_hypertension",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_current_phase",
+                "label": "Current Phase",
+                "type": "string",
+                "required": false,
+                "cardinality": 1,
+                "weight": 6,
+                "widget": "field_hidden_string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [
+                    {
+                        "value": "[current-user:field_gross_weight_loss]"
+                    }
+                ],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_question",
+                "label": "Send a message to your doctor",
+                "type": "text_long",
+                "required": false,
+                "cardinality": 1,
+                "weight": 7,
+                "widget": "text_textarea",
+                "widget_settings": {
+                    "rows": 5,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": null,
+                "description": "If you have any questions or comments for your doctor, you may provide them here.",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_author",
+                "label": "Author",
+                "type": "entity_reference",
+                "required": false,
+                "cardinality": 1,
+                "weight": 9,
+                "widget": "commerce_entity_select",
+                "widget_settings": {
+                    "hide_single_entity": true,
+                    "autocomplete_threshold": 7,
+                    "autocomplete_size": 60,
+                    "autocomplete_placeholder": ""
+                },
+                "hidden": false,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": {
+                    "epp": {
+                        "value": "target_id: '[current-user:uid]'",
+                        "on_update": 0
+                    },
+                    "disable_field": {
+                        "add_disable": "none",
+                        "edit_disable": "none"
+                    }
+                },
+                "target_type": "user",
+                "reference_view": null
+            },
+            {
+                "name": "field_blood_sugar",
+                "label": "Morning Blood Sugar",
+                "type": "integer",
+                "required": false,
+                "cardinality": 1,
+                "weight": 12,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_diabetes",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_breakfast_protein",
+                "label": "Breakfast Protein",
+                "type": "entity_reference",
+                "required": false,
+                "cardinality": 1,
+                "weight": 13,
+                "widget": "options_select",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_breakfast",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "target_type": "taxonomy_term",
+                "reference_view": null
+            },
+            {
+                "name": "field_breakfast_fruit_sel",
+                "label": "Breakfast Fruit",
+                "type": "entity_reference",
+                "required": false,
+                "cardinality": -1,
+                "weight": 14,
+                "widget": "multiple_options_select",
+                "widget_settings": {
+                    "element_type": "select"
+                },
+                "hidden": false,
+                "group": "group_breakfast",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "target_type": "taxonomy_term",
+                "reference_view": null
+            },
+            {
+                "name": "field_breakfast_other",
+                "label": "Other Breakfast",
+                "type": "string",
+                "required": false,
+                "cardinality": -1,
+                "weight": 15,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_breakfast",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_flags",
+                "label": "Flags",
+                "type": "entity_reference",
+                "required": false,
+                "cardinality": -1,
+                "weight": 18,
+                "widget": "options_buttons",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_notes",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "target_type": "taxonomy_term",
+                "reference_view": null
+            },
+            {
+                "name": "field_chiropractor_flags",
+                "label": "Chiropractor Flags",
+                "type": "entity_reference",
+                "required": false,
+                "cardinality": -1,
+                "weight": 19,
+                "widget": "options_buttons",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_notes",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "target_type": "taxonomy_term",
+                "reference_view": null
+            },
+            {
+                "name": "field_notes",
+                "label": "Personal Notes",
+                "type": "string_long",
+                "required": false,
+                "cardinality": 1,
+                "weight": 20,
+                "widget": "string_textarea",
+                "widget_settings": {
+                    "rows": 5,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_notes",
+                "description": "Use this space to record any notes for yourself. Your doctor may not see these notes; please use the \"Message Your Doctor\" box or use the \"Messages\" link on the menu to send a message to your doctor.",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_neck",
+                "label": "Neck",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": 22,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_measurements",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_dinner_protein",
+                "label": "Dinner Protein (4oz Total)",
+                "type": "entity_reference",
+                "required": false,
+                "cardinality": 1,
+                "weight": 23,
+                "widget": "options_select",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_dinner",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "target_type": "taxonomy_term",
+                "reference_view": null
+            },
+            {
+                "name": "field_shoulders",
+                "label": "Shoulders",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": 23,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_measurements",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_chest",
+                "label": "Chest",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": 24,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_measurements",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_dinner_vegetables",
+                "label": "Dinner Vegetables (4oz Total)",
+                "type": "entity_reference",
+                "required": false,
+                "cardinality": -1,
+                "weight": 24,
+                "widget": "multiple_options_select",
+                "widget_settings": {
+                    "element_type": "select"
+                },
+                "hidden": false,
+                "group": "group_dinner",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "target_type": "taxonomy_term",
+                "reference_view": null
+            },
+            {
+                "name": "field_arm_left_bicep",
+                "label": "Arm - Left Bicep",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": 25,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_measurements",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_dinner_fruit_sel",
+                "label": "Dinner Fruit (4oz Total)",
+                "type": "entity_reference",
+                "required": false,
+                "cardinality": -1,
+                "weight": 25,
+                "widget": "multiple_options_select",
+                "widget_settings": {
+                    "element_type": "select"
+                },
+                "hidden": false,
+                "group": "group_dinner",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "target_type": "taxonomy_term",
+                "reference_view": null
+            },
+            {
+                "name": "field_arm_right_bicep",
+                "label": "Arm - Right Bicep",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": 26,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_measurements",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_dinner_fruit",
+                "label": "Other Dinner Fruit",
+                "type": "string",
+                "required": false,
+                "cardinality": 1,
+                "weight": 26,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_dinner",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_abdomen",
+                "label": "Abdomen",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": 27,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_measurements",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_dinner_bread",
+                "label": "Dinner Bread",
+                "type": "entity_reference",
+                "required": false,
+                "cardinality": 1,
+                "weight": 27,
+                "widget": "options_select",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_dinner",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "target_type": "taxonomy_term",
+                "reference_view": null
+            },
+            {
+                "name": "field_dinner_vegetables_free",
+                "label": "Free Dinner Vegetables",
+                "type": "entity_reference",
+                "required": false,
+                "cardinality": -1,
+                "weight": 28,
+                "widget": "multiple_options_select",
+                "widget_settings": {
+                    "element_type": "select"
+                },
+                "hidden": false,
+                "group": "group_dinner",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "target_type": "taxonomy_term",
+                "reference_view": null
+            },
+            {
+                "name": "field_hips",
+                "label": "Hips",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": 28,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_measurements",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_dinner_other",
+                "label": "Other Dinner Foods",
+                "type": "string",
+                "required": false,
+                "cardinality": -1,
+                "weight": 29,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_dinner",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_thigh_left",
+                "label": "Thigh - Left",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": 29,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_measurements",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_thigh_right",
+                "label": "Thigh - Right",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": 30,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_measurements",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_calf_left",
+                "label": "Calf - Left",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": 31,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_measurements",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_lunch_protein",
+                "label": "Lunch Protein (4oz Total)",
+                "type": "entity_reference",
+                "required": false,
+                "cardinality": 1,
+                "weight": 31,
+                "widget": "options_select",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_lunch",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "target_type": "taxonomy_term",
+                "reference_view": null
+            },
+            {
+                "name": "field_calf_right",
+                "label": "Calf - Right",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": 32,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_measurements",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_lunch_vegetables",
+                "label": "Lunch Vegetables (4oz Total)",
+                "type": "entity_reference",
+                "required": false,
+                "cardinality": -1,
+                "weight": 32,
+                "widget": "multiple_options_select",
+                "widget_settings": {
+                    "element_type": "select"
+                },
+                "hidden": false,
+                "group": "group_lunch",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "target_type": "taxonomy_term",
+                "reference_view": null
+            },
+            {
+                "name": "field_grade",
+                "label": "On a scale of 1 to 10, grade your adherence to the plan, yesterday, with 10 being perfect.",
+                "type": "list_integer",
+                "required": true,
+                "cardinality": 1,
+                "weight": 33,
+                "widget": "options_select",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_weight_body",
+                "description": "",
+                "default_value": [
+                    {
+                        "value": 5
+                    }
+                ],
+                "third_party_settings": [],
+                "allowed_values": []
+            },
+            {
+                "name": "field_lunch_fruit_sel",
+                "label": "Lunch Fruit (4oz Total)",
+                "type": "entity_reference",
+                "required": false,
+                "cardinality": -1,
+                "weight": 33,
+                "widget": "multiple_options_select",
+                "widget_settings": {
+                    "element_type": "select"
+                },
+                "hidden": false,
+                "group": "group_lunch",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "target_type": "taxonomy_term",
+                "reference_view": null
+            },
+            {
+                "name": "field_date",
+                "label": "Date",
+                "type": "datetime",
+                "required": false,
+                "cardinality": 1,
+                "weight": 34,
+                "widget": "datetime_default",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_weight_body",
+                "description": "",
+                "default_value": [
+                    {
+                        "default_date_type": "now",
+                        "default_date": "now"
+                    }
+                ],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_lunch_fruit",
+                "label": "Other Lunch Fruit",
+                "type": "string",
+                "required": false,
+                "cardinality": 1,
+                "weight": 34,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_lunch",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_lunch_bread",
+                "label": "Lunch Bread",
+                "type": "entity_reference",
+                "required": false,
+                "cardinality": 1,
+                "weight": 35,
+                "widget": "options_select",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_lunch",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "target_type": "taxonomy_term",
+                "reference_view": null
+            },
+            {
+                "name": "field_weight",
+                "label": "Today's Weight",
+                "type": "decimal",
+                "required": true,
+                "cardinality": 1,
+                "weight": 35,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_weight_body",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_lunch_vegetables_free",
+                "label": "Free Lunch Vegetables",
+                "type": "entity_reference",
+                "required": false,
+                "cardinality": -1,
+                "weight": 36,
+                "widget": "multiple_options_select",
+                "widget_settings": {
+                    "element_type": "select"
+                },
+                "hidden": false,
+                "group": "group_lunch",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "target_type": "taxonomy_term",
+                "reference_view": null
+            },
+            {
+                "name": "field_water_intake",
+                "label": "Yesterday's Water Intake",
+                "type": "decimal",
+                "required": true,
+                "cardinality": 1,
+                "weight": 36,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_weight_body",
+                "description": "Yesterday's total water intake",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_lunch_other",
+                "label": "Other Lunch Foods",
+                "type": "string",
+                "required": false,
+                "cardinality": -1,
+                "weight": 37,
+                "widget": "string_textfield",
+                "widget_settings": {
+                    "size": 60,
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_lunch",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_sleep_hours",
+                "label": "Sleep Hours",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": 37,
+                "widget": "number",
+                "widget_settings": {
+                    "placeholder": ""
+                },
+                "hidden": false,
+                "group": "group_weight_body",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_mind_set_work",
+                "label": "Mind Set Work",
+                "type": "boolean",
+                "required": true,
+                "cardinality": 1,
+                "weight": 38,
+                "widget": "boolean_checkbox",
+                "widget_settings": {
+                    "display_label": true
+                },
+                "hidden": false,
+                "group": "group_weight_body",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_chiroburst_bend",
+                "label": "ChiroBurst Bend",
+                "type": "boolean",
+                "required": false,
+                "cardinality": 1,
+                "weight": 39,
+                "widget": "options_buttons",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_weight_body",
+                "description": "",
+                "default_value": [
+                    {
+                        "value": 0
+                    }
+                ],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_aggr",
+                "label": "AGGR",
+                "type": "list_string",
+                "required": false,
+                "cardinality": 2,
+                "weight": 40,
+                "widget": "options_buttons",
+                "widget_settings": [],
+                "hidden": false,
+                "group": "group_weight_body",
+                "description": "",
+                "default_value": [],
+                "third_party_settings": [],
+                "allowed_values": []
+            },
+            {
+                "name": "field_archive",
+                "label": "Archive",
+                "type": "boolean",
+                "required": false,
+                "cardinality": 1,
+                "weight": null,
+                "widget": null,
+                "widget_settings": [],
+                "hidden": true,
+                "group": null,
+                "description": "",
+                "default_value": [
+                    {
+                        "value": 0
+                    }
+                ],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_program_day",
+                "label": "Program Day",
+                "type": "integer",
+                "required": false,
+                "cardinality": 1,
+                "weight": null,
+                "widget": null,
+                "widget_settings": [],
+                "hidden": true,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_program_day_computed",
+                "label": "Program Day Computed",
+                "type": "integer",
+                "required": false,
+                "cardinality": 1,
+                "weight": null,
+                "widget": null,
+                "widget_settings": [],
+                "hidden": true,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_total_measurements",
+                "label": "Total Measurements",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": null,
+                "widget": null,
+                "widget_settings": [],
+                "hidden": true,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_weight_loss_computed",
+                "label": "Weight Loss To Date Computed",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": null,
+                "widget": null,
+                "widget_settings": [],
+                "hidden": true,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            },
+            {
+                "name": "field_weight_loss_to_date",
+                "label": "Weight Loss To Date",
+                "type": "decimal",
+                "required": false,
+                "cardinality": 1,
+                "weight": null,
+                "widget": null,
+                "widget_settings": [],
+                "hidden": true,
+                "group": null,
+                "description": "",
+                "default_value": [],
+                "third_party_settings": []
+            }
+        ]
+    }
+}

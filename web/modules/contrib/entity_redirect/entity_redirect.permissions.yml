@@ -1,0 +1,4 @@
+set external entity redirects:
+  title: 'Set Entity Redirects to external URLS.'
+  description: 'Set Entity Redirects to point to external URLS.'
+  restrict access: true

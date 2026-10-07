@@ -1,0 +1,48 @@
+uuid: bc3e92d3-7554-4943-83f2-973ad2609a5b
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.customization.standard_messages
+    - field.field.customization.standard_messages.field_my_clinic
+    - field.field.customization.standard_messages.field_standard_message
+  module:
+    - text
+id: customization.standard_messages.default
+targetEntityType: customization
+bundle: standard_messages
+mode: default
+content:
+  field_my_clinic:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_standard_message:
+    type: text_textarea
+    weight: 6
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 5
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }

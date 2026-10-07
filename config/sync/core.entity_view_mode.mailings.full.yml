@@ -1,0 +1,11 @@
+uuid: f3fb6d2c-a264-4261-9191-76e328979a04
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+id: mailings.full
+label: Full
+description: ''
+targetEntityType: mailings
+cache: true

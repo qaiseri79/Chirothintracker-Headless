@@ -1,0 +1,23 @@
+uuid: 28861834-9011-447f-b3ed-27d370890ebc
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_arm_left_bicep
+id: contact_message.ultraslim_profile.field_arm_left_bicep
+field_name: field_arm_left_bicep
+entity_type: contact_message
+bundle: ultraslim_profile
+label: 'Arm - Left Bicep'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Drupal Field Hidden module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function field_hidden_help($route_name, RouteMatchInterface $route_match = NULL) {
+  switch ($route_name) {
+    case 'help.page.field_hidden':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t("The Field Hidden module defines HTML input[type='hidden'] element widgets for these core field types:", [], ['context' => 'module:field_hidden:help']);
+      $output .= '<ul>';
+      $output .= '<li>' . t('Number (decimal)') . '</li>';
+      $output .= '<li>' . t('Number (float)') . '</li>';
+      $output .= '<li>' . t('Number (integer)') . '</li>';
+      $output .= '<li>' . t('Text (plain)') . '</li>';
+      $output .= '<li>' . t('Text (plain, long)') . '</li>';
+      $output .= '</ul>';
+      $output .= '</p>';
+      $output .= '<h5>' . t("Why not rich text types, like '@text_formatted'?", ['@text_formatted' => t('Text (formatted)')], ['context' => 'module:field_hidden:help']) . '</h5>';
+      $output .= '<p>' . t("The Field API's text-processing feature doesn't allow for that (or at least it's highly complicated).<br/>And rich hidden fields is neither strictly within in the scope of this module anyway.", [], ['context' => 'module:field_hidden:help']);
+      $output .= '</p>';
+      $output .= '<h5>' . t('CSS selectors of the hidden element(s)', [], ['context' => 'module:field_hidden:help']) . '</h5>';
+      $output .= '<p>' . t('The widgets add these CSS selectors to the hidden elements:', [], ['context' => 'module:field_hidden:help']);
+      $output .= '<ul>';
+      $output .= '<li>' . t('Decimal: @selector', ['@selector' => 'input.field-hidden-decimal'], ['context' => 'module:field_hidden:help']) . '</li>';
+      $output .= '<li>' . t('Float: @selector', ['@selector' => 'input.field-hidden-float'], ['context' => 'module:field_hidden:help']) . '</li>';
+      $output .= '<li>' . t('Integer: @selector', ['@selector' => 'input.field-hidden-integer'], ['context' => 'module:field_hidden:help']) . '</li>';
+      $output .= '<li>' . t('Text: @selector', ['@selector' => 'input.field-hidden-string'], ['context' => 'module:field_hidden:help']) . '</li>';
+      $output .= '<li>' . t('Text long: @selector', ['@selector' => 'input.field-hidden-string-long'], ['context' => 'module:field_hidden:help']) . '</li>';
+      $output .= '</ul>';
+      $output .= '</p>';
+      return $output;
+  }
+
+  // For IDE.
+  return NULL;
+}

@@ -1,0 +1,103 @@
+uuid: 000a5fdc-2d79-4496-bf4a-299fc6b45484
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d7_entityform_patient_account
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Content
+migration_group: migrate_drupal_7
+label: 'D8 Contact message migration from D7 entityform submission ()'
+source:
+  plugin: d7_entityform
+  constants:
+    langcode: en
+    module: contact_storage
+  bundle: patient_account
+process:
+  id:
+    -
+      plugin: get
+      source: entityform_id
+  contact_form:
+    -
+      plugin: get
+      source: type
+  uid:
+    -
+      plugin: get
+      source: uid
+  created:
+    -
+      plugin: get
+      source: created
+  changed:
+    -
+      plugin: get
+      source: changed
+  langcode:
+    -
+      plugin: default_value
+      source: language
+      default_value: en
+  'dependencies/module/[]':
+    -
+      plugin: get
+      source: constants/module
+  field_full_name:
+    -
+      plugin: get
+      source: field_full_name
+  field_patient_mail:
+    -
+      plugin: sub_process
+      source: field_patient_mail
+      process:
+        value: email
+  field_program_start_date:
+    -
+      plugin: sub_process
+      source: field_program_start_date
+      process:
+        value:
+          plugin: format_date
+          from_format: 'Y-m-d H:i:s'
+          to_format: Y-m-d
+          source: value
+  field_goal_weight:
+    -
+      plugin: get
+      source: field_goal_weight
+  field_phone_number:
+    -
+      plugin: get
+      source: field_phone_number
+  field_clinic_location:
+    -
+      plugin: get
+      source: field_clinic_location
+  field_email_optout:
+    -
+      plugin: get
+      source: field_email_optout
+  field_laser_patient_status:
+    -
+      plugin: sub_process
+      source: field_laser_patient_status
+      process:
+        target_id: tid
+  field_intake_form:
+    -
+      plugin: get
+      source: field_intake_form
+destination:
+  plugin: 'entity:contact_message'
+  default_bundle: patient_account
+migration_dependencies:
+  required:
+    - ''
+  optional:
+    - upgrade_d7_field_instance

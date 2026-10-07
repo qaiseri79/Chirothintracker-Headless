@@ -1,0 +1,7 @@
+services:
+  ct_custom_twig.custom_twig:
+    class: Drupal\ct_custom_twig\CustomTwigExtension
+    tags:
+      - { name: twig.extension }
+    arguments:
+      - '@entity_type.manager'

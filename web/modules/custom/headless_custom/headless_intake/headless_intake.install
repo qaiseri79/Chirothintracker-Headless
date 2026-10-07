@@ -1,0 +1,259 @@
+<?php
+
+/**
+ * @file
+ * Schema and install behaviour for the headless intake invite tokens.
+ *
+ * This module owns its table outright. The table is `headless_intake_invite`. An
+ * earlier version of this code lived in ctt_patient_intake and used
+ * `ctt_patient_intake_invite`. This module has no dependency on that module and
+ * shares nothing with it, so it does not inherit its table: the code was moved,
+ * the name was not, and the two modules have no link to justify sharing a table
+ * across a boundary that does not exist.
+ *
+ * The old table is not left behind silently.
+ * `_headless_intake_retire_legacy_table()` copies any tokens still in it onto the
+ * new name and then drops it, so the legacy name disappears in the same step and
+ * nothing is silently lost.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function headless_intake_schema() {
+  return [
+    'headless_intake_invite' => [
+      'description' => 'Opaque one-time invite tokens for the headless patient intake.',
+      'fields' => [
+        'token' => [
+          'type' => 'varchar',
+          'length' => 128,
+          'not null' => TRUE,
+          'description' => 'Opaque URL-safe token. The only tenant selector a patient ever sees.',
+        ],
+        'clinic_id' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => 'ID of the clinic (eck clinic entity) this token grants access to.',
+        ],
+        'status' => [
+          'type' => 'varchar',
+          'length' => 16,
+          'not null' => TRUE,
+          'default' => 'active',
+          'description' => 'active | expired | exhausted | revoked',
+        ],
+        'expires_at' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Unix timestamp when the token stops working. 0 = never expires.',
+        ],
+        'max_uses' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 1,
+          'description' => 'Maximum number of successful submissions this token permits.',
+        ],
+        'uses' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Number of successful submissions already made with this token.',
+        ],
+        'created' => [
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+          'description' => 'Unix timestamp when the token was issued.',
+        ],
+      ],
+      'primary key' => ['token'],
+      'indexes' => [
+        'clinic_status' => ['clinic_id', 'status'],
+        'expiry' => ['expires_at'],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_install().
+ *
+ * Grants invite-link management to active chiropractors.
+ *
+ * No menu link is created. The link manager is reachable at
+ * /manage/intake-links by URL, which is the current intent, so nothing is
+ * injected into the clinician navigation. If a menu entry is wanted later, add
+ * it through the UI or a menu_link_content migration rather than from here.
+ */
+function headless_intake_install() {
+  _headless_intake_retire_legacy_table();
+  user_role_grant_permissions(
+    'chiropractor_active_',
+    ['manage intake invite links'],
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Repairs an installation whose hook_install() was interrupted, which is what
+ * happens if a fatal error lands after the module is enabled but before install
+ * finishes: the module is marked installed, yet the legacy table is still there
+ * and the permission was never granted. Idempotent, so it is safe to run on an
+ * installation that completed normally.
+ */
+function headless_intake_update_8001() {
+  _headless_intake_retire_legacy_table();
+  user_role_grant_permissions(
+    'chiropractor_active_',
+    ['manage intake invite links'],
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adds the unique index behind `field_intake_token`.
+ *
+ * The field itself arrives as exported config, so there is nothing to create
+ * here. The index cannot: Drupal's field storage config format has no way to
+ * express a unique constraint, and a token column that is merely indexed would
+ * let two clinics end up sharing one token, at which point patients filling in
+ * the intake form would land on whichever clinic happened to win the lookup.
+ *
+ * The column is `field_intake_token_value`, not `intake_token`. Drupal names a
+ * configurable field's dedicated-table column after the field, and since the
+ * field is `field_intake_token` the value column is that plus `_value`. The
+ * `langcode` and `delta` parts of the table's primary key are left alone: the
+ * constraint wanted here is "no two clinics share a token", and adding them would
+ * weaken it into "no two clinics share a token in the same language", which is
+ * not a constraint at all.
+ *
+ * NULL is deliberately left repeatable. A clinic with no token stores NULL, and
+ * every clinic starts that way, so a unique index that treated NULLs as equal
+ * would make the *second* clinic unable to be created without a link. MySQL and
+ * PostgreSQL both permit any number of NULLs under a unique index, which is
+ * exactly the semantics wanted: no two clinics may share a real token, and any
+ * number may have none.
+ */
+function headless_intake_update_8002() {
+  $table = 'clinic__field_intake_token';
+  $column = 'field_intake_token_value';
+  $schema = \Drupal::database()->schema();
+
+  if (!$schema->tableExists($table)) {
+    // The config for the field has not been imported yet. Import it and re-run
+    // database updates; creating the table here instead would fight the field API,
+    // which owns it and would then find a table it did not create.
+    \Drupal::logger('headless_intake')->warning(
+      'Could not index @table because it does not exist. Import the field config and re-run database updates.',
+      ['@table' => $table],
+    );
+    return;
+  }
+
+  if ($schema->indexExists($table, 'intake_token_unique')) {
+    return;
+  }
+
+  // addUniqueKey() takes the index name before the columns, not after:
+  // ($table, $name, $fields). Swapping the last two arguments does not raise an
+  // error here, it passes the array where a name is expected and fails inside the
+  // database driver with a message about the array.
+  $schema->addUniqueKey($table, 'intake_token_unique', [$column]);
+
+  \Drupal::logger('headless_intake')->notice(
+    'Added the unique index on @table.@column.',
+    ['@table' => $table, '@column' => $column],
+  );
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function headless_intake_uninstall() {
+  \Drupal::database()->schema()->dropTable('headless_intake_invite');
+}
+
+/**
+ * Retires ctt_patient_intake's invite table.
+ *
+ * Copies first, drops second. A rename would be tidier, but Drupal creates
+ * hook_schema() tables *before* hook_install() runs, so by the time this runs
+ * the new table always exists and there is nothing left to rename onto. Copying
+ * keeps any token that was really issued working, and the legacy name is gone
+ * either way, which is the point.
+ *
+ * If the new table already has rows the copy is skipped and reported instead of
+ * run: that state means something else wrote to it, and a blind copy could
+ * collide on the token primary key.
+ */
+function _headless_intake_retire_legacy_table(): void {
+  $database = \Drupal::database();
+  $schema = $database->schema();
+  $legacy = 'ctt_patient_intake_invite';
+  $current = 'headless_intake_invite';
+
+  if (!$schema->tableExists($legacy)) {
+    return;
+  }
+
+  $taken = (int) $database->select($current, 'i')
+    ->countQuery()
+    ->execute()
+    ->fetchField();
+
+  if ($taken > 0) {
+    \Drupal::logger('headless_intake')->warning(
+      '@current already holds @taken row(s), so the tokens in @legacy were not copied and the legacy table was left alone. Inspect both and reconcile by hand.',
+      [
+        '@current' => $current,
+        '@taken' => $taken,
+        '@legacy' => $legacy,
+      ],
+    );
+    return;
+  }
+
+  // The insert and the select must list the same columns in the same order.
+  $columns = [
+    'token',
+    'clinic_id',
+    'status',
+    'expires_at',
+    'max_uses',
+    'uses',
+    'created',
+  ];
+
+  // Counted up front on purpose: execute() on an insert-from-select does not
+  // report rows affected, so counting afterwards would report 0 and quietly
+  // make a real copy look like a no-op in the log.
+  $pending = (int) $database->select($legacy, 'i')
+    ->countQuery()
+    ->execute()
+    ->fetchField();
+
+  $database->insert($current)
+    ->fields($columns)
+    ->from($database->select($legacy, 'i')->fields('i', $columns))
+    ->execute();
+
+  $schema->dropTable($legacy);
+
+  \Drupal::logger('headless_intake')->notice(
+    'Copied @count token(s) from @legacy onto @current and dropped @legacy.',
+    [
+      '@count' => $pending,
+      '@legacy' => $legacy,
+      '@current' => $current,
+    ],
+  );
+}

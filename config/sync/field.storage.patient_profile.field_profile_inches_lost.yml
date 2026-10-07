@@ -1,0 +1,20 @@
+uuid: 3c7d6aad-4d56-43ae-8a07-029e2f854acf
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+id: patient_profile.field_profile_inches_lost
+field_name: field_profile_inches_lost
+entity_type: patient_profile
+type: decimal
+settings:
+  precision: 10
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

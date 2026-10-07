@@ -1,0 +1,12 @@
+Migrate_URL2Link 1.0.1, 2025-05-02
+----------------------------------
+#3369544 by Project Update Bot, damienmckenna: Automated Drupal 11 compatibility
+  fixes.
+
+
+Migrate_URL2Link 1.0.0, 2023-03-20
+----------------------------------
+By DamienMcKenna: Initial commit.
+#3213035 by DamienMcKenna: Correct namespace.
+#3213038 by DamienMcKenna: Fix class name.
+#3347500 by dineshkumarbollu, Summit, DamienMcKenna: Drupal 10 compatibility.

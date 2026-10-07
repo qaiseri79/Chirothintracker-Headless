@@ -1,0 +1,16 @@
+services:
+  logger.channel.headless_messages:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: logger.factory:get
+    arguments: ['headless_messages']
+
+  headless_messages.messages_service:
+    class: Drupal\headless_messages\Service\MessagesService
+    arguments:
+      - '@entity_type.manager'
+      - '@current_user'
+      - '@flag'
+      - '@logger.channel.headless_messages'
+      - '@renderer'
+      - '@file_system'
+      - '@file.repository'

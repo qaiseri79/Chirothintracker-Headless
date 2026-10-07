@@ -1,0 +1,114 @@
+uuid: 336c2e9e-5506-4629-9171-258528894b76
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.user.user.commerce_remote_id
+    - field.field.user.user.field_chiropractor
+    - field.field.user.user.field_chiropractor_subscribers
+    - field.field.user.user.field_chirothin_profile
+    - field.field.user.user.field_clinic
+    - field.field.user.user.field_clinic_location
+    - field.field.user.user.field_current_program_day
+    - field.field.user.user.field_email_optout
+    - field.field.user.user.field_full_name
+    - field.field.user.user.field_goal_achieved
+    - field.field.user.user.field_goal_weight
+    - field.field.user.user.field_gross_weight_loss
+    - field.field.user.user.field_intake_form
+    - field.field.user.user.field_laser_patient_status
+    - field.field.user.user.field_last_seen
+    - field.field.user.user.field_late
+    - field.field.user.user.field_locked
+    - field.field.user.user.field_net_inches_lost
+    - field.field.user.user.field_net_weight_loss
+    - field.field.user.user.field_overall_start_weight
+    - field.field.user.user.field_payment_machine_name
+    - field.field.user.user.field_phone_number
+    - field.field.user.user.field_products_pulled
+    - field.field.user.user.field_program_day
+    - field.field.user.user.field_program_day_term
+    - field.field.user.user.field_program_start_date
+    - field.field.user.user.field_program_start_inches
+    - field.field.user.user.field_program_start_weight
+    - field.field.user.user.field_shipping_methods
+    - field.field.user.user.field_std_dm_ntfd_pd
+    - field.field.user.user.field_timezone
+    - field.field.user.user.field_user_current_program_day_c
+    - field.field.user.user.field_weight_loss_phase
+    - field.field.user.user.user_picture
+  module:
+    - user
+_core:
+  default_config_hash: FaQ9Ptcpxpg30AtiqRDtl_8zbJArHP1LPfug_s59TOA
+id: user.user.default
+targetEntityType: user
+bundle: user
+mode: default
+content:
+  account:
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_clinic:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_full_name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  private_messages:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  commerce_remote_id: true
+  contact: true
+  customer_profiles: true
+  field_chiropractor: true
+  field_chiropractor_subscribers: true
+  field_chirothin_profile: true
+  field_clinic_location: true
+  field_current_program_day: true
+  field_email_optout: true
+  field_goal_achieved: true
+  field_goal_weight: true
+  field_gross_weight_loss: true
+  field_intake_form: true
+  field_laser_patient_status: true
+  field_last_seen: true
+  field_late: true
+  field_locked: true
+  field_net_inches_lost: true
+  field_net_weight_loss: true
+  field_overall_start_weight: true
+  field_payment_machine_name: true
+  field_phone_number: true
+  field_products_pulled: true
+  field_program_day: true
+  field_program_day_term: true
+  field_program_start_date: true
+  field_program_start_inches: true
+  field_program_start_weight: true
+  field_shipping_methods: true
+  field_std_dm_ntfd_pd: true
+  field_timezone: true
+  field_user_current_program_day_c: true
+  field_weight_loss_phase: true
+  language: true
+  path: true
+  timezone: true
+  user_picture: true

@@ -1,0 +1,30 @@
+uuid: 4bb2ec20-dd4e-455b-b11e-ba4ef24627f7
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+id: task_completion
+label: 'Task Completion'
+bundles:
+  - task
+entity_type: task
+global: false
+flag_short: '<span class="square"><i class="fa-regular fa-square"></i></span>'
+flag_long: ''
+flag_message: ''
+unflag_short: '<span class="custom-square"><i class="fa-regular fa-square-check"></i></span>'
+unflag_long: ''
+unflag_message: ''
+unflag_denied_text: ''
+weight: 0
+flag_type: 'entity:task'
+link_type: ajax_link
+flagTypeConfig:
+  show_in_links: {  }
+  show_as_field: true
+  show_on_form: false
+  show_contextual_link: false
+  extra_permissions:
+    owner: '0'
+linkTypeConfig: {  }

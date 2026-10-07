@@ -1,0 +1,31 @@
+uuid: 190838b9-971c-4539-8c90-32b9669cd425
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.chirothin_resource.field_description
+    - field.field.node.chirothin_resource.field_my_clinic
+    - field.field.node.chirothin_resource.field_published_to
+    - field.field.node.chirothin_resource.field_resource
+    - field.field.node.chirothin_resource.field_resource_type
+    - node.type.chirothin_resource
+  module:
+    - user
+id: node.chirothin_resource.teaser
+targetEntityType: node
+bundle: chirothin_resource
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_description: true
+  field_my_clinic: true
+  field_published_to: true
+  field_resource: true
+  field_resource_type: true
+  private_message_link: true

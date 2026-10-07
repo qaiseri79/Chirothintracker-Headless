@@ -1,0 +1,48 @@
+uuid: 5d048f06-82c7-4ced-b2fd-41246c6f526e
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_photos
+    - field.field.contact_message.patient_photos.field_author
+    - field.field.contact_message.patient_photos.field_before_and_after_photos
+    - field.field.contact_message.patient_photos.field_patient
+    - field.field.contact_message.patient_photos.field_profile_photo
+    - image.style.thumbnail
+  module:
+    - image
+id: contact_message.patient_photos.default
+targetEntityType: contact_message
+bundle: patient_photos
+mode: default
+content:
+  field_before_and_after_photos:
+    type: image_image
+    weight: 2
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_patient:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_profile_photo:
+    type: image_image
+    weight: 1
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+hidden:
+  copy: true
+  field_author: true
+  mail: true
+  message: true
+  name: true
+  preview: true
+  subject: true

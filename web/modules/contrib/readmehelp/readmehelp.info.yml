@@ -1,0 +1,14 @@
+name: README Help
+type: module
+description: Renders README file on an admin/help/your_module page.
+core_version_requirement: ^9.5 || ^10
+package: Help
+configure: readmehelp.settings
+dependencies:
+  - drupal:help
+  - drupal:filter
+
+# Information added by Drupal.org packaging script on 2023-03-03
+version: '2.0.0-beta1'
+project: 'readmehelp'
+datestamp: 1677864702

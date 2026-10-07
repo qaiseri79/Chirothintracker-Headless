@@ -1,0 +1,115 @@
+<?php
+
+/**
+ * @file
+ * Views hook implementations for the Config Entities.
+ */
+
+use Drupal\config_view\Form\ConfigViewHelper;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function config_view_help($route_name, RouteMatchInterface $route_match) {
+  if ($route_name == 'help.page.config_view') {
+    $text = file_get_contents(__DIR__ . '/README.md');
+    if (!Drupal::moduleHandler()->moduleExists('markdown')) {
+      return '<pre>' . $text . '</pre>';
+    }
+    else {
+      /** @var \Drupal\markdown\PluginManager\ParserManagerInterface $parser_manager */
+      $parser_manager = \Drupal::service('plugin.manager.markdown.parser');
+      $parser = $parser_manager->getDefaultParser([
+        'render_strategy' => ['type' => 'none'],
+      ]);
+      return $parser->parse($text);
+    }
+  }
+  return NULL;
+}
+
+/**
+ * Implements hook_views_data().
+ */
+function config_view_views_data() {
+  $data = [];
+  $config_entities = ConfigViewHelper::getConfigEntities();
+
+  if (!empty($config_entities)) {
+    foreach ($config_entities as $id => $conf) {
+      if ($conf !== 0) {
+        try {
+          // Fill in base data.
+          $name = ConfigViewHelper::getConfigLabel($id);
+          $table = &$data[$id];
+          $table['table']['group'] = $name;
+          $table['table']['provider'] = $id;
+          $table['table']['entity type'] = $id;
+          $fields = ConfigViewHelper::getMapping($id);
+
+          // Locate the config entity type's ID.
+          $entityType = \Drupal::entityTypeManager()
+            ->getStorage($id)
+            ->getEntityType();
+          $id_key = $entityType->getKey('id');
+
+          if (empty($fields[$id_key])) {
+            continue;
+          }
+
+          if (empty($fields[$id_key]['label'])) {
+            continue;
+          }
+
+          $table['table']['base'] = [
+            'field' => strtolower($fields[$id_key]['label']),
+            'index' => strtolower($fields[$id_key]['label']),
+            'title' => $name,
+            'help' => t('Use the ConfigEntity @name to view the data.', ['@name' => $name]),
+            'query_id' => 'config_view_query',
+          ];
+
+          $table['operation'] = [
+            'title' => t('Operations'),
+            'help' => t('Operations'),
+            'field' => [
+              'id' => 'config_entity_operations',
+            ],
+            'argument' => ['type' => $id],
+          ];
+
+          // Dynamically adding suitable handlers for all indexed fields.
+          foreach ($fields as $key => $value) {
+            if (isset($value['label']) && isset($value['type'])) {
+              $properties = ConfigViewHelper::getFieldParameters($value);
+              if (!empty($properties)) {
+                $table[$key] = [
+                  'title' => $value['label'],
+                  'help' => $value['label'],
+                  'field' => [
+                    'id' => $properties['field'],
+                    'click sortable' => FALSE,
+                  ],
+                  'filter' => [
+                    'id' => $properties['filter'],
+                    'handler' => $properties['filter'],
+                    'allow empty' => TRUE,
+                  ],
+                  'sort' => ['id' => 'standard'],
+                  'argument' => ['id' => $properties['argument']],
+                ];
+              }
+            }
+          }
+        }
+        catch (\Exception $e) {
+          $args = ['%entity' => $name];
+          watchdog_exception($key, $e, '%type while computing Views data for entity: %entity.', $args);
+        }
+      }
+    }
+  }
+
+  return array_filter($data);
+}

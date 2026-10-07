@@ -1,0 +1,11 @@
+type: 'module'
+name: 'Private Files Download Permission'
+description: 'Allows by-user and by-role downloads from private file system directories.'
+core_version_requirement: ^10 || ^11
+package: 'Access control'
+configure: 'pfdp.settings'
+
+# Information added by Drupal.org packaging script on 2024-12-13
+version: '3.1.3'
+project: 'private_files_download_permission'
+datestamp: 1734115094

@@ -1,0 +1,3 @@
+administer user redirect settings:
+  title: 'Administer User Redirect Settings'
+  restrict access: true

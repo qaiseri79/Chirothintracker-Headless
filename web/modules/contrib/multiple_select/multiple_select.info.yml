@@ -1,0 +1,10 @@
+name: Multiple Select
+description: "Provides 'select/unselect all' option for configured checkboxs fields as bulk select helper."
+type: module
+core_version_requirement: ^8 || ^9 || ^10 || ^11
+configure: multiple_select.admin_form
+
+# Information added by Drupal.org packaging script on 2024-11-08
+version: '2.0.8'
+project: 'multiple_select'
+datestamp: 1731081485

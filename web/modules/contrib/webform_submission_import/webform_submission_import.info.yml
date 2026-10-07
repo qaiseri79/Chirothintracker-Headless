@@ -1,0 +1,12 @@
+name: 'Webform Submission Import'
+type: module
+description: 'Import CSV records into Webform submissions data.'
+package: Webform
+core_version_requirement: ^8.8 || ^9 || ^10 || ^11
+dependencies:
+  - webform:webform
+
+# Information added by Drupal.org packaging script on 2024-04-18
+version: '8.x-2.2'
+project: 'webform_submission_import'
+datestamp: 1713444335

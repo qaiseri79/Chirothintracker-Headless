@@ -1,0 +1,19 @@
+name: 'Commerce Extended Quantity Stock'
+type: module
+description: "Handles a commerce product variation stock."
+core_version_requirement: ^9.4 || ^10
+package: Commerce (contrib)
+dependencies:
+  - drupal:commerce_xquantity
+  - drupal:action
+  - drupal:readmehelp
+config_devel:
+  install:
+    - system.action.variation_xquantity_stock_adjust
+    - system.action.variation_xquantity_stock_set
+    - system.action.variation_xquantity_stock_rotate
+
+# Information added by Drupal.org packaging script on 2023-09-15
+version: '2.0.0-beta1'
+project: 'commerce_xquantity'
+datestamp: 1694768564

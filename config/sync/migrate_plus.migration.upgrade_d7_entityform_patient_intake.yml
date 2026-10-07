@@ -1,0 +1,287 @@
+uuid: c79899fa-901d-4b40-8328-3b6358eec5b2
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d7_entityform_patient_intake
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Content
+migration_group: migrate_drupal_7
+label: 'D8 Contact message migration from D7 entityform submission ()'
+source:
+  plugin: d7_entityform
+  constants:
+    langcode: en
+    module: contact_storage
+  bundle: patient_intake
+process:
+  id:
+    -
+      plugin: get
+      source: entityform_id
+  contact_form:
+    -
+      plugin: get
+      source: type
+  uid:
+    -
+      plugin: get
+      source: uid
+  created:
+    -
+      plugin: get
+      source: created
+  changed:
+    -
+      plugin: get
+      source: changed
+  langcode:
+    -
+      plugin: default_value
+      source: language
+      default_value: en
+  'dependencies/module/[]':
+    -
+      plugin: get
+      source: constants/module
+  field_first_name:
+    -
+      plugin: get
+      source: field_first_name
+  field_last_name:
+    -
+      plugin: get
+      source: field_last_name
+  field_domain:
+    -
+      plugin: get
+      source: field_domain
+  field_email_address:
+    -
+      plugin: sub_process
+      source: field_email_address
+      process:
+        value: email
+  field_phone_number:
+    -
+      plugin: get
+      source: field_phone_number
+  field_date_of_birth:
+    -
+      plugin: sub_process
+      source: field_date_of_birth
+      process:
+        value:
+          plugin: format_date
+          from_format: 'Y-m-d H:i:s'
+          to_format: Y-m-d
+          source: value
+  field_weight:
+    -
+      plugin: get
+      source: field_weight
+  field_height:
+    -
+      plugin: get
+      source: field_height
+  field_daily_activity_level:
+    -
+      plugin: get
+      source: field_daily_activity_level
+  field_goal_weight:
+    -
+      plugin: get
+      source: field_goal_weight
+  field_mailing_address:
+    -
+      plugin: addressfield
+      source: field_mailing_address
+  field_gender:
+    -
+      plugin: get
+      source: field_gender
+  field_marital_status:
+    -
+      plugin: get
+      source: field_marital_status
+  field_number_of_children:
+    -
+      plugin: get
+      source: field_number_of_children
+  field_occupation:
+    -
+      plugin: get
+      source: field_occupation
+  field_history_eating_disorder:
+    -
+      plugin: get
+      source: field_history_eating_disorder
+  field_emotional_eater:
+    -
+      plugin: get
+      source: field_emotional_eater
+  field_cravings:
+    -
+      plugin: get
+      source: field_cravings
+  field_history_bariatric_surgery:
+    -
+      plugin: get
+      source: field_history_bariatric_surgery
+  field_surgery_weight_loss:
+    -
+      plugin: get
+      source: field_surgery_weight_loss
+  field_surgery_weight_gain:
+    -
+      plugin: get
+      source: field_surgery_weight_gain
+  field_stressors:
+    -
+      plugin: get
+      source: field_stressors
+  field_emotional_trauma:
+    -
+      plugin: get
+      source: field_emotional_trauma
+  field_emotional_trauma_age:
+    -
+      plugin: get
+      source: field_emotional_trauma_age
+  field_consent_consumption:
+    -
+      plugin: get
+      source: field_consent_consumption
+  field_medical_eligibility:
+    -
+      plugin: get
+      source: field_medical_eligibility
+  field_diabetes:
+    -
+      plugin: get
+      source: field_diabetes
+  field_gall_bladder:
+    -
+      plugin: get
+      source: field_gall_bladder
+  field_medical_symptoms:
+    -
+      plugin: get
+      source: field_medical_symptoms
+  field_other_symptoms:
+    -
+      plugin: get
+      source: field_other_symptoms
+  field_medications:
+    -
+      plugin: get
+      source: field_medications
+  field_health_challenge:
+    -
+      plugin: get
+      source: field_health_challenge
+  field_agreement:
+    -
+      plugin: get
+      source: field_agreement
+  field_motivation:
+    -
+      plugin: get
+      source: field_motivation
+  field_programs:
+    -
+      plugin: get
+      source: field_programs
+  field_medical_eligibility_choice:
+    -
+      plugin: get
+      source: field_medical_eligibility_choice
+  field_high_blood_pressure:
+    -
+      plugin: get
+      source: field_high_blood_pressure
+  field_thyroid_condition:
+    -
+      plugin: get
+      source: field_thyroid_condition
+  field_high_cholesterol:
+    -
+      plugin: get
+      source: field_high_cholesterol
+  field_diabetes_medications:
+    -
+      plugin: get
+      source: field_diabetes_medications
+  field_blood_pressure_medications:
+    -
+      plugin: get
+      source: field_blood_pressure_medications
+  field_thyroid_medications:
+    -
+      plugin: get
+      source: field_thyroid_medications
+  field_cholesterol_medications:
+    -
+      plugin: get
+      source: field_cholesterol_medications
+  field_diabetes_diagnosis_year:
+    -
+      plugin: get
+      source: field_diabetes_diagnosis_year
+  field_bp_diagnosis_year:
+    -
+      plugin: get
+      source: field_bp_diagnosis_year
+  field_thyroid_diagnosis_year:
+    -
+      plugin: get
+      source: field_thyroid_diagnosis_year
+  field_cholesterol_diagnosis_year:
+    -
+      plugin: get
+      source: field_cholesterol_diagnosis_year
+  field_program_start_date:
+    -
+      plugin: sub_process
+      source: field_program_start_date
+      process:
+        value:
+          plugin: format_date
+          from_format: 'Y-m-d H:i:s'
+          to_format: Y-m-d
+          source: value
+  field_program_agreement:
+    -
+      plugin: get
+      source: field_program_agreement
+  field_consent:
+    -
+      plugin: get
+      source: field_consent
+  field_referral:
+    -
+      plugin: get
+      source: field_referral
+  field_media_release_agreement:
+    -
+      plugin: get
+      source: field_media_release_agreement
+  field_emergency_contact_name:
+    -
+      plugin: get
+      source: field_emergency_contact_name
+  field_emergency_contact_phone:
+    -
+      plugin: get
+      source: field_emergency_contact_phone
+destination:
+  plugin: 'entity:contact_message'
+  default_bundle: patient_intake
+migration_dependencies:
+  required:
+    - ''
+  optional:
+    - upgrade_d7_field_instance

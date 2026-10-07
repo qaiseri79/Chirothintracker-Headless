@@ -1,0 +1,145 @@
+uuid: ac5fd4b1-5b2e-4317-9cf2-e0300a0fe812
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.user.token
+    - field.field.user.user.commerce_remote_id
+    - field.field.user.user.field_chiropractor
+    - field.field.user.user.field_chiropractor_subscribers
+    - field.field.user.user.field_chirothin_profile
+    - field.field.user.user.field_clinic
+    - field.field.user.user.field_clinic_location
+    - field.field.user.user.field_current_program_day
+    - field.field.user.user.field_email_optout
+    - field.field.user.user.field_full_name
+    - field.field.user.user.field_goal_achieved
+    - field.field.user.user.field_goal_weight
+    - field.field.user.user.field_gross_weight_loss
+    - field.field.user.user.field_intake_form
+    - field.field.user.user.field_laser_patient_status
+    - field.field.user.user.field_last_seen
+    - field.field.user.user.field_late
+    - field.field.user.user.field_locked
+    - field.field.user.user.field_net_inches_lost
+    - field.field.user.user.field_net_weight_loss
+    - field.field.user.user.field_overall_start_weight
+    - field.field.user.user.field_payment_machine_name
+    - field.field.user.user.field_phone_number
+    - field.field.user.user.field_products_pulled
+    - field.field.user.user.field_program_day
+    - field.field.user.user.field_program_day_term
+    - field.field.user.user.field_program_start_date
+    - field.field.user.user.field_program_start_inches
+    - field.field.user.user.field_program_start_weight
+    - field.field.user.user.field_shipping_methods
+    - field.field.user.user.field_std_dm_ntfd_pd
+    - field.field.user.user.field_timezone
+    - field.field.user.user.field_user_current_program_day_c
+    - field.field.user.user.field_weight_loss_phase
+    - field.field.user.user.user_picture
+  module:
+    - datetime
+    - options
+    - user
+id: user.user.token
+targetEntityType: user
+bundle: user
+mode: token
+content:
+  block_user:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_current_program_day:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  field_email_optout:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 12
+    region: content
+  field_full_name:
+    type: string
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_program_start_date:
+    type: datetime_default
+    label: inline
+    settings:
+      timezone_override: ''
+      format_type: long
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_program_start_weight:
+    type: number_decimal
+    label: inline
+    settings:
+      thousand_separator: ''
+      decimal_separator: .
+      scale: 2
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  flag_following:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  masquerade:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 50
+    region: content
+  member_for:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+hidden:
+  commerce_remote_id: true
+  customer_profiles: true
+  field_chiropractor: true
+  field_chiropractor_subscribers: true
+  field_chirothin_profile: true
+  field_clinic: true
+  field_clinic_location: true
+  field_goal_achieved: true
+  field_goal_weight: true
+  field_gross_weight_loss: true
+  field_intake_form: true
+  field_laser_patient_status: true
+  field_last_seen: true
+  field_late: true
+  field_locked: true
+  field_net_inches_lost: true
+  field_net_weight_loss: true
+  field_overall_start_weight: true
+  field_payment_machine_name: true
+  field_phone_number: true
+  field_products_pulled: true
+  field_program_day: true
+  field_program_day_term: true
+  field_program_start_inches: true
+  field_shipping_methods: true
+  field_std_dm_ntfd_pd: true
+  field_timezone: true
+  field_user_current_program_day_c: true
+  field_weight_loss_phase: true
+  linked_username: true
+  private_message_link: true
+  user_picture: true

@@ -1,0 +1,7 @@
+name: 'Headless Access'
+type: module
+description: 'Shared access policies for the headless JSON endpoints: which portal roles may read a clinic roster, which may change it, and who counts as a signed-in portal member. One class per policy, referenced by every headless module, replacing per-module custom permissions.'
+package: 'ChiroThin'
+core_version_requirement: ^10
+dependencies:
+  - drupal:user

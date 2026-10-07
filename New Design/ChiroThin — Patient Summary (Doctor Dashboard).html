@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>ChiroThin Tracker — Patient Summary</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={theme:{extend:{colors:{canvas:"#F3F4F1",surface:"#FFF",ink:"#101827",muted:"#6B7280",line:"#E4E2DC",
+primary:{DEFAULT:"#0B5D52",soft:"#E4EEEC",dark:"#08423A"},accent:{DEFAULT:"#C7522A",soft:"#F6E4DC"},success:{DEFAULT:"#3D8361",soft:"#E4F0E9"}},
+fontFamily:{serif:["Newsreader","Georgia","serif"],sans:["Inter","system-ui","sans-serif"]},
+boxShadow:{panel:"0 1px 2px rgba(16,24,39,.04),0 8px 24px -12px rgba(16,24,39,.08)"}}}};
+</script>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{height:100%}
+.lbl{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#6B7280}
+</style>
+</head>
+<body class="bg-canvas font-sans text-ink antialiased h-full">
+<div class="flex h-full">
+  <aside class="group/sb hidden md:flex w-[72px] shrink-0 flex-col overflow-hidden border-r border-line bg-surface transition-[width] duration-200 hover:w-64">
+    <div class="flex h-16 shrink-0 items-center gap-3 border-b border-line px-5">
+      <svg class="h-6 w-6 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <div class="whitespace-nowrap opacity-0 transition-opacity group-hover/sb:opacity-100"><p class="font-serif leading-none">ChiroThin</p><p class="text-[10px] text-muted">Clinician Portal</p></div>
+    </div>
+    <nav id="nav" class="flex-1 space-y-0.5 px-3 py-4"></nav>
+  </aside>
+
+  <div class="flex min-w-0 flex-1 flex-col">
+    <header class="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-4 border-b border-line bg-surface/90 px-6 backdrop-blur">
+      <div class="relative max-w-sm flex-1">
+        <svg class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="search" placeholder="Search patients..." class="w-full rounded-lg border border-line bg-canvas py-2 pl-9 pr-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" />
+      </div>
+      <div class="flex-1"></div>
+      <div class="hidden items-center gap-2 rounded-lg border border-line bg-canvas px-3 py-1.5 lg:flex">
+        <span class="lbl">Intake link</span><span class="max-w-[220px] truncate text-sm text-ink/70">chirothintracker.com/intake?clinic_id=13</span>
+        <button data-act="copy" class="rounded-md p-1.5 text-primary hover:bg-primary-soft" title="Copy intake link" id="copyBtn"></button>
+      </div>
+      <div class="flex items-center gap-2 border-l border-line pl-4"><img src="https://i.pravatar.cc/64?u=drjohn" alt="" class="h-8 w-8 rounded-full border border-line" /><span class="hidden text-sm font-medium xl:block">Dr. John Schellenberg</span></div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto px-4 py-6 lg:px-8">
+      <div class="mx-auto max-w-[1400px] space-y-5">
+        <div><h1 class="font-serif text-2xl">Patient summary</h1><p class="mt-1 text-sm text-muted">Click a patient to open their card directly below the row.</p></div>
+        <div id="stats" class="flex flex-col divide-y divide-line rounded-xl border border-line bg-surface shadow-panel sm:flex-row sm:divide-x sm:divide-y-0"></div>
+        <div id="filters" class="flex flex-wrap gap-2"></div>
+        <div class="rounded-xl border border-line bg-surface shadow-panel">
+          <table class="w-full table-fixed text-sm">
+            <thead><tr class="border-b border-line text-left"><th class="lbl px-5 py-3">Patient</th><th class="lbl hidden w-44 px-3 py-3 xl:table-cell">Phase</th><th class="lbl hidden w-52 px-3 py-3 md:table-cell">Program</th><th class="lbl hidden w-44 px-3 py-3 sm:table-cell">% of goal</th><th class="lbl hidden w-24 px-3 py-3 text-right md:table-cell">Net loss</th><th class="lbl w-28 px-3 py-3">Review</th><th class="w-20"></th></tr></thead>
+            <tbody id="roster"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<div id="toast" class="pointer-events-none fixed bottom-6 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-ink px-4 py-2 text-sm text-white opacity-0 shadow-xl transition-opacity"></div>
+
+<script>
+const I={clipboard:'<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/>',
+users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>',
+message:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+utensils:'<path d="M3 2v7c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2V2M7 2v20M17 2v20M17 2c-2.5 0-4 3-4 6.5S14.5 15 17 15"/>',
+folder:'<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>',
+grad:'<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/>',
+help:'<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2-3 4"/>',
+cart:'<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 2-1.58l1.65-8.42H5.12"/>',
+bolt:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+bell:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>',
+note:'<path d="M15.5 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5z"/><path d="M15 3v6h6"/>',
+moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
+flag:'<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>',
+dots:'<circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>',
+scale:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v4l2.5 2.5"/>',droplet:'<path d="M12 2.7s7 7.3 7 12.3a7 7 0 0 1-14 0c0-5 7-12.3 7-12.3z"/>',edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',send:'<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',refresh:'<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>',download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',archive:'<rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/>',mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>',chev:'<path d="m6 9 6 6 6-6"/>',arrows:'<path d="M5 12h14"/><path d="m8 8-4 4 4 4"/><path d="m16 8 4 4-4 4"/>',cl:'<path d="m15 18-6-6 6-6"/>',cr:'<path d="m9 18 6-6-6-6"/>',cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'};
+const ic=(n,c='h-4 w-4')=>`<svg class="${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${I[n]}</svg>`;
+$copy=document.getElementById('copyBtn');$copy.innerHTML=ic('copy');
+const NAV=[["Patient Summary","clipboard",0,1],["Patients","users",6],["Messages","message",1],["My Clinic Page","home"],["Recipes","utensils"],["Resources","folder"],["Training","grad"],["Support Center","help"],["Cart","cart"]];
+document.getElementById('nav').innerHTML=NAV.map(([l,i,b,a])=>`<a href="#" class="flex items-center gap-3 rounded-lg px-2.5 py-2.5 text-sm font-medium ${a?'bg-primary text-white':'text-ink/70 hover:bg-primary-soft hover:text-primary'}">${ic(i,'h-[18px] w-[18px] shrink-0')}<span class="flex-1 whitespace-nowrap opacity-0 transition-opacity group-hover/sb:opacity-100">${l}</span>${b?`<span class="rounded-full bg-accent-soft px-1.5 text-[11px] font-semibold text-accent opacity-0 group-hover/sb:opacity-100">${b}</span>`:''}</a>`).join('');
+
+/* ---------- DATA (replace with Drupal endpoints) ---------- */
+const LABELS={period:['Period Cycle','bg-rose-600'],constipation:['Constipation','bg-amber-600'],cheated:['Cheated on program','bg-red-700'],missed:['Missed Drop-protein Day','bg-sky-600']};
+const PROG={"Red Light + Weight Loss":"bg-accent text-white","Weight Loss":"bg-primary text-white"};
+const TYPES=["Red Light Therapy Profile","Cold Laser Profile","Detox Profile"]; // placeholder names for the two extra session types
+const PRE=["Log your weight today","Drink your water (AGGR)","Missed log check-in","Protein reminder","Book your next visit"];
+const L=(n,date,grade,weight,h2o,label,food=1,sleep=0,cheat=0)=>({n,date,grade,weight,h2o,label,food,sleep,cheat});
+let PATIENTS=[
+{id:1,name:"A. Joe Patient",avatar:"https://i.pravatar.cc/100?u=joe",email:"inrlux1@gmail.com",phase:"Losing Phase",sysPhase:"Cycling / Maintenance",program:"Red Light + Weight Loss",review:"New",
+ messages:{count:1,last:"Hi Todd, feeling great this week and the scale is down again. I stuck to the protocol all weekend, including the golf outing. Can you or your staff enter my beginning measurements? I would love to see my loss in inches so far. Thanks!",time:"09/25/2026 · 08:36"},notes:{count:42,last:"Reviewed weekly logs. Weight loss has plateaued as expected; advised staying on protocol and increasing lean protein to 10 oz on high-activity days. Follow up at next visit.",time:"09/17/2026 · 14:10"},
+ sessions:[{name:TYPES[0],count:12},{name:TYPES[1],count:5},{name:TYPES[2],count:3}],
+ stats:{start:"03/15/2026",day:196,sw:210,gw:140,net:60,overall:60,inches:22,daily:"+6.0 lbs",avg:0.31,seen:"09/14/2026"},
+ logs:[L(187,"09/17/2026",10,150,100,0,1,1),L(171,"09/01/2026",10,144,100,"missed"),L(152,"08/13/2026",9,145,100,"cheated",1,0,1),L(116,"07/08/2026",10,152,100,"constipation",1,1),L(95,"06/17/2026",9,148,80,"period")]},
+{id:2,name:"Q2",avatar:"https://i.pravatar.cc/100?u=q2",email:"q2@example.com",phase:"Loading Phase",program:"Weight Loss",review:"New",
+ messages:{count:0,last:"",time:""},notes:{count:0,last:"",time:""},sessions:[],
+ stats:{start:"06/25/2025",day:460,sw:0,gw:150,net:0,overall:0,inches:0,daily:"+286.0 lbs",avg:-0.87,seen:"07/14/2025"},
+ logs:[L(460,"09/27/2026",10,400,99,"cheated",1,0,1),L(29,"07/23/2025",5,114,124),L(16,"07/10/2025",5,112,13,0,0)]},
+{id:3,name:"A. Mazing Patient",avatar:"https://i.pravatar.cc/100?u=maz",email:"mazing@example.com",phase:"Losing Phase",program:"Weight Loss",review:"Reviewed",
+ messages:{count:0,last:"",time:""},notes:{count:1,last:"Started program.",time:"08/13"},sessions:[{name:TYPES[1],count:2}],
+ stats:{start:"08/13/2026",day:45,sw:180,gw:150,net:3.8,overall:5.6,inches:4,daily:"-1.8 lbs",avg:-3.96,seen:"09/20/2026"},
+ logs:[L(3,"09/15/2026",5,176.2,100),L(2,"09/10/2026",5,180,120,"constipation",1,1),L(1,"08/27/2026",5,184.8,128,0,0)]},
+{id:4,name:"B. Random Dude",avatar:"https://i.pravatar.cc/100?u=rand",email:"random@example.com",phase:"Cycling / Maintenance",program:"Red Light + Weight Loss",review:"Reviewed",
+ messages:{count:0,last:"",time:""},notes:{count:4,last:"Bloodwork reviewed.",time:"08/30"},sessions:[{name:TYPES[0],count:12}],
+ stats:{start:"01/27/2026",day:243,sw:220,gw:165,net:55,overall:55,inches:18,daily:"-1.2 lbs",avg:0,seen:"09/10/2026"},
+ logs:[L(137,"09/10/2026",9,165,100,0,1,1),L(90,"08/15/2026",9,170.5,100,"missed"),L(60,"07/11/2026",8,180.2,110)]}
+];
+const S={q:"",f:"All",open:new Set([1])};
+const pct=p=>{const d=p.stats.sw-p.stats.gw;return d>0?Math.max(0,Math.min(100,p.stats.net/d*100)):0};
+const $=s=>document.querySelector(s), P=id=>PATIENTS.find(p=>p.id==id);
+const INP='w-full rounded-lg border border-line bg-white px-3 py-2 text-sm focus:border-primary focus:outline-none';
+const fld=(l,h)=>`<label class="block"><span class="lbl">${l}</span><div class="mt-1">${h}</div></label>`;
+const fmt=d=>d?d.slice(5,7)+'/'+d.slice(8)+'/'+d.slice(0,4):'';
+const go=t=>toast('Opens page: '+t);
+function toast(t){const e=$('#toast');e.textContent=t;e.style.opacity=1;clearTimeout(e._t);e._t=setTimeout(()=>e.style.opacity=0,2200)}
+
+/* ---------- popovers & modals ---------- */
+function closeMenu(){const m=$('#menu');m&&m.remove()}
+function menu(btn,items){closeMenu();const r=btn.getBoundingClientRect(),m=document.createElement('div');m.id='menu';
+ m.className='fixed z-50 w-64 rounded-lg bg-accent p-1.5 text-sm font-medium text-white shadow-xl';
+ m.style.top=Math.min(r.bottom+4,innerHeight-Math.min(items.length*34+20,innerHeight-16))+'px';m.style.left=Math.max(8,Math.min(r.left,innerWidth-272))+'px';
+ items.forEach(([l,f])=>{const b=document.createElement(f?'button':'div');b.textContent=l;b.className=f?'block w-full rounded-md px-3 py-1.5 text-left hover:bg-white/15':'px-3 py-1.5 text-[11px] uppercase tracking-wide text-white/70';if(f)b.onclick=()=>{closeMenu();f()};m.appendChild(b)});document.body.appendChild(m)}
+function modal(title,body,ok,fn,w='max-w-md',cancel='Cancel'){const o=document.createElement('div');o.className='fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4';
+ o.innerHTML=`<div class="w-full ${w} max-h-[90vh] overflow-y-auto rounded-2xl bg-surface p-6 shadow-xl"><h3 class="font-serif text-lg">${title}</h3><div class="mt-4 space-y-3 text-sm">${body}</div><div class="mt-5 flex justify-end gap-2"><button data-x class="rounded-full border border-line px-4 py-2 text-sm">${cancel}</button><button data-ok class="rounded-full bg-[#262d6b] px-5 py-2 text-sm font-semibold text-white">${ok}</button></div></div>`;
+ o.querySelector('[data-x]').onclick=()=>o.remove();o.onclick=e=>{if(e.target===o)o.remove()};o.querySelector('[data-ok]').onclick=()=>{fn(o);o.remove()};document.body.appendChild(o);return o}
+const v=(o,id)=>o.querySelector('#'+id).value;
+
+/* ---------- operations ---------- */
+const iso=d=>d.slice(6)+'-'+d.slice(0,2)+'-'+d.slice(3,5);
+const lbs=(id,val)=>`<div class="flex"><input id="${id}" type="number" step="0.01" value="${val}" class="${INP} rounded-r-none"><span class="flex items-center rounded-r-lg border border-l-0 border-line bg-canvas px-3 text-sm text-muted">lbs</span></div>`;
+function editAcct(p){const [fn,...ln]=p.name.split(' ');const h=t=>`<p class="lbl col-span-2 mt-1 border-b border-line pb-1">${t}</p>`;
+ modal('Edit account — '+p.name,`<div class="grid grid-cols-2 gap-3">${h('Patient')}${fld('First name',`<input id="fn" value="${fn}" class="${INP}">`)}${fld('Last name',`<input id="ln" value="${ln.join(' ')}" class="${INP}">`)}
+ <div class="col-span-2">${fld('Email',`<input id="em" type="email" value="${p.email}" class="${INP}">`)}</div>${h('Program')}
+ ${fld('Start weight',lbs('sw',p.stats.sw.toFixed(2)))}${fld('Goal weight',lbs('gw',p.stats.gw.toFixed(2)))}
+ ${fld('Clinic location',`<select id="cl" class="${INP}">${['- None -','Boise','Meridian'].map(c=>`<option ${c==(p.clinic||'- None -')?'selected':''}>${c}</option>`).join('')}</select>`)}
+ ${fld('Program start date',`<input id="sd" type="date" value="${iso(p.stats.start)}" class="${INP}">`)}
+ <div class="col-span-2">${fld('Patient status <span class="text-red-600">*</span>',`<select id="ps" class="${INP}">${Object.keys(PROG).map(k=>`<option ${k==p.program?'selected':''}>${k}</option>`).join('')}</select>`)}</div></div>`,'Save changes',
+ o=>{p.name=(v(o,'fn')+' '+v(o,'ln')).trim();p.email=v(o,'em');p.stats.sw=+v(o,'sw');p.stats.gw=+v(o,'gw');p.clinic=v(o,'cl');p.program=v(o,'ps');if(v(o,'sd'))p.stats.start=fmt(v(o,'sd'));render();toast('Account updated')},'max-w-xl')}
+function refresh(p){modal('Refreshing data',`<p>Updating all entities for ${p.name}…</p><div class="h-2 rounded-full bg-line"><div id="rb" class="h-full w-0 rounded-full bg-primary transition-all duration-300"></div></div><p id="rt" class="text-xs text-muted">0%</p>`,'Close',()=>{});
+ let x=0;const t=setInterval(()=>{x+=20;const b=$('#rb');if(!b||x>100)return clearInterval(t);b.style.width=x+'%';$('#rt').textContent=x<100?x+'%':'Done — all data refreshed'},450)}
+function archive(p){modal('Archive '+p.name+'?','<p>Archived patients can be re-enrolled at any time.</p>','Confirm',()=>{PATIENTS=PATIENTS.filter(x=>x!==p);render();toast(p.name+' archived')})}
+function seen(p){modal('Update last seen',fld('Last seen date',`<input id="a" type="date" class="${INP}">`),'Save',o=>{if(v(o,'a')){p.stats.seen=fmt(v(o,'a'));render();toast('Last seen updated')}})}
+function session(p){modal('New session — '+p.name,fld('Session type',`<select id="a" class="${INP}">${TYPES.map(t=>`<option>${t}</option>`).join('')}</select>`)+fld('Date',`<input type="date" class="${INP}">`)+fld('Notes',`<textarea rows="3" class="${INP}"></textarea>`),'Add session',
+ o=>{const n=v(o,'a');let s=p.sessions.find(x=>x.name==n);s?s.count++:p.sessions.push({name:n,count:1});render();toast('Session added')})}
+function custom(p){modal('Custom notification',fld('Message to '+p.name,`<textarea id="a" rows="4" class="${INP}" placeholder="Write your notification..."></textarea>`),'Send',o=>v(o,'a').trim()&&toast('Notification sent to '+p.name))}
+const PHASES=["Zero-Day (Pre-Loading)","Loading Phase","Losing Phase","Cycling / Maintenance","Continuity Phase"];
+const phaseMenu=(b,p)=>menu(b,PHASES.filter(ph=>ph.replace(' (Pre-Loading)','')!==p.phase).map(ph=>['Set '+ph,()=>{p.phase=ph.replace(' (Pre-Loading)','');render();toast('Phase set: '+p.phase)}]));
+const moreMenu=(b,p)=>menu(b,[['✉  '+p.email],['Edit Account',()=>editAcct(p)],['Details',()=>go('Patient details (table, graphs, data)')],['Log Patient Progress',()=>go('Log Patient Progress')],['Refresh Data',()=>refresh(p)],['Resend Welcome E-mail',()=>toast('Welcome e-mail sent')],['Archive Patient',()=>archive(p)],['Download Messages',()=>toast('Preparing messages download…')],['Download Logs',()=>toast('Preparing logs download…')]]);
+const DEF=[["scale","Log today's weight","Hi {name}, I noticed you haven't logged today's weight yet. Please log it when you can so we can keep your progress on track."],["droplet","Drink your water","Hi {name}, a quick reminder to keep up with your water today. Try to finish your full daily goal before evening."],["utensils","Protein reminder","Hi {name}, please make sure you get your protein at every meal today. It is key to protecting your results."],["message","Missed log check-in","Hi {name}, I haven't seen a log from you in a few days. Is everything okay? Let me know if you need any help."],["cal","Book your next visit","Hi {name}, it is time to book your next visit. Please call the office or reply here with times that work for you."]];
+let CUSTOM=[["message","Great progress","Hi {name}, great job this week. Keep up the excellent work!"]]; // doctor-saved, reusable for all patients
+function notify(p){const f=p.name.split(' ')[0];let sel=null;
+ const o=modal('Send notification to '+p.name,`<p class="text-muted">Choose a saved message, edit it if you like, then send. Type {name} to insert the patient's first name.</p><div id="grid" class="grid gap-2 sm:grid-cols-2"></div><textarea id="msg" rows="4" class="${INP}" placeholder="Select a message above, or write a new one..."></textarea>
+ <div id="newRow" class="hidden gap-2"><input id="ttl" placeholder="Name it, e.g. Fasting reminder" class="${INP}"><button id="saveT" class="shrink-0 rounded-lg bg-primary px-3 text-sm font-semibold text-white hover:bg-primary-dark">Save to my list</button></div>`,'Send notification',o=>toast(v(o,'msg').trim()?'Notification sent to '+p.name:'Nothing to send'),'max-w-xl');
+ const g=o.querySelector('#grid'),m=o.querySelector('#msg'),nr=o.querySelector('#newRow'),all=()=>[...DEF,...CUSTOM];
+ const draw=()=>{g.innerHTML=all().map(([i,t,x],k)=>`<div class="relative"><button data-k="${k}" class="flex h-full w-full items-start gap-2.5 rounded-lg border px-3 py-2.5 text-left hover:border-primary ${String(k)===sel?'border-primary bg-primary-soft':'border-line'}"><span class="mt-0.5 text-primary">${ic(i)}</span><span class="min-w-0 pr-4"><span class="block text-sm font-semibold">${t}</span><span class="line-clamp-2 block text-[11px] font-normal text-muted">${x.replace(/\{name\}/g,f)}</span></span></button>${k>=DEF.length?`<button data-del="${k}" title="Delete" class="absolute right-1.5 top-1.5 rounded p-1 text-xs text-muted hover:text-red-600">✕</button>`:''}</div>`).join('')+`<button data-k="new" class="flex items-center justify-center gap-2 rounded-lg border border-dashed border-primary/50 px-3 py-2.5 text-sm font-semibold text-primary hover:bg-primary-soft">${ic('edit')}New notification</button>`};
+ g.onclick=e=>{const d=e.target.closest('[data-del]');if(d){CUSTOM.splice(+d.dataset.del-DEF.length,1);sel=null;draw();return}
+  const b=e.target.closest('[data-k]');if(!b)return;sel=b.dataset.k;m.value=sel=='new'?'':all()[sel][2].replace(/\{name\}/g,f);nr.classList.toggle('hidden',sel!='new');nr.classList.toggle('flex',sel=='new');draw();m.focus()};
+ o.querySelector('#saveT').onclick=()=>{const t=o.querySelector('#ttl').value.trim(),x=m.value.trim();if(!t||!x)return toast('Add a name and a message first');
+  CUSTOM.push(['message',t,x.split(f).join('{name}')]);sel=String(all().length-1);o.querySelector('#ttl').value='';nr.classList.add('hidden');nr.classList.remove('flex');draw();toast('Saved to your notifications')};
+ draw()}
+const bellMenu=(b,p)=>notify(p);
+
+/* ---------- render ---------- */
+function stats(){const n=PATIENTS.filter(p=>p.review=="New").length,a=PATIENTS.length?Math.round(PATIENTS.reduce((s,p)=>s+pct(p),0)/PATIENTS.length):0;
+ $('#stats').innerHTML=[["Patients enrolled",PATIENTS.length],["Needs review",n],["Avg. % of goal",a+"%"],["Total weight lost",PATIENTS.reduce((s,p)=>s+p.stats.net,0).toFixed(0)+" lbs"]].map(([l,x])=>`<div class="flex-1 px-6 py-4"><p class="lbl">${l}</p><p class="mt-1 font-serif text-3xl">${x}</p></div>`).join('')}
+function filters(){$('#filters').innerHTML=["All","Needs review","Reviewed"].map(f=>`<button data-act="filter" data-arg="${f}" class="rounded-full px-3.5 py-1.5 text-sm font-medium ${S.f==f?'bg-primary text-white':'border border-line bg-surface text-ink/70 hover:bg-primary-soft'}">${f}</button>`).join('')}
+const comm=(k,i,d,pg,id)=>`<div class="flex flex-col rounded-lg border border-line p-3.5"><div class="flex items-center justify-between"><span class="flex items-center gap-2 text-sm font-semibold text-primary">${ic(i,'h-4 w-4')}${d.count} ${d.count==1?k.slice(0,-1):k}</span><button data-act="go" data-arg="${pg}" class="text-xs font-medium text-primary hover:underline">View all →</button></div>${d.count?`<p class="mt-2 text-[11px] text-muted">Latest · ${d.time}</p><p class="mt-1 line-clamp-2 text-sm leading-relaxed">${d.last}</p><button data-act="readfull" data-k="${k}" data-id="${id}" class="mt-2.5 self-start rounded-md border border-line px-2.5 py-1 text-xs font-medium hover:border-primary hover:text-primary">Read full ${k.slice(0,-1)}</button>`:'<p class="mt-2 text-sm text-muted">Nothing yet.</p>'}</div>`;
+function readFull(p,k){const d=p[k];modal(`Latest ${k.slice(0,-1)} — ${p.name}`,`<p class="text-xs text-muted">${d.time}</p><p class="whitespace-pre-line leading-relaxed">${d.last}</p>`,`View all ${k}`,()=>go(k[0].toUpperCase()+k.slice(1)),'max-w-lg','Close')}
+const phaseCard=p=>{const sy=p.sysPhase||p.phase,man=p.phase!==sy;return `<div class="flex flex-wrap items-center gap-x-4 gap-y-2"><div><p class="lbl">Program phase</p><button data-act="phase" data-id="${p.id}" class="mt-1 inline-flex items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-semibold text-white hover:bg-primary-dark">${p.phase}${ic('chev','h-3.5 w-3.5')}</button></div>
+ <p class="max-w-xs text-xs leading-relaxed text-muted">${man?`Set manually by you. System suggests <b class="text-ink">${sy}</b>. <button data-act="syspase" data-id="${p.id}" class="font-medium text-primary underline">Use system phase</button>`:'Assigned automatically from program progress. You can change it any time.'}</p></div>`};
+const tile=(l,v_,x='')=>`<div class="rounded-lg border border-line bg-surface px-3 py-2.5"><p class="lbl">${l}</p><p class="mt-0.5 text-sm font-semibold ${x}">${v_}</p></div>`;
+const SLEEP=['8:00','7:30','6:45','7:15']; // demo values; use the log's real sleep field
+const gc=g=>g>=9?'bg-success':g>=6?'bg-amber-500':'bg-red-600';
+const pill=(on,i,t,cls)=>`<span class="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-medium ${on?cls:'bg-canvas text-muted/70'}">${ic(i,'h-3 w-3')}${t}</span>`;
+const logCard=(l,o)=>{const d=o?l.weight-o.weight:null,lb=l.label&&LABELS[l.label];
+ return `<div class="w-60 shrink-0 rounded-xl border border-line border-l-4 ${lb?lb[1].replace('bg-','border-l-'):'border-l-line'} bg-surface p-3.5">
+ <div class="flex items-start justify-between"><div><p class="text-sm font-semibold">${l.date}</p><p class="text-[11px] text-muted">Log Day #${l.n}</p></div>
+  <div class="text-center" title="Adherence grade"><span class="inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white ${gc(l.grade)}">${l.grade}</span><p class="text-[9px] uppercase tracking-wide text-muted">Adherence</p></div></div>
+ <div class="mt-3"><p class="lbl">Weight</p><p class="font-serif text-2xl leading-tight">${l.weight.toFixed(2)} <span class="text-sm text-muted">lbs</span></p>
+  <p class="text-xs font-medium ${d===null?'text-muted':d<0?'text-success':d>0?'text-red-600':'text-muted'}">${d===null?'First entry in view':`${d<0?'▼':d>0?'▲':'•'} ${Math.abs(d).toFixed(2)} lbs vs previous log`}</p></div>
+ <div class="mt-3 min-h-[24px]">${lb?`<span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold text-white ${lb[1]}">${lb[0]}</span>`:'<span class="text-[11px] text-muted">No flags</span>'}</div>
+ <div class="mt-3 space-y-0.5 text-xs text-muted"><p>Water: <span class="font-semibold text-ink">${l.h2o.toFixed(0)} oz</span></p><p class="flex items-center gap-1">${ic('moon','h-3 w-3 text-sky-600')}Sleep: ${l.sleep?`<span class="font-semibold text-ink">${SLEEP[l.n%4]} hrs</span>`:'not logged'}</p></div>
+ <div class="mt-2 flex flex-wrap gap-1.5">${pillB(l.food,'utensils',l.food?'Food'+ic('chev','h-3 w-3'):'No food log','bg-accent-soft text-accent','food',l.n)}${pillB(l.n%2,'arrows',l.n%2?'Measurements'+ic('chev','h-3 w-3'):'No measurements','bg-violet-100 text-violet-700','meas',l.n)}${pill(1,'flag',l.cheat?'Cheated':'On plan',l.cheat?'bg-red-100 text-red-700':'bg-success-soft text-success')}</div></div>`};
+const pillB=(on,i,t,cls,act,n)=>on?`<button data-act="${act}" data-n="${n}" class="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-medium hover:ring-1 hover:ring-current ${cls}">${ic(i,'h-3 w-3')}${t}</button>`:pill(0,i,t,cls);
+const more=p=>p.logs[p.logs.length-1].n>1;
+const stripHTML=p=>p.logs.map((l,i)=>logCard(l,p.logs[i+1])).join('')+(more(p)?`<button data-act="more-logs" data-id="${p.id}" data-loader class="flex w-48 shrink-0 items-center justify-center rounded-xl border border-dashed border-line text-xs font-medium text-muted hover:border-primary hover:text-primary">Scroll or click for older logs →</button>`:`<div class="flex w-40 shrink-0 items-center justify-center rounded-xl border border-dashed border-line text-xs text-muted">Start of program</div>`);
+const countTxt=p=>`Showing ${p.logs.length} of ${p.logs[0].n} logs`;
+const logsBlock=p=>`<div><div class="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1"><p class="text-sm font-semibold">Daily logs</p><p data-count="${p.id}" class="text-xs text-muted">${countTxt(p)}</p>
+ <div class="flex flex-wrap gap-x-3 gap-y-1">${Object.values(LABELS).map(([n,c])=>`<span class="flex items-center gap-1 text-[11px] text-muted"><i class="h-2.5 w-2.5 rounded-sm ${c}"></i>${n}</span>`).join('')}</div>
+ <div class="ml-auto flex gap-1">${[-1,1].map(d=>`<button data-act="logscroll" data-dir="${d}" data-id="${p.id}" class="rounded-md border border-line bg-surface p-1.5 hover:border-primary" aria-label="Scroll logs">${ic(d<0?'cl':'cr')}</button>`).join('')}</div></div>
+ <div data-strip="${p.id}" class="flex gap-3 overflow-x-auto pb-2">${stripHTML(p)}</div>
+ <p class="mt-1 text-[11px] text-muted">Newest first. Left border color = flagged reason. Adherence: green 9-10, amber 6-8, red 5 or less.</p></div>`;
+const rnd=Math.random,ks=Object.keys(LABELS);
+function moreLogs(p){const last=p.logs[p.logs.length-1],out=[];let d=new Date(last.date),w=last.weight;
+ for(let i=1;i<=6&&last.n-i>=1;i++){d=new Date(d);d.setDate(d.getDate()-1-Math.floor(rnd()*3));w+=rnd()*1.4;
+  out.push(L(last.n-i,d.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}),5+Math.floor(rnd()*6),+w.toFixed(2),90+Math.floor(rnd()*40),rnd()<.25?ks[Math.floor(rnd()*4)]:0,rnd()<.85?1:0,rnd()<.5?1:0,rnd()<.1?1:0))}return out}
+function loadMore(s){const p=P(s.dataset.strip);if(s._busy||!more(p))return;s._busy=1;
+ const ld=s.querySelector('[data-loader]');ld.textContent='Loading older logs…';ld.classList.add('animate-pulse');
+ setTimeout(()=>{const x=s.scrollLeft;p.logs.push(...moreLogs(p)); // Next.js: fetch(`/api/patients/${p.id}/logs?before=${lastLogN}`)
+  s.innerHTML=stripHTML(p);s.scrollLeft=x;s._busy=0;$(`[data-count="${p.id}"]`).textContent=countTxt(p)},700)}
+const SAMPLE_FOOD={Lunch:{Protein:'Lean Pork Loin',Veg:'Cactus','Free Veg':'Bok Choy, Cabbage',Fruit:'Blueberry, Bilberry, Blackberry',Bread:'Ole Brand Extreme Wellness Tortilla'},Dinner:{Protein:'Ostrich','Free Veg':'Collard Greens, Chives',Fruit:'Damson, Dragon Fruit',Bread:'Flatout Flavor!t'}};
+const SAMPLE_MEAS={Neck:'10.00',Shoulders:'9.00',Chest:'8.00',Arms:'10.00 / 10.00',Abdomen:'10.00',Hips:'10.00',Thighs:'10.00 / 10.00',Calves:'10.00 / 10.00'};
+function showPop(b,a){const st=b.closest('[data-strip]'),p=P(st.dataset.strip),l=p.logs.find(x=>x.n==b.dataset.n);
+ const rows=o=>Object.entries(o).map(([k,x])=>`<div class="flex gap-2 py-0.5"><dt class="w-24 shrink-0 text-xs font-semibold text-accent">${k}</dt><dd class="text-xs">${x}</dd></div>`).join('');
+ const body=a=='food'?Object.entries(SAMPLE_FOOD).map(([m,o])=>`<p class="mt-3 text-sm font-semibold">${m}</p><dl>${rows(o)}</dl>`).join('')+`<p class="mt-3 text-sm font-semibold">Other</p><p class="text-xs text-muted">${l.other||'Nothing recorded'}</p>`:`<dl class="mt-2">${rows(SAMPLE_MEAS)}</dl>`;
+ closeMenu();const r=b.getBoundingClientRect(),m=document.createElement('div');m.id='menu';m.className='fixed z-50 max-h-[70vh] w-80 overflow-y-auto rounded-xl border border-line bg-surface p-4 shadow-xl';
+ m.style.top=Math.max(8,Math.min(r.bottom+4,innerHeight-360))+'px';m.style.left=Math.max(8,Math.min(r.left,innerWidth-336))+'px';
+ m.innerHTML=`<p class="lbl">${a=='food'?'Food':'Measurements'} · ${l.date} · Log Day #${l.n}</p>${body}`;document.body.appendChild(m)}
+document.addEventListener('scroll',e=>{closeMenu();const s=e.target;if(s.dataset&&s.dataset.strip&&s.scrollLeft+s.clientWidth>=s.scrollWidth-260)loadMore(s)},true);
+function detail(p){const s=p.stats;const ab=(i,t,a,x='',cls='border-line bg-surface')=>`<button data-act="${a}" data-id="${p.id}" ${x} class="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm font-medium hover:border-primary ${cls}">${ic(i,'h-3.5 w-3.5')}${t}</button>`;
+return `<div class="space-y-4">
+ <div class="rounded-xl border border-line bg-surface p-4"><div class="mb-3 flex flex-wrap items-center gap-2"><p class="lbl">Account</p><span class="inline-flex items-center gap-1.5 text-xs text-muted">${ic('mail','h-3.5 w-3.5')}${p.email}</span><button data-act="phase" data-id="${p.id}" class="ml-auto inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs font-medium xl:hidden">${p.phase}${ic('chev','h-3 w-3')}</button></div>
+  <div class="flex flex-wrap gap-2">${ab('edit','Edit account','edit')}${ab('clipboard','Details','go','data-arg="Patient details"')}${ab('scale','Log patient progress','go','data-arg="Log Patient Progress"')}${ab('refresh','Refresh data','refresh')}${ab('mail','Resend welcome e-mail','welcome')}${ab('download','Download messages','dlmsg')}${ab('download','Download logs','dllog')}${ab('archive','Archive patient','archive','','border-red-200 bg-red-50 text-red-700')}</div></div>
+ <div class="rounded-xl border border-line bg-surface p-4"><div class="flex flex-wrap items-center justify-between gap-2"><p class="lbl">Messages &amp; notes</p><button data-act="bell" data-id="${p.id}" class="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:opacity-90">${ic('send')}Send notification</button></div>
+  <div class="mt-3 grid gap-3 md:grid-cols-2">${comm('messages','message',p.messages,'Messages',p.id)}${comm('notes','note',p.notes,'Notes',p.id)}</div></div>
+ <div class="rounded-xl border border-line bg-surface p-4"><p class="lbl">Sessions</p><div class="mt-2 flex flex-wrap items-center gap-2">${p.sessions.map(x=>`<button data-act="go" data-arg="${x.name}" class="inline-flex items-center gap-2 rounded-lg bg-success px-3 py-2 text-xs font-semibold text-white hover:opacity-90">${x.name}<span class="rounded-full bg-white/25 px-1.5">${x.count}</span></button>`).join('')||'<span class="text-sm text-muted">No sessions yet</span>'}<button data-act="session" data-id="${p.id}" title="New session entry" class="flex h-9 w-9 items-center justify-center rounded-lg bg-red-600 text-white hover:bg-red-700">${ic('bolt')}</button></div></div>
+ <div class="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-6">
+  ${tile('Start date',s.start)}${tile('Program day',s.day,'text-accent')}${tile('Start weight',s.sw.toFixed(2)+' lbs')}${tile('Goal weight',s.gw.toFixed(2)+' lbs')}${tile('Net loss',s.net.toFixed(2)+' lbs','text-success')}${tile('% of goal',pct(p).toFixed(2)+'%')}
+  ${tile('Overall loss',s.overall.toFixed(2)+' lbs')}${tile('Inches lost',s.inches.toFixed(2)+' in')}${tile('Daily loss',s.daily)}${tile('Avg loss/day',s.avg.toFixed(2))}
+  <button data-act="seen" data-id="${p.id}" class="col-span-2 flex items-center gap-2 rounded-lg border border-accent/40 bg-accent-soft px-3 py-2.5 text-left hover:border-accent" title="Click to update">${ic('cal','h-4 w-4 text-accent')}<span><span class="lbl block">Last seen</span><span class="text-sm font-semibold text-accent">${s.seen}</span></span></button>
+ </div>
+ ${logsBlock(p)}</div>`}
+function roster(){const q=S.q.toLowerCase(),list=PATIENTS.filter(p=>p.name.toLowerCase().includes(q)&&(S.f=="All"||(S.f=="Needs review")==(p.review=="New")));
+ $('#roster').innerHTML=list.length?list.map(p=>{const o=S.open.has(p.id),pc=pct(p);return `<tr data-row="${p.id}" class="cursor-pointer border-b border-line ${o?'bg-primary-soft/60':'hover:bg-canvas'}">
+  <td class="px-5 py-3"><div class="flex items-center gap-3"><img src="${p.avatar}" alt="" class="h-9 w-9 rounded-full border border-line"/><div><p class="font-medium leading-tight">${p.name}</p><p class="text-xs text-muted">Day ${p.stats.day} · Started ${p.stats.start}</p></div></div></td>
+  <td class="hidden px-3 xl:table-cell"><button data-act="phase" data-id="${p.id}" class="inline-flex items-center gap-1 rounded-md border border-line bg-surface px-2.5 py-1 text-xs font-medium hover:border-primary">${p.phase}${ic('chev','h-3 w-3')}</button></td>
+  <td class="hidden px-3 md:table-cell"><span class="inline-block max-w-full truncate whitespace-nowrap rounded-md px-2.5 py-1 text-xs font-semibold ${PROG[p.program]||'bg-ink text-white'}">${p.program}</span></td>
+  <td class="hidden px-3 sm:table-cell"><div class="flex w-36 items-center gap-2"><div class="h-2 flex-1 overflow-hidden rounded-full bg-line"><div class="h-full rounded-full bg-primary" style="width:${pc}%"></div></div><span class="w-11 text-right text-xs font-medium">${pc.toFixed(0)}%</span></div></td>
+  <td class="hidden px-3 text-right font-medium text-success md:table-cell">-${p.stats.net.toFixed(1)} lbs</td>
+  <td class="px-3"><button data-act="review" data-id="${p.id}" title="Toggle review status" class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${p.review=='New'?'bg-accent-soft text-accent':'bg-success-soft text-success'}">${ic('eye','h-3 w-3')}${p.review=='New'?'New':'Reviewed'}</button></td>
+  <td class="px-3"><div class="flex items-center justify-end gap-1"><button data-act="more" data-id="${p.id}" class="rounded-md p-1.5 text-muted hover:bg-white hover:text-ink" aria-label="Patient actions">${ic('dots')}</button><span class="text-muted transition-transform ${o?'rotate-180':''}">${ic('chev')}</span></div></td></tr>
+  ${o?`<tr class="border-b border-line bg-canvas"><td colspan="7" class="min-w-0 overflow-hidden p-4 lg:p-5">${detail(p)}</td></tr>`:''}`}).join(''):'<tr><td colspan="7" class="px-5 py-10 text-center text-sm text-muted">No patients match your filters.</td></tr>'}
+function render(){stats();filters();roster()}
+
+document.addEventListener('click',e=>{
+ const inMenu=e.target.closest('#menu');if(!inMenu)closeMenu();
+ const b=e.target.closest('[data-act]');
+ if(b){const p=P(b.dataset.id),a=b.dataset.act;
+  if(a=='phase')phaseMenu(b,p);else if(a=='food'||a=='meas')showPop(b,a);else if(a=='more')moreMenu(b,p);else if(a=='bell')bellMenu(b,p);
+  else if(a=='seen')seen(p);else if(a=='edit')editAcct(p);else if(a=='refresh')refresh(p);else if(a=='welcome')toast('Welcome e-mail sent to '+p.email);else if(a=='archive')archive(p);else if(a=='dlmsg')toast('Preparing messages download…');else if(a=='dllog')toast('Preparing logs download…');else if(a=='readfull')readFull(p,b.dataset.k);else if(a=='syspase'){p.phase=p.sysPhase;render();toast('Phase reset to system: '+p.phase)}else if(a=='session')session(p);
+  else if(a=='review'){p.review=p.review=='New'?'Reviewed':'New';render()}
+  else if(a=='go')go(b.dataset.arg);else if(a=='more-logs')loadMore($(`[data-strip="${b.dataset.id}"]`));else if(a=='logscroll'){const st=$(`[data-strip="${b.dataset.id}"]`),d=+b.dataset.dir;st.scrollBy({left:d*480,behavior:'smooth'});if(d>0&&st.scrollLeft+st.clientWidth>=st.scrollWidth-40)loadMore(st)}else if(a=='filter'){S.f=b.dataset.arg;render()}
+  else if(a=='copy'){navigator.clipboard&&navigator.clipboard.writeText('https://chirothintracker.com/intake?clinic_id=13');toast('Intake link copied')}
+  return}
+ const r=e.target.closest('tr[data-row]');
+ if(r){const id=+r.dataset.row;S.open.has(id)?S.open.delete(id):S.open.add(id);roster()}
+});
+$('#search').addEventListener('input',e=>{S.q=e.target.value;roster()});
+render();
+</script>
+</body>
+</html>

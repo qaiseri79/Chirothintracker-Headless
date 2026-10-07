@@ -1,0 +1,15 @@
+{
+  "name": "drupal/filter_perms",
+  "description": "Provides role and module filters to simplify the user permissions page.",
+  "type": "drupal-module",
+  "license": "GPL-2.0+",
+  "minimum-stability": "dev",
+  "homepage": "https://www.drupal.org/project/filter_perms",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/filter_perms?categories=All",
+    "source": "http://cgit.drupalcode.org/filter_perms"
+  },
+  "require": {
+    "drupal/core": "^10.3 || ^11 || ^12"
+  }
+}

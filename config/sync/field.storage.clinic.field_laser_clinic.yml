@@ -1,0 +1,22 @@
+uuid: 32c1e120-82aa-4ac4-96c1-6c1332ef4286
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: custom
+id: clinic.field_laser_clinic
+field_name: field_laser_clinic
+entity_type: clinic
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

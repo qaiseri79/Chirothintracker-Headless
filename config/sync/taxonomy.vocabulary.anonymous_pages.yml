@@ -1,0 +1,9 @@
+uuid: 2b393834-a494-4041-8fe7-54106859e841
+langcode: en
+status: true
+dependencies: {  }
+name: 'Anonymous Pages'
+vid: anonymous_pages
+description: null
+weight: 0
+new_revision: false

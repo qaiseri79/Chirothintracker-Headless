@@ -1,0 +1,12 @@
+name: 'CTT Shop'
+type: module
+description: 'Manages the CTT shop for clinics, including product variation utilities.'
+core_version_requirement: ^10 || ^11
+package: Custom
+dependencies:
+  - drupal:user
+  - commerce:commerce_product
+
+version: 1.0.0
+
+configure: ctt_shop.ns_variations_batch

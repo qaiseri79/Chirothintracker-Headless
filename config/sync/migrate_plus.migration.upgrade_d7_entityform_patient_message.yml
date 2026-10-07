@@ -1,0 +1,65 @@
+uuid: 04abd3ec-e43e-4f38-a85f-70dec75c5c18
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d7_entityform_patient_message
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Content
+migration_group: migrate_drupal_7
+label: 'D8 Contact message migration from D7 entityform submission ()'
+source:
+  plugin: d7_entityform
+  constants:
+    langcode: en
+    module: contact_storage
+  bundle: patient_message
+process:
+  id:
+    -
+      plugin: get
+      source: entityform_id
+  contact_form:
+    -
+      plugin: get
+      source: type
+  uid:
+    -
+      plugin: get
+      source: uid
+  created:
+    -
+      plugin: get
+      source: created
+  changed:
+    -
+      plugin: get
+      source: changed
+  langcode:
+    -
+      plugin: default_value
+      source: language
+      default_value: en
+  'dependencies/module/[]':
+    -
+      plugin: get
+      source: constants/module
+  field_chiropractor:
+    -
+      plugin: get
+      source: field_chiropractor
+  field_message:
+    -
+      plugin: get
+      source: field_message
+destination:
+  plugin: 'entity:contact_message'
+  default_bundle: patient_message
+migration_dependencies:
+  required:
+    - ''
+  optional:
+    - upgrade_d7_field_instance

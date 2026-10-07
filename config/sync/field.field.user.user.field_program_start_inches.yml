@@ -1,0 +1,24 @@
+uuid: eee98e55-2594-4ec9-ab60-d40a2f28435d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_program_start_inches
+  module:
+    - user
+id: user.user.field_program_start_inches
+field_name: field_program_start_inches
+entity_type: user
+bundle: user
+label: 'Program Start Inches'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: in
+field_type: float

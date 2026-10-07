@@ -1,0 +1,24 @@
+uuid: df76ab6f-4852-4046-8d2b-b3d71851a531
+langcode: en
+status: true
+dependencies:
+  module:
+    - contact_storage
+    - contact_storage_dm
+third_party_settings:
+  contact_storage:
+    submit_text: Submit
+    show_preview: true
+    disabled_form_message: 'This contact form has been disabled.'
+    maximum_submissions_user: 0
+    page_autoreply_format: plain_text
+  contact_storage_dm:
+    disabled: true
+id: tracking_weight
+label: 'Log Your Progress'
+recipients:
+  - webmaster@example.com
+reply: ''
+weight: 0
+message: 'You have submitted your Daily Log successfully.'
+redirect: ''

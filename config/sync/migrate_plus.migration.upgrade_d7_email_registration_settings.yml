@@ -1,0 +1,28 @@
+uuid: f49677fe-f9b8-485d-80f8-b2c26c280a21
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d7_email_registration_settings
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Configuration
+migration_group: migrate_drupal_7
+label: 'Email registration configuration'
+source:
+  plugin: variable
+  variables:
+    - email_registration_login_with_username
+process:
+  login_with_username:
+    -
+      plugin: get
+      source: email_registration_login_with_username
+destination:
+  plugin: config
+  config_name: email_registration.settings
+migration_dependencies:
+  required: {  }
+  optional: {  }

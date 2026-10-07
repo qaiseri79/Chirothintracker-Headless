@@ -1,0 +1,23 @@
+{
+    "name": "drupal/migrate_skip_on_404",
+    "description": "Automatically skip files if they do not exist on the server, rather than make the Migrate Drupal UI or Migrate Upgrade -based migration fail.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://www.drupal.org/project/migrate_skip_on_404",
+    "authors": [
+      {
+        "name": "See contributors",
+        "homepage": "https://www.drupal.org/node/3195613/committers",
+        "role": "Developer"
+      }
+    ],
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/migrate_skip_on_404",
+        "slack": "#migrate",
+        "source": "https://git.drupalcode.org/project/migrate_skip_on_404"
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "drupal/core": "^9 || ^10 || ^11"
+    }
+}

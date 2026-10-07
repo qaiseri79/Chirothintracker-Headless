@@ -1,0 +1,14 @@
+uuid: 1b7416c1-7ed5-45a4-b57e-e28cccfc0c25
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.chiropractor_mind_set
+  module:
+    - user
+id: user_remove_role_action.chiropractor_mind_set
+label: 'Remove the Chiropractor - Mind Set role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: chiropractor_mind_set

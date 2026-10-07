@@ -1,0 +1,10 @@
+commerce_cart_redirection.commerce_cart_redirection_config_form:
+  path: '/admin/commerce/config/commerce_cart_redirection'
+  defaults:
+    _form: '\Drupal\commerce_cart_redirection\Form\CommerceCartRedirectionConfigForm'
+    _title: 'Commerce Cart Redirection'
+  requirements:
+    _permission: 'configure commerce_cart_redirection'
+  options:
+    _admin_route: TRUE
+  

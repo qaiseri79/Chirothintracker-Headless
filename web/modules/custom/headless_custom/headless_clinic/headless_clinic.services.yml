@@ -1,0 +1,4 @@
+services:
+  headless_clinic.clinic:
+    class: Drupal\headless_clinic\ClinicService
+    arguments: ['@entity_type.manager', '@headless_access.portal_access', '@headless_subscriptions.repository', '@headless_subscriptions.sponsorship', '@headless_subscriptions.registration', '@headless_mail.mailer', '@database', '@lock', '@datetime.time']

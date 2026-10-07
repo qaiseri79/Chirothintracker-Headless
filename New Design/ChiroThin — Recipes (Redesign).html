@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>ChiroThin — Recipes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: {
+      canvas: "#F3F4F1", surface: "#FFFFFF", ink: "#101827", muted: "#6B7280", line: "#E4E2DC",
+      primary: { DEFAULT: "#0B5D52", soft: "#E4EEEC", dark: "#08423A" },
+      accent: { DEFAULT: "#C7522A", soft: "#F6E4DC" },
+      success: { DEFAULT: "#3D8361", soft: "#E4F0E9" },
+    },
+    fontFamily: { serif: ["Newsreader","Georgia","serif"], sans: ["Inter","system-ui","sans-serif"] },
+    boxShadow: { panel: "0 1px 2px rgba(16,24,39,0.04), 0 8px 24px -12px rgba(16,24,39,0.08)" },
+  } } };
+</script>
+<style>
+  :root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  html, body { height: 100%; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #E4E2DC; border-radius: 8px; }
+  .chevron { transition: transform .2s ease; }
+  .open .chevron { transform: rotate(180deg); }
+  .recipe-body { display: none; }
+  .open .recipe-body { display: block; }
+</style>
+</head>
+<body class="bg-canvas font-sans text-ink antialiased h-full">
+<div class="flex h-full">
+  <aside class="group/sidebar hidden md:flex w-[72px] shrink-0 flex-col overflow-hidden border-r border-line bg-surface transition-[width] duration-200 hover:w-64">
+    <div class="flex h-16 shrink-0 items-center gap-3 border-b border-line px-5">
+      <svg class="h-6 w-6 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <div class="whitespace-nowrap opacity-0 transition-opacity duration-150 group-hover/sidebar:opacity-100"><p class="font-serif text-base leading-none text-ink">ChiroThin</p><p class="text-[10px] tracking-wide text-muted">My Account</p></div>
+    </div>
+    <nav id="nav" class="flex-1 space-y-0.5 px-3 py-4"></nav>
+  </aside>
+  <div class="flex min-w-0 flex-1 flex-col">
+    <header class="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-line bg-surface/90 px-6 backdrop-blur">
+      <button class="md:hidden rounded-lg p-2 text-muted hover:bg-canvas"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-2 border-l border-line pl-4"><div class="h-8 w-8 overflow-hidden rounded-full border border-line bg-accent-soft"><img src="https://i.pravatar.cc/64?u=tammy" class="h-full w-full object-cover" /></div><span class="hidden text-sm font-medium text-ink xl:block">Tammy Wahlert</span></div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto px-6 py-6 lg:px-8 lg:py-8">
+      <div class="mx-auto max-w-5xl space-y-6">
+        <div><h1 class="font-serif text-2xl text-ink">Recipes</h1><p class="mt-1 text-sm text-muted">Program-approved meals, organized by category.</p></div>
+
+        <div class="rounded-xl border border-line bg-surface p-5 shadow-panel">
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+            <div class="sm:col-span-2"><label class="mb-1.5 block text-xs font-medium text-muted">Recipe Search</label><input id="searchInput" type="text" placeholder="Search recipes..." class="w-full rounded-lg border border-line bg-canvas px-3.5 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" /></div>
+            <div><label class="mb-1.5 block text-xs font-medium text-muted">Category</label><select id="categorySelect" class="w-full rounded-lg border border-line bg-canvas px-3.5 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"><option value="">- Any -</option></select></div>
+            <div><label class="mb-1.5 block text-xs font-medium text-muted">Favorites</label><select id="favSelect" class="w-full rounded-lg border border-line bg-canvas px-3.5 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"><option value="">- Any -</option><option value="fav">Favorites only</option></select></div>
+          </div>
+        </div>
+
+        <div id="groups" class="space-y-8"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+const ICONS = {
+  home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  utensils:'<path d="M3 2v7c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2V2M7 2v20M17 2v20M17 2c-2.5 0-4 3-4 6.5S14.5 15 17 15"/>',
+  wrench:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/>',
+  grad:'<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/>',
+  scale:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v4l2.5 2.5"/>',
+  trending:'<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
+  message:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  cart:'<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 2-1.58l1.65-8.42H5.12"/>',
+  more:'<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',
+  chevronDown:'<path d="m6 9 6 6 6-6"/>', star:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+  printer:'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+};
+function icon(n,c){return `<svg class="${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]}</svg>`;}
+const NAV = [
+  {label:"Home",icon:"home"},{label:"Recipes",icon:"utensils",active:true},{label:"Resources",icon:"wrench"},{label:"Training",icon:"grad"},
+  {label:"Log My Weight",icon:"scale"},{label:"My Progress",icon:"trending"},{label:"Messages",icon:"message"},{label:"Shop",icon:"cart"},{label:"Extras",icon:"more"},
+];
+document.getElementById('nav').innerHTML = NAV.map(i=>`
+  <a href="#" class="relative flex items-center gap-3 rounded-lg px-2.5 py-2.5 text-sm font-medium transition-colors ${i.active?'bg-primary text-white':'text-ink/70 hover:bg-primary-soft hover:text-primary'}">
+    ${icon(i.icon,'h-[18px] w-[18px] shrink-0')}<span class="flex-1 whitespace-nowrap opacity-0 transition-opacity duration-150 group-hover/sidebar:opacity-100">${i.label}</span>
+  </a>`).join('');
+
+const RECIPES = [
+  { category:"Seafood", title:"Really Easy Chowder", fav:true, tag:"Seafood",
+    ingredients:["4 oz. frozen tilapia, halibut, or other white fish","4 oz. diced tomatoes","1 1/2 stalks celery, chopped","1/2 tsp. dried oregano","1/2 tsp. dried basil","salt and pepper to taste"],
+    steps:"In a medium-sized stock pot, place undrained tomatoes, celery, oregano, basil, salt and pepper. Bring to a boil over medium heat. Place frozen fish fillets in pot. Reduce heat and cook for 10 to 15 minutes. Cook until mixture is heated through and fish is opaque and flaky." },
+  { category:"Seafood", title:"Chilean Sea Bass", fav:true, tag:"Seafood",
+    ingredients:["4 oz. sea bass fillets","2 cloves garlic, minced","1/2 tsp. salt","1/2 tsp. lemon pepper","2 tbsp. finely chopped cilantro","1/2 tsp. paprika"],
+    steps:"Arrange sea bass fillets in a single layer on foil-lined broiler pan. Spread garlic and cilantro on and around fish. Squeeze lemon juice on fillets, sprinkle salt and lemon pepper to taste. Add paprika for color. Cover with foil and crimp edges to form a seal. Bake at 450 degrees for 20 minutes." },
+  { category:"Vegetables and Salads", title:"Perfection Salad", fav:true, tag:"Free Item",
+    ingredients:["2 tbsp. unflavored gelatin","1/2 c. cold water","2 c. boiling water","1/4 c. cider vinegar","1/4 c. lemon juice","1/4 c unsalted tomato juice","Stevia to substitute for 1/2 c. cugar","1 c. cabbage, shredded","1 c. celery, diced","3 tbsp. pimento, chopped","3 tbsp. green pepper, chopped"],
+    steps:"Dissolve unflavored gelatin in cold water. Add boiling water, vinegar, lemon juice, tomato juice, and sugar substitute. Cool until mixture begins to thicken. Fold in chopped vegetables. Pour into 1/2 cup molds and chill until ready to serve." },
+  { category:"Beef", title:"BBQ Beef Pepper Popper", fav:true, tag:"Beef",
+    ingredients:["4 oz. ground beef","4 oz. diced bell peppers","1 tbsp. Simple Girl Carolina Style BBQ Sauce","1/2 tbsp. Simple Girl Sweet Mustard Dressing (or 1/2 tbsp. yellow mustard and Stevia, to taste)"],
+    steps:"Preheat oven to 400 degrees. Line baking sheet with parchment paper. Combine all ingredients together in small bowl with hands. Scoop mixture out by spoonful into 6 mounds onto lined pan, flatten slightly if desired. Bake 20-25 minutes, or until cooked through. If desired, place under the broiler for an additional 2-3 minutes or until browned." },
+];
+
+const categories = [...new Set(RECIPES.map(r=>r.category))];
+document.getElementById('categorySelect').innerHTML += categories.map(c=>`<option value="${c}">${c}</option>`).join('');
+
+function render() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const cat = document.getElementById('categorySelect').value;
+  const favOnly = document.getElementById('favSelect').value === 'fav';
+  const filtered = RECIPES.filter(r => r.title.toLowerCase().includes(q) && (!cat || r.category===cat) && (!favOnly || r.fav));
+  const groups = {};
+  filtered.forEach(r => { (groups[r.category] = groups[r.category] || []).push(r); });
+
+  const el = document.getElementById('groups');
+  const keys = Object.keys(groups);
+  if (keys.length===0) { el.innerHTML = `<p class="py-10 text-center text-sm text-muted">No recipes match your search.</p>`; return; }
+  el.innerHTML = keys.map(cat => `
+    <div>
+      <h2 class="mb-3 font-serif text-xl text-ink">${cat}</h2>
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        ${groups[cat].map((r,i) => `
+        <div class="recipe rounded-xl border border-line bg-surface shadow-panel ${i===0 && cat===keys[0] ? 'open' : ''}">
+          <button type="button" class="recipe-toggle flex w-full items-center justify-between gap-3 px-5 py-4 text-left">
+            <div class="flex items-center gap-2 min-w-0">
+              ${icon('star', `h-4 w-4 shrink-0 ${r.fav ? 'fill-accent text-accent' : 'text-muted'}`)}
+              <span class="truncate font-medium text-ink">${r.title}</span>
+            </div>
+            <div class="flex items-center gap-3 shrink-0">
+              <span class="rounded-full bg-accent-soft px-2.5 py-1 text-xs font-semibold text-accent">${r.tag}</span>
+              ${icon('printer','h-4 w-4 text-muted')}
+              ${icon('chevronDown','chevron h-4 w-4 text-muted')}
+            </div>
+          </button>
+          <div class="recipe-body border-t border-line px-5 py-4">
+            <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">Ingredients</p>
+            <ul class="mb-4 list-disc space-y-1 pl-5 text-sm text-ink/80">${r.ingredients.map(x=>`<li>${x}</li>`).join('')}</ul>
+            <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">Instructions</p>
+            <p class="text-sm leading-relaxed text-ink/80">${r.steps}</p>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>`).join('');
+
+  document.querySelectorAll('.recipe-toggle').forEach(b=>b.addEventListener('click',()=>b.closest('.recipe').classList.toggle('open')));
+}
+['searchInput','categorySelect','favSelect'].forEach(id => document.getElementById(id).addEventListener('input', render));
+render();
+</script>
+</body>
+</html>

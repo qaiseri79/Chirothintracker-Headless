@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * Signature template.
+ *
+ * Available variables:
+ * - signature_src: Signature image source.
+ * - canvas_width: Width of canvas.
+ * - canvas_height: Height of canvas.
+ * - min_line_width: Minimum width of a line.
+ * - max_line_width: Maximum width of a line.
+ * - pen_color: Pen color for signature pad.
+ * - bg_color: Background color for signature pad.
+ */
+#}
+<div class="signature-inner">
+  <canvas width="{{ canvas_width }}" height="{{ canvas_height }}" class="signature-canvas"
+          data-min-line-width="{{ min_line_width }}"
+          data-max-line-width="{{ max_line_width }}"
+          data-pen-color="{{ pen_color }}"
+          data-bg-color="{{ bg_color }}">
+  </canvas>
+  {% if(signature_src is not empty) %}
+    <img src="{{ signature_src }}" class="signature-image" alt="{{ 'Signature Image'|t }}" />
+  {% endif %}
+  <button type="button" class="clear-signature-button button clear" data-action="clear">{{ 'Clear'|t }}</button>
+</div>

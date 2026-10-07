@@ -1,0 +1,12 @@
+name: 'Webform Config Performance test'
+type: module
+description: 'Support module for webform config performance testing.'
+package: 'Webform Testing'
+core_version_requirement: ^10.2
+dependencies:
+  - 'webform:webform'
+
+# Information added by Drupal.org packaging script on 2026-03-19
+version: '6.2.10'
+project: 'webform'
+datestamp: 1773926339

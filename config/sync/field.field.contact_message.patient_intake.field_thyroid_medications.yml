@@ -1,0 +1,19 @@
+uuid: 64bb3885-08a3-4739-9fd5-4e4d4cdd5c8e
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_thyroid_medications
+id: contact_message.patient_intake.field_thyroid_medications
+field_name: field_thyroid_medications
+entity_type: contact_message
+bundle: patient_intake
+label: 'Thyroid Medications'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

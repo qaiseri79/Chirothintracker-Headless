@@ -1,0 +1,11 @@
+uuid: ef835139-d15e-4f42-9f33-810a15918509
+langcode: en
+status: null
+dependencies: {  }
+id: video_message
+label: 'Video Message'
+uid: false
+created: true
+changed: true
+title: true
+standalone_url: true

@@ -1,0 +1,20 @@
+uuid: 799d6201-3829-42e6-9f2c-40f17dbf8d3b
+langcode: und
+status: true
+dependencies:
+  module:
+    - user
+id: user.field_user_current_program_day_c
+field_name: field_user_current_program_day_c
+entity_type: user
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

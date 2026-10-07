@@ -1,0 +1,136 @@
+<?php
+
+use Drupal\contact\ContactFormInterface;
+use Drupal\contact\MessageInterface;
+use Drupal\Core\Render\Markup;
+
+/**
+ * Implements hook_contact_message_insert().
+ */
+function ctt_patient_intake_contact_message_insert(MessageInterface $message): void
+{
+  // Guard: only act on the patient_intake contact form.
+  $contact_form = $message->getContactForm();
+  if (!$contact_form instanceof ContactFormInterface || $contact_form->id() !== 'patient_intake') {
+    return;
+  }
+
+  // Read field_clinic target_id from the submitted message.
+  if (!$message->hasField('field_clinic') || $message->get('field_clinic')->isEmpty()) {
+    \Drupal::logger('ctt_patient_intake')->warning(
+      'patient_intake submission (id: @id) has no field_clinic value; skipping notification.',
+      ['@id' => $message->id()]
+    );
+    return;
+  }
+
+  $clinic_target_id = (int) $message->get('field_clinic')->target_id;
+
+  // Look up users who reference the same clinic entity ID.
+  $uids = \Drupal::entityQuery('user')
+    ->condition('status', 1)
+    ->condition('field_clinic', $clinic_target_id)
+    ->accessCheck(FALSE)
+    ->range(0, 1)
+    ->execute();
+
+  if (empty($uids)) {
+    \Drupal::logger('ctt_patient_intake')->warning(
+      'No active user found with field_clinic = @clinic_id for patient_intake submission @id.',
+      ['@clinic_id' => $clinic_target_id, '@id' => $message->id()]
+    );
+    return;
+  }
+
+  $uid = reset($uids);
+  $subscriber = \Drupal::service('custom_module.services')->getSubscriberByChiropractor($uid);
+  if (!$subscriber) {
+    return;
+  }
+
+  // Build @patient_name from the message entity
+  $first_name = ($message->hasField('field_first_name') && !$message->get('field_first_name')->isEmpty())
+    ? $message->get('field_first_name')->value
+    : '';
+
+  $last_name = ($message->hasField('field_last_name') && !$message->get('field_last_name')->isEmpty())
+    ? $message->get('field_last_name')->value
+    : '';
+
+  $patient_name = trim("$first_name $last_name") ?: t('Unknown Patient');
+
+  // Build @chiropractor_name from the subscriber (user) entity
+  // The user entity may or may not have field_full_name.
+  $chiropractor_name = ($subscriber->hasField('field_full_name') && !$subscriber->get('field_full_name')->isEmpty())
+    ? $subscriber->get('field_full_name')->value
+    : $subscriber->getDisplayName();
+
+  /* COMMENTED OUT during development stage — no clinic emails are sent yet.
+   * Re-enable (remove surrounding comment) when ready to notify clinics.
+
+  // Send email
+  $mail_manager = \Drupal::service('plugin.manager.mail');
+  $params = [
+    'chiropractor_name' => $chiropractor_name,
+    'patient_name' => $patient_name,
+  ];
+
+  $result = $mail_manager->mail(
+    module: 'ctt_patient_intake',
+    key: 'clinic_notification',
+    to: $subscriber->getEmail(),
+    langcode: $subscriber->getPreferredLangcode(),
+    params: $params,
+    reply: NULL,
+    send: TRUE
+  );
+
+  if (empty($result['result'])) {
+    \Drupal::logger('ctt_patient_intake')->error(
+      'Failed to send patient_intake notification to @email (uid: @uid).',
+      ['@email' => $subscriber->getEmail(), '@uid' => $uid]
+    );
+  } else {
+    \Drupal::logger('ctt_patient_intake')->info(
+      'patient_intake notification sent to @email (uid: @uid) for clinic id @clinic.',
+      [
+        '@email' => $subscriber->getEmail(),
+        '@uid' => $uid,
+        '@clinic' => $clinic_target_id,
+      ]
+    );
+  }
+
+  */
+}
+
+/**
+ * Implements hook_mail().
+ */
+// function ctt_patient_intake_mail(string $key, array &$mail, array $params): void
+// {
+//   if ($key !== 'clinic_notification') {
+//     return;
+//   }
+
+//   $config = \Drupal::config('ctt_patient_intake.settings');
+//   $chiropractor_name = $params['chiropractor_name'];
+//   $patient_name = $params['patient_name'];
+
+//   $raw_subject = $config->get('mail_subject') ?? 'New patient intake submission from @patient_name';
+//   $raw_body = $config->get('mail_body') ?? "Hello @chiropractor_name,\n\nA new patient intake form has been submitted by @patient_name.\n\nThank you.";
+
+//   $token_map = [
+//     '@chiropractor_name' => $chiropractor_name,
+//     '@patient_name' => $patient_name,
+//   ];
+
+//   $mail['headers'] = [
+//     'Content-Type' => 'text/html; charset=UTF-8',
+//     'MIME-Version' => '1.0',
+//     'Content-Transfer-Encoding' => '8bit',
+//   ];
+//   $mail['from'] = \Drupal::config('system.site')->get('mail');
+//   $mail['subject'] = strtr($raw_subject, $token_map);
+//   $mail['body'][] = Markup::create(strtr($raw_body, $token_map));
+// }

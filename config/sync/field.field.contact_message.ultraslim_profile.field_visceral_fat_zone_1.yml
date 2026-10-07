@@ -1,0 +1,23 @@
+uuid: 38649cc8-82db-4328-85f9-c44e99346333
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_visceral_fat_zone_1
+id: contact_message.ultraslim_profile.field_visceral_fat_zone_1
+field_name: field_visceral_fat_zone_1
+entity_type: contact_message
+bundle: ultraslim_profile
+label: 'Visceral Fat Zone 1'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

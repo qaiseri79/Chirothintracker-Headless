@@ -1,0 +1,11 @@
+uuid: 1f81ca43-0a37-4ae2-8613-ccfe6e00f1b8
+langcode: en
+status: true
+dependencies: {  }
+id: training
+label: Training
+recipients: {  }
+reply: ''
+weight: 0
+message: null
+redirect: null

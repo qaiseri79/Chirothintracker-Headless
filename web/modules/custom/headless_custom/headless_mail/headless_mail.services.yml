@@ -1,0 +1,19 @@
+services:
+  # Declared explicitly, not assumed. Drupal does not create a
+  # `logger.channel.<module>` service per module; core defines a fixed set in
+  # core.services.yml and each module wanting its own has to declare it.
+  logger.channel.headless_mail:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: logger.factory:get
+    arguments: ['headless_mail']
+
+  headless_mail.mailer:
+    class: Drupal\headless_mail\Mailer
+    arguments:
+      # `plugin.manager.mail` is the plugin manager: `mail()` takes a module + key
+      # pair and resolves it to a MailInterface plugin, which is what makes this
+      # generic rather than hardwired to one message. Core aliases that service id
+      # to MailManagerInterface, so injecting the interface gets both.
+      - '@plugin.manager.mail'
+      - '@logger.channel.headless_mail'
+      - '@language_manager'

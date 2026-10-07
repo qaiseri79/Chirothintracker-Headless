@@ -1,0 +1,14 @@
+uuid: 86a50aff-86a9-4dda-99fc-6c546f5e25e4
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.ecommerce
+  module:
+    - user
+id: user_remove_role_action.ecommerce
+label: 'Remove the eCommerce role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: ecommerce

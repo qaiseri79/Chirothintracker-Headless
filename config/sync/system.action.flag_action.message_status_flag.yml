@@ -1,0 +1,15 @@
+uuid: f28db065-0311-45e7-9770-cd1297ae95f3
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.message_status
+  module:
+    - flag
+id: flag_action.message_status_flag
+label: '<span class="btn btn-primary">Mark as New</span>'
+type: webform_submission
+plugin: 'flag_action:message_status_flag'
+configuration:
+  flag_id: message_status
+  flag_action: flag

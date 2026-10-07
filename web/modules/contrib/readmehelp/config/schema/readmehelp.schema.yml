@@ -1,0 +1,10 @@
+# Schema for the configuration files of the README Help module.
+
+filter_settings.readmehelp_markdown:
+  type: filter
+  label: 'readmehelp Filter'
+  mapping:
+    quick_tips:
+      type: string
+      label: 'Quick Tips '
+

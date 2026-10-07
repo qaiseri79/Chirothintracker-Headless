@@ -1,0 +1,28 @@
+single_content_sync.import:
+  path: '/admin/content/import'
+  defaults:
+    _form: '\Drupal\single_content_sync\Form\ContentImportForm'
+    _title: 'Import content'
+  requirements:
+    _permission: 'import single content'
+
+single_content_sync.config_settings:
+  path: '/admin/config/content/single-content-sync'
+  defaults:
+    _form: '\Drupal\single_content_sync\Form\ContentSyncConfigForm'
+    _title: 'Single Content Sync Settings'
+  requirements:
+    _permission: 'administer single content sync'
+
+single_content_sync.bulk_export:
+  path: '/admin/config/content/single-content-sync/export'
+  defaults:
+    _form: '\Drupal\single_content_sync\Form\ContentBulkExportForm'
+    _title: 'Export content'
+  requirements:
+    _custom_access: '\Drupal\single_content_sync\Form\ContentBulkExportForm::access'
+  options:
+    _admin_route: TRUE
+
+route_callbacks:
+  - '\Drupal\single_content_sync\Routing\ContentExportRoutes::routes'

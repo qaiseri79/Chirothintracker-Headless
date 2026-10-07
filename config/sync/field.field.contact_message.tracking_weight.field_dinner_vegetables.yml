@@ -1,0 +1,26 @@
+uuid: 65724e6d-3c69-4de7-960b-a505189120a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_dinner_vegetables
+    - taxonomy.vocabulary.vegetables
+id: contact_message.tracking_weight.field_dinner_vegetables
+field_name: field_dinner_vegetables
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Dinner Vegetables (4oz Total)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      vegetables: vegetables
+    sort:
+      field: _none
+field_type: entity_reference

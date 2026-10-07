@@ -1,0 +1,30 @@
+uuid: b30e8571-3c36-475e-96d7-5eb29528f1db
+langcode: en
+status: false
+dependencies:
+  module:
+    - custom_module
+title: 'Free Trial'
+id: free_trial_cron
+weight: 0
+module: custom_module
+callback: free_trial_cron
+scheduler:
+  id: crontab
+  configuration:
+    rules:
+      - '0 2 * * *'
+    catch_up: 0
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: database
+  configuration:
+    method: '3'
+    expire: 1209600
+    retain: 1000

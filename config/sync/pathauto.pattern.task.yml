@@ -1,0 +1,12 @@
+uuid: 1ae34bae-e74f-4f56-a95e-a11c12e941d5
+langcode: en
+status: true
+dependencies: {  }
+id: task
+label: 'Task - default'
+type: 'canonical_entities:task'
+pattern: 'task/[task:id]'
+selection_criteria: {  }
+selection_logic: and
+weight: 0
+relationships: {  }

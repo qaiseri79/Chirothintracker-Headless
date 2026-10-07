@@ -1,0 +1,23 @@
+uuid: 95406dc6-0ccb-4382-b13a-907d39dc5d0d
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_chiroburst_bend
+id: contact_message.tracking_weight.field_chiroburst_bend
+field_name: field_chiroburst_bend
+entity_type: contact_message
+bundle: tracking_weight
+label: 'ChiroBurst Bend'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

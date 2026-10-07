@@ -1,0 +1,20 @@
+uuid: 9d10d30f-4a84-4693-8cbb-103d5d4e6361
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_shipping
+    - user
+id: user.field_shipping_methods
+field_name: field_shipping_methods
+entity_type: user
+type: entity_reference
+settings:
+  target_type: commerce_shipping_method
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

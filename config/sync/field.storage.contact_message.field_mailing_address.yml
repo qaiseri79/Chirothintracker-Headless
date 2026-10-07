@@ -1,0 +1,19 @@
+uuid: c93a01fc-6961-4726-bdb1-32712d7f9781
+langcode: und
+status: true
+dependencies:
+  module:
+    - address
+    - contact
+id: contact_message.field_mailing_address
+field_name: field_mailing_address
+entity_type: contact_message
+type: address
+settings: {  }
+module: address
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

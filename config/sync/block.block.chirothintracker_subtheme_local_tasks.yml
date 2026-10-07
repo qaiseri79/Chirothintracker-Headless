@@ -1,0 +1,28 @@
+uuid: 64da043a-0dec-4504-bf99-be421a1f1ea1
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - chirothintracker_subtheme
+_core:
+  default_config_hash: 1Bi2NJL1Q_ZhZ9t6Bea8f0NihB-XN6m-Z3RvZcakQRo
+id: chirothintracker_subtheme_local_tasks
+theme: chirothintracker_subtheme
+region: content
+weight: -20
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: Tabs
+  label_display: '0'
+  provider: core
+  primary: true
+  secondary: true
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: "/admin/structure/webform/manage/patient_intake/submission/*\r\n/intake"

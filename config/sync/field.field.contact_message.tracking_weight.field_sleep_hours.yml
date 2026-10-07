@@ -1,0 +1,23 @@
+uuid: 70d714db-ebef-47cc-b9cb-dff5c31a4a21
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_sleep_hours
+id: contact_message.tracking_weight.field_sleep_hours
+field_name: field_sleep_hours
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Sleep Hours'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: hrs
+field_type: decimal

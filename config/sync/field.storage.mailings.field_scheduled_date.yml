@@ -1,0 +1,24 @@
+uuid: d4484101-ba22-4c70-8964-522a168f8a43
+langcode: und
+status: true
+dependencies:
+  module:
+    - datetime
+    - eck
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: mailings.field_scheduled_date
+field_name: field_scheduled_date
+entity_type: mailings
+type: datetime
+settings:
+  datetime_type: date
+module: datetime
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

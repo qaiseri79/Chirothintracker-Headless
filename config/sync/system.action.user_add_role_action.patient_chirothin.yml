@@ -1,0 +1,14 @@
+uuid: a2513dc9-296b-4999-82d4-ac25ff7187e5
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.patient_chirothin
+  module:
+    - user
+id: user_add_role_action.patient_chirothin
+label: 'Add the Patient - ChiroThin role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: patient_chirothin

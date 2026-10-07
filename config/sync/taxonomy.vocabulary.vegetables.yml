@@ -1,0 +1,9 @@
+uuid: c8d24780-f6ae-4266-92aa-a1b87a4b8fd0
+langcode: en
+status: true
+dependencies: {  }
+name: Vegetables
+vid: vegetables
+description: null
+weight: 0
+new_revision: false

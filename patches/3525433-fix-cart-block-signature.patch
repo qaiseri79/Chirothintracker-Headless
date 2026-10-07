@@ -1,0 +1,11 @@
+--- src/Plugin/Block/XquantityCartBlock.php.orig	2025-05-20 13:22:02.659619021 +0500
++++ src/Plugin/Block/XquantityCartBlock.php	2025-05-20 13:22:31.970593018 +0500
+@@ -23,7 +23,7 @@
+    * @return array
+    *   A render array.
+    */
+-  public function build() {
++  public function build(): array {
+     $cachable_metadata = new CacheableMetadata();
+     $cachable_metadata->addCacheContexts(['user', 'session']);
+ 

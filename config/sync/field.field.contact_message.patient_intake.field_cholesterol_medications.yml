@@ -1,0 +1,19 @@
+uuid: 234a82b3-34f6-4f9a-a1f2-23065668ae82
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_cholesterol_medications
+id: contact_message.patient_intake.field_cholesterol_medications
+field_name: field_cholesterol_medications
+entity_type: contact_message
+bundle: patient_intake
+label: 'Cholesterol Medications'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

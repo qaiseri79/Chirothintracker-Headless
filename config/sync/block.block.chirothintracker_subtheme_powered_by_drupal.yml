@@ -1,0 +1,22 @@
+uuid: 00800dbd-a070-421b-a00e-8c408d21c314
+langcode: en
+status: false
+dependencies:
+  module:
+    - system
+  theme:
+    - chirothintracker_subtheme
+_core:
+  default_config_hash: '-RcuGknfcdkpyDZ9HlpqF7FcyqCZ5pPbbw-g241V0uY'
+id: chirothintracker_subtheme_powered_by_drupal
+theme: chirothintracker_subtheme
+region: footer
+weight: 0
+provider: null
+plugin: system_powered_by_block
+settings:
+  id: system_powered_by_block
+  label: 'Powered by Drupal'
+  label_display: '0'
+  provider: system
+visibility: {  }

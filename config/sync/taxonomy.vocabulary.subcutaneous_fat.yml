@@ -1,0 +1,9 @@
+uuid: 67b907b1-7b6a-44fe-ada0-8ac6e7da2e52
+langcode: en
+status: true
+dependencies: {  }
+name: 'Subcutaneous Fat'
+vid: subcutaneous_fat
+description: null
+weight: 0
+new_revision: false

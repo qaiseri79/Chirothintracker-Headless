@@ -1,0 +1,508 @@
+uuid: 67c8bc1d-61d4-40c3-bde5-0935ffaa4d1d
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.field.contact_message.patient_intake.field_agreement
+    - field.field.contact_message.patient_intake.field_blood_pressure_medications
+    - field.field.contact_message.patient_intake.field_bp_diagnosis_year
+    - field.field.contact_message.patient_intake.field_cholesterol_diagnosis_year
+    - field.field.contact_message.patient_intake.field_cholesterol_medications
+    - field.field.contact_message.patient_intake.field_clinic
+    - field.field.contact_message.patient_intake.field_consent
+    - field.field.contact_message.patient_intake.field_consent_consumption
+    - field.field.contact_message.patient_intake.field_cravings
+    - field.field.contact_message.patient_intake.field_daily_activity_level
+    - field.field.contact_message.patient_intake.field_date_of_birth
+    - field.field.contact_message.patient_intake.field_diabetes
+    - field.field.contact_message.patient_intake.field_diabetes_diagnosis_year
+    - field.field.contact_message.patient_intake.field_diabetes_medications
+    - field.field.contact_message.patient_intake.field_domain
+    - field.field.contact_message.patient_intake.field_email_address
+    - field.field.contact_message.patient_intake.field_emergency_contact_name
+    - field.field.contact_message.patient_intake.field_emergency_contact_phone
+    - field.field.contact_message.patient_intake.field_emotional_eater
+    - field.field.contact_message.patient_intake.field_emotional_trauma
+    - field.field.contact_message.patient_intake.field_emotional_trauma_age
+    - field.field.contact_message.patient_intake.field_first_name
+    - field.field.contact_message.patient_intake.field_gall_bladder
+    - field.field.contact_message.patient_intake.field_gender
+    - field.field.contact_message.patient_intake.field_goal_weight
+    - field.field.contact_message.patient_intake.field_health_challenge
+    - field.field.contact_message.patient_intake.field_height
+    - field.field.contact_message.patient_intake.field_high_blood_pressure
+    - field.field.contact_message.patient_intake.field_high_cholesterol
+    - field.field.contact_message.patient_intake.field_history_bariatric_surgery
+    - field.field.contact_message.patient_intake.field_history_eating_disorder
+    - field.field.contact_message.patient_intake.field_last_name
+    - field.field.contact_message.patient_intake.field_mailing_address
+    - field.field.contact_message.patient_intake.field_marital_status
+    - field.field.contact_message.patient_intake.field_media_release_agreement
+    - field.field.contact_message.patient_intake.field_media_release_disagree
+    - field.field.contact_message.patient_intake.field_medical_eligibility
+    - field.field.contact_message.patient_intake.field_medical_eligibility_choice
+    - field.field.contact_message.patient_intake.field_medical_symptoms
+    - field.field.contact_message.patient_intake.field_medications
+    - field.field.contact_message.patient_intake.field_motivation
+    - field.field.contact_message.patient_intake.field_number_of_children
+    - field.field.contact_message.patient_intake.field_occupation
+    - field.field.contact_message.patient_intake.field_other_symptoms
+    - field.field.contact_message.patient_intake.field_phone_number
+    - field.field.contact_message.patient_intake.field_program_agreement
+    - field.field.contact_message.patient_intake.field_program_start_date
+    - field.field.contact_message.patient_intake.field_programs
+    - field.field.contact_message.patient_intake.field_stressors
+    - field.field.contact_message.patient_intake.field_surgery_weight_gain
+    - field.field.contact_message.patient_intake.field_surgery_weight_loss
+    - field.field.contact_message.patient_intake.field_thyroid_condition
+    - field.field.contact_message.patient_intake.field_thyroid_diagnosis_year
+    - field.field.contact_message.patient_intake.field_thyroid_medications
+    - field.field.contact_message.patient_intake.field_weight
+  module:
+    - address
+    - datetime
+    - options
+id: contact_message.patient_intake.default
+targetEntityType: contact_message
+bundle: patient_intake
+mode: default
+content:
+  field_agreement:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 42
+    region: content
+  field_blood_pressure_medications:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 49
+    region: content
+  field_bp_diagnosis_year:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 26
+    region: content
+  field_cholesterol_diagnosis_year:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 28
+    region: content
+  field_cholesterol_medications:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 50
+    region: content
+  field_consent:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 46
+    region: content
+  field_consent_consumption:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 45
+    region: content
+  field_cravings:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 38
+    region: content
+  field_daily_activity_level:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 14
+    region: content
+  field_date_of_birth:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_diabetes:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 25
+    region: content
+  field_diabetes_diagnosis_year:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 30
+    region: content
+  field_diabetes_medications:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 51
+    region: content
+  field_email_address:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_emergency_contact_name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  field_emergency_contact_phone:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  field_emotional_eater:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 37
+    region: content
+  field_emotional_trauma:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 41
+    region: content
+  field_emotional_trauma_age:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 40
+    region: content
+  field_first_name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_gall_bladder:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 24
+    region: content
+  field_gender:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_goal_weight:
+    type: number_decimal
+    label: above
+    settings:
+      thousand_separator: ''
+      decimal_separator: .
+      scale: 2
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 16
+    region: content
+  field_health_challenge:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 36
+    region: content
+  field_height:
+    type: number_decimal
+    label: above
+    settings:
+      thousand_separator: ''
+      decimal_separator: .
+      scale: 2
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 17
+    region: content
+  field_high_blood_pressure:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 27
+    region: content
+  field_high_cholesterol:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 31
+    region: content
+  field_history_bariatric_surgery:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 21
+    region: content
+  field_history_eating_disorder:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 20
+    region: content
+  field_last_name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_mailing_address:
+    type: address_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_marital_status:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_media_release_agreement:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 44
+    region: content
+  field_media_release_disagree:
+    type: boolean
+    label: above
+    settings:
+      format: custom
+      format_custom_false: 'Media release consent given'
+      format_custom_true: 'Media release consent declined'
+    third_party_settings: {  }
+    weight: 47
+    region: content
+  field_medical_eligibility:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 18
+    region: content
+  field_medical_eligibility_choice:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 19
+    region: content
+  field_medical_symptoms:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 33
+    region: content
+  field_medications:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 35
+    region: content
+  field_motivation:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 11
+    region: content
+  field_number_of_children:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_occupation:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_other_symptoms:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 34
+    region: content
+  field_phone_number:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 48
+    region: content
+  field_program_agreement:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 43
+    region: content
+  field_program_start_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 13
+    region: content
+  field_programs:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 12
+    region: content
+  field_stressors:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 39
+    region: content
+  field_surgery_weight_gain:
+    type: number_decimal
+    label: above
+    settings:
+      thousand_separator: ''
+      decimal_separator: .
+      scale: 2
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 23
+    region: content
+  field_surgery_weight_loss:
+    type: number_decimal
+    label: above
+    settings:
+      thousand_separator: ''
+      decimal_separator: .
+      scale: 2
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 22
+    region: content
+  field_thyroid_condition:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 29
+    region: content
+  field_thyroid_diagnosis_year:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 32
+    region: content
+  field_thyroid_medications:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 53
+    region: content
+  field_weight:
+    type: number_decimal
+    label: above
+    settings:
+      thousand_separator: ''
+      decimal_separator: .
+      scale: 2
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 15
+    region: content
+hidden:
+  field_clinic: true
+  field_domain: true
+  flag_intake_processed_cs: true
+  mail: true
+  message: true
+  name: true
+  subject: true

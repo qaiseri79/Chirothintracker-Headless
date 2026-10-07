@@ -1,0 +1,39 @@
+uuid: 939f92e2-685e-47e9-99ea-7781cf346917
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.chiropractor_notes
+    - field.storage.contact_message.field_patient
+  module:
+    - disable_field
+    - epp
+third_party_settings:
+  epp:
+    value: '[current-page:query:uid]'
+    on_update: 0
+  disable_field:
+    add_disable: roles
+    add_roles:
+      - chiropractor_active_
+    edit_disable: roles
+    edit_roles:
+      - chiropractor_active_
+id: contact_message.chiropractor_notes.field_patient
+field_name: field_patient
+entity_type: contact_message
+bundle: chiropractor_notes
+label: Patient
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: enrolled_patients
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

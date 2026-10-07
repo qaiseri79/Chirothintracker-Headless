@@ -1,0 +1,38 @@
+<?php
+
+/** Implements hook_cron(). Only this module's NEW records are reconciled. */
+function headless_subscriptions_cron(): void {
+  $repo = \Drupal::service('headless_subscriptions.repository');
+  foreach ($repo->pendingEvents() as $id) \Drupal::queue('headless_subscription_events')->createItem($id);
+  $service = \Drupal::service('headless_subscriptions.subscription');
+  foreach ($repo->duePurchases(\Drupal::time()->getCurrentTime()) as $id) {
+    try { $service->reconcile($id); }
+    catch (\Throwable $e) {
+      \Drupal::logger('headless_subscriptions')->warning('Subscription @id could not be reconciled (@class).', ['@id' => $id, '@class' => get_class($e)]);
+    }
+  }
+}
+
+/** Implements hook_ENTITY_TYPE_presave(). New account clinic links are immutable. */
+function headless_subscriptions_user_presave(\Drupal\Core\Entity\EntityInterface $entity): void {
+  if ($entity->isNew()) return;
+  $account = \Drupal::service('headless_subscriptions.repository')->account((int) $entity->id());
+  if ($account && (!$entity->hasField('field_clinic') || (int) $entity->get('field_clinic')->target_id !== (int) $account['clinic_id'])) {
+    throw new \LogicException('A subscription-managed doctor cannot be reassigned to another clinic.');
+  }
+}
+
+/** Implements hook_ENTITY_TYPE_presave(). A managed clinic has exactly one owner. */
+function headless_subscriptions_clinic_presave(\Drupal\Core\Entity\EntityInterface $entity): void {
+  if ($entity->isNew()) return;
+  $account = \Drupal::service('headless_subscriptions.repository')->accountForClinic((int) $entity->id());
+  if ($account && (int) $entity->getOwnerId() !== (int) $account['uid']) {
+    throw new \LogicException('A subscription-managed clinic belongs to its registered doctor.');
+  }
+}
+
+/** Queue covered-doctor role refresh when a primary account is manually changed. */
+function headless_subscriptions_user_update(\Drupal\Core\Entity\EntityInterface $entity): void {
+  $repository = \Drupal::service('headless_subscriptions.repository');
+  if ($repository->account((int) $entity->id())) \Drupal::service('headless_subscriptions.sponsorship')->queueOwner((int) $entity->id());
+}

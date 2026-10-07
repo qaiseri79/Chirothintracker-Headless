@@ -1,0 +1,21 @@
+uuid: acb9a1e9-7c1f-4b2c-a56c-63d18ad2c553
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.clinic.clinic
+    - field.storage.clinic.field_domain_base_link
+id: clinic.clinic.field_domain_base_link
+field_name: field_domain_base_link
+entity_type: clinic
+bundle: clinic
+label: 'Domain Base Link'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: '[current-domain:path]'
+default_value_callback: ''
+settings: {  }
+field_type: string

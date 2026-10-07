@@ -1,0 +1,23 @@
+uuid: cc29e817-7386-4b4b-9398-147cc3b2fad7
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_enrollment
+    - field.storage.contact_message.field_goal_weight
+id: contact_message.patient_enrollment.field_goal_weight
+field_name: field_goal_weight
+entity_type: contact_message
+bundle: patient_enrollment
+label: 'Goal Weight'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: float

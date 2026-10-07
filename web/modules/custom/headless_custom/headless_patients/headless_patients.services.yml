@@ -1,0 +1,71 @@
+services:
+  # Declared explicitly, not assumed.
+  #
+  # Drupal does not create a `logger.channel.<module>` service per module. Core
+  # defines a fixed set in core.services.yml (default, php, image, cron, file,
+  # form, security, mail, menu, router) and each module that wants its own has
+  # to declare it. PatientsService type-hints LoggerChannelInterface, so this is a
+  # hard dependency of the service rather than a nicety: CheckExceptionOnInvalid-
+  # ReferenceBehaviorPass throws on the unresolvable argument during compilation,
+  # before any request is served.
+  #
+  # It was previously justified as a prerequisite for hook_install(); this module no
+  # longer has one, and the channel is still required for the service above.
+  #
+  # The explicit class/factory form matches headless_messages.
+  logger.channel.headless_patients:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: logger.factory:get
+    arguments: ['headless_patients']
+
+  headless_patients.clinic_scope:
+    class: Drupal\headless_patients\ClinicScope
+    arguments:
+      - '@entity_type.manager'
+
+  headless_patients.phase_map:
+    class: Drupal\headless_patients\PatientPhaseMap
+
+  # The two legacy helpers PatientsService now calls instead of reimplementing
+  # the enrolment side effects. Registered as services purely so they can be
+  # injected and replaced in a unit test: both have no constructor, so the
+  # container can build them, and nothing about their internals has been changed.
+  #
+  # This creates a dependency from a headless module onto custom_module, which is
+  # the direction the codebase is trying to move away from. It is accepted here
+  # because those functions are entangled with \Drupal:: statics and Views, and
+  # copying them into this module would guarantee two implementations to keep in
+  # step — which is the problem this endpoint was built to fix. Wrapping them
+  # behind these two services is what makes them replaceable later.
+  headless_patients.enrollment_limit:
+    class: Drupal\custom_module\Controller\EnrollmentLimit
+
+  headless_patients.program_day:
+    class: Drupal\custom_module\Controller\UserCurrentProgramDay
+
+  headless_patients.patients:
+    class: Drupal\headless_patients\PatientsService
+    arguments:
+      - '@entity_type.manager'
+      - '@headless_patients.clinic_scope'
+      - '@headless_patients.phase_map'
+      - '@logger.channel.headless_patients'
+      - '@flag'
+      - '@headless_mail.mailer'
+      - '@headless_patients.enrollment_limit'
+      - '@headless_patients.program_day'
+
+  headless_patients.intake:
+    class: Drupal\headless_patients\PatientIntakeService
+    arguments:
+      - '@entity_type.manager'
+      - '@flag'
+      # Still injected for the legal-text resolution the intake form depends on.
+      # The clinic's own link comes from clinic_link instead; invite is no longer
+      # how a link is found.
+      - '@headless_intake.invite'
+      - '@headless_intake.clinic_link'
+      - '@logger.channel.headless_patients'
+  headless_patients.summary:
+    class: Drupal\headless_patients\PatientSummaryService
+    arguments: ['@entity_type.manager', '@headless_patients.clinic_scope', '@headless_patients.patients', '@headless_patients.phase_map', '@headless_progress.progress_service', '@headless_patients.intake', '@flag', '@database', '@file_system', '@lock']

@@ -1,0 +1,21 @@
+uuid: 9c52a61f-062e-41d2-9549-f929ca779da5
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_medical_symptoms
+  module:
+    - options
+id: contact_message.patient_intake.field_medical_symptoms
+field_name: field_medical_symptoms
+entity_type: contact_message
+bundle: patient_intake
+label: 'Do you experience any of the following even if they are minor and go away on their own?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

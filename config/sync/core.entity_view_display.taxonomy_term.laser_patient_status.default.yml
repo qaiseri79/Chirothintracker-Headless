@@ -1,0 +1,30 @@
+uuid: 3b476be5-3163-415a-be4b-ceb29b78b88d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.laser_patient_status.field_laser
+    - taxonomy.vocabulary.laser_patient_status
+  module:
+    - options
+    - text
+id: taxonomy_term.laser_patient_status.default
+targetEntityType: taxonomy_term
+bundle: laser_patient_status
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_laser:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden: {  }

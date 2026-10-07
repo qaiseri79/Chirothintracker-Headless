@@ -1,0 +1,54 @@
+services:
+  plugin.manager.fillpdf.pdf_backend:
+    class: Drupal\fillpdf\Plugin\PdfBackendManager
+    parent: default_plugin_manager
+
+  fillpdf.link_manipulator:
+    class: Drupal\fillpdf\Service\FillPdfLinkManipulator
+
+  fillpdf.admin_form_helper:
+    class: Drupal\fillpdf\Service\FillPdfAdminFormHelper
+    arguments: ['@module_handler', '@config.factory', '@stream_wrapper_manager', '@database']
+
+  # I don't like the name of this, but it is what it does...it translates
+  # the context provided by a FillPDF Link into loaded entities (or serializes)
+  # entities into a context...well, it might in the future.
+  fillpdf.context_manager:
+    class: Drupal\fillpdf\Service\FillPdfContextManager
+    arguments: ['@entity_type.manager']
+
+  plugin.manager.fillpdf_action.processor:
+    class: Drupal\fillpdf\Plugin\FillPdfActionPluginManager
+    parent: default_plugin_manager
+
+  fillpdf.output_handler:
+    class: Drupal\fillpdf\OutputHandler
+    arguments: ['@fillpdf.token_resolver', '@logger.channel.fillpdf', '@fillpdf.link_manipulator', '@file_system', '@file.repository']
+
+  logger.channel.fillpdf:
+    parent: logger.channel_base
+    arguments: ['fillpdf']
+
+  fillpdf.access_helper:
+    class: Drupal\fillpdf\FillPdfAccessHelper
+    arguments: ["@fillpdf.link_manipulator", "@fillpdf.context_manager"]
+
+  fillpdf.token_resolver:
+    class: Drupal\fillpdf\TokenResolver
+    arguments: ["@token", "@token.entity_mapper", "@module_handler"]
+
+  fillpdf.serializer:
+    class: Drupal\fillpdf\Serializer
+    arguments: ["@serializer", '@entity_type.manager']
+
+  fillpdf.input_helper:
+    class: Drupal\fillpdf\InputHelper
+    arguments: ["@config.factory", "@plugin.manager.fillpdf.pdf_backend", "@entity_type.manager"]
+
+  fillpdf.shell_manager:
+    class: Drupal\fillpdf\ShellManager
+    arguments: ['@config.factory']
+
+  fillpdf.backend_proxy:
+    class: Drupal\fillpdf\Service\BackendProxy
+    arguments: ['@fillpdf.token_resolver', '@plugin.manager.fillpdf.pdf_backend', '@config.factory', '@entity_type.manager']

@@ -1,0 +1,61 @@
+# Schema for the configuration files of the commerce_xquantity module.
+commerce_xquantity_prices:
+  type: integer
+  label: 'The number of the Xquantity Price adjustments'
+
+commerce_xquantity_price:
+  type: sequence
+  label: 'Xquantity Price Adjustments'
+  sequence:
+    type: mapping
+    label: 'Xquantity Price Adjustment'
+    mapping:
+      qty_start:
+        type: string
+      qty_end:
+        type: string   
+      date_start:
+        type: string             
+      date_end:
+        type: string           
+      time_start:
+        type: string 
+      time_end:
+        type: string 
+      week_days:
+        type: string 
+      variation_ids:
+        type: string 
+      product_ids:
+        type: string 
+      variation_types:
+        type: string 
+      product_types:
+        type: string 
+      stores:
+        type: string 
+      roles:
+        type: string
+      adjust_value:
+        type: string
+      adjust_op:
+        type: string
+      adjust_type:
+        type: string
+      list:
+        type: boolean
+      notify:
+        type: sequence          
+        sequence:
+          type: commerce_xquantity_price_notify
+
+commerce_xquantity_price_notify:
+  type: mapping
+  label: 'Display Message'
+  mapping:
+    add_to_cart:
+      type: boolean
+      label: 'Whether to display a message on the Add to Cart form'
+    shopping_cart:
+      type: boolean
+      label: 'Whether to display a message on the Shopping Cart form'

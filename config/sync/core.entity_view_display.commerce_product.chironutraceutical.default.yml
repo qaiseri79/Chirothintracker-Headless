@@ -1,0 +1,272 @@
+uuid: abed0555-fc11-47ef-b96c-85ab8f80d5bd
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.chironutraceutical
+    - field.field.commerce_product.chironutraceutical.body
+    - field.field.commerce_product.chironutraceutical.field_description_file
+    - field.field.commerce_product.chironutraceutical.field_product_type
+    - field.field.commerce_product.chironutraceutical.field_short_detail
+    - field.field.commerce_product.chironutraceutical.field_subscription_image
+  module:
+    - commerce_product
+    - ctools
+    - ds
+    - file
+    - layout_builder
+    - text
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: ds_2col_stacked
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          wrappers:
+            header: div
+            left: div
+            right: div
+            footer: div
+          outer_wrapper: div
+          attributes: ''
+          link_attribute: ''
+          link_custom: ''
+          classes:
+            layout_class: {  }
+        components:
+          6f455ec9-132b-4dcd-a988-02b26f07067a:
+            uuid: 6f455ec9-132b-4dcd-a988-02b26f07067a
+            region: left
+            configuration:
+              id: 'field_block:commerce_product:chironutraceutical:field_subscription_image'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_entity_view
+                label: hidden
+                settings:
+                  view_mode: default
+                  link: false
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
+          ba4e0469-92f9-4d1d-9e74-70baa297a641:
+            uuid: ba4e0469-92f9-4d1d-9e74-70baa297a641
+            region: right
+            configuration:
+              id: 'field_block:commerce_product_variation:chironutraceutical_variations:price'
+              label: Price
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: '@commerce_product.product_variation_route_context:commerce_product_variation'
+                view_mode: view_mode
+              formatter:
+                type: commerce_price_default
+                label: inline
+                settings:
+                  strip_trailing_zeroes: false
+                  currency_display: symbol
+                third_party_settings: {  }
+            weight: 1
+            additional: {  }
+          fef2e816-1837-44f3-93ef-e2d8c371b4c3:
+            uuid: fef2e816-1837-44f3-93ef-e2d8c371b4c3
+            region: footer
+            configuration:
+              id: 'field_block:commerce_product:chironutraceutical:body'
+              label: Description
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: text_default
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+            weight: 4
+            additional: {  }
+          f573303c-e643-4161-b8c4-e6e49c97d412:
+            uuid: f573303c-e643-4161-b8c4-e6e49c97d412
+            region: right
+            configuration:
+              id: 'field_block:commerce_product:chironutraceutical:variations'
+              label: Variations
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: commerce_add_to_cart
+                label: hidden
+                settings:
+                  combine: false
+                third_party_settings: {  }
+            weight: 4
+            additional: {  }
+          b77f3a25-8845-4bad-831f-14709730bd1a:
+            uuid: b77f3a25-8845-4bad-831f-14709730bd1a
+            region: right
+            configuration:
+              id: 'field_block:commerce_product:chironutraceutical:field_short_detail'
+              label: 'Short Detail'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: text_default
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+            weight: 3
+            additional: {  }
+          ba7f9764-6cc6-4e13-9137-51e9f389f542:
+            uuid: ba7f9764-6cc6-4e13-9137-51e9f389f542
+            region: header
+            configuration:
+              id: 'field_block:commerce_product:chironutraceutical:field_description_file'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: file_default
+                label: above
+                settings:
+                  use_description_as_link_text: true
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
+          c51361c5-49eb-4bdf-afd5-83bc7b47fb55:
+            uuid: c51361c5-49eb-4bdf-afd5-83bc7b47fb55
+            region: footer
+            configuration:
+              id: 'field_block:commerce_product:chironutraceutical:field_description_file'
+              label: 'Description File'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: file_default
+                label: above
+                settings:
+                  use_description_as_link_text: true
+                third_party_settings: {  }
+            weight: 3
+            additional: {  }
+          ac80fab5-ef13-415e-966c-2462807bffc3:
+            uuid: ac80fab5-ef13-415e-966c-2462807bffc3
+            region: footer
+            configuration:
+              id: 'entity_view:commerce_product_variation'
+              label: 'Additional Information'
+              label_display: visible
+              provider: ctools
+              view_mode: summary
+              context_mapping:
+                entity: '@commerce_product.product_variation_route_context:commerce_product_variation'
+            weight: 5
+            additional: {  }
+          d1389924-1b64-4b8b-8bf8-493c6c2d6f3d:
+            uuid: d1389924-1b64-4b8b-8bf8-493c6c2d6f3d
+            region: right
+            configuration:
+              id: 'field_block:commerce_product_variation:chironutraceutical_variations:sku'
+              label: SKU
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: '@commerce_product.product_variation_route_context:commerce_product_variation'
+                view_mode: view_mode
+              formatter:
+                type: string
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+            weight: 2
+            additional: {  }
+          84b5f541-f375-439a-b94c-c673f8319bde:
+            uuid: 84b5f541-f375-439a-b94c-c673f8319bde
+            region: header
+            configuration:
+              id: 'field_block:commerce_product:chironutraceutical:field_exclude_shipping_method'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: true
+                third_party_settings: {  }
+            weight: 1
+            additional: {  }
+        third_party_settings: {  }
+id: commerce_product.chironutraceutical.default
+targetEntityType: commerce_product
+bundle: chironutraceutical
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 11
+    region: content
+  field_description_file:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 14
+    region: header
+  field_short_detail:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 12
+    region: content
+  field_subscription_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 13
+    region: content
+  title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -5
+    region: content
+  variations:
+    type: commerce_add_to_cart
+    label: above
+    settings:
+      combine: true
+    third_party_settings: {  }
+    weight: 10
+    region: content
+hidden:
+  created: true
+  field_product_type: true
+  stores: true
+  uid: true

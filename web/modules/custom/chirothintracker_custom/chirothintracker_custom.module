@@ -1,0 +1,790 @@
+<?php
+
+use Drupal\migrate\Row;
+use Drupal\migrate\Plugin\MigrateSourceInterface;
+use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\Core\Database\Database;
+use Drupal\webform\Entity\Webform;
+use Drupal\webform\Entity\WebformSubmission;
+use Drupal\webform\WebformSubmissionForm;
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\file\Entity\File;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+
+/**
+ * Implements hook_migrate_prepare_row().
+ */
+function chirothintracker_custom_migrate_prepare_row(Row $row, MigrateSourceInterface $source, MigrationInterface $migration) {
+  // if($migration->id() == 'upgrade_d7_entityform_message') {
+  //      message($row->getSource());
+  //      \Drupal::logger('chirothintracker')->notice('Entity Form ID: <pre>' . print_r($row->getSource()['entityform_id'], TRUE) . '</pre>');
+  //      return FALSE;
+  // }
+    if ($migration->id() == 'upgrade_d7_entityform_message') {
+        // $entityform_id = $row->getSourceIdValues()['entityform_id'];
+        // // Check if this ID already exists in the migrate map table.
+        // $exists = \Drupal::database()->select('migrate_map_upgrade_d7_entityform_message', 'm')
+        //   ->fields('m', ['sourceid1'])
+        //   ->condition('sourceid1', $entityform_id)
+        //   ->execute()
+        //   ->fetchField();migrate_map_d7_entityform__message 
+        // // If not migrated yet, run your logic.
+        // if (!$exists) {
+        //   message($row->getSource());
+        //   //\Drupal::logger('chirothintracker')->notice('Entity Form ID: <pre>' . print_r($row->getSource()['entityform_id'], TRUE) . '</pre>');
+        //   // Manually record it to the map table to prevent reprocessing.
+        //   // \Drupal::database()->insert('migrate_map_upgrade_d7_entityform_message')
+        //   //   ->fields([
+        //   //     'source_ids_hash' => hash('sha256', serialize([$entityform_id])),
+        //   //     'sourceid1' => $entityform_id,
+        //   //     'source_row_status' => 2, // Imported
+        //   //     'rollback_action' => 0,
+        //   //     'last_imported' => time(),
+        //   //     'hash' => '', // Optional
+        //   //   ])
+        //   //   ->execute();
+        // }
+        // return FALSE;
+          //   $to_uid = $row->getSourceProperty('field_to');
+          //   if (!empty($to_uid)) {
+          //     $row->setDestinationProperty('field_to', [
+          //       'target_id' => $to_uid,
+          //     ]);
+          // }
+
+     //   Drupal::logger('chirothintracker')->notice('Message Id: <pre>' . print_r($row->getSource()['field_to'], TRUE) . '</pre>');
+  }
+
+
+
+
+  if ($migration->id() == 'upgrade_d7_entityform_tracking_weight') {
+      //if($row->getSource()['entityform_id'] == 1001){
+    // if($row->getSource()['uid'] != 1077){
+    //    //\Drupal::logger('chirothintracker')->notice('Row Data: <pre>' . print_r($row->getSource(), TRUE) . '</pre>');
+    //    // log_your_progress($row->getSource());
+       
+    //      // $legacy_code = $row->getSourceProperty('field_legacy_code');
+    //        return FALSE;
+    //   }
+
+        // $uid = $row->getSourceProperty('uid');
+        //  Drupal::logger('chirothintracker')->notice('Log ID: <pre>' . print_r($uid, TRUE) . '</pre>');
+        // $row->setSourceProperty('field_author', $uid);
+       
+    }
+  if ($migration->id() == 'upgrade_d7_entityform_lipolight_profile') {
+      // if($row->getSource()['entityform_id'] == 4560837){
+      //     lipolight_profile($row->getSource());
+      //    \Drupal::logger('chirothintracker')->notice('Row Data: <pre>' . print_r($row->getSource(), TRUE) . '</pre>');
+      //  }
+      // return FALSE;
+  }
+  if ($migration->id() == 'upgrade_d7_entityform_ultraslim_profile') {
+    //  if($row->getSource()['entityform_id'] == 4562216){
+    //      ultraslim_profile($row->getSource());
+    // // \Drupal::logger('chirothintracker')->notice('Row Data: <pre>' . print_r($row->getSource(), TRUE) . '</pre>');
+    //    }
+    //    return FALSE;
+  }
+   if ($migration->id() == 'upgrade_d7_entityform_zerona_profile') {
+     // if($row->getSource()['entityform_id'] == 686103){
+     //    zerona_profile($row->getSource());
+     //     \Drupal::logger('chirothintracker')->notice('Row Data: <pre>' . print_r($row->getSource(), TRUE) . '</pre>');
+     // }
+     //   return FALSE;
+   }
+    if ($migration->id() == 'upgrade_d7_entityform_patient_intake') {
+     if($row->getSource()['entityform_id'] == 4674270){
+       //  if(empty($row->getSource()['field_mailing_address'])){
+        //patient_intake($row->getSource());
+      // \Drupal::logger('chirothintracker')->notice('Row Data: <pre>' . print_r($row->getSource(), TRUE) . '</pre>');
+         }
+        // \Drupal::logger('chirothintracker')->notice('Row Data: <pre>' . print_r($row->getSource(), TRUE) . '</pre>');
+      // return FALSE;
+   }
+   if ($migration->id() == 'upgrade_d7_entityform_patient_photos') {
+       // if($row->getSource()['entityform_id'] == 4015586){
+       // // if(!empty($row->getSource()['field_before_and_after_photos'])){
+       //        //  patient_photos($row->getSource());
+       //   //\Drupal::logger('chirothintracker')->notice('Photo Data: <pre>' . print_r($row->getSource(), TRUE) . '</pre>');
+       //   }
+       // return FALSE;
+   }
+
+    if ($migration->id() == 'upgrade_d7_entityform_last_seen') {
+       // if($row->getSource()['entityform_id'] == 4447011){
+       //      // last_seen($row->getSource());
+       //      // \Drupal::logger('chirothintracker')->notice('Photo Data: <pre>' . print_r($row->getSource(), TRUE) . '</pre>');
+       // }
+       // return FALSE;
+   }
+
+    if ($migration->id() == 'upgrade_d7_entityform_patient_attachments') {
+      if($row->getSource()['entityform_id'] == 4672725){
+            // patient_attachments($row->getSource());
+            // \Drupal::logger('chirothintracker')->notice('Photo Data: <pre>' . print_r($row->getSource(), TRUE) . '</pre>');
+       }
+      // return FALSE;
+   }
+
+    if ($migration->id() == 'upgrade_d7_entityform_chiropractor_notes') {
+     if($row->getSource()['entityform_id'] == 4673655){
+            // chiropractor_notes($row->getSource());
+            // \Drupal::logger('chirothintracker')->notice('Photo Data: <pre>' . print_r($row->getSource(), TRUE) . '</pre>');
+       }
+      // return FALSE;
+   }
+   
+}
+
+
+function chiropractor_notes($row_source){
+            $data = $row_source;
+            $webform_id = 'chiropractor_notes';
+            $webform = Webform::load($webform_id);
+            // Create webform submission.
+            $values = [
+            'webform_id' => $webform->id(),
+            'uid'=> $data['uid'],
+            'sid' => $data["entityform_id"],
+            'data' => [
+            'patient' => !empty($data['field_patient']) ? $data['field_patient'][0]['target_id'] : "",
+            'date' => !empty($data['field_date']) ? $data['field_date'][0]['value'] : "",
+            'notes' => !empty($data['field_notes']) ? $data['field_notes'][0]['value'] : "",
+               ],
+            ];
+        
+          //\Drupal::logger('chirothintracker')->notice('Data: <pre>' . print_r($values, TRUE) . '</pre>');
+            $webform_submission = WebformSubmission::create($values);
+            $webform_submission->setCreatedTime($data['created']); 
+            $webform_submission->setChangedTime($data['changed']);
+            $webform_submission->set('completed', $data['created']); 
+            $webform_submission->save();
+}
+
+
+
+function patient_attachments($row_source){
+            $data = $row_source;
+            $webform_id = 'patient_attachments';
+            $webform = Webform::load($webform_id);
+            // Create webform submission.
+            $values = [
+            'webform_id' => $webform->id(),
+            'uid'=> $data['uid'],
+            'sid' => $data["entityform_id"],
+            'data' => [
+            'field_patient' => !empty($data['field_patient']) ? $data['field_patient'][0]['target_id'] : "",
+            'field_attachments' => !empty($data['field_attachments']) ? $data['field_attachments'][0]['fid'] : "",
+               ],
+            ];
+        
+          //\Drupal::logger('chirothintracker')->notice('Data: <pre>' . print_r($values, TRUE) . '</pre>');
+            $webform_submission = WebformSubmission::create($values);
+            $webform_submission->setCreatedTime($data['created']); 
+            $webform_submission->setChangedTime($data['changed']);
+            $webform_submission->set('completed', $data['created']); 
+            $webform_submission->save();
+}
+
+
+function last_seen($row_source){
+            $data = $row_source;
+            $webform_id = 'last_seen';
+            $webform = Webform::load($webform_id);
+            // Create webform submission.
+            $values = [
+            'webform_id' => $webform->id(),
+            'uid'=> $data['uid'],
+            'sid' => $data["entityform_id"],
+            'data' => [
+            'patient' => !empty($data['field_patient']) ? $data['field_patient'][0]['target_id'] : "",
+            'last_seen' => !empty($data['field_last_seen']) ? $data['field_last_seen'][0]['value'] : "",
+               ],
+            ];
+        
+          //\Drupal::logger('chirothintracker')->notice('Data: <pre>' . print_r($values, TRUE) . '</pre>');
+            $webform_submission = WebformSubmission::create($values);
+            $webform_submission->setCreatedTime($data['created']); 
+            $webform_submission->setChangedTime($data['changed']);
+            $webform_submission->set('completed', $data['created']); 
+            $webform_submission->save();
+}
+
+
+
+function patient_photos($row_source){
+            $data = $row_source;
+            $webform_id = 'patient_photos';
+            $webform = Webform::load($webform_id);
+             if(!empty($data['field_before_and_after_photos'])){
+                   $field_before_and_after_photos = array_column($data['field_before_and_after_photos'], 'fid');
+             }else{
+                    $field_before_and_after_photos = $data['field_before_and_after_photos'];
+             }
+            // Create webform submission.
+            $values = [
+            'webform_id' => $webform->id(),
+            'uid'=> $data['uid'],
+            'sid' => $data["entityform_id"],
+            'data' => [
+            'patient' => !empty($data['field_patient']) ? $data['field_patient'][0]['target_id'] : "",
+            'profile_photo' => !empty($data['field_profile_photo']) ? $data['field_profile_photo'][0]['fid'] : "",
+            'before_and_after_photos' => !empty($field_before_and_after_photos) ? $field_before_and_after_photos : "",
+               ],
+            ];
+        
+          \Drupal::logger('chirothintracker')->notice('Data: <pre>' . print_r($values, TRUE) . '</pre>');
+            $webform_submission = WebformSubmission::create($values);
+            $webform_submission->setCreatedTime($data['created']); 
+            $webform_submission->setChangedTime($data['changed']);
+            $webform_submission->set('completed', $data['created']); 
+            $webform_submission->save();
+
+}
+
+
+function patient_intake($row_source){
+        $data = $row_source;
+
+        $significant_emotional_trauma_ = [];
+        $traumas = $data['field_emotional_trauma'] ?? [];
+        $ages = $data['field_emotional_trauma_age'] ?? [];
+        foreach ($traumas as $index => $trauma_item) {
+          $trauma = $trauma_item['value'] ?? '';
+          $age = $ages[$index]['value'] ?? '';
+          $significant_emotional_trauma_[] = [
+            'age' => $age,
+            'emotional_trauma' => $trauma,
+          ];
+        }
+        $stressors = $data['field_stressors'] ?? [];
+        $data['field_stressors'] = array_map(function ($item) {
+             return $item['value'] ?? '';
+        }, $stressors);
+
+        $bariatric_surgery = $data['field_history_bariatric_surgery'] ?? [];
+        $data['field_history_bariatric_surgery'] = array_map(function ($item) {
+          return $item['value'] ?? '';
+        }, $bariatric_surgery);
+
+        $food_carving = $data['field_cravings'] ?? [];
+        $data['field_cravings'] = array_map(function ($item) {
+          return $item['value'] ?? '';
+        }, $food_carving);
+
+        $history_eating_disorder = $data['field_history_eating_disorder'] ?? [];
+        $data['field_history_eating_disorder'] = array_map(function ($item) {
+          return $item['value'] ?? '';
+        }, $history_eating_disorder);
+
+        $medical_symptoms = $data['field_medical_symptoms'] ?? [];
+        $data['field_medical_symptoms'] = array_map(function ($item) {
+          return $item['value'] ?? '';
+        }, $medical_symptoms);
+
+        $medications = $data['field_medications'] ?? [];
+        $data['field_medications'] = array_map(function ($item) {
+          return $item['value'] ?? '';
+        }, $medications);
+
+        $programs = $data['field_programs'] ?? [];
+        $data['field_programs'] = array_map(function ($item) {
+          return $item['value'] ?? '';
+        }, $programs);
+
+        $blood_pressure_medications = $data['field_blood_pressure_medications'] ?? [];
+        $data['field_blood_pressure_medications'] = array_map(function ($item) {
+          return $item['value'] ?? '';
+        }, $blood_pressure_medications);
+ 
+        $thyraid_medications = $data['field_thyroid_medications'] ?? [];
+        $data['field_thyroid_medications'] = array_map(function ($item) {
+        return $item['value'] ?? '';
+        }, $thyraid_medications);
+
+        $cholesterol_medications = $data['field_cholesterol_medications'] ?? [];
+        $data['field_cholesterol_medications'] = array_map(function ($item) {
+          return $item['value'] ?? '';
+        }, $cholesterol_medications);   
+
+        $other_symptoms = $data['field_other_symptoms'] ?? [];
+        $data['field_other_symptoms'] = array_map(function ($item) {
+          return $item['value'] ?? '';
+        }, $other_symptoms);     
+
+
+
+                if(!empty($data['field_mailing_address'])){
+                            $mailing_address_ = array(
+                                "additional_name" => '',
+                                "address_line1" => $data['field_mailing_address'][0]['thoroughfare'],
+                                "address_line2" => $data['field_mailing_address'][0]['premise'],
+                                "address_line3" => '',
+                                "administrative_area" => $data['field_mailing_address'][0]['administrative_area'],
+                                "country_code" => $data['field_mailing_address'][0]['country'],
+                                "dependent_locality" => '',
+                                "family_name" => '',
+                                "given_name" => '',
+                                "langcode" => '',
+                                "locality" => $data['field_mailing_address'][0]['locality'],
+                                "organization" => $data['field_mailing_address'][0]['organisation_name'],
+                                "postal_code" => $data['field_mailing_address'][0]['postal_code'],
+                                "sorting_code" => ''
+                        );
+                }
+        $webform_id = 'patient_intake';
+        $webform = Webform::load($webform_id);
+        $clinic_id = getClinicFromDomain($data["field_domain"][0]["value"]);
+
+       // \Drupal::logger('chirothintracker')->notice('Domain: <pre>' . print_r($data["field_domain"], TRUE) . '</pre>');
+ 
+        // Create webform submission.
+        $values = [
+        'webform_id' => $webform->id(),
+        'uid'=> $data['uid'],
+        'sid' => $data["entityform_id"],
+        'data' => [
+        'first_name' => $data["field_first_name"][0]["value"],
+        'last_name' => $data["field_last_name"][0]["value"],
+        'email_address' => $data["field_email_address"][0]["email"],
+        'phone_number' => $data["field_phone_number"][0]["value"],
+        'mailing_address_' => $mailing_address_,
+        'field_gender' => $data["field_gender"][0]["value"],
+        'date_of_birth' => !empty($data['field_date_of_birth'][0]['value']) ? $data['field_date_of_birth'][0]['value'] : '',
+        'occupation' => !empty($data['field_occupation'][0]['value']) ? $data['field_occupation'][0]['value'] : '',
+        'marital_status' => !empty($data['field_marital_status'][0]['value']) ? $data['field_marital_status'][0]['value'] : '',
+        'number_of_children' => !empty($data['field_number_of_children'][0]['value']) ? $data['field_number_of_children'][0]['value'] : '',
+        'emergency_contact_name' => !empty($data['field_emergency_contact_name'][0]['value']) ? $data['field_emergency_contact_name'][0]['value'] : '',
+        'emergency_contact_phone' => !empty($data['field_emergency_contact_phone'][0]['value']) ? $data['field_emergency_contact_phone'][0]['value'] : '',
+        'what_is_your_motivation_for_losing_weight_' => !empty($data['field_motivation'][0]['value']) ? $data['field_motivation'][0]['value'] : '',
+        'field_programs' =>  !empty($data['field_programs']) ? $data['field_programs'] : '',
+        'field_program_start_date' => !empty($data['field_program_start_date'][0]['value']) ? $data['field_program_start_date'][0]['value'] : '',
+        'daily_activity_level' => $data["field_daily_activity_level"][0]["value"],
+        'current_weight_lbs_' =>  $data["field_weight"][0]["value"],
+        'desired_weight_lbs_' =>  !empty($data['field_goal_weight'][0]['value']) ? $data['field_goal_weight'][0]['value'] : '',
+        'height_inches_' => !empty($data['field_height'][0]['value']) ? $data['field_height'][0]['value'] : '',
+        'field_medical_eligibility' => $data["field_medical_eligibility"][0]["value"],
+        'field_medical_eligibility_choice' => !empty($data['field_medical_eligibility_choice'][0]['value']) ? $data['field_medical_eligibility_choice'][0]['value'] : '',
+        'field_history_eating_disorder' => !empty($data['field_history_eating_disorder']) ? $data['field_history_eating_disorder'] : '',
+        'field_history_bariatric_surgery' => !empty($data['field_history_bariatric_surgery']) ? $data['field_history_bariatric_surgery'] : '',
+        'field_surgery_weight_loss' => !empty($data['field_surgery_weight_loss'][0]['value']) ? $data['field_surgery_weight_loss'][0]['value'] : '',
+        'field_surgery_weight_gain' => !empty($data['field_surgery_weight_gain'][0]['value']) ? $data['field_surgery_weight_gain'][0]['value'] : '',
+        'field_gall_bladder' => $data["field_gall_bladder"][0]["value"],
+        'field_diabetes' => $data["field_diabetes"][0]["value"],
+        'year_diagnosed' => !empty($data['field_diabetes_diagnosis_year'][0]['value']) ? $data['field_diabetes_diagnosis_year'][0]['value'] : '',
+        'diabetes_medications' =>  !empty($data['field_diabetes_medications'][0]['value']) ? $data['field_diabetes_medications'][0]['value'] : '',
+        'field_high_blood_pressure' => $data["field_high_blood_pressure"][0]["value"],
+        'field_bp_diagnosis_year' =>!empty($data['field_bp_diagnosis_year'][0]['value']) ? $data['field_bp_diagnosis_year'][0]['value'] : '',
+        'field_thyroid_condition' =>  $data["field_thyroid_condition"][0]["value"],
+        'field_thyroid_diagnosis_year' => !empty($data['field_thyroid_diagnosis_year'][0]['value']) ? $data['field_thyroid_diagnosis_year'][0]['value'] : '',
+        'field_blood_pressure_medications' => !empty($data['field_blood_pressure_medications']) ? $data['field_blood_pressure_medications'] : '',
+        'field_thyroid_medications' => !empty($data['field_thyroid_medications']) ? $data['field_thyroid_medications'] : '',
+        'field_high_cholesterol' =>  $data["field_high_cholesterol"][0]["value"],
+        'field_cholesterol_diagnosis_year' => !empty($data['field_cholesterol_diagnosis_year'][0]['value']) ? $data['field_cholesterol_diagnosis_year'][0]['value'] : '',
+        'field_cholesterol_medications' => !empty($data['field_cholesterol_medications']) ? $data['field_cholesterol_medications'] : '',
+        'field_medical_symptoms' => !empty($data['field_medical_symptoms']) ? $data['field_medical_symptoms'] : '',
+        'field_other_symptoms' => !empty($data['field_other_symptoms']) ? $data['field_other_symptoms'] : '',
+        'field_medications' => !empty($data['field_medications']) ? $data['field_medications'] : '',
+        'field_health_challenge' => !empty($data['field_health_challenge'][0]['value']) ? $data['field_health_challenge'][0]['value'] : '',
+        'field_emotional_eater' => $data["field_emotional_eater"][0]["value"],
+        'field_cravings' => !empty($data['field_cravings']) ? $data['field_cravings'] : '',
+        'field_stressors' => !empty($data['field_stressors']) ? $data['field_stressors'] : '',
+        'significant_emotional_trauma_' => $significant_emotional_trauma_,
+        'field_agreement' => $data["field_agreement"][0]["value"],
+        'field_program_agreement' => $data["field_program_agreement"][0]["value"],
+        //'field_media_release_agreement' => $data["field_media_release_agreement"][0]["value"],
+        'field_consent_consumption' => $data["field_consent_consumption"][0]["value"],
+        'media_consent' => !empty($data['field_media_release_disagree'][0]['value']) ? $data['field_media_release_disagree'][0]['value'] : '',
+        'field_consent' => $data["field_consent"][0]["value"],
+        'clinic' => !empty($clinic_id) ? $clinic_id : array(),
+        ],
+        ];
+        $webform_submission = WebformSubmission::create($values);
+        $webform_submission->setCreatedTime($data['created']); 
+        $webform_submission->setChangedTime($data['changed']);
+        $webform_submission->set('completed', $data['created']); 
+        $webform_submission->save();
+}
+
+function ultraslim_profile($row_source){
+     $data = $row_source;
+     if(!empty($data["field_subcutaneous_fat"])){
+        $subcutaneous_tids = array_column($data['field_subcutaneous_fat'], 'tid');
+     }
+      if(!empty($data["field_skin_tightening"])){
+        $skin_tids = array_column($data['field_skin_tightening'], 'tid');
+     }
+    if(!empty($data["field_cellulite"])){
+        $cellulite_tids = array_column($data['field_cellulite'], 'tid');
+     }
+     if(!empty($data["field_treatment_protocol"])){
+           $treatment_tids = array_column($data['field_treatment_protocol'], 'tid');
+     }
+     if(!empty($data['field_before_and_after_photos'])){
+           $field_before_and_after_photos = array_column($data['field_before_and_after_photos'], 'fid');
+     }else{
+            $field_before_and_after_photos = $data['field_before_and_after_photos'];
+     }
+        $webform_id = 'ultraslim_session';
+        $webform = Webform::load($webform_id);
+        // Create webform submission.
+        $values = [
+        'webform_id' => $webform->id(),
+        'uid'=> $data['uid'],
+        'sid' => $data["entityform_id"],
+        'data' => [
+        'patient_profile' => !empty($data['field_patient_profile']) ? $data['field_patient_profile'][0]['target_id'] : '',
+        'date' => !empty($data['field_date']) ? $data['field_date'][0]['value'] : '',
+        'weight' => !empty($data['field_weight']) ? $data['field_weight'][0]['value'] : '',
+        'blood_pressure' => !empty($data['field_blood_pressure']) ? $data['field_blood_pressure'][0]['value'] : '',
+        'treatment_type_' => !empty($data['field_treatment_protocol']) ? $treatment_tids : '',
+        'subcutaneous_fat' => !empty($data['field_subcutaneous_fat']) ? $subcutaneous_tids : '',
+        'skin_tightening' => !empty($data['field_skin_tightening']) ? $skin_tids : '',
+        'cellulite' => !empty($data['field_cellulite']) ? $cellulite_tids : '',
+        'notes' => !empty($data['field_notes']) ? $data['field_notes'][0]['value'] : '',
+        'before_and_after_photos' => !empty($data['field_before_and_after_photos']) ? $field_before_and_after_photos : '',
+        'show_all_measurements' => !empty($data['field_all_measurements']) ? $data['field_all_measurements'][0]['value'] : '',
+        'neck' => !empty($data['field_neck']) ? $data['field_neck'][0]['value'] : '',
+        'arm_left_bicep' => !empty($data['field_arm_left_bicep']) ? $data['field_arm_left_bicep'][0]['value'] : '',
+        'arm_right_bicep' => !empty($data['field_arm_right_bicep']) ? $data['field_arm_right_bicep'][0]['value'] : '',
+        'back_bra_line' => !empty($data['field_back_bra_line']) ? $data['field_back_bra_line'][0]['value'] : '',
+        'abdomen' => !empty($data['field_abdomen']) ? $data['field_abdomen'][0]['value'] : '',
+        'hips' => !empty($data['field_hips']) ? $data['field_hips'][0]['value'] : '',
+        'buttocks' => !empty($data['field_buttocks']) ? $data['field_buttocks'][0]['value'] : '',
+        'thigh_left' => !empty($data['field_thigh_left']) ? $data['field_thigh_left'][0]['value'] : '',
+        'thigh_right' => !empty($data['field_thigh_right']) ? $data['field_thigh_right'][0]['value'] : '',
+        'waist_buster_zone_1' => !empty($data['field_waistbuster_zone_1']) ? $data['field_waistbuster_zone_1'][0]['value'] : '',
+        'waist_buster_zone_2' => !empty($data['field_waistbuster_zone_2']) ? $data['field_waistbuster_zone_2'][0]['value'] : '',
+        'waist_buster_zone_3' => !empty($data['field_waistbuster_zone_3']) ? $data['field_waistbuster_zone_3'][0]['value'] : '',
+        'waist_buster_zone_4' => !empty($data['field_waistbuster_zone_4']) ? $data['field_waistbuster_zone_4'][0]['value'] : '',
+        'waist_buster_zone_5_male_' => !empty($data['field_waistbuster_zone_5']) ? $data['field_waistbuster_zone_5'][0]['value'] : '',
+        'waist_buster_zone_6_female_right_thigh_' => !empty($data['field_waistbuster_zone_6']) ? $data['field_waistbuster_zone_6'][0]['value'] : '',
+        'waist_buster_zone_6_female_left_thigh_' => !empty($data['field_waist_buster_zone_6l']) ? $data['field_waist_buster_zone_6l'][0]['value'] : '',
+        'visceral_fat_zone_1' => !empty($data['field_visceral_fat_zone_1']) ? $data['field_visceral_fat_zone_1'][0]['value'] : '',
+        'visceral_fat_zone_2' => !empty($data['field_visceral_fat_zone_2']) ? $data['field_visceral_fat_zone_2'][0]['value'] : '',
+        'visceral_fat_zone_3' => !empty($data['field_visceral_fat_zone_3']) ? $data['field_visceral_fat_zone_3'][0]['value'] : '',
+        'visceral_fat_zone_4' => !empty($data['field_visceral_fat_zone_4']) ? $data['field_visceral_fat_zone_4'][0]['value'] : '',
+        'visceral_fat_zone_5' => !empty($data['field_visceral_fat_zone_5']) ? $data['field_visceral_fat_zone_5'][0]['value'] : '',
+        'visceral_fat_zone_6_female_' => !empty($data['field_visceral_fat_zone_6']) ? $data['field_visceral_fat_zone_6'][0]['value'] : '',
+        'waistbuster_protocol' => !empty($data['field_waistbuster_protocol']) ? $data['field_waistbuster_protocol'][0]['value'] : '',
+        'visceral_fat_protocol' => !empty($data['field_visceral_fat_protocol']) ? $data['field_visceral_fat_protocol'][0]['value'] : '',
+        'subcutaneous_fat_protocol' => !empty($data['field_subcutaneous_fat_protocol']) ? $data['field_subcutaneous_fat_protocol'][0]['value'] : '',
+        'skin_tightening_protocol' => !empty($data['field_skin_tightening_protocol']) ? $data['field_skin_tightening_protocol'][0]['value'] : '',
+        'cellulite_protocol' => !empty($data['field_cellulite_protocol']) ? $data['field_cellulite_protocol'][0]['value'] : '',
+        'facial_rejuvenation_protocol' => !empty($data['field_facial_rejuvenation_protoc']) ? $data['field_facial_rejuvenation_protoc'][0]['value'] : '',
+        ],
+        ];
+        $webform_submission = WebformSubmission::create($values);
+        $webform_submission->setCreatedTime($data['created']); 
+        $webform_submission->setChangedTime($data['changed']);
+        $webform_submission->set('completed', $data['created']); 
+        $webform_submission->save();
+}
+
+function lipolight_profile($row_source){
+     $data = $row_source;
+    if(!empty($data["field_treatment_area"])){
+        $treatment_area_tids = array_column($data['field_treatment_area'], 'tid');
+     }
+     if(!empty($data['field_before_and_after_photos'])){
+           $field_before_and_after_photos = array_column($data['field_before_and_after_photos'], 'fid');
+     }else{
+            $field_before_and_after_photos = $data['field_before_and_after_photos'];
+     }
+
+        $webform_id = 'lipolight_session';
+        $webform = Webform::load($webform_id);
+ 
+        // Create webform submission.
+        $values = [
+        'webform_id' => $webform->id(),
+        'uid'=> $data['uid'],
+        'sid' => $data["entityform_id"],
+        'data' => [
+        'patient_profile' => !empty($data['field_patient_profile']) ? $data['field_patient_profile'][0]['target_id'] : '',
+        'date' => $data["field_date"][0]["value"],
+        'weight' => !empty($data['field_weight']) ? $data['field_weight'][0]['value'] : '',
+        'blood_pressure' => !empty($data['field_blood_pressure']) ? $data['field_blood_pressure'][0]['value'] : '',
+        'treatment_area' => !empty($data['field_treatment_area']) ? $treatment_area_tids : '',
+        'field_notes' => !empty($data['field_notes']) ? $data['field_notes'][0]['value'] : '',
+        'before_and_after_photos' => !empty($data['field_before_and_after_photos']) ? $field_before_and_after_photos : '',
+        'neck' => !empty($data['field_neck']) ? $data['field_neck'][0]['value'] : '',
+        'shoulders' => !empty($data['field_shoulders']) ? $data['field_shoulders'][0]['value'] : '',
+        'arm_left_bicep' => !empty($data['field_arm_left_bicep']) ? $data['field_arm_left_bicep'][0]['value'] : '',
+        'arm_right_bicep' => !empty($data['field_arm_right_bicep']) ? $data['field_arm_right_bicep'][0]['value'] : '',
+        'chest' => !empty($data['field_chest']) ? $data['field_chest'][0]['value'] : '',
+        'back_bra_line' => !empty($data['field_back_bra_line']) ? $data['field_back_bra_line'][0]['value'] : '',
+        'above_umbilicus' => !empty($data['field_above_umbilicus']) ? $data['field_above_umbilicus'][0]['value'] : '',
+        'below_umbilicus' => !empty($data['field_below_umbilicus']) ? $data['field_below_umbilicus'][0]['value'] : '',
+        'abdomen' => !empty($data['field_abdomen']) ? $data['field_abdomen'][0]['value'] : '',
+        'hips' => !empty($data['field_hips']) ? $data['field_hips'][0]['value'] : '',
+        'thigh_left' => !empty($data['field_thigh_left']) ? $data['field_thigh_left'][0]['value'] : '',
+        'thigh_right' => !empty($data['field_thigh_right']) ? $data['field_thigh_right'][0]['value'] : '',
+        'calf_left' => !empty($data['field_calf_left']) ? $data['field_calf_left'][0]['value'] : '',
+        'calf_right' => !empty($data['field_calf_right']) ? $data['field_calf_right'][0]['value'] : '',
+        ],
+        ];
+        $webform_submission = WebformSubmission::create($values);
+        $webform_submission->setCreatedTime($data['created']); 
+        $webform_submission->setChangedTime($data['changed']);
+        $webform_submission->set('completed', $data['created']); 
+        $webform_submission->save();
+}
+
+function zerona_profile($row_source){
+        $data = $row_source;
+        if(!empty($data["field_treatment_area"])){
+            $treatment_area_tids = array_column($data['field_treatment_area'], 'tid');
+         }
+         if(!empty($data['field_before_and_after_photos'])){
+               $field_before_and_after_photos = array_column($data['field_before_and_after_photos'], 'fid');
+         }else{
+                $field_before_and_after_photos = $data['field_before_and_after_photos'];
+         }
+        $webform_id = 'zerona_session';
+        $webform = Webform::load($webform_id);
+ 
+        // Create webform submission.
+        $values = [
+        'webform_id' => $webform->id(),
+        'uid'=> $data['uid'],
+        'sid' => $data["entityform_id"],
+        'data' => [
+        'patient_profile' => !empty($data['field_patient_profile']) ? $data['field_patient_profile'][0]['target_id'] : '',
+        'date' => $data["field_date"][0]["value"],
+        'weight' => !empty($data['field_weight']) ? $data['field_weight'][0]['value'] : '',
+        'blood_pressure' => !empty($data['field_blood_pressure']) ? $data['field_blood_pressure'][0]['value'] : '',
+        'treatment_area' => !empty($data['field_treatment_area']) ? $treatment_area_tids : '',
+        'field_notes' => !empty($data['field_notes']) ? $data['field_notes'][0]['value'] : '',
+        'before_and_after_photos' => !empty($data['field_before_and_after_photos']) ? $field_before_and_after_photos : '',
+        'neck' => !empty($data['field_neck']) ? $data['field_neck'][0]['value'] : '',
+        'shoulders' => !empty($data['field_shoulders']) ? $data['field_shoulders'][0]['value'] : '',
+        'arm_left_bicep' => !empty($data['field_arm_left_bicep']) ? $data['field_arm_left_bicep'][0]['value'] : '',
+        'arm_right_bicep' => !empty($data['field_arm_right_bicep']) ? $data['field_arm_right_bicep'][0]['value'] : '',
+        'chest' => !empty($data['field_chest']) ? $data['field_chest'][0]['value'] : '',
+        'back_bra_line' => !empty($data['field_back_bra_line']) ? $data['field_back_bra_line'][0]['value'] : '',
+        'above_umbilicus' => !empty($data['field_above_umbilicus']) ? $data['field_above_umbilicus'][0]['value'] : '',
+        'below_umbilicus' => !empty($data['field_below_umbilicus']) ? $data['field_below_umbilicus'][0]['value'] : '',
+        'abdomen' => !empty($data['field_abdomen']) ? $data['field_abdomen'][0]['value'] : '',
+        'hips' => !empty($data['field_hips']) ? $data['field_hips'][0]['value'] : '',
+        'thigh_left' => !empty($data['field_thigh_left']) ? $data['field_thigh_left'][0]['value'] : '',
+        'thigh_right' => !empty($data['field_thigh_right']) ? $data['field_thigh_right'][0]['value'] : '',
+        'calf_left' => !empty($data['field_calf_left']) ? $data['field_calf_left'][0]['value'] : '',
+        'calf_right' => !empty($data['field_calf_right']) ? $data['field_calf_right'][0]['value'] : '',
+        ],
+        ];
+        $webform_submission = WebformSubmission::create($values);
+        $webform_submission->setCreatedTime($data['created']); 
+        $webform_submission->setChangedTime($data['changed']);
+        $webform_submission->set('completed', $data['created']); 
+        $webform_submission->save();
+}
+
+function message($row_source){
+            $data = $row_source;
+            $field_message = $data["field_message"][0]["value"];
+            $message_id = 'message';
+            $message_webform = Webform::load($message_id);
+            $message_value = [
+                'value' => $field_message,
+                'format' => $data["field_message"][0]['format'] ?? 'filtered_html'
+            ];
+            // Create webform submission.
+            $values = [
+            'webform_id' => $message_webform->id(),
+            'uid'=> $data['uid'],
+            //'sid' => $data["entityform_id"],
+            'data' => [
+            'field_from' => $data["field_from"][0]['target_id'],
+            'field_to' => $data["field_to"][0]['target_id'],
+            'field_message' => $message_value,
+            'attachments' => "",
+            'field_patient_uid' => $data["field_patient_uid"][0]['value'],
+            'field_timestamp' => $data["field_timestamp"][0]['value'],
+               ],
+            ];
+            $message_webform_submission = WebformSubmission::create($values);
+            $message_webform_submission->setCreatedTime($data['created']); 
+            $message_webform_submission->setChangedTime($data['changed']);
+            $message_webform_submission->set('completed', $data['created']); 
+            $message_webform_submission->save();
+
+}
+
+function log_your_progress($row_source){
+            $data = $row_source;
+            $webform_id = 'tracking_weight';
+            $webform = Webform::load($webform_id);
+
+
+              if(!empty($data["field_flags"])){
+                    $flags_tids = array_column($data['field_flags'], 'tid');
+                 }
+               if(!empty($data["field_chiropractor_flags"])){
+                    $chiropractor_flags_tids = array_column($data['field_chiropractor_flags'], 'tid');
+                 }   
+                  if(!empty($data["field_lunch_vegetables"])){
+                    $lunch_vegetables_tids = array_column($data['field_lunch_vegetables'], 'tid');
+                 }   
+                   if(!empty($data["field_dinner_vegetables_free"])){
+                    $dinner_vegetables_free_tids = array_column($data['field_dinner_vegetables_free'], 'tid');
+                 }
+                     if(!empty($data["field_lunch_vegetables_free"])){
+                    $lunch_vegetables_free_tids = array_column($data['field_lunch_vegetables_free'], 'tid');
+                 }  
+
+                  if(!empty($data["field_dinner_vegetables"])){
+                    $dinner_vegetables_tids = array_column($data['field_dinner_vegetables'], 'tid');
+                 } 
+
+                $field_lunch_other = $data['field_lunch_other'] ?? [];
+                $data['field_lunch_other'] = array_map(function ($item) {
+                return $item['value'] ?? '';
+                }, $field_lunch_other);
+
+                $field_dinner_other = $data['field_dinner_other'] ?? [];
+                $data['field_dinner_other'] = array_map(function ($item) {
+                return $item['value'] ?? '';
+                }, $field_dinner_other);
+
+                $field_other_food = $data['field_other_food'] ?? [];
+                $data['field_other_food'] = array_map(function ($item) {
+                return $item['value'] ?? '';
+                }, $field_other_food);
+
+              if(!empty($data["field_lunch_fruit_sel"])){
+                    $lunch_fruit_sel_tids = array_column($data['field_lunch_fruit_sel'], 'tid');
+                 } 
+
+                if(!empty($data["field_dinner_fruit_sel"])){
+                    $dinner_fruit_sel_tids = array_column($data['field_dinner_fruit_sel'], 'tid');
+                 } 
+                if(!empty($data["field_breakfast_fruit_sel"])){
+                    $breakfast_fruit_sel_tids = array_column($data['field_breakfast_fruit_sel'], 'tid');
+                 } 
+
+                $field_breakfast_other = $data['field_breakfast_other'] ?? [];
+                $data['field_breakfast_other'] = array_map(function ($item) {
+                return $item['value'] ?? '';
+                }, $field_breakfast_other); 
+
+                $field_aggr = $data['field_aggr'] ?? [];
+                $data['field_aggr'] = array_map(function ($item) {
+                return $item['value'] ?? '';
+                }, $field_aggr); 
+
+            // Create webform submission.
+            $values = [
+            'webform_id' => $webform->id(),
+            'uid'=> $data['uid'],
+            'sid' => $data["entityform_id"],
+              'data' => [
+                  'field_date' => !empty($data["field_date"]) ? $data["field_date"][0]['value'] : '',
+                  'field_weight' => !empty($data["field_weight"]) ? $data["field_weight"][0]['value'] : '',
+                  'field_blood_sugar' => !empty($data["field_blood_sugar"]) ? $data["field_blood_sugar"][0]['value'] : '',
+                  'field_blood_pressure' => !empty($data["field_blood_pressure"]) ? $data["field_blood_pressure"][0]['value'] : '',
+                  'field_notes' => !empty($data["field_notes"]) ? $data["field_notes"][0]['value'] : '',
+                  'field_question' => !empty($data["field_question"]) ? array('value' => $data["field_question"][0]['value'], 'format' => 'webform_default') : '',
+                  'field_flags' => !empty($data["field_flags"]) ? $flags_tids : '',
+                  'field_chiropractor_flags' => !empty($data["field_chiropractor_flags"]) ? $chiropractor_flags_tids : '',
+                  'field_grade' => !empty($data["field_grade"]) ? $data["field_grade"][0]['value'] : '',
+                  'field_archive' => !empty($data["field_archive"]) ? $data["field_archive"][0]['value'] : '',
+                  'field_water_intake' => !empty($data["field_water_intake"]) ? $data["field_water_intake"][0]['value'] : '',
+                  'field_lunch_protein' => !empty($data["field_lunch_protein"]) ? $data["field_lunch_protein"][0]['tid'] : '',
+                  'field_lunch_vegetables' => !empty($data["field_lunch_vegetables"]) ? $lunch_vegetables_tids : '',
+                  'field_lunch_fruit' => !empty($data["field_lunch_fruit"]) ? $data["field_lunch_fruit"][0]['value'] : '',
+                  'field_lunch_bread' => !empty($data["field_lunch_bread"]) ? $data["field_lunch_bread"][0]['tid'] : '',
+                  'field_dinner_protein' => !empty($data["field_dinner_protein"]) ? $data["field_dinner_protein"][0]['tid'] : '',
+                  'field_lunch_vegetables_free' => !empty($data["field_lunch_vegetables_free"]) ? $lunch_vegetables_free_tids : '',
+                  'field_dinner_vegetables' => !empty($data["field_dinner_vegetables"]) ? $dinner_vegetables_tids : '',
+                  'field_dinner_fruit' => !empty($data["field_dinner_fruit"]) ? $data["field_dinner_fruit"][0]['value'] : '',
+                  'dinner_bread' => !empty($data["field_dinner_bread"]) ? $data["field_dinner_bread"][0]['tid'] : '',
+                  'field_lunch_other' => !empty($data["field_lunch_other"]) ? $data["field_lunch_other"] : '',
+                  'field_dinner_other' => !empty($data["field_dinner_other"]) ? $data["field_dinner_other"] : '',
+                  'field_dinner_vegetables_free' => !empty($data["field_dinner_vegetables_free"]) ? $dinner_vegetables_free_tids : '',
+                  'field_other_food' => !empty($data["field_other_food"]) ? $data["field_other_food"] : '',
+                  'field_lunch_fruit_sel' => !empty($data["field_lunch_fruit_sel"]) ? $lunch_fruit_sel_tids : '',
+                  'field_dinner_fruit_sel' => !empty($data["field_dinner_fruit_sel"]) ? $dinner_fruit_sel_tids : '',
+                  'field_breakfast_protein' => !empty($data["field_breakfast_protein"]) ? $data["field_breakfast_protein"][0]['tid'] : '',
+                  'field_breakfast_fruit_sel' => !empty($data["field_breakfast_fruit_sel"]) ? $breakfast_fruit_sel_tids : '',
+                  'current_phase' => !empty($data["field_current_phase"]) ? $data["field_current_phase"][0]['value'] : '',
+                  'field_breakfast_other' => !empty($data["field_breakfast_other"]) ? $data["field_breakfast_other"] : '',
+                  'field_sleep_hours' => !empty($data["field_sleep_hours"]) ? $data["field_sleep_hours"][0]['value'] : '',
+                  'field_mind_set_work' => !empty($data["field_mind_set_work"]) ? $data["field_mind_set_work"][0]['value'] : '',
+                  'field_neck' => !empty($data["field_neck"]) ? $data["field_neck"][0]['value'] : '',
+                  'field_shoulders' => !empty($data["field_shoulders"]) ? $data["field_shoulders"][0]['value'] : '',
+                  'field_chest' => !empty($data["field_chest"]) ? $data["field_chest"][0]['value'] : '',
+                  'field_arm_left_bicep' => !empty($data["field_arm_left_bicep"]) ? $data["field_arm_left_bicep"][0]['value'] : '',
+                  'field_arm_right_bicep' => !empty($data["field_arm_right_bicep"]) ? $data["field_arm_right_bicep"][0]['value'] : '',
+                  'field_abdomen' => !empty($data["field_abdomen"]) ? $data["field_abdomen"][0]['value'] : '',
+                  'field_hips' => !empty($data["field_hips"]) ? $data["field_hips"][0]['value'] : '',
+                  'field_thigh_left' => !empty($data["field_thigh_left"]) ? $data["field_thigh_left"][0]['value'] : '',
+                  'field_thigh_right' => !empty($data["field_thigh_right"]) ? $data["field_thigh_right"][0]['value'] : '',
+                  'field_calf_left' => !empty($data["field_calf_left"]) ? $data["field_calf_left"][0]['value'] : '',
+                  'field_calf_right' => !empty($data["field_calf_right"]) ? $data["field_calf_right"][0]['value'] : '',
+                  'field_chiroburst_bend' => !empty($data["field_chiroburst_bend"]) ? $data["field_chiroburst_bend"][0]['value'] : '',
+                  'field_aggr' => !empty($data["field_aggr"]) ? $data["field_aggr"] : '',
+                  'field_total_measurements' => !empty($data["field_total_measurements"]) ? $data["field_total_measurements"][0]['value'] : '',
+                  'field_program_day' => !empty($data["field_program_day"]) ? $data["field_program_day"][0]['value'] : '',
+                  'field_weight_loss_to_date' => !empty($data["field_weight_loss_to_date"]) ? $data["field_weight_loss_to_date"][0]['value'] : '',
+                  'field_program_day_computed' => !empty($data["field_program_day_computed"]) ? $data["field_program_day_computed"][0]['value'] : '',
+                  'field_weight_loss_computed' => !empty($data["field_weight_loss_computed"]) ? $data["field_weight_loss_computed"][0]['value'] : '',
+              ],
+            ];
+           //\Drupal::logger('chirothintracker')->notice('Values: <pre>' . print_r($values, TRUE) . '</pre>');
+            $webform_submission = WebformSubmission::create($values);
+            $webform_submission->setCreatedTime($data['created']); 
+            $webform_submission->setChangedTime($data['changed']);
+            $webform_submission->set('completed', $data['created']); 
+            $webform_submission->save();
+
+}
+
+
+
+function getClinicFromDomain($domain_id){
+        $module_path = \Drupal::service('extension.list.module')->getPath('chirothintracker_custom');
+        $domains_file_path = $module_path . '/src/Controller/all_domains.json';
+        $domains_json = file_get_contents($domains_file_path);
+        $domains_data = json_decode($domains_json, true);
+        $site_name = "";
+        foreach ($domains_data as $key => $value) {
+             if($value["Domain ID"] == $domain_id){
+                $site_name = $value["Site name"];
+             }
+        }
+            $replacements = [
+              'Drs. Ed & Sandie McCuiston' => 'Drs. Ed & Dr. Sandie McCuiston',
+              'Durrum Chiropractic' => 'Dr. Courtney Durrum',
+              'Ascend Aesthetic' => 'Ascend Aesthetics',
+              'Back2Back Chiropractic' => 'Back 2 Back Chiropractic',
+              'Beverly Hills Disc & Laser Therapy Center, INC' => 'Beverly Hills Disc & Laser Therapy Center, INC.',
+              'Chiropractic and Wellness Care' => 'Chiropractic & Wellness Care',
+              'ChiroThinTracker.com' => 'ChiroThinTracker.com Training Site',
+              'Inspire Weight Loss' => 'Inspire Weight Loss & Health Coaching℠',
+              'Iv Parlour' => 'IV Parlour',
+              'Leading Edge Chiropractic' => 'ChiroThin Corporate',
+              'Sydney Chiropractic and Weight Loss' => 'ChiroThin Corporate',
+              "DENTON & SANGER WELLNES CENTER" => "Sanger Wellness Center"
+              ];
+              if (array_key_exists($site_name, $replacements)) {
+              $value = $replacements[$site_name];
+              }else{
+              $value = $site_name;
+              }
+              $storage = \Drupal::entityTypeManager()->getStorage('clinic');
+              $query = $storage->getQuery();
+              $ids = $query
+              ->condition('title', $value)
+              ->accessCheck(false)
+              ->execute();                       
+              // if($ids){
+              //     foreach ($ids as $id) {
+              //     $referenced_ids[] = ['target_id' => $id];
+              //     }
+              // }
+              return $ids;
+
+}

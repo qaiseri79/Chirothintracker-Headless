@@ -1,0 +1,16 @@
+headless_subscriptions.settings:
+  type: config_object
+  label: Portal subscription settings
+  mapping:
+    checkout_enabled:
+      type: boolean
+      label: Enable subscription payments
+    registration_enabled:
+      type: boolean
+      label: Enable doctor registration
+    grace_days:
+      type: integer
+      label: Renewal failure grace days
+    cart_ttl:
+      type: integer
+      label: Subscription cart lifetime in seconds

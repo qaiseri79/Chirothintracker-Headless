@@ -1,0 +1,11 @@
+download_file.download_file_path:
+  path: '/download/file/{file}'
+  defaults:
+    _controller: '\Drupal\download_file\Controller\DownloadFileController::downloadFileDirectDownload'
+    _title: 'Direct File Download'
+  requirements:
+    _custom_access: '\Drupal\download_file\Controller\DownloadFileController::access'
+  options:
+    parameters:
+      file:
+        type: entity:file

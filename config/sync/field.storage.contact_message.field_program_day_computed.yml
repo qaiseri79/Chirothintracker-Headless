@@ -1,0 +1,20 @@
+uuid: 208493e4-4eb8-4d2b-b059-3b7cef9780cf
+langcode: en
+status: true
+dependencies:
+  module:
+    - contact
+id: contact_message.field_program_day_computed
+field_name: field_program_day_computed
+entity_type: contact_message
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

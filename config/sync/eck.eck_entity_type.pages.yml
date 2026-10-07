@@ -1,0 +1,11 @@
+uuid: 5a1f25fa-a0fb-4395-a3fb-4f922d9abeae
+langcode: en
+status: null
+dependencies: {  }
+id: pages
+label: Pages
+uid: false
+created: true
+changed: true
+title: true
+standalone_url: true

@@ -1,0 +1,21 @@
+uuid: 9ad76cbf-b81a-4a94-b100-985b39b79d32
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_aggr
+  module:
+    - options
+id: contact_message.tracking_weight.field_aggr
+field_name: field_aggr
+entity_type: contact_message
+bundle: tracking_weight
+label: AGGR
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,14 @@
+uuid: 4cc10b79-74d8-450e-bade-f6fac980098b
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.patient_chirothin
+  module:
+    - user
+id: user_remove_role_action.patient_chirothin
+label: 'Remove the Patient - ChiroThin role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: patient_chirothin

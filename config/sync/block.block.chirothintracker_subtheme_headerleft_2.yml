@@ -1,0 +1,31 @@
+uuid: 9e1827ea-8312-4198-bb1e-0f97fc8cdaff
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.menu-header-left
+  module:
+    - system
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_headerleft_2
+theme: chirothintracker_subtheme
+region: sidebar_menu
+weight: -17
+provider: null
+plugin: 'system_menu_block:menu-header-left'
+settings:
+  id: 'system_menu_block:menu-header-left'
+  label: 'Header Left'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  response_status:
+    id: response_status
+    negate: false
+    status_codes:
+      - 200
+      - 403

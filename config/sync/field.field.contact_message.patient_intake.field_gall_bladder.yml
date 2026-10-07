@@ -1,0 +1,23 @@
+uuid: af64144d-025c-402b-8245-22d5ad16b914
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_gall_bladder
+  module:
+    - options
+id: contact_message.patient_intake.field_gall_bladder
+field_name: field_gall_bladder
+entity_type: contact_message
+bundle: patient_intake
+label: 'Have you had your gall bladder removed?'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: '0'
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,24 @@
+uuid: c8909129-34d2-493e-bbb4-afe5f2f9e1a8
+langcode: en
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+    - user
+third_party_settings:
+  field_permissions:
+    permission_type: custom
+id: contact_message.field_author
+field_name: field_author
+entity_type: contact_message
+type: entity_reference
+settings:
+  target_type: user
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

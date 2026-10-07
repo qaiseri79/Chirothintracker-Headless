@@ -1,0 +1,21 @@
+uuid: c9046f13-61ed-4920-8464-992b6c6f11a0
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_facial_rejuvenation_protoc
+id: contact_message.ultraslim_profile.field_facial_rejuvenation_protoc
+field_name: field_facial_rejuvenation_protoc
+entity_type: contact_message
+bundle: ultraslim_profile
+label: 'Facial Rejuvenation Protocol'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: "Face, Neck, and Chin (all at once)\r\nDistance: 6 inches\r\nTime: 20 minutes, 2 sides (total 40 minutes)"
+default_value_callback: ''
+settings: {  }
+field_type: string_long

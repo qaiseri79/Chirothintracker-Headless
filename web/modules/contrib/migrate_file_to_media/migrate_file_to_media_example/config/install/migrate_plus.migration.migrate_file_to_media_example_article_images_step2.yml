@@ -1,0 +1,41 @@
+# This migration links the newly created media entities with entity reference field on the target bundle.
+
+id: migrate_file_to_media_example_article_images_step2
+label: Article Images Mapping
+migration_group: media
+source:
+  plugin: content_entity:node
+  bundle: article
+  include_revisions: false
+  include_translations: true
+  fields_not_empty:
+    - field_image
+    - field_image2
+
+destination:
+  plugin: entity:node
+  translations: true
+
+process:
+  nid: nid
+
+  type:
+    plugin: default_value
+    default_value: article
+
+  field_image_media:
+    plugin: file_id_lookup
+    source: field_image
+    migration: migrate_file_to_media_example_article_images_step1
+    no_stub: true
+  field_image2_media:
+    plugin: file_id_lookup
+    source: field_image2
+    migration: migrate_file_to_media_example_article_images_step1
+    no_stub: true
+
+  langcode: langcode
+
+migration_dependencies:
+  optional:
+  - migrate_file_to_media_example_article_images_step1

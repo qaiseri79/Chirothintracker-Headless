@@ -1,0 +1,23 @@
+uuid: fed47f37-dd32-428a-aaa2-89c0adcc4c71
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_consent_consumption
+id: contact_message.patient_intake.field_consent_consumption
+field_name: field_consent_consumption
+entity_type: contact_message
+bundle: patient_intake
+label: 'I Agree'
+description: 'By checking this box, I agree to the Informed Consent and Release of Liability.'
+required: true
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: ''
+  off_label: ''
+field_type: boolean

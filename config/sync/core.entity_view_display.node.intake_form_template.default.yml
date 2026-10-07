@@ -1,0 +1,29 @@
+uuid: ab0e2a02-d5e0-49b1-adc7-29f063f28f79
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.intake_form_template.body
+    - node.type.intake_form_template
+  module:
+    - text
+    - user
+id: node.intake_form_template.default
+targetEntityType: node
+bundle: intake_form_template
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  private_message_link: true

@@ -1,0 +1,32 @@
+uuid: c735862a-3be3-43db-a743-9f2094ae0e64
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_class
+    - custom_module
+    - user
+  theme:
+    - olivero
+third_party_settings:
+  block_class:
+    classes: container
+id: olivero_intakeformlinkcustomblock
+theme: olivero
+region: hero
+weight: -20
+provider: null
+plugin: intake_form_link_block
+settings:
+  id: intake_form_link_block
+  label: 'Intake Form Link (Custom Block))'
+  label_display: '0'
+  provider: custom_module
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      chiropractor_active_: chiropractor_active_

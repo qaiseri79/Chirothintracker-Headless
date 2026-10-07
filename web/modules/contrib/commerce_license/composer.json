@@ -1,0 +1,24 @@
+{
+  "name": "drupal/commerce_license",
+  "type": "drupal-module",
+  "description": "License entities and product behavior",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0-or-later",
+  "homepage": "https://www.drupal.org/project/commerce_license",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/commerce_license",
+    "source": "https://cgit.drupalcode.org/commerce_license"
+  },
+  "require": {
+    "drupal/advancedqueue": "^1.0",
+    "drupal/commerce": "^2.32 || ^3",
+    "drupal/interval": "^1.11"
+  },
+  "require-dev": {
+    "drupal/commerce_recurring": "^1.0@RC"
+  },
+    "conflict": {
+        "drupal/recurring_period": "1.*"
+    }
+}

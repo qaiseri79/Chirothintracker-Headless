@@ -1,0 +1,29 @@
+uuid: f809fe57-a255-4a21-8017-8e9b346af8a6
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.chiropractor_notes
+    - field.storage.contact_message.field_date
+  module:
+    - datetime
+    - disable_field
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: contact_message.chiropractor_notes.field_date
+field_name: field_date
+entity_type: contact_message
+bundle: chiropractor_notes
+label: Date
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    default_date_type: now
+    default_date: now
+default_value_callback: ''
+settings: {  }
+field_type: datetime

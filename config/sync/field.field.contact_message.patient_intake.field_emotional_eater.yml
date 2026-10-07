@@ -1,0 +1,23 @@
+uuid: 3a984158-40aa-420f-913f-469237cbae6d
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_emotional_eater
+  module:
+    - options
+id: contact_message.patient_intake.field_emotional_eater
+field_name: field_emotional_eater
+entity_type: contact_message
+bundle: patient_intake
+label: 'Would you say you are an "Emotional Eater?"'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: '0'
+default_value_callback: ''
+settings: {  }
+field_type: list_string

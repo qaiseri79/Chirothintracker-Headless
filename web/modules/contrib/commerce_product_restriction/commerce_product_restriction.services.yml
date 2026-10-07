@@ -1,0 +1,13 @@
+services:
+  plugin.manager.product_restriction:
+    class: Drupal\commerce_product_restriction\Plugin\ProductRestrictionPluginManager
+    parent: default_plugin_manager
+  commerce_product_restriction.availability_checker:
+    class: Drupal\commerce_product_restriction\AvailabilityChecker
+    arguments: ["@commerce_cart.order_item_matcher"]
+  #    tags:
+  #      - { name: commerce_order.availability_checker }
+  commerce_product_restriction.referenceable_plugin_types_subscriber:
+    class: Drupal\commerce_product_restriction\EventSubscriber\ProductRestrictionPluginTypesSubscriber
+    tags:
+      - { name: event_subscriber }

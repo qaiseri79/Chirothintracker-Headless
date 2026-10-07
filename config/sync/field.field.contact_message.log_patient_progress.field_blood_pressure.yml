@@ -1,0 +1,19 @@
+uuid: 8d42bfe9-96d6-4ca5-afed-0612251f60e1
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.log_patient_progress
+    - field.storage.contact_message.field_blood_pressure
+id: contact_message.log_patient_progress.field_blood_pressure
+field_name: field_blood_pressure
+entity_type: contact_message
+bundle: log_patient_progress
+label: 'Blood Pressure'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,23 @@
+uuid: d2b164b4-5ce1-4254-a822-a0945688bb72
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_bp_diagnosis_year
+id: contact_message.patient_intake.field_bp_diagnosis_year
+field_name: field_bp_diagnosis_year
+entity_type: contact_message
+bundle: patient_intake
+label: 'Year Diagnosed'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 1900
+  max: 2100
+  prefix: ''
+  suffix: ''
+field_type: integer

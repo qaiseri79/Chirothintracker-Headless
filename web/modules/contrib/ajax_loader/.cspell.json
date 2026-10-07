@@ -1,0 +1,9 @@
+{
+  "import": [
+    "./web/core/.cspell.json"
+  ],
+  "ignorePaths": [
+    "config"
+  ]
+
+}

@@ -1,0 +1,36 @@
+Migate: Skip on 404: 1.1.2, 2025-05-02
+--------------------------------------
+#3433440 by Project Update Bot, damienmckenna: Automated Drupal 11 compatibility
+  fixes.
+#3478315 by ananya.k, fengtan, damienmckenna: Replace deprecated
+  MigrateSkipProcessException.
+
+
+Migate: Skip on 404: 1.1.1, 2022-09-22
+--------------------------------------
+#3311131 by DamienMcKenna: Fixed syntax bug in info file.
+
+
+Migate: Skip on 404: 1.1.0, 2022-09-22
+--------------------------------------
+#3288646 by Project Update Bot, DamienMcKenna: Automated Drupal 10 compatibility
+  fixes.
+#3261190 by MacSim, mmbk, DamienMcKenna: Provide a default message with the
+  value leading to a 404.
+#3311131 by DamienMcKenna: Drop support for D8.
+
+
+Migate: Skip on 404: 1.0.1, 2021-10-11
+--------------------------------------
+#3195998 by vintimpe, gbotis, DamienMcKenna: Extend to ignore missing private
+  files.
+
+
+Migate: Skip on 404: 1.0.0, 2021-01-31
+--------------------------------------
+#3113394 by sorlov, DamienMcKenna: Add process plugin to skip files that
+  don't exist. Automatically add the plugin when using Migrate Drupal UI or
+  Migrate Upgrade.
+By DamienMcKenna: Works with core 8 or 9.
+By DamienMcKenna: Cleaned up some comments.
+By DamienMcKenna: Refactored migrate_skip_on_404_migration_plugins_alter().

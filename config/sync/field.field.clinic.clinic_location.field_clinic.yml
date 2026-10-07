@@ -1,0 +1,35 @@
+uuid: 7554712e-a716-4db3-b729-56df0dbbc213
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.clinic.clinic_location
+    - field.storage.clinic.field_clinic
+  module:
+    - disable_field
+    - epp
+third_party_settings:
+  epp:
+    value: "target_id: '[current-user:field_clinic:target_id]'\r\n\r\n"
+    on_update: 0
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: clinic.clinic_location.field_clinic
+field_name: field_clinic
+entity_type: clinic
+bundle: clinic_location
+label: Clinic
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: my_clinic
+      display_name: entity_reference_2
+      arguments: {  }
+field_type: entity_reference

@@ -1,0 +1,39 @@
+uuid: 68799cf1-f004-41d2-bce9-f7dcf276c566
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:9be883e4-61e1-4ceb-921f-9cfd06c1f762'
+  module:
+    - block_content
+    - system
+    - user
+  theme:
+    - olivero
+id: homemenu
+theme: olivero
+region: content_above
+weight: -18
+provider: null
+plugin: 'block_content:9be883e4-61e1-4ceb-921f-9cfd06c1f762'
+settings:
+  id: 'block_content:9be883e4-61e1-4ceb-921f-9cfd06c1f762'
+  label: 'Home Menu'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /welcome
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      chiropractor_active_: chiropractor_active_
+      enrolled_patient: enrolled_patient

@@ -1,0 +1,38 @@
+uuid: a92673d7-7895-435a-894b-1f4eb4b4f8fe
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.intake_forms_cs
+  module:
+    - system
+    - user
+    - views
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_views_block__intake_forms_cs_block_2
+theme: chirothintracker_subtheme
+region: content
+weight: -3
+provider: null
+plugin: 'views_block:intake_forms_cs-block_2'
+settings:
+  id: 'views_block:intake_forms_cs-block_2'
+  label: ''
+  label_display: '0'
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/admin/structure/contact/messages/*'
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      chiropractor_active_: chiropractor_active_

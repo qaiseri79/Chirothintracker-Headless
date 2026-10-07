@@ -1,0 +1,11 @@
+uuid: e9ea894c-84a4-47fb-b3cb-0f69d8bdf812
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+id: activity_log.full
+label: Full
+description: ''
+targetEntityType: activity_log
+cache: true

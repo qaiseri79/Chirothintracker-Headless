@@ -1,0 +1,375 @@
+# Headless Patients routes.
+#
+# ## Access
+#
+# Every route is gated by a policy class from the headless_access module rather
+# than by a permission declared here. That module holds the portal's role machine
+# names in one place, so the read/write distinction is stated the same way in every
+# headless module instead of being re-derived per module.
+#
+#   ReadChiropractorAccess   — the roster, archived patients, intake, phase options
+#   WriteChiropractorAccess  — create, archive, re-enrol, review state
+#
+# Cancelling a subscription moves an account to `chiropractor_inactive_`, which
+# keeps ReadChiropractorAccess and loses WriteChiropractorAccess. That is the whole
+# read-only posture, and it is a one-line difference between the two role lists.
+#
+# ## Requirements, not defaults
+#
+# `_custom_access` sits in `requirements` because that is the only block Drupal
+# evaluates for access. The previous revision of this file put `_permission` under
+# `defaults`, where it became an inert route default: all nine routes were
+# registered, none of them enforced anything, and the permission strings were
+# simply unread. Same for `_auth`, which Drupal reads as a route *option*
+# (AuthenticationManager), so `requirements` was wrong for it too. Both are in the
+# right blocks now.
+#
+# No `_access: 'TRUE'` is written anywhere in this file. AccessAwareRouter adds that
+# requirement itself to every route, and hand-writing it only obscures whether a
+# gate is actually present.
+#
+# ## No CSRF token on the POST routes
+#
+# This matches headless_progress rather than being an oversight. The session cookie
+# is forwarded from the Next.js server and is HttpOnly, so a cross-site form post
+# cannot carry it, and there is no browser JS in this system that holds a cookie.
+# The only CSRF token anywhere is the logout token, which is session-bound and
+# single-use by design. Do not add a token check here without first giving the
+# client a way to obtain a valid one, or every write will fail with a 403 that
+# looks like a permissions problem.
+#
+# ## The clinic is never a parameter
+#
+# The clinic is not a route parameter, a query parameter or a body field. It is
+# resolved from the authenticated account by ClinicScope, so no request can select a
+# tenant. Every route below that takes a `{user}` still has to pass
+# ClinicScope::requireUser(), which re-checks that the target belongs to the
+# caller's clinic.
+
+headless_patients.phases:
+  path: '/api/headless/patients/phases'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientsController::phases'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\ReadChiropractorAccess::access'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [GET]
+
+headless_patients.snapshot:
+  path: '/api/headless/patients'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientsController::snapshot'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\ReadChiropractorAccess::access'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [GET]
+
+headless_patients.archived:
+  path: '/api/headless/patients/archived'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientsController::archived'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\ReadChiropractorAccess::access'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [GET]
+
+headless_patients.create:
+  path: '/api/headless/patients'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientsController::createPatient'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [POST]
+
+headless_patients.archive:
+  path: '/api/headless/patients/{user}/archive'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientsController::archive'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+    user: '\d+'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [POST]
+
+headless_patients.enroll:
+  path: '/api/headless/patients/{user}/enroll'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientsController::enroll'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+    user: '\d+'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [POST]
+
+headless_patients.intake_list:
+  path: '/api/headless/patients/intake'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientsController::intakeList'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\ReadChiropractorAccess::access'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [GET]
+
+headless_patients.intake_get:
+  path: '/api/headless/patients/intake/{message}'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientsController::intakeGet'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\ReadChiropractorAccess::access'
+    message: '\d+'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [GET]
+
+## Write-gated, not read-gated: this is the same path as intake_get with a
+## different method, because a submission is one resource. Destroying a patient's
+## own words is not a read.
+headless_patients.intake_delete:
+  path: '/api/headless/patients/intake/{message}'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientsController::intakeDelete'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+    message: '\d+'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [DELETE]
+
+headless_patients.intake_review:
+  path: '/api/headless/patients/intake/review'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientsController::intakeReview'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [POST]
+
+## The clinic's one permanent intake link.
+##
+## These live here rather than in headless_intake because they need ClinicScope,
+## which this module owns, and this module already depends on headless_intake. The
+## token storage itself is still headless_intake's, injected as
+## `headless_intake.clinic_link`.
+##
+## The gate is ManageIntakeLinkAccess rather than the read/write pair used above,
+## because these are the only headless endpoints an administrator may reach: a
+## clinic whose chiropractor has lost their account still needs a link, and no other
+## portal route lets staff act on a clinic they do not belong to. It does not widen
+## anything for a chiropractor, who stays scoped to their own clinic.
+##
+## No clinic appears in any path. A chiropractor's clinic comes from their own
+## account; an administrator names one with ?clinic=.
+headless_patients.intake_link_show:
+  path: '/api/intake-link'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\ClinicIntakeLinkController::show'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\ManageIntakeLinkAccess::access'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [GET]
+
+headless_patients.intake_link_create:
+  path: '/api/intake-link'
+  defaults:
+    # createLink, not create: ContainerInjectionInterface already claims create()
+    # for the service factory, and a method cannot be both.
+    _controller: '\Drupal\headless_patients\Controller\ClinicIntakeLinkController::createLink'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\ManageIntakeLinkAccess::access'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [POST]
+
+## Separate path rather than an action on the create path, because losing the old
+## token is destructive and should not be reachable by a retry of the create call.
+headless_patients.intake_link_regenerate:
+  path: '/api/intake-link/regenerate'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\ClinicIntakeLinkController::regenerate'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\ManageIntakeLinkAccess::access'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [POST]
+headless_patients.summary:
+  path: '/api/headless/patients/summary'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientSummaryController::roster'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\ReadChiropractorAccess::access'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [GET]
+
+headless_patients.summary_section:
+  path: '/api/headless/patients/{user}/summary'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientSummaryController::section'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\ReadChiropractorAccess::access'
+    user: '\d+'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [GET]
+
+headless_patients.summary_update:
+  path: '/api/headless/patients/{user}/summary'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientSummaryController::update'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+    user: '\d+'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [POST]
+
+headless_patients.summary_note:
+  path: '/api/headless/patients/{user}/summary/notes'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientSummaryController::note'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+    user: '\d+'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [POST]
+
+headless_patients.summary_upload:
+  path: '/api/headless/patients/{user}/summary/files'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientSummaryController::upload'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+    user: '\d+'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [POST]
+
+headless_patients.summary_download:
+  path: '/api/headless/patients/{user}/summary/files/{file}'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientSummaryController::file'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\ReadChiropractorAccess::access'
+    user: '\d+'
+    file: '\d+'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [GET]
+
+headless_patients.summary_delete:
+  path: '/api/headless/patients/{user}/summary/files/{file}'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientSummaryController::deleteAttachment'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+    user: '\d+'
+    file: '\d+'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [DELETE]
+
+headless_patients.summary_photo:
+  path: '/api/headless/patients/{user}/summary/photo'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientSummaryController::file'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\ReadChiropractorAccess::access'
+    user: '\d+'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [GET]
+
+## The photos read shows the profile photo plus the patient_photos gallery; the
+## gallery images stream back through {file} on the same path.
+headless_patients.summary_photos:
+  path: '/api/headless/patients/{user}/summary/photos'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientSummaryController::photos'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\ReadChiropractorAccess::access'
+    user: '\d+'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [GET]
+
+headless_patients.summary_photos_update:
+  path: '/api/headless/patients/{user}/summary/photos'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientSummaryController::updatePhotos'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+    user: '\d+'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [POST]
+
+headless_patients.summary_photo_file:
+  path: '/api/headless/patients/{user}/summary/photos/{file}'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientSummaryController::photoFile'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\ReadChiropractorAccess::access'
+    user: '\d+'
+    file: '\d+'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [GET]
+
+headless_patients.summary_session:
+  path: '/api/headless/patients/{user}/summary/sessions'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientSummaryController::session'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+    user: '\d+'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [POST]
+
+headless_patients.summary_progress:
+  path: '/api/headless/patients/{user}/summary/progress'
+  defaults:
+    _controller: '\Drupal\headless_patients\Controller\PatientSummaryController::progress'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+    user: '\d+'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [POST]

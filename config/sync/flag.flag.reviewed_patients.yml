@@ -1,0 +1,31 @@
+uuid: bffc8b0d-4aa6-45b6-8577-27c261c6ee3f
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: reviewed_patients
+label: 'Reviewed Patients'
+bundles: {  }
+entity_type: user
+global: true
+flag_short: Reviewed
+flag_long: ''
+flag_message: ''
+unflag_short: New
+unflag_long: ''
+unflag_message: ''
+unflag_denied_text: ''
+weight: 0
+flag_type: 'entity:user'
+link_type: ajax_link
+flagTypeConfig:
+  show_in_links:
+    full: full
+  show_as_field: false
+  show_on_form: false
+  show_contextual_link: false
+  extra_permissions:
+    owner: '0'
+  show_on_profile: false
+linkTypeConfig: {  }

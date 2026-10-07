@@ -1,0 +1,64 @@
+uuid: 1e940767-a7de-44ef-b0ef-b4d0ad5709d5
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.chiropractor_message
+    - field.field.contact_message.chiropractor_message.field_attachments
+    - field.field.contact_message.chiropractor_message.field_message
+    - field.field.contact_message.chiropractor_message.field_patient
+  module:
+    - file
+    - text
+id: contact_message.chiropractor_message.default
+targetEntityType: contact_message
+bundle: chiropractor_message
+mode: default
+content:
+  field_attachments:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 11
+    region: content
+  field_message:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  mail:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: -2
+    region: content
+  message:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -3
+    region: content
+  subject:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -1
+    region: content
+hidden:
+  field_patient: true

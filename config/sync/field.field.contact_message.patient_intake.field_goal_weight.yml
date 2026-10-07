@@ -1,0 +1,23 @@
+uuid: 60c9608d-a377-4343-9a35-9077343641f5
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_goal_weight
+id: contact_message.patient_intake.field_goal_weight
+field_name: field_goal_weight
+entity_type: contact_message
+bundle: patient_intake
+label: 'Desired Weight (lbs)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: float

@@ -1,0 +1,36 @@
+{
+    "name": "drupal/field_hidden",
+    "description": "The Field Hidden module defines hidden field widgets for several core field types.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "keywords": ["Drupal"],
+    "homepage": "https://www.drupal.org/project/field_hidden",
+    "authors": [
+        {
+            "name": "Jacob Friis Mathiasen (jacobfriis)",
+            "homepage": "https://www.drupal.org/u/jacobfriis",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Amit Sedai (amitsedaiz)",
+            "homepage": "https://www.drupal.org/u/amitsedaiz",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Oleksandr Kuzava (nginex)",
+            "homepage": "https://www.drupal.org/u/nginex",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Istvan Reszler-Fekete (reszli)",
+            "homepage": "https://www.drupal.org/u/reszli",
+            "role": "Maintainer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/field_hidden",
+        "source": "https://git.drupalcode.org/project/field_hidden"
+    },
+    "require": { }
+}

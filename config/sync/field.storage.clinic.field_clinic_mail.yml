@@ -1,0 +1,22 @@
+uuid: f878a046-06f4-4f9a-8624-eaefa2b5bad4
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: clinic.field_clinic_mail
+field_name: field_clinic_mail
+entity_type: clinic
+type: email
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

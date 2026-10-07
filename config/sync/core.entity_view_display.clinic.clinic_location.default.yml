@@ -1,0 +1,58 @@
+uuid: 9491120d-0a18-4a21-8a26-d8199ad8d226
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.clinic.clinic_location
+    - field.field.clinic.clinic_location.field_clinic
+  module:
+    - user
+id: clinic.clinic_location.default
+targetEntityType: clinic
+bundle: clinic_location
+mode: default
+content:
+  created:
+    type: timestamp
+    label: hidden
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_clinic:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -5
+    region: content
+  uid:
+    type: author
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  changed: true

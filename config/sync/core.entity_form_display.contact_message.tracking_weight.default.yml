@@ -1,0 +1,616 @@
+uuid: f89ab1c0-19c4-4053-bd27-348afa81d5ad
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.field.contact_message.tracking_weight.field_abdomen
+    - field.field.contact_message.tracking_weight.field_aggr
+    - field.field.contact_message.tracking_weight.field_archive
+    - field.field.contact_message.tracking_weight.field_arm_left_bicep
+    - field.field.contact_message.tracking_weight.field_arm_right_bicep
+    - field.field.contact_message.tracking_weight.field_author
+    - field.field.contact_message.tracking_weight.field_blood_pressure
+    - field.field.contact_message.tracking_weight.field_blood_sugar
+    - field.field.contact_message.tracking_weight.field_breakfast_fruit_sel
+    - field.field.contact_message.tracking_weight.field_breakfast_other
+    - field.field.contact_message.tracking_weight.field_breakfast_protein
+    - field.field.contact_message.tracking_weight.field_calf_left
+    - field.field.contact_message.tracking_weight.field_calf_right
+    - field.field.contact_message.tracking_weight.field_chest
+    - field.field.contact_message.tracking_weight.field_chiroburst_bend
+    - field.field.contact_message.tracking_weight.field_chiropractor_flags
+    - field.field.contact_message.tracking_weight.field_current_phase
+    - field.field.contact_message.tracking_weight.field_date
+    - field.field.contact_message.tracking_weight.field_dinner_bread
+    - field.field.contact_message.tracking_weight.field_dinner_fruit
+    - field.field.contact_message.tracking_weight.field_dinner_fruit_sel
+    - field.field.contact_message.tracking_weight.field_dinner_other
+    - field.field.contact_message.tracking_weight.field_dinner_protein
+    - field.field.contact_message.tracking_weight.field_dinner_vegetables
+    - field.field.contact_message.tracking_weight.field_dinner_vegetables_free
+    - field.field.contact_message.tracking_weight.field_flags
+    - field.field.contact_message.tracking_weight.field_grade
+    - field.field.contact_message.tracking_weight.field_hips
+    - field.field.contact_message.tracking_weight.field_lunch_bread
+    - field.field.contact_message.tracking_weight.field_lunch_fruit
+    - field.field.contact_message.tracking_weight.field_lunch_fruit_sel
+    - field.field.contact_message.tracking_weight.field_lunch_other
+    - field.field.contact_message.tracking_weight.field_lunch_protein
+    - field.field.contact_message.tracking_weight.field_lunch_vegetables
+    - field.field.contact_message.tracking_weight.field_lunch_vegetables_free
+    - field.field.contact_message.tracking_weight.field_mind_set_work
+    - field.field.contact_message.tracking_weight.field_neck
+    - field.field.contact_message.tracking_weight.field_notes
+    - field.field.contact_message.tracking_weight.field_other_food
+    - field.field.contact_message.tracking_weight.field_program_day
+    - field.field.contact_message.tracking_weight.field_program_day_computed
+    - field.field.contact_message.tracking_weight.field_question
+    - field.field.contact_message.tracking_weight.field_shoulders
+    - field.field.contact_message.tracking_weight.field_sleep_hours
+    - field.field.contact_message.tracking_weight.field_thigh_left
+    - field.field.contact_message.tracking_weight.field_thigh_right
+    - field.field.contact_message.tracking_weight.field_total_measurements
+    - field.field.contact_message.tracking_weight.field_water_intake
+    - field.field.contact_message.tracking_weight.field_weight
+    - field.field.contact_message.tracking_weight.field_weight_loss_computed
+    - field.field.contact_message.tracking_weight.field_weight_loss_to_date
+  module:
+    - commerce
+    - datetime
+    - field_group
+    - field_hidden
+    - multiple_selects
+    - text
+third_party_settings:
+  field_group:
+    group_weight_body:
+      children:
+        - field_grade
+        - field_date
+        - field_weight
+        - field_water_intake
+        - field_sleep_hours
+        - field_mind_set_work
+        - field_chiroburst_bend
+        - field_aggr
+      label: 'Weight and Water'
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        description: ''
+        required_fields: false
+    group_food_log_yesterday:
+      children:
+        - group_breakfast
+        - group_lunch
+        - group_dinner
+        - group_other
+      label: 'Food Log (Yesterday)'
+      region: content
+      parent_name: ''
+      weight: 1
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: ''
+        required_fields: true
+    group_breakfast:
+      children:
+        - field_breakfast_protein
+        - field_breakfast_fruit_sel
+        - field_breakfast_other
+      label: 'Breakfast (Lock In Phase Only)'
+      region: content
+      parent_name: group_food_log_yesterday
+      weight: 2
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: ''
+        required_fields: true
+    group_lunch:
+      children:
+        - field_lunch_protein
+        - field_lunch_vegetables
+        - field_lunch_fruit_sel
+        - field_lunch_fruit
+        - field_lunch_bread
+        - field_lunch_vegetables_free
+        - field_lunch_other
+      label: Lunch
+      region: content
+      parent_name: group_food_log_yesterday
+      weight: 3
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: ''
+        required_fields: true
+    group_dinner:
+      children:
+        - field_dinner_protein
+        - field_dinner_vegetables
+        - field_dinner_fruit_sel
+        - field_dinner_fruit
+        - field_dinner_bread
+        - field_dinner_vegetables_free
+        - field_dinner_other
+      label: Dinner
+      region: content
+      parent_name: group_food_log_yesterday
+      weight: 4
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: ''
+        required_fields: true
+    group_other:
+      children:
+        - field_other_food
+      label: Other
+      region: content
+      parent_name: group_food_log_yesterday
+      weight: 5
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: ''
+        required_fields: true
+    group_notes:
+      children:
+        - field_flags
+        - field_chiropractor_flags
+        - field_notes
+      label: 'Flags and Notes'
+      region: content
+      parent_name: ''
+      weight: 2
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: ''
+        required_fields: true
+    group_diabetes:
+      children:
+        - field_blood_sugar
+      label: 'Blood Sugar (Today)'
+      region: content
+      parent_name: ''
+      weight: 3
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: ''
+        required_fields: false
+    group_hypertension:
+      children:
+        - field_blood_pressure
+      label: 'Blood Pressure (Today)'
+      region: content
+      parent_name: ''
+      weight: 4
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: ''
+        required_fields: false
+    group_measurements:
+      children:
+        - field_neck
+        - field_shoulders
+        - field_chest
+        - field_arm_left_bicep
+        - field_arm_right_bicep
+        - field_abdomen
+        - field_hips
+        - field_thigh_left
+        - field_thigh_right
+        - field_calf_left
+        - field_calf_right
+      label: 'Body Measurements (Today)'
+      region: content
+      parent_name: ''
+      weight: 5
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: false
+        description: ''
+        required_fields: false
+    group_markup:
+      children: {  }
+      label: 'Watch Video: Taking your body measurements'
+      region: content
+      parent_name: ''
+      weight: 8
+      format_type: html_element
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: '<p> Watch Video: <a href="https://vimeo.com/272650849">Taking your body measurements</a> </p>'
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
+id: contact_message.tracking_weight.default
+targetEntityType: contact_message
+bundle: tracking_weight
+mode: default
+content:
+  field_abdomen:
+    type: number
+    weight: 27
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_aggr:
+    type: options_buttons
+    weight: 40
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_arm_left_bicep:
+    type: number
+    weight: 25
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_arm_right_bicep:
+    type: number
+    weight: 26
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_author:
+    type: commerce_entity_select
+    weight: 9
+    region: content
+    settings:
+      hide_single_entity: true
+      autocomplete_threshold: 7
+      autocomplete_size: 60
+      autocomplete_placeholder: ''
+    third_party_settings: {  }
+  field_blood_pressure:
+    type: string_textfield
+    weight: 5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_blood_sugar:
+    type: number
+    weight: 12
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_breakfast_fruit_sel:
+    type: multiple_options_select
+    weight: 14
+    region: content
+    settings:
+      element_type: select
+    third_party_settings: {  }
+  field_breakfast_other:
+    type: string_textfield
+    weight: 15
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_breakfast_protein:
+    type: options_select
+    weight: 13
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_calf_left:
+    type: number
+    weight: 31
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_calf_right:
+    type: number
+    weight: 32
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_chest:
+    type: number
+    weight: 24
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_chiroburst_bend:
+    type: options_buttons
+    weight: 39
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_chiropractor_flags:
+    type: options_buttons
+    weight: 19
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_current_phase:
+    type: field_hidden_string_textfield
+    weight: 6
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_date:
+    type: datetime_default
+    weight: 34
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_dinner_bread:
+    type: options_select
+    weight: 27
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_dinner_fruit:
+    type: string_textfield
+    weight: 26
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_dinner_fruit_sel:
+    type: multiple_options_select
+    weight: 25
+    region: content
+    settings:
+      element_type: select
+    third_party_settings: {  }
+  field_dinner_other:
+    type: string_textfield
+    weight: 29
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_dinner_protein:
+    type: options_select
+    weight: 23
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_dinner_vegetables:
+    type: multiple_options_select
+    weight: 24
+    region: content
+    settings:
+      element_type: select
+    third_party_settings: {  }
+  field_dinner_vegetables_free:
+    type: multiple_options_select
+    weight: 28
+    region: content
+    settings:
+      element_type: select
+    third_party_settings: {  }
+  field_flags:
+    type: options_buttons
+    weight: 18
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_grade:
+    type: options_select
+    weight: 33
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_hips:
+    type: number
+    weight: 28
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_lunch_bread:
+    type: options_select
+    weight: 35
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_lunch_fruit:
+    type: string_textfield
+    weight: 34
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_lunch_fruit_sel:
+    type: multiple_options_select
+    weight: 33
+    region: content
+    settings:
+      element_type: select
+    third_party_settings: {  }
+  field_lunch_other:
+    type: string_textfield
+    weight: 37
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_lunch_protein:
+    type: options_select
+    weight: 31
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_lunch_vegetables:
+    type: multiple_options_select
+    weight: 32
+    region: content
+    settings:
+      element_type: select
+    third_party_settings: {  }
+  field_lunch_vegetables_free:
+    type: multiple_options_select
+    weight: 36
+    region: content
+    settings:
+      element_type: select
+    third_party_settings: {  }
+  field_mind_set_work:
+    type: boolean_checkbox
+    weight: 38
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_neck:
+    type: number
+    weight: 22
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_notes:
+    type: string_textarea
+    weight: 20
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_other_food:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_question:
+    type: text_textarea
+    weight: 7
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_shoulders:
+    type: number
+    weight: 23
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_sleep_hours:
+    type: number
+    weight: 37
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_thigh_left:
+    type: number
+    weight: 29
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_thigh_right:
+    type: number
+    weight: 30
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_water_intake:
+    type: number
+    weight: 36
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_weight:
+    type: number
+    weight: 35
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  copy: true
+  field_archive: true
+  field_program_day: true
+  field_program_day_computed: true
+  field_total_measurements: true
+  field_weight_loss_computed: true
+  field_weight_loss_to_date: true
+  mail: true
+  message: true
+  name: true
+  preview: true
+  subject: true

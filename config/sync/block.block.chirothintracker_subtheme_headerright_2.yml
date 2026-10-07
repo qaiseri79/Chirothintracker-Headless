@@ -1,0 +1,37 @@
+uuid: 09d65631-6c25-46e0-b1bc-b70b886eea91
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.menu-header-right
+  module:
+    - system
+    - user
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_headerright_2
+theme: chirothintracker_subtheme
+region: sidebar_menu
+weight: -15
+provider: null
+plugin: 'system_menu_block:menu-header-right'
+settings:
+  id: 'system_menu_block:menu-header-right'
+  label: 'Header Right'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      chiropractor_active_: chiropractor_active_
+      chiropractor_inactive_: chiropractor_inactive_
+      impersonator: impersonator
+      enrolled_patient: enrolled_patient
+      archived_patient: archived_patient

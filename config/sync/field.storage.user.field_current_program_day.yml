@@ -1,0 +1,21 @@
+uuid: 09ceca65-71ad-474b-894f-1d801c494ecf
+langcode: und
+status: true
+dependencies:
+  module:
+    - user
+id: user.field_current_program_day
+field_name: field_current_program_day
+entity_type: user
+type: string
+settings:
+  max_length: 10
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

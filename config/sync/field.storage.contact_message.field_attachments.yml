@@ -1,0 +1,23 @@
+uuid: 95bc6c98-f5d5-4df9-a8ea-643a3121faba
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - file
+id: contact_message.field_attachments
+field_name: field_attachments
+entity_type: contact_message
+type: file
+settings:
+  target_type: file
+  display_field: false
+  display_default: false
+  uri_scheme: private
+module: file
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

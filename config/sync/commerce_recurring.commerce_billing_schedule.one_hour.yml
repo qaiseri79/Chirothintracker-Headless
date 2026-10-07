@@ -1,0 +1,22 @@
+uuid: 162dd80c-cab1-4afb-9e0a-9f417788abbe
+langcode: en
+status: true
+dependencies: {  }
+id: one_hour
+label: 'One Hour'
+displayLabel: 'One Hour'
+billingType: prepaid
+combineSubscriptions: false
+retrySchedule:
+  - 1
+  - 1
+  - 1
+unpaidSubscriptionState: canceled
+plugin: rolling
+configuration:
+  trial_interval: {  }
+  interval:
+    number: 1
+    unit: hour
+prorater: full_price
+proraterConfiguration: {  }

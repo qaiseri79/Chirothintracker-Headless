@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>ChiroThin — Provider Messages</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: {
+      canvas: "#F3F4F1", surface: "#FFFFFF", ink: "#101827", muted: "#6B7280", line: "#E4E2DC",
+      primary: { DEFAULT: "#0B5D52", soft: "#E4EEEC", dark: "#08423A" },
+      accent: { DEFAULT: "#C7522A", soft: "#F6E4DC" },
+    },
+    fontFamily: { serif: ["Newsreader","Georgia","serif"], sans: ["Inter","system-ui","sans-serif"] },
+    boxShadow: { panel: "0 1px 2px rgba(16,24,39,0.04), 0 8px 24px -12px rgba(16,24,39,0.08)" },
+  } } };
+</script>
+<style>
+  :root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  html, body { height: 100%; }
+  ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-thumb { background: #E4E2DC; border-radius: 8px; }
+  #pane.dragging #dropOverlay { display: flex; }
+</style>
+</head>
+<body class="bg-canvas font-sans text-ink antialiased h-full">
+<div class="flex h-full">
+  <aside class="group/sidebar hidden md:flex w-[72px] shrink-0 flex-col overflow-hidden border-r border-line bg-surface transition-[width] duration-200 hover:w-64">
+    <div class="flex h-16 shrink-0 items-center gap-3 border-b border-line px-5">
+      <svg class="h-6 w-6 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <div class="whitespace-nowrap opacity-0 transition-opacity group-hover/sidebar:opacity-100"><p class="font-serif text-base leading-none">ChiroThin</p><p class="text-[10px] tracking-wide text-muted">Provider Portal</p></div>
+    </div>
+    <nav id="nav" class="flex-1 space-y-0.5 px-3 py-4"></nav>
+  </aside>
+
+  <div class="flex min-w-0 flex-1 flex-col">
+    <header class="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-4 border-b border-line bg-surface/90 px-6 backdrop-blur">
+      <h1 class="font-serif text-lg">Messages</h1>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-2 border-l border-line pl-4"><div class="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-primary-soft text-[11px] font-semibold text-primary">TR</div><span class="hidden text-sm font-medium xl:block">Dr. Todd Reese</span></div>
+    </header>
+
+    <div class="flex min-h-0 flex-1 overflow-hidden">
+      <!-- PATIENT LIST -->
+      <div id="listCol" class="flex w-full shrink-0 flex-col border-r border-line bg-surface sm:w-80">
+        <div class="space-y-3 border-b border-line p-4">
+          <button id="massBtn" class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-panel hover:bg-primary-dark">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+            Mass Message
+          </button>
+          <div class="relative">
+            <svg class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="pSearch" type="text" placeholder="Search patients or messages..." class="w-full rounded-lg border border-line bg-canvas py-2 pl-9 pr-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" />
+          </div>
+          <div id="tabs" class="flex rounded-lg bg-canvas p-0.5 text-xs font-medium"></div>
+        </div>
+        <div id="list" class="flex-1 overflow-y-auto"></div>
+      </div>
+
+      <!-- THREAD -->
+      <div id="threadCol" class="relative hidden min-w-0 flex-1 flex-col sm:flex">
+        <div id="pane" class="relative flex min-h-0 flex-1 flex-col">
+          <div class="flex items-center gap-3 border-b border-line bg-surface px-4 py-3.5 sm:px-6">
+            <button id="backBtn" aria-label="Back" class="rounded-lg p-1.5 text-muted hover:bg-canvas sm:hidden"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
+            <div id="tAvatar"></div>
+            <div class="min-w-0 flex-1"><p id="tName" class="truncate text-sm font-semibold"></p><p id="tSub" class="truncate text-xs text-muted"></p></div>
+            <button id="readAll" class="hidden shrink-0 rounded-full border border-accent/40 px-3 py-1 text-[11px] font-medium text-accent hover:bg-accent hover:text-white">Mark all read</button>
+            <div class="relative hidden w-40 lg:block"><input id="tSearch" type="text" placeholder="Search thread..." class="w-full rounded-lg border border-line bg-canvas py-1.5 pl-3 pr-3 text-xs focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" /></div>
+          </div>
+          <div id="thread" class="flex-1 overflow-y-auto px-4 py-6 sm:px-6"></div>
+
+          <div class="border-t border-line bg-surface p-4">
+            <div class="mx-auto max-w-3xl">
+              <div class="rounded-xl border border-line bg-canvas focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
+                <div id="staged" class="hidden flex-wrap gap-2 p-2.5 pb-0"></div>
+                <div class="flex items-end gap-1.5 p-2">
+                  <input id="fileInput" type="file" multiple class="hidden" accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.heic,.doc,.docx,.xls,.xlsx,.csv,.txt" />
+                  <button id="attachBtn" aria-label="Attach files" title="Attach files" class="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-muted hover:bg-primary-soft hover:text-primary">
+                    <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                    <span id="attachCount" class="absolute -right-0.5 -top-0.5 hidden h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-white"></span>
+                  </button>
+                  <textarea id="replyBox" rows="1" placeholder="Write a reply..." class="max-h-32 flex-1 resize-none bg-transparent px-2 py-2 text-sm focus:outline-none"></textarea>
+                  <button id="sendBtn" aria-label="Send" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary text-white hover:bg-primary-dark"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+                </div>
+              </div>
+              <p id="err" class="mt-1.5 hidden px-1 text-[11px] text-accent"></p>
+            </div>
+          </div>
+          <div id="dropOverlay" class="pointer-events-none absolute inset-0 z-20 hidden items-center justify-center bg-primary/10">
+            <div class="m-4 flex h-[calc(100%-2rem)] w-[calc(100%-2rem)] items-center justify-center rounded-2xl border-2 border-dashed border-primary bg-surface/80 font-serif text-xl text-primary">Drop files to attach</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MASS MESSAGE MODAL -->
+<div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-ink/40 p-4">
+  <div class="flex max-h-full w-full max-w-xl flex-col overflow-hidden rounded-2xl bg-surface shadow-panel">
+    <div class="flex items-center justify-between border-b border-line px-5 py-4">
+      <div><h2 class="font-serif text-lg">Mass Message</h2><p class="text-xs text-muted">Each patient receives it in their own private thread.</p></div>
+      <button id="mClose" aria-label="Close" class="rounded-lg p-1.5 text-muted hover:bg-canvas"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="flex-1 space-y-4 overflow-y-auto p-5">
+      <div>
+        <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">Recipients</p>
+        <div id="mModes" class="grid grid-cols-3 gap-2 text-xs font-medium"></div>
+        <div id="mPick" class="mt-3 hidden rounded-lg border border-line">
+          <div class="flex items-center gap-2 border-b border-line p-2">
+            <input id="mQ" type="text" placeholder="Filter patients..." class="min-w-0 flex-1 rounded-md bg-canvas px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary" />
+            <button id="mAll" class="shrink-0 text-xs font-medium text-primary hover:underline"></button>
+          </div>
+          <div id="mChecks" class="max-h-40 overflow-y-auto"></div>
+        </div>
+      </div>
+      <div>
+        <div class="mb-2 flex items-center justify-between"><p class="text-xs font-semibold uppercase tracking-wide text-muted">Message</p>
+          <button id="mToken" class="rounded-full border border-line px-2.5 py-0.5 text-[11px] font-medium text-primary hover:bg-primary-soft">+ Insert first name</button></div>
+        <div class="rounded-xl border border-line bg-canvas focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
+          <div id="mStaged" class="hidden flex-wrap gap-2 p-2.5 pb-0"></div>
+          <div class="flex items-end gap-1.5 p-2">
+            <input id="mFile" type="file" multiple class="hidden" accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.heic,.doc,.docx,.xls,.xlsx,.csv,.txt" />
+            <button id="mAttach" aria-label="Attach files" class="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-muted hover:bg-primary-soft hover:text-primary">
+              <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+              <span id="mCount" class="absolute -right-0.5 -top-0.5 hidden h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-white"></span>
+            </button>
+            <textarea id="mText" rows="4" placeholder="Hi {first_name}, ..." class="flex-1 resize-none bg-transparent px-2 py-2 text-sm focus:outline-none"></textarea>
+          </div>
+        </div>
+        <p id="mErr" class="mt-1.5 hidden text-[11px] text-accent"></p>
+        <p class="mt-1.5 text-[11px] text-muted">Use <code class="rounded bg-canvas px-1">{first_name}</code> to personalize. Up to 10 files, 10 MB each.</p>
+      </div>
+    </div>
+    <div class="flex items-center justify-between gap-3 border-t border-line bg-canvas/60 px-5 py-3.5">
+      <p id="mSummary" class="text-xs text-muted"></p>
+      <div class="flex shrink-0 gap-2">
+        <button id="mCancel" class="rounded-lg px-3.5 py-2 text-sm font-medium text-muted hover:bg-canvas">Cancel</button>
+        <button id="mSend" class="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-40"></button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toast" class="pointer-events-none fixed bottom-6 left-1/2 z-50 hidden -translate-x-1/2 rounded-full bg-ink px-4 py-2 text-sm text-white shadow-panel"></div>
+
+<script>
+const ICONS={
+  home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+  message:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  utensils:'<path d="M3 2v7c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2V2M7 2v20M17 2v20M17 2c-2.5 0-4 3-4 6.5S14.5 15 17 15"/>',
+  trending:'<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
+  cart:'<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 2-1.58l1.65-8.42H5.12"/>',
+  more:'<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',
+};
+const icon=(n,c)=>`<svg class="${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]}</svg>`;
+const NAV=[["Dashboard","home"],["Patients","users"],["Messages","message",1],["Protocols","utensils"],["Reports","trending"],["Shop Orders","cart"],["Settings","more"]];
+document.getElementById('nav').innerHTML=NAV.map(([l,i,a])=>`<a href="#" class="flex items-center gap-3 rounded-lg px-2.5 py-2.5 text-sm font-medium ${a?'bg-primary text-white':'text-ink/70 hover:bg-primary-soft hover:text-primary'}">${icon(i,'h-[18px] w-[18px] shrink-0')}<span class="whitespace-nowrap opacity-0 transition-opacity group-hover/sidebar:opacity-100">${l}</span></a>`).join('');
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const initials=n=>n.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+const avatar=(p,s='h-10 w-10 text-xs')=>`<div class="flex ${s} shrink-0 items-center justify-center rounded-full border border-line font-semibold ${p.id%2?'bg-primary-soft text-primary':'bg-accent-soft text-accent'}">${initials(p.name)}</div>`;
+
+/* ---- Attachments ---- */
+const MAX_FILES=10, MAX_BYTES=10*1024*1024;
+const KINDS={pdf:['PDF','bg-red-600'],img:['IMG','bg-accent'],doc:['DOC','bg-blue-600'],xls:['XLS','bg-emerald-600'],txt:['TXT','bg-slate-500']};
+const kindOf=n=>{const e=(n.split('.').pop()||'').toLowerCase();
+  if(e==='pdf')return'pdf'; if(['jpg','jpeg','png','gif','webp','heic'].includes(e))return'img';
+  if(['doc','docx'].includes(e))return'doc'; if(['xls','xlsx','csv'].includes(e))return'xls'; if(e==='txt')return'txt'; return null;};
+const fmtSize=b=>b<1024?b+' B':b<1048576?Math.round(b/1024)+' KB':(b/1048576).toFixed(1)+' MB';
+const badge=k=>`<span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[10px] font-bold tracking-wide text-white ${KINDS[k][1]}">${KINDS[k][0]}</span>`;
+
+function Stage(boxId,errId,cntId){
+  const s={items:[],n:0,timer:0};
+  s.err=m=>{const e=$(errId);e.textContent=m;e.classList.toggle('hidden',!m);clearTimeout(s.timer);if(m)s.timer=setTimeout(()=>s.err(''),6000);};
+  s.render=()=>{
+    const b=$(boxId); b.classList.toggle('hidden',!s.items.length); b.classList.toggle('flex',!!s.items.length);
+    b.innerHTML=s.items.map(x=>`<div class="flex max-w-[15rem] items-center gap-2 rounded-lg border border-line bg-surface py-1.5 pl-1.5 pr-1 shadow-panel">
+      ${x.kind==='img'?`<img src="${x.url}" alt="" class="h-9 w-9 shrink-0 rounded-lg object-cover"/>`:badge(x.kind)}
+      <span class="min-w-0"><span class="block truncate text-xs font-medium">${esc(x.file.name)}</span><span class="block text-[11px] text-muted">${fmtSize(x.file.size)}</span></span>
+      <button data-rm="${x.id}" aria-label="Remove" class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-muted hover:bg-accent-soft hover:text-accent"><svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>`).join('')
+      +(s.items.length>1?'<button data-clr class="self-center px-1 text-[11px] font-medium text-muted hover:text-accent">Clear all</button>':'');
+    const c=$(cntId); c.textContent=s.items.length; c.classList.toggle('hidden',!s.items.length); c.classList.toggle('flex',!!s.items.length);
+  };
+  s.add=list=>{const errs=[];
+    for(const f of list){const kind=kindOf(f.name);
+      if(!kind){errs.push(`${f.name}: unsupported type`);continue;}
+      if(f.size>MAX_BYTES){errs.push(`${f.name}: over 10 MB`);continue;}
+      if(!f.size){errs.push(`${f.name}: empty file`);continue;}
+      if(s.items.some(x=>x.file.name===f.name&&x.file.size===f.size)){errs.push(`${f.name}: already added`);continue;}
+      if(s.items.length>=MAX_FILES){errs.push(`Limit of ${MAX_FILES} files reached`);break;}
+      s.items.push({id:++s.n,file:f,kind,url:URL.createObjectURL(f)});}
+    s.render(); s.err(errs.slice(0,2).join(' · ')+(errs.length>2?` · +${errs.length-2} more`:''));};
+  s.clear=()=>{s.items.length=0;s.render();s.err('');};
+  s.take=()=>{const f=s.items.map(x=>({name:x.file.name,size:x.file.size,kind:x.kind,url:x.url}));s.items.length=0;s.render();s.err('');return f;};
+  $(boxId).addEventListener('click',e=>{
+    const r=e.target.closest('[data-rm]'); if(r){const i=s.items.findIndex(x=>x.id==r.dataset.rm); if(i>-1){URL.revokeObjectURL(s.items[i].url);s.items.splice(i,1);} s.render();s.err('');}
+    else if(e.target.closest('[data-clr]')) s.clear();});
+  return s;
+}
+const S=Stage('staged','err','attachCount'), MS=Stage('mStaged','mErr','mCount');
+
+/* ---- Data adapter: swap with your Drupal endpoints ---- */
+let mid=0;
+const mk=(arr,ago)=>arr.map((m,i)=>({...m,id:++mid,ts:Date.now()-ago*36e5-(arr.length-i)*6e4,isNew:!!m.n}));
+const ERIK=[
+ {from:"doctor",time:"Wed, 09/16 · 11:56",text:"Constipation can be a real challenge with weight loss, and yet regular bowel movements are essential to losing weight. Since you've indicated constipation as a flag, here's a list of things you can try:\n\n• Start your day with a warm beverage\n• Drink plenty of water throughout the day\n• Get adequate sleep\n• Drink a flushing tea before bed, like Yogi Smooth Move or ChiroKlenz – Senna\n• Eat cherries, berries, pears, plums, apples or kiwi\n• Eat broccoli, brussels sprouts, kale and spinach\n• Move your body — gentle exercise\n• Elevate your feet on a step stool while on the toilet\n• Take a good digestive enzyme at the beginning of each meal\n\nAvoid: sitting for long periods, skipping meals, stress, and too much caffeine. Message us if you'd like a supplement recommendation."},
+ {from:"doctor",time:"Wed, 09/16 · 12:00",text:"Make an appointment to come in Monday or Tuesday next week for you and Debbie. (208) 227-0400\n\nTodd"},
+ {from:"patient",time:"Wed, 09/16 · 16:53",text:"Will do. I'm also feeling great today."},
+ {from:"patient",time:"Sun, 09/20 · 07:30",text:"Super busy day yesterday helping wire my son-in-law's house and then walked 18 holes of golf with the sons. I increased lean protein to 10 oz to offset the calorie deficit from the extra activity. I'm also experiencing lack of bowel movement the past 2 days — I'll focus on that today."},
+ {from:"patient",time:"Tue, 09/22 · 08:30",text:"My weight loss appears to have plateaued, as you said it would. Any recommendations beyond following the protocol that I should consider?"},
+ {from:"patient",time:"Wed, 09/23 · 11:07",text:"Hey Todd. Can you also send me the blast formula when you send it to Debbie. Thanks!"},
+ {from:"doctor",time:"Wed, 09/23 · 21:22",text:"I just got that sent to Debbie."},
+ {from:"patient",time:"Wed, 09/23 · 21:39",text:"Thanks"},
+ {from:"patient",time:"Fri, 09/25 · 08:36",text:"Hi Todd, can you or your staff enter into the system my beginning measurements? I'm curious what my loss in inches has been so far. Thanks!",n:1},
+ {from:"patient",time:"Fri, 09/25 · 08:41",text:"Also attaching my latest lab work and food log for review.",n:1,files:[{name:"Lab-Results-Sept.pdf",size:482113,kind:"pdf"},{name:"Food-Log-Week-3.xlsx",size:38210,kind:"xls"},{name:"Beginning-Measurements.jpg",size:1284900,kind:"img"}]},
+];
+const fresh=()=>{mid=0;return [
+ {id:1,name:"Erik Madsen",sub:"Week 5 · Started Aug 24",msgs:mk(ERIK,96)},
+ {id:2,name:"Debbie Madsen",sub:"Week 5 · Started Aug 24",msgs:mk([{from:"patient",time:"Mon, 09/28 · 18:10",text:"Hi Dr. Reese, I haven't received the blast formula yet. Could you resend it?",n:1}],20)},
+ {id:3,name:"Sarah Whitlock",sub:"Week 2 · Started Sep 14",msgs:mk([{from:"patient",time:"Mon, 09/28 · 09:12",text:"Feeling a bit light-headed in the mornings. Should I adjust anything?",n:1},{from:"patient",time:"Mon, 09/28 · 09:14",text:"Attaching my morning log.",n:1,files:[{name:"Morning-Log.pdf",size:120400,kind:"pdf"}]}],30)},
+ {id:4,name:"Marcus Chen",sub:"Week 8 · Started Aug 3",msgs:mk([{from:"doctor",time:"Thu, 09/24 · 14:00",text:"Great progress, Marcus. Keep the protein steady this week."},{from:"patient",time:"Thu, 09/24 · 15:32",text:"Will do, thank you!"}],120)},
+ {id:5,name:"Linda Alvarez",sub:"Week 3 · Started Sep 7",msgs:mk([{from:"patient",time:"Sun, 09/27 · 20:45",text:"Can I substitute the salmon with chicken on Fridays?",n:1}],46)},
+ {id:6,name:"James O'Neil",sub:"Week 11 · Started Jul 13",msgs:mk([{from:"patient",time:"Sat, 09/26 · 10:05",text:"Hit my goal weight today! Thank you for everything."},{from:"doctor",time:"Sat, 09/26 · 11:30",text:"Fantastic news, James — congratulations! Let's plan your maintenance phase at your next visit."}],72)},
+ {id:7,name:"Priya Nair",sub:"Week 1 · Started Sep 21",msgs:mk([{from:"doctor",time:"Mon, 09/21 · 10:00",text:"Welcome to ChiroThin, Priya! Message me anytime with questions."}],200)},
+];};
+let PATIENTS=fresh(), selId=1, filter='all', mobileThread=false;
+const P=id=>PATIENTS.find(p=>p.id===id);
+const last=p=>p.msgs[p.msgs.length-1];
+const unread=p=>p.msgs.filter(m=>m.isNew).length;
+const stamp=()=>{const d=new Date(),z=n=>String(n).padStart(2,'0');return `${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]}, ${z(d.getMonth()+1)}/${z(d.getDate())} · ${z(d.getHours())}:${z(d.getMinutes())}`;};
+
+/* ---- Patient list ---- */
+function renderList(){
+  const q=$('pSearch').value.trim().toLowerCase();
+  const tot=PATIENTS.filter(p=>unread(p)).length;
+  $('tabs').innerHTML=[['all','All patients'],['unread','Unread'+(tot?` (${tot})`:'')]].map(([k,l])=>`<button data-tab="${k}" class="flex-1 rounded-md px-3 py-1.5 ${filter===k?'bg-surface text-ink shadow-panel':'text-muted hover:text-ink'}">${l}</button>`).join('');
+  const rows=[...PATIENTS].filter(p=>(filter==='all'||unread(p))&&(!q||p.name.toLowerCase().includes(q)||p.msgs.some(m=>m.text.toLowerCase().includes(q)))).sort((a,b)=>last(b).ts-last(a).ts);
+  $('list').innerHTML=rows.length?rows.map(p=>{const l=last(p),u=unread(p);
+    return `<button data-pid="${p.id}" class="flex w-full items-start gap-3 border-b border-line px-4 py-3.5 text-left hover:bg-canvas/60 ${p.id===selId?'bg-primary-soft hover:bg-primary-soft':''}">
+      ${avatar(p)}
+      <div class="min-w-0 flex-1">
+        <div class="flex items-center justify-between gap-2"><p class="truncate text-sm ${u?'font-semibold':'font-medium'}">${esc(p.name)}</p><span class="shrink-0 text-[11px] text-muted">${esc(l.time.split(' · ')[1])}</span></div>
+        <div class="flex items-center justify-between gap-2">
+          <p class="truncate text-xs ${u?'text-ink/80':'text-muted'}">${l.from==='doctor'?'You: ':''}${l.bc?'📢 ':''}${esc(l.text||(l.files?l.files.length+' file(s)':''))}</p>
+          ${u?`<span class="shrink-0 rounded-full bg-accent px-1.5 py-0.5 text-[10px] font-semibold text-white">${u}</span>`:''}
+        </div></div></button>`}).join(''):'<p class="p-6 text-center text-sm text-muted">No patients found.</p>';
+}
+
+/* ---- Thread ---- */
+function filesHtml(files,mine){
+  const imgs=files.filter(f=>f.kind==='img'&&f.url), rest=files.filter(f=>!(f.kind==='img'&&f.url));
+  const cls=`flex items-center gap-2.5 rounded-lg px-2.5 py-2 ${mine?'bg-white/15 hover:bg-white/25':'bg-canvas hover:bg-line/60'}`;
+  const grid=imgs.length?`<div class="mb-2 grid gap-1.5 ${imgs.length>1?'grid-cols-2':''}">${imgs.map(f=>`<a href="${f.url}" target="_blank" rel="noopener"><img src="${f.url}" alt="${esc(f.name)}" class="h-32 w-full rounded-lg object-cover"/></a>`).join('')}</div>`:'';
+  const inner=f=>`${badge(f.kind)}<span class="min-w-0"><span class="block truncate text-[13px] font-medium">${esc(f.name)}</span><span class="block text-[11px] opacity-70">${fmtSize(f.size)}</span></span>`;
+  return `<div class="mt-2.5 space-y-1.5">${grid}${rest.map(f=>f.url?`<a href="${f.url}" download="${esc(f.name)}" target="_blank" rel="noopener" class="${cls}">${inner(f)}</a>`:`<div class="${cls}">${inner(f)}</div>`).join('')}</div>`;
+}
+function renderThread(keep){
+  const p=P(selId), t=$('thread'), prev=t.scrollTop;
+  $('tAvatar').innerHTML=avatar(p,'h-10 w-10 text-xs'); $('tName').textContent=p.name; $('tSub').textContent=p.sub;
+  $('readAll').classList.toggle('hidden',!unread(p));
+  const q=$('tSearch').value.trim().toLowerCase();
+  const rows=p.msgs.filter(m=>!q||m.text.toLowerCase().includes(q)||(m.files||[]).some(f=>f.name.toLowerCase().includes(q)));
+  t.innerHTML=rows.length?`<div class="mx-auto max-w-3xl space-y-4">`+rows.map(m=>{const mine=m.from==='doctor';return `
+    <div class="flex ${mine?'justify-end':'justify-start'}">
+      <div class="max-w-[85%] sm:max-w-[70%]">
+        ${m.bc?`<p class="mb-1 flex items-center gap-1 text-[11px] font-medium text-primary ${mine?'justify-end':''}">📢 Mass message</p>`:''}
+        <div class="rounded-2xl px-4 py-3 text-sm leading-relaxed ${mine?'bg-primary text-white rounded-br-sm':'border bg-surface text-ink rounded-bl-sm shadow-panel '+(m.isNew?'border-accent ring-1 ring-accent/30':'border-line')}">
+          ${m.text?`<div class="whitespace-pre-line">${esc(m.text)}</div>`:''}${m.files&&m.files.length?filesHtml(m.files,mine):''}
+        </div>
+        <div class="mt-1 flex flex-wrap items-center gap-2 text-[11px] text-muted ${mine?'justify-end':''}">
+          <span>${m.time}</span>${m.files&&m.files.length?`<span class="text-line">·</span><span>${m.files.length} file${m.files.length>1?'s':''}</span>`:''}
+          ${!mine?`${m.isNew?'<span class="rounded-full bg-accent px-1.5 py-0.5 text-[10px] font-semibold text-white">New</span>':''}<span class="text-line">·</span>
+            <button data-a="reply" class="font-medium text-primary hover:underline">Reply</button><span class="text-line">·</span>
+            <button data-a="tog" data-mid="${m.id}" class="font-medium text-ink/60 hover:text-accent hover:underline">${m.isNew?'Mark as read':'Mark as new'}</button>`:''}
+        </div></div></div>`}).join('')+`</div>`:`<p class="mt-16 text-center text-sm text-muted">${q?`No messages match "${esc(q)}".`:'No messages yet.'}</p>`;
+  t.scrollTop=keep?prev:t.scrollHeight;
+}
+function layout(){
+  $('listCol').classList.toggle('hidden',mobileThread&&innerWidth<640);
+  $('threadCol').classList.toggle('hidden',!mobileThread&&innerWidth<640);
+  $('threadCol').classList.toggle('flex',mobileThread||innerWidth>=640);
+}
+const refresh=keep=>{renderList();renderThread(keep);layout();};
+function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.add('hidden'),3500);}
+
+function send(){
+  const text=$('replyBox').value.trim(); if(!text&&!S.items.length) return;
+  P(selId).msgs.push({id:++mid,from:'doctor',isNew:false,text,files:S.take(),time:stamp(),ts:Date.now()});
+  $('replyBox').value=''; $('replyBox').style.height='auto'; refresh(false);
+}
+$('sendBtn').onclick=send;
+$('attachBtn').onclick=()=>$('fileInput').click();
+$('fileInput').onchange=e=>{S.add([...e.target.files]);e.target.value='';};
+$('replyBox').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
+$('replyBox').addEventListener('input',e=>{const t=e.target;t.style.height='auto';t.style.height=Math.min(t.scrollHeight,128)+'px';});
+$('replyBox').addEventListener('paste',e=>{const f=[...(e.clipboardData?.files||[])]; if(f.length){e.preventDefault();S.add(f);}});
+$('pSearch').oninput=renderList; $('tSearch').oninput=()=>renderThread(true);
+$('tabs').onclick=e=>{const b=e.target.closest('[data-tab]'); if(b){filter=b.dataset.tab;renderList();}};
+$('list').onclick=e=>{const b=e.target.closest('[data-pid]'); if(!b) return;
+  if(+b.dataset.pid!==selId){S.clear();$('replyBox').value='';$('tSearch').value='';}
+  selId=+b.dataset.pid; mobileThread=true; refresh(false);};
+$('backBtn').onclick=()=>{mobileThread=false;layout();};
+$('readAll').onclick=()=>{P(selId).msgs.forEach(m=>m.isNew=false);refresh(true);};
+$('thread').onclick=e=>{const b=e.target.closest('button[data-a]'); if(!b) return;
+  if(b.dataset.a==='reply') return $('replyBox').focus();
+  const m=P(selId).msgs.find(x=>x.id==b.dataset.mid); m.isNew=!m.isNew; refresh(true);};
+addEventListener('resize',layout);
+
+/* Drag & drop into current conversation */
+const pane=$('pane'); let depth=0;
+const hasF=e=>[...(e.dataTransfer?.types||[])].includes('Files');
+pane.addEventListener('dragenter',e=>{if(!hasF(e))return;e.preventDefault();depth++;pane.classList.add('dragging');});
+pane.addEventListener('dragover',e=>{if(hasF(e))e.preventDefault();});
+pane.addEventListener('dragleave',()=>{depth=Math.max(0,depth-1);if(!depth)pane.classList.remove('dragging');});
+pane.addEventListener('drop',e=>{if(!hasF(e))return;e.preventDefault();depth=0;pane.classList.remove('dragging');S.add([...e.dataTransfer.files]);});
+
+/* ---- Mass message ---- */
+let M={mode:'all',picked:new Set(),q:'',confirm:false};
+const MODES=[['all','All patients'],['unread','Unread replies'],['pick','Choose...']];
+function recipients(){
+  if(M.mode==='all') return PATIENTS;
+  if(M.mode==='unread') return PATIENTS.filter(unread);
+  return PATIENTS.filter(p=>M.picked.has(p.id));
+}
+function mRender(){
+  const r=recipients(), has=$('mText').value.trim()||MS.items.length;
+  $('mModes').innerHTML=MODES.map(([k,l])=>`<button data-mode="${k}" class="rounded-lg border px-2 py-2 ${M.mode===k?'border-primary bg-primary-soft text-primary':'border-line text-ink/70 hover:bg-canvas'}">${l}</button>`).join('');
+  $('mPick').classList.toggle('hidden',M.mode!=='pick');
+  const list=PATIENTS.filter(p=>p.name.toLowerCase().includes(M.q.toLowerCase()));
+  $('mChecks').innerHTML=list.map(p=>`<label class="flex cursor-pointer items-center gap-3 border-b border-line px-3 py-2 last:border-0 hover:bg-canvas/60"><input type="checkbox" data-c="${p.id}" class="h-4 w-4 accent-[#0B5D52]" ${M.picked.has(p.id)?'checked':''}>${avatar(p,'h-7 w-7 text-[10px]')}<span class="text-sm">${esc(p.name)}</span></label>`).join('')||'<p class="p-3 text-xs text-muted">No matches.</p>';
+  $('mAll').textContent=list.every(p=>M.picked.has(p.id))&&list.length?'Deselect all':'Select all';
+  $('mSummary').textContent=r.length?`${r.length} patient${r.length>1?'s':''} will receive this`:'No recipients selected';
+  const b=$('mSend'); b.disabled=!r.length||!has;
+  b.textContent=M.confirm?`Confirm: send to ${r.length}`:'Review & send';
+  b.classList.toggle('bg-accent',M.confirm); b.classList.toggle('hover:bg-accent',M.confirm);
+}
+function mOpen(){M={mode:'all',picked:new Set(),q:'',confirm:false};$('mText').value='';$('mQ').value='';MS.clear();$('modal').classList.replace('hidden','flex');mRender();$('mText').focus();}
+function mClose(){$('modal').classList.replace('flex','hidden');MS.clear();}
+$('massBtn').onclick=mOpen; $('mClose').onclick=mClose; $('mCancel').onclick=mClose;
+$('modal').addEventListener('mousedown',e=>{if(e.target===$('modal'))mClose();});
+$('mModes').onclick=e=>{const b=e.target.closest('[data-mode]'); if(b){M.mode=b.dataset.mode;M.confirm=false;mRender();}};
+$('mQ').oninput=e=>{M.q=e.target.value;mRender();};
+$('mChecks').onchange=e=>{const c=e.target.dataset.c; if(c){e.target.checked?M.picked.add(+c):M.picked.delete(+c);M.confirm=false;mRender();}};
+$('mAll').onclick=()=>{const list=PATIENTS.filter(p=>p.name.toLowerCase().includes(M.q.toLowerCase()));
+  const all=list.every(p=>M.picked.has(p.id)); list.forEach(p=>all?M.picked.delete(p.id):M.picked.add(p.id)); M.confirm=false; mRender();};
+$('mText').oninput=()=>{M.confirm=false;mRender();};
+$('mToken').onclick=()=>{const t=$('mText'),s=t.selectionStart??t.value.length;t.value=t.value.slice(0,s)+'{first_name}'+t.value.slice(t.selectionEnd??s);t.focus();mRender();};
+$('mAttach').onclick=()=>$('mFile').click();
+$('mFile').onchange=e=>{MS.add([...e.target.files]);e.target.value='';M.confirm=false;mRender();};
+$('mStaged').addEventListener('click',()=>setTimeout(()=>{M.confirm=false;mRender();}));
+$('mSend').onclick=()=>{
+  if(!M.confirm){M.confirm=true;return mRender();}
+  const r=recipients(), tpl=$('mText').value.trim(), files=MS.take(), time=stamp(), ts=Date.now();
+  r.forEach(p=>p.msgs.push({id:++mid,from:'doctor',isNew:false,bc:true,files:files.map(f=>({...f})),time,ts,text:tpl.replace(/\{first_name\}/gi,p.name.split(' ')[0])}));
+  $('modal').classList.replace('flex','hidden'); toast(`Mass message sent to ${r.length} patient${r.length>1?'s':''}`); refresh(true);
+};
+addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('modal').classList.contains('hidden'))mClose();});
+
+refresh(false);
+</script>
+</body>
+</html>

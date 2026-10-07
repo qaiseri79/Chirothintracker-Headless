@@ -1,0 +1,37 @@
+uuid: edb2df45-fbcf-4635-86c5-5da0dbc93c0d
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.training.body
+    - field.field.node.training.field_my_clinic
+    - field.field.node.training.field_published_to
+    - field.field.node.training.field_video
+    - node.type.training
+  module:
+    - text
+    - user
+id: node.training.teaser
+targetEntityType: node
+bundle: training
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_my_clinic: true
+  field_published_to: true
+  field_video: true
+  private_message_link: true

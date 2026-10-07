@@ -1,0 +1,14 @@
+uuid: 134ef2e9-761e-49be-9490-33ed03acc9ee
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.enrolled_patient
+  module:
+    - user
+id: user_remove_role_action.enrolled_patient
+label: 'Remove the Enrolled Patient role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: enrolled_patient

@@ -1,0 +1,9 @@
+uuid: 3ec59a4f-b33c-4e8c-b54c-6915874dfffb
+langcode: en
+status: true
+dependencies: {  }
+name: 'Message Status'
+vid: message_status
+description: null
+weight: 0
+new_revision: false

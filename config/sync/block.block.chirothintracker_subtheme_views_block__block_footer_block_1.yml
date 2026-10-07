@@ -1,0 +1,32 @@
+uuid: 094c1b5b-acf1-4ae3-a27a-6bfdc5239330
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.block_footer
+  module:
+    - user
+    - views
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_views_block__block_footer_block_1
+theme: chirothintracker_subtheme
+region: footer
+weight: 0
+provider: null
+plugin: 'views_block:block_footer-block_1'
+settings:
+  id: 'views_block:block_footer-block_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      chiropractor_active_: chiropractor_active_

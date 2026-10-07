@@ -1,0 +1,378 @@
+<?php
+
+/**
+ * @file
+ * CTT GoHighLevel integration module.
+ */
+
+use Drupal\user\UserInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for commerce_subscription.
+ */
+function ctt_gohighlevel_commerce_subscription_insert($subscription)
+{
+  // Only process if integration is enabled.
+  $config = \Drupal::config('ctt_gohighlevel.settings');
+  if (!$config->get('enabled')) {
+    return;
+  }
+
+  // Check if subscription is a license type and is active.
+  if ($subscription->getState()->getId() === 'active' && _ctt_gohighlevel_is_license_subscription($subscription)) {
+    _ctt_gohighlevel_handle_subscription_activation($subscription);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for commerce_subscription.
+ */
+function ctt_gohighlevel_commerce_subscription_update($subscription)
+{
+  // Only process if integration is enabled.
+  $config = \Drupal::config('ctt_gohighlevel.settings');
+  if (!$config->get('enabled')) {
+    return;
+  }
+
+  // Get the original subscription to compare state changes.
+  $original = $subscription->original;
+  if (!$original) {
+    return;
+  }
+
+  $new_state = $subscription->getState()->getId();
+  $old_state = $original->getState()->getId();
+
+  // Check if this is a license subscription.
+  if (!_ctt_gohighlevel_is_license_subscription($subscription)) {
+    return;
+  }
+
+  // Handle state transition to active.
+  if ($new_state === 'active' && $old_state !== 'active') {
+    _ctt_gohighlevel_handle_subscription_activation($subscription);
+  }
+
+  // Handle state transition to canceled.
+  if ($new_state === 'canceled' && $old_state !== 'canceled') {
+    _ctt_gohighlevel_handle_subscription_cancellation($subscription);
+  }
+}
+
+/**
+ * Check if a subscription is a license type.
+ *
+ * @param \Drupal\commerce_recurring\Entity\Subscription $subscription
+ *   The subscription entity.
+ *
+ * @return bool
+ *   TRUE if this is a license subscription, FALSE otherwise.
+ */
+function _ctt_gohighlevel_is_license_subscription($subscription)
+{
+  // Get the subscription type (bundle).
+  $subscription_type = $subscription->bundle();
+
+  // Check if the subscription type is 'license'.
+  if ($subscription_type === 'license') {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Get subscription-specific tag based on purchased product title.
+ *
+ * @param \Drupal\commerce_recurring\Entity\Subscription $subscription
+ *   The subscription entity.
+ *
+ * @return string|null
+ *   The subscription-specific tag, or NULL if not available.
+ */
+function _ctt_gohighlevel_get_subscription_tag($subscription)
+{
+  // Get the purchased entity (product variation).
+  if (!$subscription->hasPurchasedEntity()) {
+    return NULL;
+  }
+
+  $variation = $subscription->getPurchasedEntity();
+
+  if (!$variation) {
+    return NULL;
+  }
+
+  // Get the parent product from the variation.
+  $product = $variation->getProduct();
+
+  if (!$product) {
+    return NULL;
+  }
+
+  // Get the product title.
+  $title = $product->getTitle();
+
+  if (empty($title)) {
+    return NULL;
+  }
+
+  // Convert to lowercase.
+  $tag = strtolower($title);
+
+  // Special handling for "VETERAN (ANNUAL)" -> "annual"
+  if (stripos($tag, 'veteran (annual)') !== FALSE || stripos($tag, 'veteran(annual)') !== FALSE) {
+    return 'annual';
+  }
+
+  // Remove parentheses and their contents for other cases.
+  $tag = preg_replace('/\s*\([^)]*\)/', '', $tag);
+
+  // Remove extra whitespace and trim.
+  $tag = preg_replace('/\s+/', ' ', $tag);
+  $tag = trim($tag);
+
+  return $tag;
+}
+
+/**
+ * Handle subscription activation.
+ *
+ * @param \Drupal\commerce_recurring\Entity\Subscription $subscription
+ *   The subscription entity.
+ */
+function _ctt_gohighlevel_handle_subscription_activation($subscription)
+{
+  $config = \Drupal::config('ctt_gohighlevel.settings');
+  $subscription_tag = $config->get('subscription_tag') ?? 'CTT - New Subscriber';
+
+  // Get the user account.
+  $account = $subscription->getCustomer();
+  if (!$account) {
+    \Drupal::logger('ctt_gohighlevel')->error('Subscription @id has no customer account', [
+      '@id' => $subscription->id(),
+    ]);
+    return;
+  }
+
+  // Get the user's email.
+  $email = $account->getEmail();
+  if (empty($email)) {
+    \Drupal::logger('ctt_gohighlevel')->error('Customer @uid has no email address', [
+      '@uid' => $account->id(),
+    ]);
+    return;
+  }
+
+  // Get the GoHighLevel API service.
+  $ghl_api = \Drupal::service('ctt_gohighlevel.api');
+
+  // Get subscription-specific tag from product title.
+  $product_tag = _ctt_gohighlevel_get_subscription_tag($subscription);
+
+  // Search for existing contact.
+  $existing_contact = $ghl_api->getContactByEmail($email);
+
+  if ($existing_contact) {
+    // Contact exists - add subscription tag if not already present.
+    $existing_tags = $existing_contact['tags'] ?? [];
+    $tags_to_add = [];
+
+    // Convert subscription tag to lowercase.
+    $subscription_tag_lower = strtolower($subscription_tag);
+
+    if (!in_array($subscription_tag_lower, $existing_tags)) {
+      $tags_to_add[] = $subscription_tag_lower;
+    }
+
+    // Add product tag if available and not already present.
+    if ($product_tag !== NULL && !in_array($product_tag, $existing_tags)) {
+      $tags_to_add[] = $product_tag;
+    }
+
+    if (!empty($tags_to_add)) {
+      $updated_tags = array_merge($existing_tags, $tags_to_add);
+
+      $update_data = [
+        'tags' => $updated_tags,
+      ];
+
+      $result = $ghl_api->updateContact($existing_contact['id'], $update_data);
+
+      if ($result) {
+        \Drupal::logger('ctt_gohighlevel')->info('Added tags "@tags" to existing contact @email', [
+          '@tags' => implode(', ', $tags_to_add),
+          '@email' => $email,
+        ]);
+      }
+    } else {
+      \Drupal::logger('ctt_gohighlevel')->info('Contact @email already has all required tags', [
+        '@email' => $email,
+      ]);
+    }
+  } else {
+    // Contact doesn't exist - create new contact with subscription tag.
+    $contact_data = _ctt_gohighlevel_prepare_contact_data($account);
+    
+    // Convert subscription tag to lowercase and add to tags array.
+    $tags = [strtolower($subscription_tag)];
+    
+    // Add product tag if available.
+    if ($product_tag !== NULL) {
+      $tags[] = $product_tag;
+    }
+    
+    $contact_data['tags'] = $tags;
+
+    $result = $ghl_api->createContact($contact_data);
+
+    if ($result) {
+      \Drupal::logger('ctt_gohighlevel')->info('Created new contact @email with tags "@tags"', [
+        '@email' => $email,
+        '@tags' => implode(', ', $tags),
+      ]);
+    }
+  }
+}
+
+/**
+ * Handle subscription cancellation.
+ *
+ * @param \Drupal\commerce_recurring\Entity\Subscription $subscription
+ *   The subscription entity.
+ */
+function _ctt_gohighlevel_handle_subscription_cancellation($subscription)
+{
+  $config = \Drupal::config('ctt_gohighlevel.settings');
+  $cancellation_tag = $config->get('cancellation_tag') ?? 'CTT Cancelled';
+
+  // Get the user account.
+  $account = $subscription->getCustomer();
+  if (!$account) {
+    \Drupal::logger('ctt_gohighlevel')->error('Subscription @id has no customer account', [
+      '@id' => $subscription->id(),
+    ]);
+    return;
+  }
+
+  // Get the user's email.
+  $email = $account->getEmail();
+  if (empty($email)) {
+    \Drupal::logger('ctt_gohighlevel')->error('Customer @uid has no email address', [
+      '@uid' => $account->id(),
+    ]);
+    return;
+  }
+
+  // Get the GoHighLevel API service.
+  $ghl_api = \Drupal::service('ctt_gohighlevel.api');
+
+  // Get subscription-specific tag from product title.
+  $product_tag = _ctt_gohighlevel_get_subscription_tag($subscription);
+
+  // Search for existing contact.
+  $existing_contact = $ghl_api->getContactByEmail($email);
+
+  if ($existing_contact) {
+    // Contact exists - add cancellation tag if not already present.
+    $existing_tags = $existing_contact['tags'] ?? [];
+    $tags_to_add = [];
+
+    // Convert cancellation tag to lowercase.
+    $cancellation_tag_lower = strtolower($cancellation_tag);
+
+    if (!in_array($cancellation_tag_lower, $existing_tags)) {
+      $tags_to_add[] = $cancellation_tag_lower;
+    }
+
+    // Add product tag if available and not already present.
+    if ($product_tag !== NULL && !in_array($product_tag, $existing_tags)) {
+      $tags_to_add[] = $product_tag;
+    }
+
+    if (!empty($tags_to_add)) {
+      $updated_tags = array_merge($existing_tags, $tags_to_add);
+
+      $update_data = [
+        'tags' => $updated_tags,
+      ];
+
+      $result = $ghl_api->updateContact($existing_contact['id'], $update_data);
+
+      if ($result) {
+        \Drupal::logger('ctt_gohighlevel')->info('Added cancellation tags "@tags" to contact @email', [
+          '@tags' => implode(', ', $tags_to_add),
+          '@email' => $email,
+        ]);
+      }
+    } else {
+      \Drupal::logger('ctt_gohighlevel')->info('Contact @email already has all required cancellation tags', [
+        '@email' => $email,
+      ]);
+    }
+  } else {
+    // Contact doesn't exist - create new contact with cancellation tag.
+    $contact_data = _ctt_gohighlevel_prepare_contact_data($account);
+    
+    // Convert cancellation tag to lowercase and add to tags array.
+    $tags = [strtolower($cancellation_tag)];
+    
+    // Add product tag if available.
+    if ($product_tag !== NULL) {
+      $tags[] = $product_tag;
+    }
+    
+    $contact_data['tags'] = $tags;
+
+    $result = $ghl_api->createContact($contact_data);
+
+    if ($result) {
+      \Drupal::logger('ctt_gohighlevel')->info('Created new contact @email with cancellation tags "@tags"', [
+        '@email' => $email,
+        '@tags' => implode(', ', $tags),
+      ]);
+    }
+  }
+}
+
+/**
+ * Prepare contact data from user account.
+ *
+ * @param \Drupal\user\UserInterface $account
+ *   The user account.
+ *
+ * @return array
+ *   Contact data array for GoHighLevel API.
+ */
+function _ctt_gohighlevel_prepare_contact_data(UserInterface $account)
+{
+  $config = \Drupal::config('ctt_gohighlevel.settings');
+
+  $contact_data = [
+    'email' => $account->getEmail(),
+  ];
+
+  // Add source if configured.
+  $default_source = $config->get('default_source');
+  if (!empty($default_source)) {
+    $contact_data['source'] = $default_source;
+  }
+
+  // Map field_full_name to firstName and lastName.
+  if ($account->hasField('field_full_name') && !$account->get('field_full_name')->isEmpty()) {
+    $full_name = $account->get('field_full_name')->value;
+    $name_parts = explode(' ', $full_name, 2);
+    $contact_data['firstName'] = $name_parts[0];
+    if (isset($name_parts[1])) {
+      $contact_data['lastName'] = $name_parts[1];
+    }
+  }
+
+  // Map field_phone_number to phone.
+  if ($account->hasField('field_phone_number') && !$account->get('field_phone_number')->isEmpty()) {
+    $contact_data['phone'] = $account->get('field_phone_number')->value;
+  }
+
+  return $contact_data;
+}

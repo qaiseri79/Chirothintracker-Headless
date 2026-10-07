@@ -1,0 +1,86 @@
+uuid: 4e9eb6cf-46c8-424e-85ef-c443b31dbd58
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.clinic.teaser
+    - eck.eck_type.clinic.clinic
+    - field.field.clinic.clinic.field_brand
+    - field.field.clinic.clinic.field_clinic_body
+    - field.field.clinic.clinic.field_clinic_mail
+    - field.field.clinic.clinic.field_custom_daily_messages
+    - field.field.clinic.clinic.field_domain_base_link
+    - field.field.clinic.clinic.field_domain_base_no_protocol
+    - field.field.clinic.clinic.field_ecommerce_enabled
+    - field.field.clinic.clinic.field_enrollment_package
+    - field.field.clinic.clinic.field_false_clinic
+    - field.field.clinic.clinic.field_footer_logo
+    - field.field.clinic.clinic.field_fulfillment_type
+    - field.field.clinic.clinic.field_hide_shared_resources
+    - field.field.clinic.clinic.field_intake_forms_enabled
+    - field.field.clinic.clinic.field_laser_clinic
+    - field.field.clinic.clinic.field_logo
+    - field.field.clinic.clinic.field_mind_set_work
+    - field.field.clinic.clinic.field_photo
+    - field.field.clinic.clinic.field_video_messages
+  module:
+    - user
+id: clinic.clinic.teaser
+targetEntityType: clinic
+bundle: clinic
+mode: teaser
+content:
+  created:
+    type: timestamp
+    label: hidden
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -5
+    region: content
+  uid:
+    type: author
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  changed: true
+  field_brand: true
+  field_clinic_body: true
+  field_clinic_mail: true
+  field_custom_daily_messages: true
+  field_domain_base_link: true
+  field_domain_base_no_protocol: true
+  field_ecommerce_enabled: true
+  field_enrollment_package: true
+  field_false_clinic: true
+  field_footer_logo: true
+  field_fulfillment_type: true
+  field_hide_shared_resources: true
+  field_intake_forms_enabled: true
+  field_laser_clinic: true
+  field_logo: true
+  field_mind_set_work: true
+  field_photo: true
+  field_video_messages: true

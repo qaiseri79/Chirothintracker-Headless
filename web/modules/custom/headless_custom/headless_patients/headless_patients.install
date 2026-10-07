@@ -1,0 +1,96 @@
+<?php
+
+/**
+ * @file
+ * Uninstall behaviour for the headless patients roster.
+ *
+ * ## There is no schema here any more
+ *
+ * This module keeps no tables, and the only one it ever had was a mistake.
+ *
+ * `headless_patients_intake_review` was created to hold intake review state,
+ * because nothing in the codebase recorded it. That was wrong on both counts:
+ * the site has recorded it for years as the `intake_processed_cs` flag on the
+ * submission, written by `custom_module`'s `FlagIntakeForm()`, and a parallel
+ * store for a fact that already has a home is only ever going to disagree with
+ * it. It did, immediately and in the worst direction: the table started empty,
+ * so all 188 of the clinic's submissions reported as `new` and the chiropractor
+ * was shown work that had already been done.
+ *
+ * {@see \Drupal\headless_patients\PatientIntakeService} now reads and writes the
+ * flag, so there is nothing here to create. {@see headless_patients_update_8003()}
+ * drops the table on installations that have it.
+ *
+ * ## Why there is no permission-granting code here either
+ *
+ * This file used to declare the roles that may read and write the roster, grant
+ * them `access headless patients` and `manage headless patients`, and revoke those
+ * permissions from `patient_chirothin` and the two patient roles. All of that is
+ * gone, along with the permissions themselves, for two reasons.
+ *
+ * The grants never took effect: the routing file put `_permission` under
+ * `defaults`, where Drupal does not read it, so nothing on these routes was ever
+ * gated. An operator reading this file would reasonably conclude the endpoints were
+ * closed to patients when in fact every route was open to any signed-in account.
+ *
+ * And the arrangement itself was the problem. The role lists here answered "who is
+ * a chiropractor" a third time, in a module about patients, and they had already
+ * drifted from headless_progress, which grants its own permission to the patient
+ * roles. Access is now expressed once, in the headless_access module, by
+ * {@see \Drupal\headless_access\PortalRoles} and the policy classes that read it.
+ * Roles are the single source of truth; there is nothing to grant.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Drops the review table, which is no longer read or written.
+ *
+ * ## Why 8003 and not 8002
+ *
+ * 8002 created this table on installations that predated it, and it never ran:
+ * the module was reinstalled instead, and installing sets the recorded schema
+ * version to the highest update number available at that moment. So the site
+ * believes 8002 has already happened and will never call it. Reusing the number
+ * would look like the fix but silently do nothing, which is precisely how the
+ * table went missing in the first place.
+ *
+ * Safe to run against a site where the table does not exist, and safe against
+ * rows that matter: the table was never the record of anything real.
+ */
+function headless_patients_update_8003(): void {
+  headless_patients_drop_review_table();
+}
+
+/**
+ * Drops the obsolete review table, if this site still has it.
+ *
+ * Shared by the update hook and hook_uninstall() because they cannot see each
+ * other: uninstalling does not run update hooks, so a site that uninstalls before
+ * it ever runs updatedb would otherwise leave the table behind with nothing left
+ * in code that knows its name.
+ */
+function headless_patients_drop_review_table(): void {
+  $database = \Drupal::database();
+  $name = 'headless_patients_intake_review';
+
+  if (!$database->schema()->tableExists($name)) {
+    return;
+  }
+
+  $database->schema()->dropTable($name);
+
+  \Drupal::logger('headless_patients')->notice(
+    'Dropped the @table table. Intake review state is the @flag flag.',
+    ['@table' => $name, '@flag' => 'intake_processed_cs']
+  );
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function headless_patients_uninstall(): void {
+  headless_patients_drop_review_table();
+
+  drupal_flush_all_caches();
+}

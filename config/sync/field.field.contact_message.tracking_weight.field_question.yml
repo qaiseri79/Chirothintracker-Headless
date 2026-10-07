@@ -1,0 +1,22 @@
+uuid: 1138da2f-c07c-463c-8595-6eb83f892545
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_question
+  module:
+    - text
+id: contact_message.tracking_weight.field_question
+field_name: field_question
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Send a message to your doctor'
+description: 'If you have any questions or comments for your doctor, you may provide them here.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

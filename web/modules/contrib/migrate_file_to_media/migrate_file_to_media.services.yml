@@ -1,0 +1,17 @@
+services:
+  migrate_file_to_media.commands:
+    class: \Drupal\migrate_file_to_media\Commands\MediaMigrateCommands
+    public: true
+    arguments:
+      - '@entity_field.manager'
+      - '@entity_type.manager'
+      - '@database'
+      - '@plugin.manager.migration'
+      - '@stream_wrapper_manager'
+      - '@file_system'
+      - '@string_translation'
+  migrate_file_to_media.event_subscriber:
+    class: Drupal\migrate_file_to_media\EventSubscriber\MediaMigrateSubscriber
+    arguments: [ '@database' ]
+    tags:
+      - { name: event_subscriber }

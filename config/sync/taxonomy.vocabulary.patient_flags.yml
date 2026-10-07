@@ -1,0 +1,9 @@
+uuid: 672f5615-bef6-410b-aed7-e99a0b072255
+langcode: en
+status: true
+dependencies: {  }
+name: 'Patient Flags'
+vid: patient_flags
+description: null
+weight: 0
+new_revision: false

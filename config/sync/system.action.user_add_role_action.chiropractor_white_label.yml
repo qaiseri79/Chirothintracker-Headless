@@ -1,0 +1,14 @@
+uuid: 1af20e09-5e00-4f29-ba6e-2b820af0f2c2
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.chiropractor_white_label
+  module:
+    - user
+id: user_add_role_action.chiropractor_white_label
+label: 'Add the Chiropractor - White Label role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: chiropractor_white_label

@@ -1,0 +1,25 @@
+uuid: cf6f18e9-4c66-4ee7-83c1-b120d2757940
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_published_to
+    - node.type.chirothin_resource
+id: node.chirothin_resource.field_published_to
+field_name: field_published_to
+entity_type: node
+bundle: chirothin_resource
+label: 'Published To'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: my_clinic
+      display_name: entity_reference_2
+      arguments: {  }
+field_type: entity_reference

@@ -1,0 +1,106 @@
+uuid: fb948f50-3c14-47b2-b86d-1ca34fc4dc67
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d7_taxonomy_term_resource_category
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Content
+migration_group: migrate_drupal_7
+label: 'Taxonomy terms (Resource Category)'
+source:
+  plugin: d7_taxonomy_term
+  bundle: resource_category
+process:
+  tid:
+    -
+      plugin: get
+      source: tid
+  vid:
+    -
+      plugin: migration_lookup
+      migration: upgrade_d7_taxonomy_vocabulary
+      source: vid
+  name:
+    -
+      plugin: get
+      source: name
+  description/value:
+    -
+      plugin: get
+      source: description
+  description/format:
+    -
+      plugin: get
+      source: format
+  weight:
+    -
+      plugin: get
+      source: weight
+  parent_id:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: parent
+    -
+      plugin: migration_lookup
+      migration:
+        - upgrade_d7_taxonomy_term_tags
+        - upgrade_d7_taxonomy_term_message_status
+        - upgrade_d7_taxonomy_term_patient_flags
+        - upgrade_d7_taxonomy_term_chiropractor_flags
+        - upgrade_d7_taxonomy_term_catalog
+        - upgrade_d7_taxonomy_term_program_days
+        - upgrade_d7_taxonomy_term_anonymous_pages
+        - upgrade_d7_taxonomy_term_recipe_types
+        - upgrade_d7_taxonomy_term_recipe_category
+        - upgrade_d7_taxonomy_term_resource_category
+        - upgrade_d7_taxonomy_term_order_pickup
+        - upgrade_d7_taxonomy_term_protein
+        - upgrade_d7_taxonomy_term_vegetables
+        - upgrade_d7_taxonomy_term_vegetables_free_
+        - upgrade_d7_taxonomy_term_bread
+        - upgrade_d7_taxonomy_term_sauces_and_seasonings
+        - upgrade_d7_taxonomy_term_fruit
+        - upgrade_d7_taxonomy_term_laser_type
+        - upgrade_d7_taxonomy_term_gender
+        - upgrade_d7_taxonomy_term_weight_loss_phase
+        - upgrade_d7_taxonomy_term_dominant_hand
+        - upgrade_d7_taxonomy_term_measure_application
+        - upgrade_d7_taxonomy_term_laser_treatment_area
+        - upgrade_d7_taxonomy_term_ultraslim_treatment_protocols
+        - upgrade_d7_taxonomy_term_subcutaneous_fat
+        - upgrade_d7_taxonomy_term_skin_tightening
+        - upgrade_d7_taxonomy_term_cellulite
+        - upgrade_d7_taxonomy_term_glyphicons
+        - upgrade_d7_taxonomy_term_yes_no
+        - upgrade_d7_taxonomy_term_laser_patient_status
+  parent:
+    -
+      plugin: default_value
+      default_value: 0
+      source: '@parent_id'
+  forum_container:
+    -
+      plugin: get
+      source: is_container
+  changed:
+    -
+      plugin: get
+      source: timestamp
+  langcode:
+    -
+      plugin: get
+      source: language
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: resource_category
+migration_dependencies:
+  required:
+    - upgrade_d7_taxonomy_vocabulary
+  optional:
+    - upgrade_d7_field_instance
+    - upgrade_d7_taxonomy_vocabulary

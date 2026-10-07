@@ -1,0 +1,31 @@
+uuid: 8e9e9c37-40c0-409f-a893-47250d1b3a99
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_cart
+    - commerce_checkout
+    - commerce_shipping
+third_party_settings:
+  commerce_cart:
+    cart_block_view: commerce_cart_block
+    cart_form_view: commerce_cart_form
+    cart_expiration:
+      number: 30
+      unit: minute
+    enable_cart_message: true
+  commerce_checkout:
+    checkout_flow: shop
+  commerce_shipping:
+    shipment_type: default
+id: shop
+label: Shop
+traits: {  }
+locked: false
+workflow: order_default
+numberPattern: order_default
+refresh_mode: customer
+refresh_frequency: 300
+sendReceipt: true
+receiptBcc: ''
+receiptSubject: ''

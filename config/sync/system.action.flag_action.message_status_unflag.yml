@@ -1,0 +1,15 @@
+uuid: e478d50c-88d7-4057-9a4f-96f7398f39d3
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.message_status
+  module:
+    - flag
+id: flag_action.message_status_unflag
+label: '<span class="btn btn-success">Mark as Read</span>'
+type: webform_submission
+plugin: 'flag_action:message_status_unflag'
+configuration:
+  flag_id: message_status
+  flag_action: unflag

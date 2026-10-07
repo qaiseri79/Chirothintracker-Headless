@@ -1,0 +1,19 @@
+uuid: 4f4ede8f-1306-4fab-b89d-83be0e0acb60
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_other_food
+id: contact_message.tracking_weight.field_other_food
+field_name: field_other_food
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Other Foods'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

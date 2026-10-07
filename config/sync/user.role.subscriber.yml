@@ -1,0 +1,13 @@
+uuid: 3bc9a885-6e8e-4ec8-87b8-3af345df23e7
+langcode: en
+status: true
+dependencies:
+  module:
+    - pfdp
+id: subscriber
+label: Subscriber
+weight: 20
+is_admin: null
+permissions:
+  - 'bypass pfdp'
+  - 'bypass pfdp for temporary files'

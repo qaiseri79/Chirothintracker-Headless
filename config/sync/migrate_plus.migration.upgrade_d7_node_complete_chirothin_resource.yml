@@ -1,0 +1,110 @@
+uuid: f8d04106-0ea7-4017-80b8-07af001f76fc
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d7_node_complete_chirothin_resource
+class: Drupal\node\Plugin\migrate\D7NodeTranslation
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Content
+migration_group: migrate_drupal_7
+label: 'Node complete (Resource)'
+source:
+  plugin: d7_node_complete
+  node_type: chirothin_resource
+process:
+  nid:
+    -
+      plugin: get
+      source: tnid
+  vid:
+    -
+      plugin: get
+      source: vid
+  langcode:
+    -
+      plugin: default_value
+      source: language
+      default_value: und
+  title:
+    -
+      plugin: get
+      source: title
+  uid:
+    -
+      plugin: get
+      source: node_uid
+  status:
+    -
+      plugin: get
+      source: status
+  created:
+    -
+      plugin: get
+      source: created
+  changed:
+    -
+      plugin: get
+      source: timestamp
+  promote:
+    -
+      plugin: get
+      source: promote
+  sticky:
+    -
+      plugin: get
+      source: sticky
+  revision_uid:
+    -
+      plugin: get
+      source: revision_uid
+  revision_log:
+    -
+      plugin: get
+      source: log
+  revision_timestamp:
+    -
+      plugin: get
+      source: timestamp
+  content_translation_source:
+    -
+      plugin: get
+      source: source_langcode
+  comment_node_chirothin_resource/0/status:
+    -
+      plugin: get
+      source: comment
+  field_resource:
+    -
+      plugin: sub_process
+      source: field_resource
+      process:
+        target_id: fid
+        display: display
+        description: description
+  field_body:
+    -
+      plugin: get
+      source: field_body
+  field_resource_type:
+    -
+      plugin: sub_process
+      source: field_resource_type
+      process:
+        target_id: tid
+  field_my_clinic:
+    -
+      plugin: get
+      source: field_my_clinic
+destination:
+  plugin: 'entity_complete:node'
+  translations: true
+  default_bundle: chirothin_resource
+migration_dependencies:
+  required:
+    - upgrade_d7_user
+    - upgrade_d7_node_type
+  optional:
+    - upgrade_d7_field_instance

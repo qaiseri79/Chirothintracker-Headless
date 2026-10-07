@@ -1,0 +1,37 @@
+uuid: baa3f656-fd7b-48e1-9fe0-d82a86c242a2
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+    - options
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: contact_message.field_daily_activity_level
+field_name: field_daily_activity_level
+entity_type: contact_message
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '1'
+      label: Sedentary
+    -
+      value: '2'
+      label: 'Lightly Active'
+    -
+      value: '3'
+      label: 'Moderately Active'
+    -
+      value: '4'
+      label: 'Very Active'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

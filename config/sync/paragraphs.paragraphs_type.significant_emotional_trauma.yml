@@ -1,0 +1,10 @@
+uuid: 51f223d0-3821-4ba6-bfdb-28e3fc68e7c5
+langcode: en
+status: true
+dependencies: {  }
+id: significant_emotional_trauma
+label: 'Significant Emotional Trauma'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

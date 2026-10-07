@@ -1,0 +1,103 @@
+uuid: 25d1bd65-3f0b-4c47-8006-ba0b98a46c03
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.recipe.body
+    - field.field.node.recipe.field_my_clinic
+    - field.field.node.recipe.field_published_to
+    - field.field.node.recipe.field_recipe_category
+    - field.field.node.recipe.field_recipe_ingredient
+    - field.field.node.recipe.field_recipe_type
+    - node.type.recipe
+  module:
+    - field_group
+    - text
+    - user
+third_party_settings:
+  field_group:
+    group_ingredients:
+      children:
+        - field_recipe_ingredient
+      label: Ingredients
+      parent_name: ''
+      region: content
+      weight: 0
+      format_type: html_element
+      format_settings:
+        classes: 'group-ingredients field-group-div'
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: true
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        formatter: collapsible
+        description: ''
+    group_instructions:
+      children:
+        - body
+      label: Instructions
+      parent_name: ''
+      region: content
+      weight: 1
+      format_type: html_element
+      format_settings:
+        classes: 'group-instructions field-group-div'
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: true
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        formatter: collapsible
+        description: ''
+id: node.recipe.default
+targetEntityType: node
+bundle: recipe
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_my_clinic:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_recipe_ingredient:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  flag_favorites:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+hidden:
+  field_published_to: true
+  field_recipe_category: true
+  field_recipe_type: true
+  private_message_link: true

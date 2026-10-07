@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Commerce Reporting module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\entity\EntityAccessControlHandler;
+use Drupal\entity\EntityPermissionProvider;
+
+/**
+ * Update access and permission handlers on commerce_order_report entity type.
+ */
+function commerce_reports_update_10000() {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $entity_type = $entity_type_manager->getDefinition('commerce_order_report')
+    ->setHandlerClass('access', EntityAccessControlHandler::class)
+    ->setHandlerClass('permission_provider', EntityPermissionProvider::class);
+  $definition_manager = \Drupal::entityDefinitionUpdateManager();
+  $definition_manager->updateEntityType($entity_type);
+}

@@ -1,0 +1,207 @@
+<?php
+
+/**
+ * @file
+ * ECA Webform submodule.
+ */
+
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Database\Query\AlterableInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\eca_webform\HookHandler;
+use Drupal\webform\Plugin\WebformHandlerInterface;
+use Drupal\webform\WebformSubmissionInterface;
+
+/**
+ * Helper function to return the hook handler service.
+ *
+ * @return \Drupal\eca_webform\HookHandler
+ *   The hook handler service.
+ */
+function _eca_webform_hook_handler(): HookHandler {
+  return \Drupal::service('eca_webform.hook_handler');
+}
+
+/**
+ * Implements hook_webform_element_info_alter().
+ */
+function eca_webform_webform_element_info_alter(array &$definitions): void {
+  _eca_webform_hook_handler()->alterElementInfo($definitions);
+}
+
+/**
+ * Implements hook_webform_handler_info_alter().
+ */
+function eca_webform_webform_handler_info_alter(array &$handlers): void {
+  _eca_webform_hook_handler()->alterHandlerInfo($handlers);
+}
+
+/**
+ * Implements hook_webform_variant_info_alter().
+ */
+function eca_webform_webform_variant_info_alter(array &$variants): void {
+  _eca_webform_hook_handler()->alterVariantInfo($variants);
+}
+
+/**
+ * Implements hook_webform_source_entity_info_alter().
+ */
+function eca_webform_webform_source_entity_info_alter(array &$definitions): void {
+  _eca_webform_hook_handler()->alterSourceEntityInfo($definitions);
+}
+
+/**
+ * Implements hook_webform_element_default_properties_alter().
+ */
+function eca_webform_webform_element_default_properties_alter(array &$properties, array &$definition): void {
+  _eca_webform_hook_handler()->alterElementDefaultProperties($properties, $definition);
+}
+
+/**
+ * Implements hook_webform_element_translatable_properties_alter().
+ */
+function eca_webform_webform_element_translatable_properties_alter(array &$properties, array &$definition): void {
+  _eca_webform_hook_handler()->alterElementTranslatableProperties($properties, $definition);
+}
+
+/**
+ * Implements hook_webform_element_configuration_form_alter().
+ */
+function eca_webform_webform_element_configuration_form_alter(array &$form, FormStateInterface $form_state): void {
+  _eca_webform_hook_handler()->alterElementConfigurationForm($form, $form_state);
+}
+
+/**
+ * Implements hook_webform_element_alter().
+ *
+ * @see hook_webform_element_ELEMENT_TYPE_alter
+ */
+function eca_webform_webform_element_alter(array &$element, FormStateInterface $form_state, array $context): void {
+  _eca_webform_hook_handler()->alterElement($element, $form_state, $context);
+}
+
+/**
+ * Implements hook_webform_element_access().
+ */
+function eca_webform_webform_element_access(string $operation, array &$element, AccountInterface $account = NULL, array $context = []): AccessResultInterface {
+  return _eca_webform_hook_handler()->alterElementAccess($operation, $element, $account, $context);
+}
+
+/**
+ * Implements hook_webform_element_input_masks().
+ */
+function eca_webform_hook_webform_element_input_masks(): array {
+  return _eca_webform_hook_handler()->elementInputMasks();
+}
+
+/**
+ * Implements hook_webform_element_input_masks_alter().
+ */
+function eca_webform_webform_element_input_masks_alter(array &$input_masks): void {
+  _eca_webform_hook_handler()->alterElementInputMasks($input_masks);
+}
+
+/**
+ * Implements hook_webform_options_alter().
+ *
+ * @see hook_webform_options_WEBFORM_OPTIONS_ID_alter()
+ */
+function eca_webform_webform_options_alter(array &$options, array &$element, string $options_id = NULL): void {
+  _eca_webform_hook_handler()->alterOptions($options, $element, $options_id);
+}
+
+/**
+ * Implements hook_webform_submissions_pre_purge().
+ */
+function eca_webform_webform_submissions_pre_purge(array $webform_submissions): void {
+  _eca_webform_hook_handler()->submissionsPrePurge($webform_submissions);
+}
+
+/**
+ * Implements hook_webform_submissions_post_purge().
+ */
+function eca_webform_webform_submissions_post_purge(array $webform_submissions): void {
+  _eca_webform_hook_handler()->submissionsPostPurge($webform_submissions);
+}
+
+/**
+ * Implements hook_webform_submission_form_alter().
+ */
+function eca_webform_webform_submission_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  _eca_webform_hook_handler()->alterSubmissionForm($form, $form_state, $form_id);
+}
+
+/**
+ * Implements hook_webform_admin_third_party_settings_form_alter().
+ */
+function eca_webform_webform_admin_third_party_settings_form_alter(array &$form, FormStateInterface $form_state): void {
+  _eca_webform_hook_handler()->alterAdminThirdPartySettingsForm($form, $form_state);
+}
+
+/**
+ * Implements hook_webform_third_party_settings_form_alter().
+ */
+function eca_webform_webform_third_party_settings_form_alter(array &$form, FormStateInterface $form_state): void {
+  _eca_webform_hook_handler()->alterThirdPartySettingsForm($form, $form_state);
+}
+
+/**
+ * Implements hook_webform_handler_invoke_alter().
+ *
+ * @see hook_webform_handler_invoke_METHOD_NAME_alter()
+ */
+function eca_webform_webform_handler_invoke_alter(WebformHandlerInterface $handler, string $method_name, array &$args): void {
+  _eca_webform_hook_handler()->alterHandlerInvoke($handler, $method_name, $args);
+}
+
+/**
+ * Implements hook_webform_help_info().
+ */
+function eca_webform_webform_help_info(): array {
+  return _eca_webform_hook_handler()->helpInfo();
+}
+
+/**
+ * Implements hook_webform_help_info_alter().
+ */
+function eca_webform_webform_help_info_alter(array &$help): void {
+  _eca_webform_hook_handler()->alterHelpInfo($help);
+}
+
+/**
+ * Implements hook_webform_access_rules().
+ */
+function eca_webform_webform_access_rules(): array {
+  return _eca_webform_hook_handler()->accessRules();
+}
+
+/**
+ * Implements hook_webform_access_rules_alter().
+ */
+function eca_webform_webform_access_rules_alter(array &$access_rules): void {
+  _eca_webform_hook_handler()->alterAccessRules($access_rules);
+}
+
+/**
+ * Implements hook_webform_submission_access().
+ */
+function eca_webform_webform_submission_access(WebformSubmissionInterface $webform_submission, string $operation, AccountInterface $account): AccessResultInterface {
+  return _eca_webform_hook_handler()->submissionAccess($webform_submission, $operation, $account);
+}
+
+/**
+ * Implements hook_webform_submission_query_access_alter().
+ */
+function eca_webform_webform_submission_query_access_alter(AlterableInterface $query, array $webform_submission_tables): void {
+  _eca_webform_hook_handler()->alterSubmissionQueryAccess($query, $webform_submission_tables);
+}
+
+/**
+ * Implements hook_webform_image_select_images_alter().
+ *
+ * @see hook_webform_image_select_images_WEBFORM_IMAGE_SELECT_IMAGES_ID_alter()
+ */
+function eca_webform_webform_image_select_images_alter(array &$images, array &$element, $images_id = NULL): void {
+  _eca_webform_hook_handler()->alterImageSelectImages($images, $element, $images_id);
+}

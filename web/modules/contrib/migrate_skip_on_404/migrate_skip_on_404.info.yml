@@ -1,0 +1,12 @@
+type: module
+name: 'Migrate: Skip File On Not Exists'
+description: 'Automatically skip files if they do not exist on the server, rather than make the Migrate Drupal UI or Migrate Upgrade -based migration fail.'
+package: Migration
+core_version_requirement: ^9 || ^10 || ^11
+dependencies:
+  - drupal:migrate
+
+# Information added by Drupal.org packaging script on 2025-05-02
+version: '1.1.2'
+project: 'migrate_skip_on_404'
+datestamp: 1746183941

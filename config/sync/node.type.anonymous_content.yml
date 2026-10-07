@@ -1,0 +1,16 @@
+uuid: b0bf56bb-c8bd-4191-998a-4bfa613a72f9
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    parent: 'main-menu:0:'
+name: 'Anonymous Content'
+type: anonymous_content
+description: null
+help: null
+new_revision: false
+preview_mode: 1
+display_submitted: false

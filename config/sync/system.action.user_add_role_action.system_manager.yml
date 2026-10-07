@@ -1,0 +1,14 @@
+uuid: 7bd49e0e-f4b5-4f4f-ab1a-16bb80e4c273
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.system_manager
+  module:
+    - user
+id: user_add_role_action.system_manager
+label: 'Add the System Manager role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: system_manager

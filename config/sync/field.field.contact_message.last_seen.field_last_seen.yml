@@ -1,0 +1,21 @@
+uuid: 2ad8b3ce-81fb-4b73-9e48-d7756b1cb212
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.last_seen
+    - field.storage.contact_message.field_last_seen
+  module:
+    - datetime
+id: contact_message.last_seen.field_last_seen
+field_name: field_last_seen
+entity_type: contact_message
+bundle: last_seen
+label: 'Last Seen'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

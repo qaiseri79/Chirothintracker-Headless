@@ -1,0 +1,14 @@
+uuid: 81716506-93d9-4b98-974f-53ab32d9354a
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.chiropractor_active_
+  module:
+    - user
+id: user_remove_role_action.chiropractor_active_
+label: 'Remove the Chiropractor (Active) role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: chiropractor_active_

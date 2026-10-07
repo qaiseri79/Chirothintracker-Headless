@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>ChiroThin — Patients</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: {
+      canvas: "#F3F4F1", surface: "#FFFFFF", ink: "#101827", muted: "#6B7280", line: "#E4E2DC",
+      primary: { DEFAULT: "#0B5D52", soft: "#E4EEEC", dark: "#08423A" },
+      accent: { DEFAULT: "#C7522A", soft: "#F6E4DC" },
+    },
+    fontFamily: { serif: ["Newsreader","Georgia","serif"], sans: ["Inter","system-ui","sans-serif"] },
+    boxShadow: { panel: "0 1px 2px rgba(16,24,39,0.04), 0 8px 24px -12px rgba(16,24,39,0.08)" },
+  } } };
+</script>
+<style>
+  :root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  html, body { height: 100%; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; } ::-webkit-scrollbar-thumb { background: #E4E2DC; border-radius: 8px; }
+</style>
+</head>
+<body class="bg-canvas font-sans text-ink antialiased h-full">
+<div class="flex h-full">
+  <aside class="group/sidebar hidden md:flex w-[72px] shrink-0 flex-col overflow-hidden border-r border-line bg-surface transition-[width] duration-200 hover:w-64">
+    <div class="flex h-16 shrink-0 items-center gap-3 border-b border-line px-5">
+      <svg class="h-6 w-6 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <div class="whitespace-nowrap opacity-0 transition-opacity group-hover/sidebar:opacity-100"><p class="font-serif text-base leading-none">ChiroThin</p><p class="text-[10px] tracking-wide text-muted">Provider Portal</p></div>
+    </div>
+    <nav id="nav" class="flex-1 space-y-0.5 overflow-y-auto px-3 py-4"></nav>
+  </aside>
+
+  <div class="flex min-w-0 flex-1 flex-col">
+    <header class="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-4 border-b border-line bg-surface/90 px-4 backdrop-blur sm:px-6">
+      <h1 class="font-serif text-lg">Patients</h1>
+      <div class="flex-1"></div>
+      <div class="hidden items-center gap-2 rounded-full border border-accent/40 px-3 py-1 text-[11px] sm:flex"><span class="text-muted">Subscription</span><b>Unlimited</b><span class="text-line">|</span><span class="text-muted">Enrolled</span><b id="enrolled"></b></div>
+      <div class="flex items-center gap-2 border-l border-line pl-4"><div class="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-primary-soft text-[11px] font-semibold text-primary">JS</div><span class="hidden text-sm font-medium xl:block">Dr. John Schellenberg</span></div>
+    </header>
+    <main class="flex-1 overflow-y-auto"><div id="page" class="mx-auto max-w-6xl px-4 py-6 sm:px-6"></div></main>
+  </div>
+</div>
+
+<div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-ink/40 p-4">
+  <div class="w-full max-w-md rounded-2xl bg-surface p-6 shadow-panel">
+    <h2 id="mTitle" class="font-serif text-lg"></h2><p id="mBody" class="mt-2 text-sm leading-relaxed text-muted"></p>
+    <div class="mt-6 flex justify-end gap-2"><button id="mNo" class="rounded-lg px-4 py-2 text-sm font-medium text-muted hover:bg-canvas">Cancel</button><button id="mYes" class="rounded-lg px-4 py-2 text-sm font-semibold text-white"></button></div>
+  </div>
+</div>
+<div id="toast" class="pointer-events-none fixed bottom-6 left-1/2 z-50 hidden -translate-x-1/2 rounded-full bg-ink px-4 py-2 text-sm text-white shadow-panel"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ICONS={
+ home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+ users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+ message:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+ utensils:'<path d="M3 2v7c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2V2M7 2v20M17 2v20M17 2c-2.5 0-4 3-4 6.5S14.5 15 17 15"/>',
+ trending:'<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
+ cart:'<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 2-1.58l1.65-8.42H5.12"/>',
+ more:'<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',
+ search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+ archive:'<rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8M10 12h4"/>',
+ plus:'<path d="M12 5v14M5 12h14"/>', check:'<path d="M20 6 9 17l-5-5"/>', x:'<path d="M18 6 6 18M6 6l12 12"/>',
+ info:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>', notes:'<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>',
+ eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>', copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+ userplus:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/>', sort:'<path d="m7 15 5 5 5-5M7 9l5-5 5 5"/>',
+};
+const icon=(n,c='h-4 w-4')=>`<svg class="${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]}</svg>`;
+
+/* ---- Data adapter: swap with your Drupal endpoints ---- */
+const PHASES={L:'Losing Phase',D:'Loading Phase',Z:'Zero-Day (Pre-Loading)',C:'Continuity Phase',M:'Cycling / Maintenance Phase'};
+const PH_CLS={L:'bg-primary-soft text-primary',D:'bg-accent-soft text-accent',Z:'bg-slate-100 text-slate-600',C:'bg-sky-50 text-sky-700',M:'bg-violet-50 text-violet-700'};
+let ACTIVE=[["B. Rita Roe","rita.roe@chirothintracker.com","L","2026-09-17",14,0,0],["B Rooney","br@me.com","L","2026-09-14",13,0,0],["A. Mazing Patient","live@livem.com","L","2026-08-13",48,0,-178.2],["Misc","misc@fakemail.com","L","2026-07-09",80,0,0],["LAser Only Test","lot@me.com","L","2026-04-15",165,0,0],["Testing Testing123","testtesting123@yopmail.com","L","2026-03-31",180,0,0],["test testers123","test123@yopmail.com","D","2026-03-18",0,0,0],["A. Joe Patient","inrlux1@gmail.com","L","2026-03-15",199,210,60],["C. Laser Only Patient","laser@me.com","D","2026-02-17",1,0,0],["todd rammy","saldfkj@hotmail.com","Z","2026-02-13",0,0,0],["Amazing Patient","ap@live.com","L","2025-09-07",341,202,5],["Demo test","demo@test.com","D","2025-08-20",1,0,0],["Chant W","loe@me.com","C","2025-08-01",59,0,0],["Deb M","em@dm.com","L","2025-07-26",65,0,0],["graph tester","145@gmail.com","L","2025-07-16",75,158,8],["Vadnee Jefferson","drvsj@rocketmail.com","L","2025-02-22",219,0,0],["Amber Von Haden","ambervonhaden1234@yahoo.com","M","2025-01-12",299,178,0],["Test Patient","amberv185@yahoo.com","Z","2024-11-20",0,0,0],["Jane Doe","jane.doe@chirothintracker.com","L","2022-06-01",1302,180.8,20.8],["Jenn Tester","abc@123.com","L","2022-04-30",541,0,-112],["Josh Nelson","jn@me.com","C","2019-05-31",589,0,-199],["Mary Smith","msmith@me.com","L","2019-05-26",594,0,0],["Mrs. Smith","lkj@gmail.com","L","2019-02-02",707,197.3,2.3],["Ben McNeil","adfasef@adlf.com","L","2019-05-24",596,0,-250],["Maddie soden","maddison.soden@gmail.com","L","2020-02-29",490,155,8.1],["Mrs Mary Jones","mrsmaryjones@gmil.com","C","2020-01-10",365,126.5,1.5],["Lipo Test","zt@we.com","M","2019-05-01",619,0,0],["Joseph J","joseph.j@chirothintracker.com","L","2018-09-22",840,0,0]]
+ .map(([name,email,ph,start,day,sw,net],i)=>({id:i+1,role:'patient',name,email,ph,start,day,sw,net}));
+let ARCH=[["al davis","al@asl.com"],["Bri Oslowski","mukwa25@gmail.com"],["Chirothin and Contour Light Patient","me@me.com"],["ChiroThinSuccess","cts@me.com"],["cls","ceydeels@icloud.com"],["Custom Test","custom@test.com"],["Dana Patient","sign2154@me.net"],["Dr .Chris","drcarr@gmail.com"],["Dr. Brenda's Patient","pt@pt.com"],["Forum Workshop Patient","cdf3@me.com"],["Gary Holland","lkjhr@live.com"],["Glen T","glen@me.com"],["Height Inches","h@in.com"],["J MCL","jm@me.com"],["J. Richard Roe","richard.roe@chirothintracker.com"],["Jack Tester","live4zumba@yahoo.com"],["Janet T","janet@jt.com"],["John Doe","john.doe@chirothintracker.com"],["Jonathan Gardner","jairgee@outlook.com"],["Kendall - Patient","john.kendall@gtail.com"],["Laser Patti","lpme@gmail.com"],["Martha Stewart","martha@st.me123fdbfd"],["Saurabh Kumar","saurabhkumar6698@gmail.com"],["Tiffany R","tr@tr.com"],["Welcome","messages@myidealtracker.com"],["Will M","wm@wm.com"]]
+ 
+ .map(([name,email],i)=>{const d=new Date(2019,0,1+((i*97)%2400));return {id:100+i,name,email,start:d.toISOString().slice(0,10),day:30+((i*211)%700)};});
+let nextId=500;
+ACTIVE.push(...[["Dr. Amy Koch","amy.koch@logan.edu","doctor"],["Training Clinic Health Coach","api@myidealtracker.com","coach"],["ChiroThin NKB Coach","john@myidealtracker.com","coach"],["Health Coach","jbcs.discovery40g@gmail.com","coach"]].map(([name,email,role],i)=>({id:300+i,role,name,email,ph:'',start:'',day:0,sw:0,net:0})));
+
+/* ---- State ---- */
+let view='list', pages={list:1,archived:1,intake:1}, PER=10;
+let fl={q:'',ph:'',role:''}, fa={q:''}, sortL={k:'start',d:-1}, sortA={k:'name',d:1};
+const fmtDate=iso=>new Date(iso+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+const lbs=n=>n?n.toFixed(1)+' lbs':'—';
+const avatar=p=>`<div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line text-[11px] font-semibold ${p.id%2?'bg-primary-soft text-primary':'bg-accent-soft text-accent'}">${esc(p.name.split(/\s+/).map(w=>w[0]).filter(Boolean).slice(0,2).join('').toUpperCase())}</div>`;
+const card='rounded-2xl border border-line bg-surface shadow-panel';
+const inp='w-full rounded-lg border border-line bg-canvas px-3.5 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary';
+const btnO='rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-ink/80 hover:border-primary hover:text-primary';
+function toast(m){const t=$('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.add('hidden'),3200);}
+function confirmBox(title,body,cta,cls,ok){$('mTitle').textContent=title;$('mBody').textContent=body;const y=$('mYes');y.textContent=cta;y.className='rounded-lg px-4 py-2 text-sm font-semibold text-white '+cls;
+  $('modal').classList.replace('hidden','flex');y.onclick=()=>{$('modal').classList.replace('flex','hidden');ok();};}
+$('mNo').onclick=()=>$('modal').classList.replace('flex','hidden');
+
+/* ---- Nav + tabs ---- */
+const SUB=[['intake','Intake Forms'],['archived','Archived Patients'],['add','Add New Patient'],['list','Patient List']];
+function renderNav(){
+  $('nav').innerHTML=[['Dashboard','home'],['Patients','users',1],['Messages','message',0,3],['Protocols','utensils'],['Reports','trending'],['Shop Orders','cart'],['Settings','more']].map(([l,i,g,b])=>
+   `<a href="#" class="flex items-center gap-3 rounded-lg px-2.5 py-2.5 text-sm font-medium ${g?'bg-primary text-white':'text-ink/70 hover:bg-primary-soft hover:text-primary'}">${icon(i,'h-[18px] w-[18px] shrink-0')}<span class="flex-1 whitespace-nowrap opacity-0 transition-opacity group-hover/sidebar:opacity-100">${l}</span>${b?`<span class="rounded-full bg-accent px-1.5 text-[10px] font-semibold text-white opacity-0 group-hover/sidebar:opacity-100">${b}</span>`:''}</a>`
+   +(g?`<div class="hidden space-y-0.5 pb-1 pl-9 group-hover/sidebar:block">${SUB.map(([k,l])=>`<button data-view="${k}" class="block w-full whitespace-nowrap rounded-md px-2.5 py-1.5 text-left text-[13px] ${view===k?'bg-primary-soft font-semibold text-primary':'text-ink/70 hover:bg-canvas'}">${l}</button>`).join('')}</div>`:'')).join('');
+  $('enrolled').textContent=ACTIVE.filter(p=>p.role==='patient').length;
+}
+$('nav').onclick=e=>{const b=e.target.closest('[data-view]'); if(b) go(b.dataset.view);};
+function go(v){view=v;render();$('page').parentElement.scrollTop=0;}
+
+const HEAD={list:['Patient List','Everyone currently enrolled in a program.'],archived:['Archived Patients','Former patients. Re-enroll anyone to bring them back into the program.'],add:['Add New Patient','Create a patient account and set up their program.'],intake:['Intake Forms','New submissions from your clinic intake link.']};
+function head(){
+  const nNew=INTAKE.filter(i=>i.st==='new').length;
+  const tabs=[['list','Patient List',ACTIVE.length],['archived','Archived',ARCH.length],['add','Add New Patient'],['intake','Intake Forms',INTAKE.length]];
+  const pill='inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-semibold tabular-nums';
+  return `<div class="mb-5"><h2 class="font-serif text-2xl">${HEAD[view][0]}</h2><p class="mt-1 text-sm text-muted">${HEAD[view][1]}</p></div>
+  <div class="mb-5 flex gap-1 overflow-x-auto border-b border-line">${tabs.map(([k,l,c])=>`<button data-view="${k}" class="flex shrink-0 items-center gap-2 border-b-2 px-3.5 py-2.5 text-sm font-medium ${view===k?'border-primary text-primary':'border-transparent text-muted hover:text-ink'}">${k==='add'?icon('plus','h-3.5 w-3.5'):''}${l}${c!=null?`<span class="${pill} ${view===k?'bg-primary-soft text-primary':'bg-canvas text-muted'}">${c}</span>`:''}${k==='intake'&&nNew?`<span class="${pill} gap-1 bg-accent-soft text-accent"><span class="h-1.5 w-1.5 rounded-full bg-accent"></span>${nNew} new</span>`:''}</button>`).join('')}</div>`;
+}
+const searchBox=(id,ph,val)=>`<div class="relative min-w-0 flex-1">${icon('search','absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted')}<input id="${id}" value="${esc(val)}" placeholder="${ph}" class="${inp} pl-9" /></div>`;
+/* ---- Shared table + filter building blocks ---- */
+const sel=(id,opts,val)=>`<select id="${id}" class="${inp}">${opts.map(([v,l])=>`<option value="${v}" ${String(v)===String(val)?'selected':''}>${l}</option>`).join('')}</select>`;
+const lab=(t,inner,span='')=>`<label class="block min-w-0 ${span}"><span class="mb-1.5 block text-xs font-medium text-muted">${t}</span>${inner}</label>`;
+const ORD=[[1,'Ascending'],[-1,'Descending']];
+const sortFields=(s,opts)=>lab('Sort by',sel('sortK',opts,s.k),'lg:col-span-2')+lab('Order',sel('sortD',ORD,s.d),'lg:col-span-2');
+const filterBar=inner=>`<div class="${card} mb-4 grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-12">${inner}</div>`;
+const resBox=`<div id="results" class="${card} overflow-hidden"></div>`;
+const LC='grid-cols-1 md:grid-cols-[minmax(0,2.4fr)_1fr_1.5fr_1.1fr_.9fr_.9fr_auto]';
+const AC='grid-cols-1 md:grid-cols-[minmax(0,2.4fr)_1.2fr_1fr_auto]';
+const IC='grid-cols-[28px_minmax(0,1fr)] md:grid-cols-[28px_minmax(0,2.2fr)_1.1fr_.6fr_1.3fr_1fr_.9fr_auto]';
+const hd=(k,l,s)=>k?`<button data-sort="${k}" class="inline-flex items-center gap-1 uppercase tracking-wider ${s.k===k?'text-ink':'hover:text-ink'}">${l}${s.k===k?`<span class="text-primary">${s.d>0?'↑':'↓'}</span>`:icon('sort','h-3 w-3 opacity-40')}</button>`:`<span>${l}</span>`;
+const gHead=(cols,items)=>`<div class="hidden ${cols} items-center gap-4 border-b border-line bg-canvas/70 px-5 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-muted md:grid">${items.join('')}</div>`;
+const gRow=(cols,inner,cls='')=>`<div class="grid ${cols} items-center gap-x-4 gap-y-2 border-b border-line px-5 py-3.5 last:border-b-0 hover:bg-primary-soft/30 ${cls}">${inner}</div>`;
+const cell=(l,h)=>`<div class="col-span-full flex items-center justify-between gap-3 md:col-span-1 md:block"><span class="text-[11px] uppercase tracking-wide text-muted md:hidden">${l}</span><div class="text-sm">${h}</div></div>`;
+const acts=h=>`<div class="col-span-full flex items-center gap-1 md:col-span-1 md:justify-end">${h}</div>`;
+const who=p=>`<div class="flex min-w-0 items-center gap-3">${avatar(p)}<div class="min-w-0"><p class="truncate text-sm font-medium">${esc(p.name)}</p><p class="truncate text-xs text-muted">${esc(p.email)}</p></div></div>`;
+const ib=(act,id,ic,t,cls='hover:bg-primary-soft hover:text-primary')=>`<button data-act="${act}" data-id="${id}" title="${t}" aria-label="${t}" class="flex h-8 w-8 items-center justify-center rounded-lg text-muted ${cls}">${icon(ic)}</button>`;
+const enrollBtn=(act,id)=>`<button data-act="${act}" data-id="${id}" class="mr-1 inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-white hover:bg-primary-dark">${icon('userplus','h-3.5 w-3.5')}Enroll</button>`;
+const empty=(rows,msg)=>rows.length?'':`<p class="p-10 text-center text-sm text-muted">${msg}</p>`;
+function pager(total,key){
+  const n=Math.max(1,Math.ceil(total/PER)), cur=pages[key]=Math.min(pages[key],n), from=total?(cur-1)*PER+1:0, to=Math.min(cur*PER,total);
+  const pb=(p,l,dis,on)=>`<button data-page="${p}" ${dis?'disabled':''} class="h-8 min-w-8 rounded-lg px-2.5 text-xs font-medium disabled:opacity-40 ${on?'bg-primary text-white':'text-ink/70 hover:bg-canvas'}">${l}</button>`;
+  return `<div class="flex flex-wrap items-center justify-between gap-3 border-t border-line bg-canvas/40 px-5 py-3 text-xs text-muted"><span>Showing <b class="text-ink">${from}–${to}</b> of <b class="text-ink">${total}</b></span><div class="flex items-center gap-1">${pb(cur-1,'‹ Prev',cur<=1)}${Array.from({length:n},(_,i)=>i+1).filter(x=>x===1||x===n||Math.abs(x-cur)<=1).map((x,i,a)=>(i&&x-a[i-1]>1?'<span class="px-1">…</span>':'')+pb(x,x,false,x===cur)).join('')}${pb(cur+1,'Next ›',cur>=n)}</div></div>`;
+}
+const cmp=(a,b,k,d)=>(typeof a[k]==='string'?a[k].localeCompare(b[k]):a[k]-b[k])*d;
+
+/* ---- Patient list ---- */
+const ROLES=[['patient','Patient'],['coach','Health Coach'],['doctor','Clinic Doctor']];
+const roleName=r=>(ROLES.find(x=>x[0]===r)||[])[1]||'Patient';
+function listRows(){
+  const q=fl.q.toLowerCase();
+  const rows=ACTIVE.filter(p=>(!fl.role||p.role===fl.role)&&(!fl.ph||p.ph===fl.ph)&&(!q||p.name.toLowerCase().includes(q)||p.email.toLowerCase().includes(q))).sort((a,b)=>cmp(a,b,sortL.k,sortL.d));
+  const dateCell=p=>p.start?`<p class="whitespace-nowrap">${fmtDate(p.start)}</p><p class="text-xs text-muted">Day ${p.day}</p>`:'<span class="text-muted">—</span>';
+  $('results').innerHTML=gHead(LC,[hd('name','Patient',sortL),'<span>Role</span>','<span>Phase</span>',hd('start','Program start',sortL),'<span>Start weight</span>',hd('net','Net loss',sortL),'<span></span>'])
+   +pageOf(rows,'list').map(p=>gRow(LC,`<div class="col-span-full md:col-span-1">${who(p)}</div>`
+    +cell('Role',`<span class="text-ink/80">${roleName(p.role)}</span>`)
+    +cell('Phase',p.ph?`<span class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-medium ${PH_CLS[p.ph]}"><span class="h-1.5 w-1.5 rounded-full bg-current"></span>${PHASES[p.ph]}</span>`:'<span class="text-muted">—</span>')
+    +cell('Program start',dateCell(p))+cell('Start weight',`<span class="tabular-nums text-ink/80">${lbs(p.sw)}</span>`)
+    +cell('Net loss',`<span class="whitespace-nowrap font-medium tabular-nums ${p.net>0?'text-primary':p.net<0?'text-accent':'text-muted'}">${p.net?(p.net>0?'▼ ':'')+p.net.toFixed(1)+' lbs':'—'}</span>`)
+    +acts(ib('detail',p.id,'info','Patient details')+ib('notes',p.id,'notes','Patient notes')+ib('archive',p.id,'archive','Archive patient','hover:bg-accent-soft hover:text-accent')))).join('')
+   +empty(rows,'No patients match your filters.')+pager(rows.length,'list');
+}
+const viewList=()=>filterBar(lab('Patient search',searchBox('q','Search by name or email...',fl.q),'lg:col-span-4')
+  +lab('Role',sel('roleSel',[['','All roles'],...ROLES],fl.role),'lg:col-span-2')
+  +lab('Phase',sel('phSel',[['','All phases'],...Object.entries(PHASES)],fl.ph),'lg:col-span-2')
+  +sortFields(sortL,[['name','Full name'],['start','Program start date'],['day','Current program day'],['net','Net weight loss']]))+resBox;
+
+/* ---- Archived ---- */
+function archRows(){
+  const q=fa.q.toLowerCase();
+  const rows=ARCH.filter(p=>!q||p.name.toLowerCase().includes(q)||p.email.toLowerCase().includes(q)).sort((a,b)=>cmp(a,b,sortA.k,sortA.d));
+  $('results').innerHTML=gHead(AC,[hd('name','Patient',sortA),hd('start','Program start',sortA),hd('day','Program day',sortA),'<span></span>'])
+   +pageOf(rows,'archived').map(p=>gRow(AC,`<div class="col-span-full md:col-span-1">${who(p)}</div>`
+    +cell('Program start',p.start?`<span class="whitespace-nowrap">${fmtDate(p.start)}</span>`:'—')+cell('Program day',p.day?`<span class="tabular-nums">Day ${p.day}</span>`:'—')
+    +acts(enrollBtn('enroll',p.id)+ib('detail',p.id,'info','Patient details')+ib('notes',p.id,'notes','Patient notes')))).join('')
+   +empty(rows,'No archived patients found.')+pager(rows.length,'archived');
+}
+const viewArch=()=>filterBar(lab('Name or email',searchBox('q','Search archived patients...',fa.q),'lg:col-span-8')
+  +sortFields(sortA,[['name','Full name'],['start','Program start date'],['day','Current program day']]))+resBox;
+
+/* ---- Add patient ---- */
+const fld=(id,label,inner,req=1,hint='')=>`<div><label for="f_${id}" class="mb-1.5 block text-sm font-medium">${label}${req?' <span class="text-accent">*</span>':''}</label>${inner}${hint?`<p class="mt-1 text-xs text-muted">${hint}</p>`:''}<p id="e_${id}" class="mt-1 hidden text-xs text-accent"></p></div>`;
+const today=()=>{const d=new Date(),z=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`;};
+function viewAdd(){
+  return `<div class="grid gap-5 lg:grid-cols-3"><form id="f" novalidate class="${card} space-y-5 p-5 sm:p-6 lg:col-span-2">
+   <p class="text-xs font-semibold uppercase tracking-wide text-muted">Patient details</p>
+   ${fld('name','Patient full name',`<input id="f_name" class="${inp}" autocomplete="off" />`)}
+   <div class="grid gap-5 sm:grid-cols-2">${fld('email','Email address',`<input id="f_email" type="email" class="${inp}" />`)}${fld('phone','Phone number',`<input id="f_phone" type="tel" class="${inp}" />`)}</div>
+   <div><p class="mb-1.5 text-sm font-medium">Daily email notifications</p><div id="f_notif" class="inline-flex rounded-lg border border-line bg-canvas p-0.5 text-sm font-medium">
+     <button type="button" data-n="1" class="rounded-md px-4 py-1.5">Enabled</button><button type="button" data-n="0" class="rounded-md px-4 py-1.5">Disabled</button></div></div>
+   <hr class="border-line"><p class="text-xs font-semibold uppercase tracking-wide text-muted">Program</p>
+   <div class="grid gap-5 sm:grid-cols-2">${fld('start','Program start date',`<input id="f_start" type="date" value="${today()}" class="${inp}" />`,0)}
+    ${fld('goal','Goal weight',`<div class="flex"><input id="f_goal" type="number" min="1" step="0.1" class="${inp} rounded-r-none" /><span class="flex items-center rounded-r-lg border border-l-0 border-line bg-surface px-3 text-sm text-muted">lbs</span></div>`)}</div>
+   <div class="grid gap-5 sm:grid-cols-2">${fld('clinic','Clinic location',`<select id="f_clinic" class="${inp}"><option>None</option><option>Main Clinic</option><option>Second Location</option></select>`,0)}
+    ${fld('ph','Patient status',`<select id="f_ph" class="${inp}">${Object.entries(PHASES).map(([k,v])=>`<option value="${k}">${k==='L'?'Weight Loss':v}</option>`).join('')}</select>`)}</div>
+   <div class="flex items-center gap-3 pt-1"><button class="rounded-lg bg-primary px-6 py-2.5 text-sm font-semibold text-white hover:bg-primary-dark">Add patient</button><button type="button" id="f_reset" class="rounded-lg px-4 py-2.5 text-sm font-medium text-muted hover:bg-canvas">Clear form</button></div></form>
+   <aside class="${card} h-fit p-5 lg:sticky lg:top-6"><p class="text-xs font-semibold uppercase tracking-wide text-muted">Summary</p>
+    <div id="sum" class="mt-4 space-y-3 text-sm"></div></aside></div>`;
+}
+let notif=1;
+function paintForm(){
+  document.querySelectorAll('#f_notif button').forEach(b=>{const on=+b.dataset.n===notif;b.className='rounded-md px-4 py-1.5 '+(on?'bg-primary text-white shadow-panel':'text-muted hover:text-ink');});
+  const v=id=>$('f_'+id).value.trim(), row=(l,x)=>`<div class="flex justify-between gap-3"><span class="text-muted">${l}</span><span class="text-right font-medium">${x||'<span class="font-normal text-muted">—</span>'}</span></div>`;
+  $('sum').innerHTML=`<div class="flex items-center gap-3">${avatar({id:1,name:v('name')||'?'})}<div class="min-w-0"><p class="truncate font-medium">${esc(v('name')||'New patient')}</p><p class="truncate text-xs text-muted">${esc(v('email')||'No email yet')}</p></div></div><hr class="border-line">
+   ${row('Status',`<span class="rounded-full px-2 py-0.5 text-[11px] ${PH_CLS[v('ph')]}">${$('f_ph').selectedOptions[0].text}</span>`)}${row('Starts',fmtDate(v('start')||today()))}${row('Goal weight',v('goal')&&esc(v('goal'))+' lbs')}${row('Clinic',v('clinic')==='None'?'':esc(v('clinic')))}${row('Daily emails',notif?'Enabled':'Disabled')}`;
+}
+function bindAdd(){
+  paintForm();
+  $('f').addEventListener('input',paintForm);
+  $('f_notif').onclick=e=>{const b=e.target.closest('[data-n]'); if(b){notif=+b.dataset.n;paintForm();}};
+  $('f_reset').onclick=()=>{$('f').reset();notif=1;document.querySelectorAll('[id^=e_]').forEach(e=>e.classList.add('hidden'));paintForm();};
+  $('f').onsubmit=e=>{e.preventDefault();
+    const v=id=>$('f_'+id).value.trim(), err={};
+    if(!v('name'))err.name='Enter the patient\'s full name.';
+    if(!/^\S+@\S+\.\S+$/.test(v('email')))err.email='Enter a valid email address.';
+    else if([...ACTIVE,...ARCH].some(p=>p.email.toLowerCase()===v('email').toLowerCase()))err.email='A patient with this email already exists.';
+    if(v('phone').replace(/\D/g,'').length<7)err.phone='Enter a valid phone number.';
+    if(!(+v('goal')>0))err.goal='Enter a goal weight in lbs.';
+    ['name','email','phone','goal'].forEach(k=>{const m=$('e_'+k);m.textContent=err[k]||'';m.classList.toggle('hidden',!err[k]);$('f_'+k).classList.toggle('border-accent',!!err[k]);});
+    const first=Object.keys(err)[0]; if(first){$('f_'+first).focus();return;}
+    const start=v('start')||today(), day=Math.max(0,Math.floor((Date.now()-new Date(start+'T12:00'))/864e5));
+    ACTIVE.unshift({role:'patient',id:nextId++,name:v('name'),email:v('email'),ph:v('ph'),start,day,sw:0,net:0});
+    sortL={k:'start',d:-1}; fl={q:'',ph:'',role:''}; pages.list=1; notif=1; toast(`${v('name')} was added to your patient list`); go('list');};
+}
+/* ---- Intake forms ---- */
+let INTAKE=[["Qaiser","Iqbal","qaiseri79@gmail.com",777,"2026-09-26 11:41","03369911061","2026-10-01","new"],["Qaiser","Iqbal","qaiseri79@gmail.com",4343,"2026-09-26 11:14","03369911061","2026-09-08","new"],["test","testers123","test123@yopmail.com",0,"2026-01-29 09:33","1111111111","2026-02-05","new"],["Testing","Testing123","testtesting123@yopmail.com",0,"2026-01-29 09:30","1111111111","2026-01-30","new"],["test","test","ambervonhaden@yahoo.com",150,"2025-11-02 15:19","5074022029","2025-11-19","new"],["Vadnee","Jefferson","drvsj@rocketmail.com",175,"2024-10-04 13:13","2013765822","2024-10-05","new"],["A","Testers","ambervonhaden1234@yahoo.com",120,"2024-03-21 09:15","5074022029","2024-03-23","checked"],["A. Joe","Patient","inrlux1@gmail.com",0,"2024-02-01 08:49","7857857855","2024-02-03","checked"],["Amber","Von Test","amberv185@yahoo.com",0,"2023-05-30 09:13","5074022029","2023-06-03","checked"],["Demo","test","demo@test.com",150,"2023-03-30 10:14","1111111111","2023-04-01","checked"],["Martha","Stewart","martha@st.me",135,"2021-06-14 08:47","555-123-1234","2021-06-19","checked"],["Saurabh","Kumar","saurabhkumar6698@gmail.com",144,"2021-05-26 02:21","9708400656","2021-05-29","checked"],["Jennifer","Jones","SCHWAJ7@GMAIL.COM",190,"2021-03-03 11:40","6127099244","2021-03-06","checked"],["Tia","Powell","tiapow@yahoo.com",180,"2021-02-23 11:00","9523939910","2021-02-27","checked"],["Jessica","Dirkx","jessicadirkx@me.com",0,"2021-02-22 10:40","6127308365","2021-02-27","checked"],["Sonyia","Granville","lambam37@yahoo.com",200,"2021-02-22 09:51","6513341714","2021-02-27","checked"],["Dawn","LaBrosse","dawnlabrosse@yahoo.com",147,"2021-02-22 09:29","6127038634","2021-02-27","checked"],["Tara","Deweever","Misst.lynn13@gmail.com",185,"2021-02-19 06:48","3204939942","2021-02-20","checked"],["Rachel","Berg","rachel06333@gmail.com",210,"2021-02-17 06:17","920-819-2883","2021-02-20","checked"],["Lillian","Simmons","lillian.simmons14@gmail.com",145,"2021-02-16 17:46","6517475109","2021-02-20","checked"],["Mya","Gordon","mya.gordon7@gmail.com",160,"2021-02-16 11:00","218-348-8380","2021-02-23","checked"],["Rachel","Rubin","goober1122@gmail.com",130,"2021-02-15 18:36","3204380401","2021-02-20","checked"],["Cindy","Vachon","vachoncj@gmail.com",165,"2021-02-14 14:27","6128677604","2021-02-15","checked"],["Kristine","Winter","iskwinter@gmail.com",165,"2021-02-10 11:49","9072592266","2021-03-02","checked"]]
+ .map(([first,last,email,goal,sub,phone,start,st],i)=>({id:1000+i,first,last,email,goal,sub,phone,start,st,name:first+' '+last}));
+let fi={q:'',st:''}, sortI={k:'sub',d:-1}, SEL=new Set(), allSel=false;
+const FILT=()=>({list:fl,archived:fa,intake:fi}), SORT=()=>({list:sortL,archived:sortA,intake:sortI});
+const redraw=()=>({list:listRows,archived:archRows,intake:intakeRows}[view]());
+const fmtDT=s=>{const d=new Date(s.replace(' ','T'));return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+' · '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});};
+const intakeFiltered=()=>{const q=fi.q.toLowerCase();return INTAKE.filter(i=>(!fi.st||i.st===fi.st)&&(!q||(i.name+i.email+i.phone).toLowerCase().includes(q))).sort((a,b)=>cmp(a,b,sortI.k,sortI.d));};
+const pageOf=(rows,key)=>rows.slice((Math.min(pages[key],Math.max(1,Math.ceil(rows.length/PER)))-1)*PER).slice(0,PER);
+function intakeRows(){
+  const rows=intakeFiltered(), slice=pageOf(rows,'intake');
+  const n=allSel?rows.length:SEL.size, pageAll=slice.length>0&&slice.every(r=>allSel||SEL.has(r.id));
+  const bar=n?`<div class="flex flex-wrap items-center gap-3 border-b border-primary/15 bg-primary-soft px-5 py-3">
+     <span class="inline-flex items-center gap-2 text-sm font-semibold text-primary"><span class="flex h-6 min-w-6 items-center justify-center rounded-full bg-primary px-1.5 text-xs tabular-nums text-white">${n}</span>selected</span>
+     <button data-act="i-clear" class="inline-flex items-center gap-1 text-xs font-medium text-primary/70 hover:text-primary">${icon('x','h-3 w-3')}Clear</button><div class="flex-1"></div>
+     <div class="inline-flex overflow-hidden rounded-lg border border-primary/25 bg-surface shadow-sm">
+      <button data-act="i-mark" data-to="checked" class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-primary hover:bg-primary hover:text-white">${icon('check','h-3.5 w-3.5')}Mark as checked</button><span class="w-px bg-primary/25"></span>
+      <button data-act="i-mark" data-to="new" class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-accent hover:bg-accent hover:text-white"><span class="h-2 w-2 rounded-full bg-current"></span>Mark as new</button></div></div>`
+   :`<div class="flex items-center gap-2 border-b border-line px-5 py-3 text-xs text-muted">${icon('check','h-3.5 w-3.5')}Tick submissions to mark them as checked or new.<span class="ml-auto tabular-nums">${rows.length} results</span></div>`;
+  const banner=pageAll&&rows.length>slice.length?`<div class="border-b border-line bg-canvas/70 px-5 py-2 text-xs text-muted">${allSel?`All ${rows.length} results are selected.`:`All ${slice.length} on this page are selected.`} <button data-act="i-all" class="font-semibold text-primary underline">${allSel?'Clear selection':`Select all ${rows.length} results`}</button></div>`:'';
+  const cb='class="h-4 w-4 accent-[#0B5D52]"';
+  $('results').innerHTML=bar+banner+gHead(IC,[`<input type="checkbox" data-selpage aria-label="Select page" ${cb} ${pageAll?'checked':''}>`,hd('name','Patient',sortI),'<span>Phone</span>',hd('goal','Goal',sortI),hd('sub','Submitted',sortI),hd('start','Program start',sortI),'<span>Status</span>','<span></span>'])
+   +slice.map(i=>{const on=allSel||SEL.has(i.id),[d,t]=fmtDT(i.sub).split(' · ');
+    return gRow(IC,`<input type="checkbox" data-sel="${i.id}" aria-label="Select ${esc(i.name)}" ${cb} ${on?'checked':''}><div class="min-w-0">${who(i)}</div>`
+     +cell('Phone',`<span class="whitespace-nowrap text-ink/80">${esc(i.phone)}</span>`)+cell('Goal',`<span class="tabular-nums">${i.goal?i.goal.toFixed(0)+' lbs':'—'}</span>`)
+     +cell('Submitted',`<p class="whitespace-nowrap">${d}</p><p class="text-xs text-muted">${t}</p>`)+cell('Program start',`<span class="whitespace-nowrap">${fmtDate(i.start)}</span>`)
+     +cell('Status',`<button data-act="i-toggle" data-id="${i.id}" title="Click to toggle" class="whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-semibold ${i.st==='new'?'bg-accent-soft text-accent':'bg-primary-soft text-primary'}">${i.st==='new'?'● New':'✓ Checked'}</button>`)
+     +acts(enrollBtn('i-enroll',i.id)+ib('i-view',i.id,'eye','View intake form')),on?'bg-primary-soft/40':'');}).join('')
+   +empty(rows,'No intake forms match your filters.')+pager(rows.length,'intake');
+}
+const viewIntake=()=>`<div class="${card} mb-4 flex flex-wrap items-center gap-3 p-3 pl-4"><span class="text-xs font-medium text-muted">Intake link</span><code class="min-w-0 flex-1 truncate rounded-md bg-canvas px-3 py-1.5 text-xs">https://chirothintrackerreact.lndo.site/intake?clinic_id=13</code><button data-act="i-copy" class="${btnO} inline-flex items-center gap-1.5">${icon('copy','h-3.5 w-3.5')}Copy link</button></div>`
+  +filterBar(lab('Search',searchBox('q','Search by name, email or phone...',fi.q),'lg:col-span-6')+lab('Review status',sel('stSel',[['','All submissions'],['new','New'],['checked','Checked']],fi.st),'lg:col-span-2')
+  +sortFields(sortI,[['sub','Date submitted'],['name','Full name'],['start','Program start date'],['goal','Goal weight']]))+resBox;
+$('page').addEventListener('change',e=>{const t=e.target; if(view!=='intake')return;
+  if(t.dataset.sel){allSel=false;t.checked?SEL.add(+t.dataset.sel):SEL.delete(+t.dataset.sel);intakeRows();}
+  else if('selpage' in t.dataset){allSel=false;pageOf(intakeFiltered(),'intake').forEach(r=>t.checked?SEL.add(r.id):SEL.delete(r.id));intakeRows();}});
+function intakeAct(a){
+  const act=a.dataset.act, it=INTAKE.find(x=>x.id===+a.dataset.id);
+  if(act==='i-toggle'){it.st=it.st==='new'?'checked':'new';render();}
+  else if(act==='i-clear'){SEL.clear();allSel=false;intakeRows();}
+  else if(act==='i-copy'){try{navigator.clipboard.writeText('https://chirothintrackerreact.lndo.site/intake?clinic_id=13');}catch(e){} toast('Intake link copied');}
+  else if(act==='i-view')toast(`Opening intake form for ${it.name}`);
+  else if(act==='i-all'){allSel=!allSel;if(!allSel)SEL.clear();intakeRows();}
+  else if(act==='i-mark'){const rows=intakeFiltered(),ids=allSel?rows.map(r=>r.id):[...SEL]; if(!ids.length)return;
+    INTAKE.forEach(i=>{if(ids.includes(i.id))i.st=a.dataset.to;}); SEL.clear();allSel=false;toast(`${ids.length} marked as ${a.dataset.to}`);render();}
+  else if(act==='i-enroll')confirmBox('Enroll this patient?',`${it.name} will be added to your Patient List in the Zero-Day (Pre-Loading) phase with a program start of ${fmtDate(it.start)}.`,'Enroll patient','bg-primary hover:bg-primary-dark',()=>{
+    INTAKE=INTAKE.filter(x=>x.id!==it.id);SEL.delete(it.id);
+    ACTIVE.unshift({role:'patient',id:nextId++,name:it.name,email:it.email,ph:'Z',start:it.start,day:Math.max(0,Math.floor((Date.now()-new Date(it.start+'T12:00'))/864e5)),sw:0,net:0});toast(`${it.name} enrolled`);render();});
+}
+
+/* ---- Render + events ---- */
+function render(){
+  renderNav();
+  $('page').innerHTML=head()+({list:viewList,archived:viewArch,add:viewAdd,intake:viewIntake}[view])();
+  if(view==='list')listRows(); if(view==='archived')archRows(); if(view==='add')bindAdd(); if(view==='intake')intakeRows();
+  if($('q'))$('q').oninput=e=>{FILT()[view].q=e.target.value;pages[view]=1;redraw();};
+  if($('stSel'))$('stSel').onchange=e=>{fi.st=e.target.value;pages.intake=1;SEL.clear();allSel=false;intakeRows();};
+  if($('phSel'))$('phSel').onchange=e=>{fl.ph=e.target.value;pages.list=1;listRows();};
+  if($('roleSel'))$('roleSel').onchange=e=>{fl.role=e.target.value;pages.list=1;listRows();};
+  if($('sortK'))$('sortK').onchange=e=>{SORT()[view].k=e.target.value;render();};
+  if($('sortD'))$('sortD').onchange=e=>{SORT()[view].d=+e.target.value;render();};
+}
+$('page').addEventListener('click',e=>{
+  const v=e.target.closest('[data-view]'); if(v) return go(v.dataset.view);
+  const s=e.target.closest('[data-sort]'); if(s){const st=SORT()[view],k=s.dataset.sort; st.d=st.k===k?-st.d:1; st.k=k; return render();}
+  const pg=e.target.closest('[data-page]'); if(pg&&!pg.disabled){pages[view]=+pg.dataset.page; return redraw();}
+  const a=e.target.closest('[data-act]'); if(!a) return;
+  if(a.dataset.act.startsWith('i-')) return intakeAct(a);
+  const id=+a.dataset.id, p=[...ACTIVE,...ARCH].find(x=>x.id===id);
+  if(a.dataset.act==='detail') toast(`Opening details for ${p.name}`);
+  if(a.dataset.act==='notes') toast(`Opening notes for ${p.name}`);
+  if(a.dataset.act==='archive') confirmBox('Archive this patient?',`${p.name} will move to Archived Patients. You can re-enroll them at any time.`,'Archive','bg-accent hover:opacity-90',()=>{
+    ACTIVE=ACTIVE.filter(x=>x.id!==id);ARCH.push({id:p.id,name:p.name,email:p.email,start:p.start,day:p.day});toast(`${p.name} archived`);render();});
+  if(a.dataset.act==='enroll') confirmBox('Re-enroll this patient?',`${p.name} will return to your Patient List in the Zero-Day (Pre-Loading) phase, starting today.`,'Enroll patient','bg-primary hover:bg-primary-dark',()=>{
+    ARCH=ARCH.filter(x=>x.id!==id);ACTIVE.unshift({role:'patient',id:p.id,name:p.name,email:p.email,ph:'Z',start:today(),day:0,sw:0,net:0});toast(`${p.name} enrolled`);render();});
+});
+render();
+</script>
+</body>
+</html>

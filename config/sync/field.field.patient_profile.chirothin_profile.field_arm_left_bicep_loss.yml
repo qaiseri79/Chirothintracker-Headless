@@ -1,0 +1,23 @@
+uuid: 165b7240-0e72-4dea-abd9-e7a5dc40daba
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.chirothin_profile
+    - field.storage.patient_profile.field_arm_left_bicep_loss
+id: patient_profile.chirothin_profile.field_arm_left_bicep_loss
+field_name: field_arm_left_bicep_loss
+entity_type: patient_profile
+bundle: chirothin_profile
+label: 'Arm Left Bicep Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

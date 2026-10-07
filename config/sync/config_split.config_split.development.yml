@@ -1,0 +1,23 @@
+uuid: 949853e1-a868-4647-904e-b1f786a07c58
+langcode: en
+status: false
+dependencies: {  }
+id: development
+label: Development
+description: 'Split development configuration.'
+weight: 0
+stackable: false
+no_patching: false
+storage: folder
+folder: ../config/development
+module: {  }
+theme: {  }
+complete_list:
+  - captcha.captcha_point.user_login_form
+  - captcha.captcha_point.user_pass
+  - commerce_payment.commerce_payment_gateway.authorize_net
+  - commerce_payment.commerce_payment_gateway.authorize_net_demo
+  - ultimate_cron.job.free_trial_cron
+  - ultimate_cron.job.standard_email_cron
+  - ultimate_cron.job.standard_email_custom_cron
+partial_list: {  }

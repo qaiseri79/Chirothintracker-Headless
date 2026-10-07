@@ -1,0 +1,37 @@
+uuid: f02f83d9-1c06-4645-bbc5-b7c76534768c
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_attachments
+    - field.field.contact_message.patient_attachments.field_attachments
+    - field.field.contact_message.patient_attachments.field_author
+    - field.field.contact_message.patient_attachments.field_patient
+  module:
+    - file
+id: contact_message.patient_attachments.default
+targetEntityType: contact_message
+bundle: patient_attachments
+mode: default
+content:
+  field_attachments:
+    type: file_generic
+    weight: 1
+    region: content
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
+  field_patient:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  copy: true
+  field_author: true
+  mail: true
+  message: true
+  name: true
+  preview: true
+  subject: true

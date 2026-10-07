@@ -1,0 +1,50 @@
+uuid: 3406a069-3b8c-4f64-abbc-ef874f59180b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.training.body
+    - field.field.node.training.field_my_clinic
+    - field.field.node.training.field_published_to
+    - field.field.node.training.field_video
+    - node.type.training
+  module:
+    - file
+    - text
+    - user
+id: node.training.default
+targetEntityType: node
+bundle: training
+mode: default
+content:
+  body:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_my_clinic:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_video:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  field_published_to: true
+  private_message_link: true

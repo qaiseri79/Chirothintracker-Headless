@@ -1,0 +1,29 @@
+uuid: e06d6c44-23c9-4251-a7b0-84ad824e5673
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_program_day
+  module:
+    - disable_field
+    - user
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: user.user.field_program_day
+field_name: field_program_day
+entity_type: user
+bundle: user
+label: 'Program Day'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

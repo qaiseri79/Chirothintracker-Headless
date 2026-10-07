@@ -1,0 +1,33 @@
+uuid: 4c000758-093b-4ff1-92c2-d70bc1f3151b
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_message
+    - field.storage.contact_message.field_message
+    - filter.format.basic_html
+    - filter.format.filtered_html
+    - filter.format.full_html
+  module:
+    - disable_field
+    - text
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: contact_message.patient_message.field_message
+field_name: field_message
+entity_type: contact_message
+bundle: patient_message
+label: Message
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - basic_html
+    - filtered_html
+    - full_html
+field_type: text_long

@@ -1,0 +1,21 @@
+uuid: 4d1f8ee2-fcd0-42f4-a571-7306ac71fa63
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_last_seen
+  module:
+    - datetime
+    - user
+id: user.user.field_last_seen
+field_name: field_last_seen
+entity_type: user
+bundle: user
+label: 'Last Seen'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

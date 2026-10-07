@@ -1,0 +1,24 @@
+uuid: f0e67165-fbb1-4c72-a24f-19bee00b204d
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: patient_profile.field_arm_left_bicep_loss
+field_name: field_arm_left_bicep_loss
+entity_type: patient_profile
+type: decimal
+settings:
+  precision: 10
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

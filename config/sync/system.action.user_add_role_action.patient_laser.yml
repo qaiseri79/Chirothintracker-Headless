@@ -1,0 +1,14 @@
+uuid: da18d31f-9611-4e2f-83c9-8e92cf196425
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.patient_laser
+  module:
+    - user
+id: user_add_role_action.patient_laser
+label: 'Add the Patient - Laser role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: patient_laser

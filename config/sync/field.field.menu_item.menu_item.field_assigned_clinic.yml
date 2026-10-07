@@ -1,0 +1,25 @@
+uuid: 133656ba-ad97-4090-93fc-12461efe8aa9
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.menu_item.menu_item
+    - field.storage.menu_item.field_assigned_clinic
+id: menu_item.menu_item.field_assigned_clinic
+field_name: field_assigned_clinic
+entity_type: menu_item
+bundle: menu_item
+label: 'Assigned Clinic'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: my_clinic
+      display_name: entity_reference_2
+      arguments: {  }
+field_type: entity_reference

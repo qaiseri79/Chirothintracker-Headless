@@ -1,0 +1,22 @@
+footer {
+    padding: 1rem !important;
+}
+
+.footer-dark {
+    @include background($navy-blue !important);
+}
+
+.menu--menu-footer-menu  {
+    & ul.nav.navbar-nav {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        margin-left: 0;
+    }
+    & li {
+        & a.nav-link {
+            color: $white;
+            font-size: 14px;
+        }
+    }
+}

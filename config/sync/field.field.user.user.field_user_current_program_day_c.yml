@@ -1,0 +1,29 @@
+uuid: f55de0f7-5b7e-43f6-b70e-15be916f2c89
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_user_current_program_day_c
+  module:
+    - disable_field
+    - user
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: user.user.field_user_current_program_day_c
+field_name: field_user_current_program_day_c
+entity_type: user
+bundle: user
+label: 'User Current Program Day Computed'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

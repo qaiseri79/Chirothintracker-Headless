@@ -1,0 +1,69 @@
+uuid: e8f51fe4-36fa-4fed-b8e0-1a4c736bfd5f
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_order.commerce_order_item_type.default
+    - field.field.commerce_order_item.default.license
+  module:
+    - commerce_order
+    - xnumber
+  enforced:
+    module:
+      - commerce_product
+_core:
+  default_config_hash: OLyelsZyDDqQPIGVz4oz8VpJvddm6C0heZtFpIHjEcI
+id: commerce_order_item.default.default
+targetEntityType: commerce_order_item
+bundle: default
+mode: default
+content:
+  license:
+    type: entity_reference_autocomplete
+    weight: 3
+    region: hidden
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  purchased_entity:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  quantity:
+    type: xnumber
+    weight: 1
+    region: content
+    settings:
+      step: '1'
+      min: '1'
+      max: ''
+      prefix: ''
+      suffix: ''
+      placeholder: ''
+      default_value: '1'
+      disable_on_cart: '0'
+      qty_prices: 0
+      qty_price: {  }
+    third_party_settings: {  }
+  unit_price:
+    type: commerce_unit_price
+    weight: 2
+    region: content
+    settings:
+      require_confirmation: true
+    third_party_settings: {  }
+hidden:
+  adjustments: true
+  created: true
+  status: true
+  total_price: true
+  uid: true

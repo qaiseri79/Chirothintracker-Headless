@@ -1,0 +1,22 @@
+uuid: 34b04e68-631d-4f24-a73f-38e466a7e01f
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - chirothintracker_subtheme
+_core:
+  default_config_hash: Z_ojmqXpP1T6kcpk324va2gd2M7Kij8CXIUgOh45zNg
+id: chirothintracker_subtheme_content
+theme: chirothintracker_subtheme
+region: content
+weight: -10
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

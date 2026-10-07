@@ -1,0 +1,400 @@
+uuid: 61a10d7f-38c5-4058-9aa5-8089f65f2ce0
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+    - user
+id: media_default
+label: 'File: Media browser'
+module: views
+description: 'Default view for the media browser library tab.'
+tag: 'media, default'
+base_table: file_managed
+base_field: fid
+display:
+  default:
+    id: default
+    display_title: Master
+    display_plugin: default
+    position: 1
+    display_options:
+      fields:
+        filename:
+          id: filename
+          table: file_managed
+          field: filename
+          plugin_id: field
+          label: ''
+          alter:
+            word_boundary: false
+            ellipsis: false
+          link_to_file: true
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 25
+          id: 0
+          pagination_heading_level: h4
+      exposed_form:
+        type: basic
+        options:
+          reset_button: false
+      access:
+        type: perm
+        options:
+          perm: 'view files'
+        perm: 'view files'
+      cache:
+        type: none
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          content:
+            value: 'No files available.'
+            format: plain_text
+      sorts:
+        count:
+          id: count
+          table: file_usage
+          field: count
+          group_type: sum
+          plugin_id: standard
+          expose:
+            label: 'Use count'
+            field_identifier: count
+          exposed: true
+      filters:
+        status:
+          id: status
+          table: file_managed
+          field: status
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: file_status
+          operator: in
+          value:
+            1: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        filename:
+          id: filename
+          table: file_managed
+          field: filename
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: string
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: filename_op
+            label: 'File name'
+            description: ''
+            use_operator: false
+            operator: filename_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: filename
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              content_editor: '0'
+              system_manager: '0'
+              chiropractor_active_: '0'
+              chiropractor_inactive_: '0'
+              chiropractor_white_label: '0'
+              chiropractor_ghost: '0'
+              chiropractor_mind_set: '0'
+              chiropractor_laser: '0'
+              ecommerce: '0'
+              ecommerce_manager: '0'
+              video_message_manager: '0'
+              impersonator: '0'
+              enrolled_patient: '0'
+              archived_patient: '0'
+              patient_chirothin: '0'
+              patient_laser: '0'
+              patient_mind_set: '0'
+              patient_white_label: '0'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      style:
+        type: default
+      query:
+        type: views_query
+        options:
+          query_tags:
+            - media_browser
+      use_ajax: true
+      group_by: true
+      use_more_always: false
+      display_extenders: {  }
+      style_plugin: media_browser
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'url.query_args:sort_by'
+        - 'url.query_args:sort_order'
+        - user.permissions
+      tags: {  }
+  media_browser_1:
+    id: media_browser_1
+    display_title: 'Media browser'
+    display_plugin: default
+    position: 2
+    display_options:
+      title: Library
+      fields:
+        fid:
+          id: fid
+          table: file_managed
+          field: fid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: file
+          entity_field: fid
+          plugin_id: field
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: number_integer
+          settings:
+            thousand_separator: ''
+            prefix_suffix: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+      query:
+        type: views_query
+        options: {  }
+      defaults:
+        title: false
+        hide_admin_links: false
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url.query_args
+      tags: {  }
+  media_browser_my_files:
+    id: media_browser_my_files
+    display_title: 'My files'
+    display_plugin: default
+    position: 3
+    display_options:
+      title: 'My files'
+      fields:
+        fid:
+          id: fid
+          table: file_managed
+          field: fid
+          entity_type: file
+          entity_field: fid
+          plugin_id: field
+      access:
+        type: perm
+        options:
+          perm: 'view own files'
+        perm: 'view own files'
+      filters:
+        status:
+          id: status
+          table: file_managed
+          field: status
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: file_status
+          operator: in
+          value:
+            1: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        filename:
+          id: filename
+          table: file_managed
+          field: filename
+          plugin_id: string
+          operator: contains
+          exposed: true
+          expose:
+            operator_id: filename_op
+            label: 'File name'
+            operator: filename_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: filename
+        uid_current:
+          id: uid_current
+          table: users
+          field: uid_current
+          relationship: uid
+          plugin_id: user_current
+          operator: or
+          value: '1'
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+      query:
+        type: views_query
+        options: {  }
+      defaults:
+        access: false
+        title: false
+        relationships: false
+        arguments: false
+        filters: false
+        filter_groups: false
+        hide_admin_links: false
+      relationships:
+        uid:
+          id: uid
+          table: file_managed
+          field: uid
+          entity_type: file
+          plugin_id: standard
+          required: true
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user
+        - user.permissions
+      tags: {  }

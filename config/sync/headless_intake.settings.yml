@@ -1,0 +1,5 @@
+_core:
+  default_config_hash: cpKbCXyfdRT7-dZ98ZRD2BYTKzpMgY-Oc6t6okbFWfY
+intake_base_url: ''
+token_default_max_uses: 1
+token_default_expiry_days: 7

@@ -1,0 +1,20 @@
+uuid: e338a04e-da05-46b9-a669-f13717178549
+langcode: en
+status: true
+dependencies:
+  theme:
+    - chirothintracker_subtheme
+_core:
+  default_config_hash: RTVehyv1ZnG9OhsM9SK-ijRm_K1j89Gw1_xxcj49y3A
+id: chirothintracker_subtheme_local_actions
+theme: chirothintracker_subtheme
+region: content
+weight: -18
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility: {  }

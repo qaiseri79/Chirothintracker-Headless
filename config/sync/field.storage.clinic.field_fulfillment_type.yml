@@ -1,0 +1,30 @@
+uuid: ce0b25d6-516f-4c4f-8ac7-db6050c9467a
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+    - options
+id: clinic.field_fulfillment_type
+field_name: field_fulfillment_type
+entity_type: clinic
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: shipping
+      label: 'Shipping Only'
+    -
+      value: pickup
+      label: 'Store Pickup Only'
+    -
+      value: both
+      label: 'Shipping & Store Pickup'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

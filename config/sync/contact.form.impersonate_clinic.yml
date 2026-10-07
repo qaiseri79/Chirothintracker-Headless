@@ -1,0 +1,11 @@
+uuid: db6e44fa-66d1-4a2c-9425-a313ac18dd2b
+langcode: en
+status: true
+dependencies: {  }
+id: impersonate_clinic
+label: 'Impersonate Clinic'
+recipients: {  }
+reply: ''
+weight: 0
+message: null
+redirect: null

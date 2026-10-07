@@ -1,0 +1,38 @@
+uuid: f81dc395-95c6-45ca-a628-f135e18c6533
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.resources_test
+  module:
+    - system
+    - user
+    - views
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_views_block__resources_test_block_1
+theme: chirothintracker_subtheme
+region: content
+weight: 0
+provider: null
+plugin: 'views_block:resources_test-block_1'
+settings:
+  id: 'views_block:resources_test-block_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/recipes\r\n/recipes/*\r\n/track\r\n/history\r\n/history/*"
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      enrolled_patient: enrolled_patient

@@ -1,0 +1,31 @@
+uuid: 2c2b503f-2d80-41b7-aeab-d6e218e774cc
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+    - options
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: contact_message.field_gender
+field_name: field_gender
+entity_type: contact_message
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: M
+      label: Male
+    -
+      value: F
+      label: Female
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

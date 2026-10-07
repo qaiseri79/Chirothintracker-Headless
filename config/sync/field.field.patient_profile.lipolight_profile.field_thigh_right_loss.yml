@@ -1,0 +1,23 @@
+uuid: 670a1c1d-ce4a-414b-a811-c9ba2b924366
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.lipolight_profile
+    - field.storage.patient_profile.field_thigh_right_loss
+id: patient_profile.lipolight_profile.field_thigh_right_loss
+field_name: field_thigh_right_loss
+entity_type: patient_profile
+bundle: lipolight_profile
+label: 'Thigh - Right Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

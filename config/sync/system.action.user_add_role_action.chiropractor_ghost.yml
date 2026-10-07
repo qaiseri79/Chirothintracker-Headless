@@ -1,0 +1,14 @@
+uuid: 098ea861-ca71-4053-98e7-f61e1688429c
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.chiropractor_ghost
+  module:
+    - user
+id: user_add_role_action.chiropractor_ghost
+label: 'Add the Chiropractor - Ghost role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: chiropractor_ghost

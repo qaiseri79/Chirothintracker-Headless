@@ -1,0 +1,23 @@
+uuid: d1c05416-c74b-456d-a6d1-78f124d34428
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.zerona_profile
+    - field.storage.patient_profile.field_thigh_right_loss
+id: patient_profile.zerona_profile.field_thigh_right_loss
+field_name: field_thigh_right_loss
+entity_type: patient_profile
+bundle: zerona_profile
+label: 'Thigh - Right Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

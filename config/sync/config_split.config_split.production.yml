@@ -1,0 +1,23 @@
+uuid: 806df91e-9f81-4700-9ef4-af7d1390c005
+langcode: en
+status: true
+dependencies: {  }
+id: production
+label: Production
+description: 'Split production configuration.'
+weight: 0
+stackable: false
+no_patching: false
+storage: folder
+folder: ../config/production
+module: {  }
+theme: {  }
+complete_list:
+  - captcha.captcha_point.user_login_form
+  - captcha.captcha_point.user_pass
+  - commerce_payment.commerce_payment_gateway.authorize_net
+  - commerce_payment.commerce_payment_gateway.authorize_net_demo
+  - ultimate_cron.job.free_trial_cron
+  - ultimate_cron.job.standard_email_cron
+  - ultimate_cron.job.standard_email_custom_cron
+partial_list: {  }

@@ -1,0 +1,9 @@
+uuid: 951ad69c-82bd-43c4-9b98-14f5b9b8b53d
+langcode: en
+status: true
+dependencies: {  }
+name: 'UltraSlim Treatment Protocols'
+vid: ultraslim_treatment_protocols
+description: null
+weight: 0
+new_revision: false

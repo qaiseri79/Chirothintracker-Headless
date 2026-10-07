@@ -1,0 +1,7 @@
+uuid: 62b5388b-bc29-4c50-a627-12bef9baffdc
+langcode: en
+status: false
+dependencies: {  }
+formId: node_daily_message_form
+captchaType: default
+label: node_daily_message_form

@@ -1,0 +1,23 @@
+uuid: 01971d0b-86b7-47c7-8684-8a3ed20bdf8f
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_diabetes_diagnosis_year
+id: contact_message.patient_intake.field_diabetes_diagnosis_year
+field_name: field_diabetes_diagnosis_year
+entity_type: contact_message
+bundle: patient_intake
+label: 'Year Diagnosed'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 1900
+  max: 2100
+  prefix: ''
+  suffix: ''
+field_type: integer

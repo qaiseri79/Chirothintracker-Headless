@@ -1,0 +1,58 @@
+uuid: 2b389c37-5337-409c-a7b9-dc9810ac4778
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d7_entityform_type
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Configuration
+migration_group: migrate_drupal_7
+label: 'D8 contact storage configuration from D7 entityform type configuration'
+source:
+  plugin: d7_entityform_type
+  constants:
+    description: 'Migrated from entityform'
+    multiple: false
+    use_revisions: false
+process:
+  id:
+    -
+      plugin: machine_name
+      source: type
+    -
+      plugin: make_unique_entity_field
+      entity_type: contact_form
+      field: id
+      length: 50
+  label:
+    -
+      plugin: get
+      source: label
+  weight:
+    -
+      plugin: get
+      source: weight
+  uid:
+    -
+      plugin: get
+      source: uid
+  created:
+    -
+      plugin: get
+      source: created
+  langcode:
+    -
+      plugin: get
+      source: constants/langcode
+  status:
+    -
+      plugin: get
+      source: status
+destination:
+  plugin: 'entity:contact_form'
+migration_dependencies:
+  required: {  }
+  optional: {  }

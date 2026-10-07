@@ -1,0 +1,23 @@
+uuid: bda15625-d964-4ca3-bfc7-b66ce7e96324
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_medical_eligibility
+  module:
+    - options
+id: contact_message.patient_intake.field_medical_eligibility
+field_name: field_medical_eligibility
+entity_type: contact_message
+bundle: patient_intake
+label: 'Are you currently pregnant, breast feeding, have active cancer or active gall bladder disease (cholecycstitis)?'
+description: 'If yes, you are not eligible to participate in this program.'
+required: true
+translatable: false
+default_value:
+  -
+    value: '0'
+default_value_callback: ''
+settings: {  }
+field_type: list_string

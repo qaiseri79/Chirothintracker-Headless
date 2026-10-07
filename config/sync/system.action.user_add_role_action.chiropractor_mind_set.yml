@@ -1,0 +1,14 @@
+uuid: 8c40538c-cf16-443b-a376-fcd8797911a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.chiropractor_mind_set
+  module:
+    - user
+id: user_add_role_action.chiropractor_mind_set
+label: 'Add the Chiropractor - Mind Set role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: chiropractor_mind_set

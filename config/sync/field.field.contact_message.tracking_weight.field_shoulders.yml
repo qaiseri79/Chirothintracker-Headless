@@ -1,0 +1,23 @@
+uuid: 693d745b-1f38-456a-8f4f-a1d323fa6a92
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_shoulders
+id: contact_message.tracking_weight.field_shoulders
+field_name: field_shoulders
+entity_type: contact_message
+bundle: tracking_weight
+label: Shoulders
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

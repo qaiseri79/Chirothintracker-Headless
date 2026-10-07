@@ -1,0 +1,15 @@
+uuid: 4da62801-2e9c-4a79-9146-878a0ccb112c
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.intake_processed
+  module:
+    - flag
+id: flag_action.intake_processed_unflag
+label: '<span class="btn btn-primary btn-sm">Reviewed</span>'
+type: webform_submission
+plugin: 'flag_action:intake_processed_unflag'
+configuration:
+  flag_id: intake_processed
+  flag_action: unflag

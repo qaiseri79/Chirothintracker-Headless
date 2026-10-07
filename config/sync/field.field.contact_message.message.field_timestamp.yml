@@ -1,0 +1,24 @@
+uuid: 35f5fa01-f2ac-4db3-b4b2-9d06ea5ada0f
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.message
+    - field.storage.contact_message.field_timestamp
+  module:
+    - datetime
+id: contact_message.message.field_timestamp
+field_name: field_timestamp
+entity_type: contact_message
+bundle: message
+label: Timestamp
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    default_date_type: now
+    default_date: now
+default_value_callback: ''
+settings: {  }
+field_type: datetime

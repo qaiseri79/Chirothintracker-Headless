@@ -1,0 +1,15 @@
+uuid: 4b473c45-e6a3-48e9-b1aa-5d034d0144cb
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.intake_processed_cs
+  module:
+    - flag
+id: flag_action.intake_processed_cs_flag
+label: '<span class="btn btn-default btn-sm intake-new">New</span>'
+type: contact_message
+plugin: 'flag_action:intake_processed_cs_flag'
+configuration:
+  flag_id: intake_processed_cs
+  flag_action: flag

@@ -1,0 +1,21 @@
+uuid: 3a56196e-9546-4141-8a46-002f0451b8a0
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_domain
+id: contact_message.patient_intake.field_domain
+field_name: field_domain
+entity_type: contact_message
+bundle: patient_intake
+label: Domain
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: '[current-domain:id]'
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,26 @@
+{
+	"name" : "andileco/eval-math",
+	"description" : "EvalMath",
+	"license": "BSD-3-Clause",
+	"type" : "library",
+	"keywords" : [
+		"EvalMath"
+	],
+	"require": {
+		"php": "^7 || ^8.0"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^5",
+		"php-coveralls/php-coveralls": "^2"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"Andileco\\Util\\EvalMath\\" : "src/"
+		}
+	},
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
+    }
+}

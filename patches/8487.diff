@@ -1,0 +1,100 @@
+diff --git a/core/modules/user/src/Form/EntityPermissionsForm.php b/core/modules/user/src/Form/EntityPermissionsForm.php
+index 41c6f140f0959bcf27c0e334f5e40570fa295a06..d97b5987b67c0837af45c24170374cdbf4c4219e 100644
+--- a/core/modules/user/src/Form/EntityPermissionsForm.php
++++ b/core/modules/user/src/Form/EntityPermissionsForm.php
+@@ -93,11 +93,10 @@ protected function permissionsByProvider(): array {
+     // Get the names of all config entities that depend on $this->bundle.
+     $config_name = $this->bundle->getConfigDependencyName();
+     $config_entities = $this->configManager
+-      ->getConfigEntitiesToChangeOnDependencyRemoval('config', [$config_name]);
++      ->findConfigEntityDependencies('config', [$config_name]);
+     $config_names = array_map(
+-      function ($dependent_config) {
+-        return $dependent_config->getConfigDependencyName();
+-      }, $config_entities['delete'] ?? []
++      fn($dependent_config) => $dependent_config->getConfigDependencyName(),
++      $config_entities,
+     );
+     $config_names[] = $config_name;
+ 
+diff --git a/core/modules/user/tests/src/Functional/UserPermissionsTest.php b/core/modules/user/tests/src/Functional/UserPermissionsTest.php
+index b9fea1381634b0147b3da414d45df05c48becfbd..e0112f1d6765f7143bfc6e10f385293591640581 100644
+--- a/core/modules/user/tests/src/Functional/UserPermissionsTest.php
++++ b/core/modules/user/tests/src/Functional/UserPermissionsTest.php
+@@ -4,9 +4,10 @@
+ 
+ namespace Drupal\Tests\user\Functional;
+ 
++use Drupal\comment\Tests\CommentTestTrait;
+ use Drupal\Tests\BrowserTestBase;
+-use Drupal\user\RoleInterface;
+ use Drupal\user\Entity\Role;
++use Drupal\user\RoleInterface;
+ 
+ /**
+  * Verifies role permissions can be added and removed via the permissions page.
+@@ -15,6 +16,8 @@
+  */
+ class UserPermissionsTest extends BrowserTestBase {
+ 
++  use CommentTestTrait;
++
+   /**
+    * User with admin privileges.
+    *
+@@ -297,4 +300,35 @@ public function testAccessBundlePermission(): void {
+     $this->assertSession()->statusCodeEquals(403);
+   }
+ 
++  /**
++   * Tests that access check does not trigger warnings.
++   *
++   * The access check for /admin/structure/comment/manage/comment/permissions is
++   * \Drupal\user\Form\EntityPermissionsForm::EntityPermissionsForm::access().
++   */
++  public function testBundlePermissionError(): void {
++    \Drupal::service('module_installer')->install(['comment', 'dblog', 'field_ui', 'node']);
++    // Set up the node and comment field. Use the 'default' view mode since
++    // 'full' is not defined, so it will not be added to the config entity.
++    $this->drupalCreateContentType(['type' => 'article']);
++    $this->addDefaultCommentField('node', 'article', comment_view_mode: 'default');
++
++    $this->drupalLogin($this->adminUser);
++    $this->grantPermissions(Role::load($this->rid), ['access site reports', 'administer comment display']);
++
++    // Access both the Manage display and permission page, which is not
++    // accessible currently.
++    $assert_session = $this->assertSession();
++    $this->drupalGet('/admin/structure/comment/manage/comment/display');
++    $assert_session->statusCodeEquals(200);
++    $this->drupalGet('/admin/structure/comment/manage/comment/permissions');
++    $assert_session->statusCodeEquals(403);
++
++    // Ensure there are no warnings in the log.
++    $this->drupalGet('/admin/reports/dblog');
++    $assert_session->statusCodeEquals(200);
++    $assert_session->pageTextContains('access denied');
++    $assert_session->pageTextNotContains("Entity view display 'node.article.default': Component");
++  }
++
+ }
+diff --git a/core/modules/user/tests/src/Unit/Form/EntityPermissionsFormTest.php b/core/modules/user/tests/src/Unit/Form/EntityPermissionsFormTest.php
+index aa4639f3192effe459943572db28f2eacb976cc6..c240aafa803e8ad0747055ffd6b2395eb09c023d 100644
+--- a/core/modules/user/tests/src/Unit/Form/EntityPermissionsFormTest.php
++++ b/core/modules/user/tests/src/Unit/Form/EntityPermissionsFormTest.php
+@@ -60,12 +60,10 @@ public function testPermissionsByProvider(string $dependency_name, bool $found):
+     $module_handler = $this->prophesize(ModuleHandlerInterface::class)->reveal();
+     $module_extension_list = $this->prophesize(ModuleExtensionList::class)->reveal();
+     $prophecy = $this->prophesize(ConfigManagerInterface::class);
+-    $prophecy->getConfigEntitiesToChangeOnDependencyRemoval('config', ['node.type.article'])
++    $prophecy->findConfigEntityDependencies('config', ['node.type.article'])
+       ->willReturn([
+-        'delete' => [
+-          new ConfigEntityDependency('core.entity_view_display.node.article.full'),
+-          new ConfigEntityDependency('field.field.node.article.body'),
+-        ],
++        new ConfigEntityDependency('core.entity_view_display.node.article.full'),
++        new ConfigEntityDependency('field.field.node.article.body'),
+       ]);
+     $config_manager = $prophecy->reveal();
+     $prophecy = $this->prophesize(EntityTypeInterface::class);

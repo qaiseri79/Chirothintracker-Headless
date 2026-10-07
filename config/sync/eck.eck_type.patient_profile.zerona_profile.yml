@@ -1,0 +1,34 @@
+uuid: 11a7e76d-d327-4123-9a45-97cfa0dc42c2
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_entity_type.patient_profile
+  module:
+    - entity_redirect
+third_party_settings:
+  entity_redirect:
+    redirect:
+      add:
+        active: 0
+        destination: default
+        url: ''
+        external: ''
+      edit:
+        active: 1
+        destination: previous_page
+        url: ''
+        external: ''
+      delete:
+        active: 1
+        destination: previous_page
+        url: ''
+        external: ''
+      anonymous:
+        active: 0
+        destination: default
+        url: ''
+        external: ''
+name: 'Red Light Therapy Profile'
+type: zerona_profile
+description: 'Red Light Therapy Profile'

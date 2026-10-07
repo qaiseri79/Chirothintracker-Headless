@@ -1,0 +1,19 @@
+uuid: ca1c3b56-bb68-4736-8c11-4a8a48588d5d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_emotional_trauma
+    - paragraphs.paragraphs_type.significant_emotional_trauma
+id: paragraph.significant_emotional_trauma.field_emotional_trauma
+field_name: field_emotional_trauma
+entity_type: paragraph
+bundle: significant_emotional_trauma
+label: 'Emotional Trauma'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

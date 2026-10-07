@@ -1,0 +1,14 @@
+{
+  "name": "drupal/commerce_cart_redirection",
+  "type": "drupal-module",
+  "description": "Redirect to your cart page after adding a product to it",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/commerce_cart_redirection",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/commerce_cart_redirection",
+    "source": "http://cgit.drupalcode.org/commerce_cart_redirection"
+  },
+  "require": { }
+}

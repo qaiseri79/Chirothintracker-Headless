@@ -1,0 +1,43 @@
+{
+    "name": "drupal/download_file",
+    "description": "DownloadFile is a module to direct download files or images.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "keywords": [
+        "Drupal"
+    ],
+    "homepage": "https://www.drupal.org/project/download_file",
+    "authors": [
+        {
+            "name": "Ayesh Karunaratne (Ayesh)",
+            "homepage": "https://www.drupal.org/u/ayesh",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Ben Mullins (bnjmnm)",
+            "homepage": "https://www.drupal.org/u/bnjmnm",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Kristoffer Wiklund (kristofferwiklund)",
+            "homepage": "https://www.drupal.org/u/kristofferwiklund",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Henrik Danielsson (TwoD)",
+            "homepage": "https://www.drupal.org/u/twod",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Viktor Holovachek (AstonVictor)",
+            "homepage": "https://www.drupal.org/u/astonvictor",
+            "role": "Maintainer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/download_file",
+        "source": "https://git.drupalcode.org/project/download_file"
+    },
+    "require": {}
+}

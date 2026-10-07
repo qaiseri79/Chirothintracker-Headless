@@ -1,0 +1,25 @@
+uuid: 32eae562-37b1-4faa-9938-1c25b5d047e7
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.lipolight_profile
+    - field.storage.patient_profile.field_sessions_available
+id: patient_profile.lipolight_profile.field_sessions_available
+field_name: field_sessions_available
+entity_type: patient_profile
+bundle: lipolight_profile
+label: 'Sessions Available'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  min: 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

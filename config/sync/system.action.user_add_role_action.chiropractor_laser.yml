@@ -1,0 +1,14 @@
+uuid: c810b331-084b-4d81-af27-efd98a3723f6
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.chiropractor_laser
+  module:
+    - user
+id: user_add_role_action.chiropractor_laser
+label: 'Add the Chiropractor - Laser role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: chiropractor_laser

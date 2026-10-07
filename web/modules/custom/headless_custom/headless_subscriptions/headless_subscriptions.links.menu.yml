@@ -1,0 +1,12 @@
+headless_subscriptions.settings:
+  title: Portal subscriptions
+  description: Configure registration, payments, and renewal access.
+  parent: system.admin_config_people
+  route_name: headless_subscriptions.settings
+
+headless_subscriptions.admin:
+  title: 'Portal subscriptions'
+  description: 'View and manage doctor portal subscriptions and payments.'
+  parent: commerce.admin_commerce
+  route_name: headless_subscriptions.admin
+  weight: 5

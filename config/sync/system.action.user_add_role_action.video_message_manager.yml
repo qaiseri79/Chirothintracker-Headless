@@ -1,0 +1,14 @@
+uuid: b99bac12-e957-43b7-98c0-0101620a565a
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.video_message_manager
+  module:
+    - user
+id: user_add_role_action.video_message_manager
+label: 'Add the Video Message Manager role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: video_message_manager

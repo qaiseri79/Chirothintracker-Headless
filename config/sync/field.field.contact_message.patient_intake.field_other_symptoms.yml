@@ -1,0 +1,19 @@
+uuid: 0efc8ed7-0ea0-4fa4-888d-c26792e98ef2
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_other_symptoms
+id: contact_message.patient_intake.field_other_symptoms
+field_name: field_other_symptoms
+entity_type: contact_message
+bundle: patient_intake
+label: 'Do you experience any other problems, even if they are minor?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

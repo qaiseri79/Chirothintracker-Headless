@@ -1,0 +1,31 @@
+uuid: 5c12ac28-782a-4b71-8463-f487d6375cbc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.significant_emotional_trauma.field_age
+    - field.field.paragraph.significant_emotional_trauma.field_emotional_trauma
+    - paragraphs.paragraphs_type.significant_emotional_trauma
+id: paragraph.significant_emotional_trauma.default
+targetEntityType: paragraph
+bundle: significant_emotional_trauma
+mode: default
+content:
+  field_age:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_emotional_trauma:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden: {  }

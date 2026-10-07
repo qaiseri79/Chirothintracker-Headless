@@ -1,0 +1,29 @@
+uuid: a34e3564-d5c8-4baf-8c93-a2e39e4649cf
+langcode: en
+status: true
+dependencies:
+  module:
+    - contact
+id: clinician_message_status_cs
+label: 'Clinician Message Status (Contact Storage)'
+bundles:
+  - message
+entity_type: contact_message
+global: true
+flag_short: '<span class="button--primary button">Mark as New</span>'
+flag_long: 'Mark as New'
+flag_message: ''
+unflag_short: '<span class="button btn-success">Mark as Read</span>'
+unflag_long: 'Mark as Read'
+unflag_message: ''
+unflag_denied_text: ''
+weight: 0
+flag_type: 'entity:contact_message'
+link_type: ajax_link
+flagTypeConfig:
+  show_in_links: {  }
+  show_as_field: true
+  show_on_form: false
+  show_contextual_link: false
+  extra_permissions: {  }
+linkTypeConfig: {  }

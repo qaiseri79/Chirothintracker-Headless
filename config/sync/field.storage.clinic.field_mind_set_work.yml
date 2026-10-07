@@ -1,0 +1,22 @@
+uuid: d5cc39f0-a073-4761-b953-aa85c8b4488d
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: custom
+id: clinic.field_mind_set_work
+field_name: field_mind_set_work
+entity_type: clinic
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

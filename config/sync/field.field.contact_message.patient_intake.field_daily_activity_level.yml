@@ -1,0 +1,23 @@
+uuid: 08a299dc-2e4c-48a3-af0f-2a92478686c2
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_daily_activity_level
+  module:
+    - options
+id: contact_message.patient_intake.field_daily_activity_level
+field_name: field_daily_activity_level
+entity_type: contact_message
+bundle: patient_intake
+label: 'Daily Activity Level'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: '2'
+default_value_callback: ''
+settings: {  }
+field_type: list_string

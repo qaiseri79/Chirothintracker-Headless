@@ -1,0 +1,39 @@
+uuid: 40d767c3-1195-4df1-91bd-141e98bddb3b
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_photos
+    - field.storage.contact_message.field_author
+  module:
+    - disable_field
+    - epp
+third_party_settings:
+  epp:
+    value: '[current-user:uid]'
+    on_update: 1
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: contact_message.patient_photos.field_author
+field_name: field_author
+entity_type: contact_message
+bundle: patient_photos
+label: Author
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    filter:
+      type: _none
+    include_anonymous: true
+field_type: entity_reference

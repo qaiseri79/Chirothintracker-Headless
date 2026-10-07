@@ -1,0 +1,29 @@
+uuid: b069110f-387b-4f9e-bc10-bf418bc5dd67
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.home_menu
+  module:
+    - system
+    - views
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_views_block__home_menu_block_3
+theme: chirothintracker_subtheme
+region: content
+weight: 2
+provider: null
+plugin: 'views_block:home_menu-block_3'
+settings:
+  id: 'views_block:home_menu-block_3'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/home\r\n/welcome"

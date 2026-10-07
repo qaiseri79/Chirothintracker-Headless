@@ -1,0 +1,89 @@
+<?php
+
+use Drupal\Core\Url;
+
+/**
+ * @file
+ * Install, update and uninstall functions for CTT GoHighLevel module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function ctt_gohighlevel_install() {
+  \Drupal::messenger()->addStatus(t('CTT GoHighLevel module installed successfully. Please configure your API settings at <a href=":url">Administration > Configuration > Web services > CTT GoHighLevel</a>.', [
+    ':url' => Url::fromRoute('ctt_gohighlevel.settings')->toString(),
+  ]));
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function ctt_gohighlevel_uninstall() {
+  // Clean up configuration.
+  \Drupal::configFactory()->getEditable('ctt_gohighlevel.settings')->delete();
+  
+  \Drupal::messenger()->addStatus(t('CTT GoHighLevel module has been uninstalled and all configuration removed.'));
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function ctt_gohighlevel_requirements($phase) {
+  $requirements = [];
+
+  if ($phase == 'runtime') {
+    $config = \Drupal::config('ctt_gohighlevel.settings');
+    $api_key = $config->get('api_key');
+
+    if (empty($api_key)) {
+      $requirements['ctt_gohighlevel_api'] = [
+        'title' => t('CTT GoHighLevel API'),
+        'value' => t('Not configured'),
+        'description' => t('The GoHighLevel API key has not been configured. Please configure it at <a href=":url">CTT GoHighLevel settings</a>.', [
+          ':url' => Url::fromRoute('ctt_gohighlevel.settings')->toString(),
+        ]),
+        'severity' => REQUIREMENT_WARNING,
+      ];
+    }
+    else {
+      // Test the API connection.
+      $gohighlevel = \Drupal::service('ctt_gohighlevel.api');
+      $connection_test = $gohighlevel->testConnection();
+
+      if ($connection_test) {
+        $requirements['ctt_gohighlevel_api'] = [
+          'title' => t('CTT GoHighLevel API'),
+          'value' => t('Connected'),
+          'description' => t('API connection is working correctly.'),
+          'severity' => REQUIREMENT_OK,
+        ];
+      }
+      else {
+        $requirements['ctt_gohighlevel_api'] = [
+          'title' => t('CTT GoHighLevel API'),
+          'value' => t('Connection failed'),
+          'description' => t('Unable to connect to GoHighLevel API. Please check your API key at <a href=":url">CTT GoHighLevel settings</a>.', [
+            ':url' => Url::fromRoute('ctt_gohighlevel.settings')->toString(),
+          ]),
+          'severity' => REQUIREMENT_ERROR,
+        ];
+      }
+    }
+
+    // Check if integration is enabled.
+    $enabled = $config->get('enabled');
+    if (!$enabled) {
+      $requirements['ctt_gohighlevel_status'] = [
+        'title' => t('CTT GoHighLevel Status'),
+        'value' => t('Disabled'),
+        'description' => t('The GoHighLevel integration is currently disabled. Enable it at <a href=":url">CTT GoHighLevel settings</a>.', [
+          ':url' => Url::fromRoute('ctt_gohighlevel.settings')->toString(),
+        ]),
+        'severity' => REQUIREMENT_INFO,
+      ];
+    }
+  }
+
+  return $requirements;
+}

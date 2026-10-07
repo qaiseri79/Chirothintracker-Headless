@@ -1,0 +1,23 @@
+uuid: 547e4494-2acc-492a-89ca-306ad0a760d7
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.lipolight_profile
+    - field.storage.contact_message.field_chest
+id: contact_message.lipolight_profile.field_chest
+field_name: field_chest
+entity_type: contact_message
+bundle: lipolight_profile
+label: Chest
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

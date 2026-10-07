@@ -1,0 +1,7 @@
+name: Custom Twig Extension
+type: module
+description: 'Used for custom twig function and filter.'
+package: Custom
+core_version_requirement: ^10 || ^11
+
+version: 1.x

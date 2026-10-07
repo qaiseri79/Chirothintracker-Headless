@@ -1,0 +1,22 @@
+uuid: bfc0f576-e8a4-450f-a85a-bf5ec5ec158d
+langcode: en
+status: false
+dependencies:
+  module:
+    - system
+  theme:
+    - chirothintracker_subtheme
+_core:
+  default_config_hash: lXHzplrwlID8OzL4oDXCSqkwS7j7-38MBsWTU2Q5xqQ
+id: chirothintracker_subtheme_breadcrumbs
+theme: chirothintracker_subtheme
+region: breadcrumb
+weight: 0
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  label_display: '0'
+  provider: system
+visibility: {  }

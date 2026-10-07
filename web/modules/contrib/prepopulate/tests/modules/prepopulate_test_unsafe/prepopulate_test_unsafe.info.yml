@@ -1,0 +1,12 @@
+name: 'Prepopulate test unsafe module'
+type: module
+description: 'Provides alter for testing unsafe methods of pre-populating.'
+package: Testing
+core_version_requirement: ^8 || ^9 || ^10 || ^11
+dependencies:
+  - prepopulate:prepopulate
+
+# Information added by Drupal.org packaging script on 2024-11-29
+version: '8.x-2.5'
+project: 'prepopulate'
+datestamp: 1732903419

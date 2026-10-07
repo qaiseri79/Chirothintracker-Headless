@@ -1,0 +1,19 @@
+uuid: 2de03264-69da-4364-9da4-15fb878a23a9
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_lunch_fruit
+id: contact_message.tracking_weight.field_lunch_fruit
+field_name: field_lunch_fruit
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Other Lunch Fruit'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,29 @@
+uuid: e60a39d1-cb67-4bf4-8225-3a1140d033ff
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.recipes
+  module:
+    - system
+    - views
+  theme:
+    - olivero
+id: olivero_views_block__recipes_block_3
+theme: olivero
+region: content
+weight: 0
+provider: null
+plugin: 'views_block:recipes-block_3'
+settings:
+  id: 'views_block:recipes-block_3'
+  label: 'Shared Recipes'
+  label_display: '0'
+  provider: views
+  views_label: 'Shared Recipes'
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /recipes

@@ -1,0 +1,13 @@
+name: 'ECA Webform'
+type: module
+description: 'Integrate ECA with the Webform module and its plugins.'
+core_version_requirement: ^9 || ^10
+package: ECA
+dependencies:
+  - eca:eca
+  - webform:webform (^6.2)
+
+# Information added by Drupal.org packaging script on 2024-02-14
+version: '1.0.2'
+project: 'eca_webform'
+datestamp: 1707917932

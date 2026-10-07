@@ -1,0 +1,11 @@
+uuid: c2a3346c-9717-474a-807c-20ec499a1472
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+id: clinic.full
+label: Full
+description: ''
+targetEntityType: clinic
+cache: true

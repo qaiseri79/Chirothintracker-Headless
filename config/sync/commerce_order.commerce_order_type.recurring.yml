@@ -1,0 +1,19 @@
+uuid: f6f0eb25-c152-4d44-b9bf-5c57c9589141
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_recurring
+_core:
+  default_config_hash: alBtcl93cZUqOuWKBA9ltV1C-XnMEvXgiagdjOkpj2Y
+label: Recurring
+id: recurring
+workflow: order_recurring
+numberPattern: null
+refresh_mode: customer
+refresh_frequency: 300
+sendReceipt: false
+receiptBcc: ''
+receiptSubject: ''
+traits: {  }
+locked: true

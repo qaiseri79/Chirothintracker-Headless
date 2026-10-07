@@ -1,0 +1,14 @@
+uuid: e19fad6f-b007-4696-897c-6e43687e4a62
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.video_message_manager
+  module:
+    - user
+id: user_remove_role_action.video_message_manager
+label: 'Remove the Video Message Manager role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: video_message_manager

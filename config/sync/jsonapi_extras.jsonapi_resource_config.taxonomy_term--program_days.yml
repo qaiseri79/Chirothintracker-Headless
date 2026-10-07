@@ -1,0 +1,11 @@
+uuid: 14917d6c-06b8-4bed-9a88-73972f525dfe
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.program_days
+id: taxonomy_term--program_days
+disabled: false
+path: taxonomy_term--program_days
+resourceType: taxonomy_term--program_days
+resourceFields: {  }

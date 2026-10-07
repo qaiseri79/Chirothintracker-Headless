@@ -1,0 +1,8 @@
+single_content_sync.import_content:
+  route_name: single_content_sync.import
+  title: 'Import content'
+  appears_on:
+    - system.admin_content
+
+single_content_sync.bulk_export:
+  deriver: \Drupal\single_content_sync\Plugin\Derivative\ContentBulkExportLocalActions

@@ -1,0 +1,23 @@
+uuid: ec7ada4b-63e7-4011-a55f-143b48519891
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.chirothin_profile
+    - field.storage.patient_profile.field_back_bra_line_loss
+id: patient_profile.chirothin_profile.field_back_bra_line_loss
+field_name: field_back_bra_line_loss
+entity_type: patient_profile
+bundle: chirothin_profile
+label: 'Back / Bra-Line Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

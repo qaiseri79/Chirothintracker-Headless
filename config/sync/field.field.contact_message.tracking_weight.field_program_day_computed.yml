@@ -1,0 +1,23 @@
+uuid: 2fc08e44-fa5d-46b9-84b1-9a8f58fb8858
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_program_day_computed
+id: contact_message.tracking_weight.field_program_day_computed
+field_name: field_program_day_computed
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Program Day Computed'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

@@ -1,0 +1,23 @@
+uuid: 88fbf144-821e-47fd-8cab-c7e1fb330b4b
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: task.field_description
+field_name: field_description
+entity_type: task
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

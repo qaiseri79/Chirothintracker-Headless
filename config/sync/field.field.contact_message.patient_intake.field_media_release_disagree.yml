@@ -1,0 +1,21 @@
+uuid: 56d70f92-0015-4b59-a1ac-014163833ee6
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_media_release_disagree
+id: contact_message.patient_intake.field_media_release_disagree
+field_name: field_media_release_disagree
+entity_type: contact_message
+bundle: patient_intake
+label: 'I do not consent to the media release.'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: ''
+  off_label: ''
+field_type: boolean

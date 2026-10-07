@@ -1,0 +1,64 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Commerce License module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function commerce_license_uninstall() {
+  // Traits to uninstall.
+  $trait_ids = ['commerce_license', 'commerce_license_order_item_type'];
+
+  // Services we'll need.
+  $trait_manager = \Drupal::service('plugin.manager.commerce_entity_trait');
+  $type_manager = \Drupal::service('entity_type.manager');
+  $bundle_info = \Drupal::service('entity_type.bundle.info');
+
+  foreach ($trait_ids as $trait_id) {
+    $trait_definition = $trait_manager->getDefinition($trait_id);
+    $trait = $trait_manager->createInstance($trait_id, []);
+
+    // Whether a trait is applied to an entity is defined at the bundle
+    // level. Get all bundles for the entity type and if it is configured to
+    // apply the trait, uninstall its fields and remove it.
+    foreach ($trait_definition['entity_types'] as $entity_type_id) {
+      $bundle_entity_type_id = $type_manager
+        ->getDefinition($entity_type_id)
+        ->getBundleEntityType();
+      $bundles = $type_manager
+        ->getStorage($bundle_entity_type_id)
+        ->loadMultiple();
+      foreach ($bundles as $bundle) {
+        $bundle_id = $bundle->id();
+        $bundle_traits = $bundle->getTraits();
+        $licensed_trait_key = array_search($trait_id, $bundle_traits);
+        if ($licensed_trait_key === FALSE) {
+          continue;
+        }
+
+        // Don't uninstall and throw an exception if there is data on the fields.
+        if (!$trait_manager->canUninstallTrait($trait, $entity_type_id, $bundle_id)) {
+          throw new \Exception(
+            sprintf(
+              'Cannot uninstall the trait "%s" because there is data available on the fields it defines for the entity type "%s", bundle "%s"',
+              $trait_id,
+              $entity_type_id,
+              $bundle_id
+            )
+          );
+        }
+
+        // Uninstall fields.
+        $trait_manager->uninstallTrait($trait, $entity_type_id, $bundle_id);
+
+        // Disable trait in bundle.
+        unset($bundle_traits[$licensed_trait_key]);
+        $bundle->setTraits($bundle_traits);
+        $bundle->save();
+      }
+    }
+  };
+}

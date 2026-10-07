@@ -1,0 +1,19 @@
+uuid: 492b385c-21ec-4352-b4d5-70731cd8cb5c
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.clinic.clinic
+    - field.storage.clinic.field_domain_base_no_protocol
+id: clinic.clinic.field_domain_base_no_protocol
+field_name: field_domain_base_no_protocol
+entity_type: clinic
+bundle: clinic
+label: 'Domain Base No Protocol'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

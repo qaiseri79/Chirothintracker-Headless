@@ -1,0 +1,23 @@
+include:
+  - remote: 'https://gitlab.lakedrops.com/gitlab-ci-cd/drupal/-/raw/main/mr-proposed-changes.yml'
+  - project: $_GITLAB_TEMPLATES_REPO
+    ref: $_GITLAB_TEMPLATES_REF
+    file:
+      - '/includes/include.drupalci.main.yml'
+      - '/includes/include.drupalci.variables.yml'
+      - '/includes/include.drupalci.workflows.yml'
+
+BuildApp:
+  extends: '.mr-proposed-changes'
+  script:
+    - cd build
+    - npm update --save
+    - npm run all
+
+variables:
+  SKIP_ESLINT: '1'
+  SKIP_STYLELINT: '1'
+phpcs:
+  allow_failure: false
+phpstan:
+  allow_failure: false

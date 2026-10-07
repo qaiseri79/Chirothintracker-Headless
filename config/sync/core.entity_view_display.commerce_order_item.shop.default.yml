@@ -1,0 +1,36 @@
+uuid: 2c4b3db6-110b-4124-8d0f-fe236e6cf5cc
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_order.commerce_order_item_type.shop
+id: commerce_order_item.shop.default
+targetEntityType: commerce_order_item
+bundle: shop
+mode: default
+content:
+  created:
+    type: timestamp
+    label: hidden
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: long
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  adjustments: true
+  purchased_entity: true
+  quantity: true
+  total_price: true
+  unit_price: true

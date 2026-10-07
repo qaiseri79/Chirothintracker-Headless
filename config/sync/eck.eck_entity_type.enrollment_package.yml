@@ -1,0 +1,11 @@
+uuid: 23eb9183-6514-4b13-a66b-fbec60199b1d
+langcode: en
+status: null
+dependencies: {  }
+id: enrollment_package
+label: 'Enrollment Package'
+uid: true
+created: true
+changed: true
+title: true
+standalone_url: true

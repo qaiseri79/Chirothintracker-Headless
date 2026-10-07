@@ -1,0 +1,83 @@
+uuid: 3f09a04a-7352-42d4-a400-c9279f20b657
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d7_entityform_message
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Content
+migration_group: migrate_drupal_7
+label: 'D8 Contact message migration from D7 entityform submission ()'
+source:
+  plugin: d7_entityform
+  constants:
+    langcode: en
+    module: contact_storage
+  bundle: message
+process:
+  id:
+    -
+      plugin: get
+      source: entityform_id
+  contact_form:
+    -
+      plugin: get
+      source: type
+  uid:
+    -
+      plugin: get
+      source: uid
+  created:
+    -
+      plugin: get
+      source: created
+  changed:
+    -
+      plugin: get
+      source: changed
+  langcode:
+    -
+      plugin: default_value
+      source: language
+      default_value: en
+  'dependencies/module/[]':
+    -
+      plugin: get
+      source: constants/module
+  field_from:
+    -
+      plugin: get
+      source: field_from
+  field_to:
+    -
+      plugin: get
+      source: field_to
+  field_message:
+    -
+      plugin: get
+      source: field_message
+  field_patient_uid:
+    -
+      plugin: get
+      source: field_patient_uid
+  field_timestamp:
+    -
+      plugin: sub_process
+      source: field_timestamp
+      process:
+        value:
+          plugin: format_date
+          from_format: 'Y-m-d H:i:s'
+          to_format: 'Y-m-d\TH:i:s'
+          source: value
+destination:
+  plugin: 'entity:contact_message'
+  default_bundle: message
+migration_dependencies:
+  required:
+    - ''
+  optional:
+    - upgrade_d7_field_instance

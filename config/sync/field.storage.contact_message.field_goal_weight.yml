@@ -1,0 +1,22 @@
+uuid: e4f4e4be-95e3-48af-aff3-fa87905f57d7
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: contact_message.field_goal_weight
+field_name: field_goal_weight
+entity_type: contact_message
+type: float
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

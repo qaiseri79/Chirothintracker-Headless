@@ -1,0 +1,85 @@
+uuid: a9d4387b-bf88-4df0-94f6-3f5dadd734aa
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d7_entityform_my_home_page
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Content
+migration_group: migrate_drupal_7
+label: 'D8 Contact message migration from D7 entityform submission ()'
+source:
+  plugin: d7_entityform
+  constants:
+    langcode: en
+    module: contact_storage
+  bundle: my_home_page
+process:
+  id:
+    -
+      plugin: get
+      source: entityform_id
+  contact_form:
+    -
+      plugin: get
+      source: type
+  uid:
+    -
+      plugin: get
+      source: uid
+  created:
+    -
+      plugin: get
+      source: created
+  changed:
+    -
+      plugin: get
+      source: changed
+  langcode:
+    -
+      plugin: default_value
+      source: language
+      default_value: en
+  'dependencies/module/[]':
+    -
+      plugin: get
+      source: constants/module
+  field_logo:
+    -
+      plugin: sub_process
+      source: field_logo
+      process:
+        target_id: fid
+        alt: alt
+        title: title
+        width: width
+        height: height
+  field_photo:
+    -
+      plugin: sub_process
+      source: field_photo
+      process:
+        target_id: fid
+        alt: alt
+        title: title
+        width: width
+        height: height
+  field_title:
+    -
+      plugin: get
+      source: field_title
+  field_body:
+    -
+      plugin: get
+      source: field_body
+destination:
+  plugin: 'entity:contact_message'
+  default_bundle: my_home_page
+migration_dependencies:
+  required:
+    - ''
+  optional:
+    - upgrade_d7_field_instance

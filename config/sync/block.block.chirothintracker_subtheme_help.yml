@@ -1,0 +1,35 @@
+uuid: 209ba010-51a5-4cfe-bef4-8441f917a34b
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+    - system
+    - user
+  theme:
+    - chirothintracker_subtheme
+_core:
+  default_config_hash: gj3xLHxC8MaXp_QUzQ6wVCPoRvuwIDrn01pvvDmjmB4
+id: chirothintracker_subtheme_help
+theme: chirothintracker_subtheme
+region: content
+weight: -19
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  label_display: '0'
+  provider: help
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: '/admin/structure/webform/manage/patient_intake/submission/*'
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      administrator: administrator

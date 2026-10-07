@@ -1,0 +1,9 @@
+uuid: 3bdd781c-89f7-4996-bf79-1cf99fb4f513
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_entity_type.test_entity
+name: 'Test Bundle'
+type: test_bundle
+description: ''

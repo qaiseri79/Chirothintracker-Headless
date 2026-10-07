@@ -1,0 +1,23 @@
+uuid: ac70b67e-483a-4bab-8da1-e1224411fc32
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.zerona_profile
+    - field.storage.contact_message.field_shoulders
+id: contact_message.zerona_profile.field_shoulders
+field_name: field_shoulders
+entity_type: contact_message
+bundle: zerona_profile
+label: Shoulders
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

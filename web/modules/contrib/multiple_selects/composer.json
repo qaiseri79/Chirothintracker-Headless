@@ -1,0 +1,28 @@
+{
+  "name": "drupal/multiple_selects",
+  "description": "Adding a possibility to use multiple select fields rather than a multiselect field.",
+  "require": {
+    "drupal/core": "^8.8 || ^9 || ^10 || ^11"
+  },
+  "require-dev": {
+    "drupal/select2": "^1.0 || ^2.0"
+  },
+  "type": "drupal-module",
+  "license": [
+    "GPL-2.0-or-later"
+  ],
+  "authors": [
+    {
+      "name": "JeroenT",
+      "homepage": "https://www.drupal.org/user/2228934"
+    },
+    {
+      "name": "webadpro",
+      "homepage": "https://www.drupal.org/user/708024"
+    }
+  ],
+  "homepage": "https://www.drupal.org/project/multiple_selects",
+  "support": {
+    "source": "https://git.drupalcode.org/project/multiple_selects"
+  }
+}

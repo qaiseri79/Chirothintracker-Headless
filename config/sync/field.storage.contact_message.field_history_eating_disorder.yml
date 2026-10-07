@@ -1,0 +1,49 @@
+uuid: 66408473-4b3f-49c0-af3e-b2bd077da8d0
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+    - options
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: contact_message.field_history_eating_disorder
+field_name: field_history_eating_disorder
+entity_type: contact_message
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '1'
+      label: 'Anorexia Nervosa'
+    -
+      value: '2'
+      label: 'Bulimia Nervosa'
+    -
+      value: '3'
+      label: 'Binge Eating Disorder'
+    -
+      value: '4'
+      label: PICA
+    -
+      value: '5'
+      label: 'Rumination Disorder'
+    -
+      value: '6'
+      label: 'Avoidant or Restrictive Food Intake Disorder'
+    -
+      value: '7'
+      label: 'Purging Disorder'
+    -
+      value: '8'
+      label: 'Night Eating Syndrome'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

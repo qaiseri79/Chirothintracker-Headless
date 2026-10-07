@@ -1,0 +1,30 @@
+uuid: 0c611690-7910-4f7a-8d11-0f2dcb654f1f
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+    - file
+    - image
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: contact_message.field_photo
+field_name: field_photo
+entity_type: contact_message
+type: image
+settings:
+  target_type: file
+  display_field: false
+  display_default: true
+  uri_scheme: public
+  default_image:
+    uuid: ''
+module: image
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

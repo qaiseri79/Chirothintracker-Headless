@@ -1,0 +1,35 @@
+uuid: cbcb42d3-268b-4ed0-9412-bedfac8892bd
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.subscription
+    - field.storage.commerce_product.field_subscription_image
+    - media.type.image
+  module:
+    - disable_field
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: commerce_product.subscription.field_subscription_image
+field_name: field_subscription_image
+entity_type: commerce_product
+bundle: subscription
+label: Image
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

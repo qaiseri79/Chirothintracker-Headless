@@ -1,0 +1,17 @@
+name: Commerce Reporting
+description: Provides reporting capabilities for sales, products, customers and payment gateways.
+package: Commerce (contrib)
+
+type: module
+core_version_requirement: ^9 || ^10 || ^11
+
+dependencies:
+  - commerce:commerce
+  - commerce:commerce_price
+  - commerce:commerce_order
+  - drupal:views
+
+# Information added by Drupal.org packaging script on 2025-02-04
+version: '8.x-1.0-rc4'
+project: 'commerce_reports'
+datestamp: 1738664828

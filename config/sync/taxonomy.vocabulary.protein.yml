@@ -1,0 +1,9 @@
+uuid: ef5fc2b9-88e2-4e65-9cc8-a66e79e5a472
+langcode: en
+status: true
+dependencies: {  }
+name: Protein
+vid: protein
+description: 'Approved Proteins'
+weight: 0
+new_revision: false

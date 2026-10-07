@@ -1,0 +1,15 @@
+uuid: a69cbfaf-d67c-4e8b-84e1-e466399c5525
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.new_order_personal
+  module:
+    - flag
+id: flag_action.new_order_personal_unflag
+label: '<span class="btn btn-default btn-sm intake-new">New Order</span>'
+type: commerce_order
+plugin: 'flag_action:new_order_personal_unflag'
+configuration:
+  flag_id: new_order_personal
+  flag_action: unflag

@@ -1,0 +1,23 @@
+uuid: 3bad8439-b35c-4d34-9ac2-a6db48be06d4
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_back_bra_line
+id: contact_message.ultraslim_profile.field_back_bra_line
+field_name: field_back_bra_line
+entity_type: contact_message
+bundle: ultraslim_profile
+label: 'Back / Bra-Line'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

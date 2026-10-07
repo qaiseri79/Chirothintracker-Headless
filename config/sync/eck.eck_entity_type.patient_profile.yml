@@ -1,0 +1,11 @@
+uuid: 34fc5fc0-7c59-401b-bd10-673e40869a1a
+langcode: en
+status: false
+dependencies: {  }
+id: patient_profile
+label: 'Patient Profile'
+uid: false
+created: true
+changed: false
+title: false
+standalone_url: true

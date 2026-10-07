@@ -1,0 +1,30 @@
+uuid: 3919d741-319c-4743-91c3-c1911877e76d
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.mailings.scheduled_mail
+    - field.field.mailings.scheduled_mail.field_message_plain
+    - field.field.mailings.scheduled_mail.field_scheduled_date
+  module:
+    - datetime
+id: mailings.scheduled_mail.default
+targetEntityType: mailings
+bundle: scheduled_mail
+mode: default
+content:
+  field_message_plain:
+    type: string_textarea
+    weight: 5
+    region: content
+    settings:
+      rows: 12
+      placeholder: ''
+    third_party_settings: {  }
+  field_scheduled_date:
+    type: datetime_default
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden: {  }

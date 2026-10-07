@@ -1,0 +1,29 @@
+uuid: 5b79531b-d0cf-415a-8bde-2c96654f0600
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.test_entity.test_bundle
+    - field.field.test_entity.test_bundle.field_my_test_field
+  module:
+    - text
+id: test_entity.test_bundle.default
+targetEntityType: test_entity
+bundle: test_bundle
+mode: default
+content:
+  created:
+    type: datetime_timestamp
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_my_test_field:
+    type: text_textarea
+    weight: 11
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }

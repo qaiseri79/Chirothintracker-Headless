@@ -1,0 +1,23 @@
+uuid: 21cf71a3-a673-4d17-97b8-5182dda39950
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.zerona_profile
+    - field.storage.contact_message.field_hips
+id: contact_message.zerona_profile.field_hips
+field_name: field_hips
+entity_type: contact_message
+bundle: zerona_profile
+label: Hips
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

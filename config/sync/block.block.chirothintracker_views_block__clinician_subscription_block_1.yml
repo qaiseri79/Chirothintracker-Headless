@@ -1,0 +1,34 @@
+uuid: f64c3e1c-2ec1-4b6c-b76f-71c46c094ea1
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.clinician_subscription
+  module:
+    - user
+    - views
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_views_block__clinician_subscription_block_1
+theme: chirothintracker_subtheme
+region: header_top
+weight: -24
+provider: null
+plugin: 'views_block:clinician_subscription-block_1'
+settings:
+  id: 'views_block:clinician_subscription-block_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      chiropractor_active_: chiropractor_active_
+      chiropractor_inactive_: chiropractor_inactive_

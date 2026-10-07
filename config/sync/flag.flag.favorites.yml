@@ -1,0 +1,32 @@
+uuid: 306c1862-b85f-44da-80ee-c64032f994f3
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: favorites
+label: Favorites
+bundles:
+  - recipe
+entity_type: node
+global: false
+flag_short: '<i class="fa-regular fa-star"></i>'
+flag_long: 'Add to favorites'
+flag_message: ''
+unflag_short: '<i class="fa-solid fa-star"></i>'
+unflag_long: 'Remove from favorites'
+unflag_message: ''
+unflag_denied_text: ''
+weight: 0
+flag_type: 'entity:node'
+link_type: ajax_link
+flagTypeConfig:
+  show_in_links:
+    full: full
+    teaser: teaser
+  show_as_field: true
+  show_on_form: false
+  show_contextual_link: false
+  extra_permissions:
+    owner: '0'
+linkTypeConfig: {  }

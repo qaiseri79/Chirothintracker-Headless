@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Password Reset Landing Page module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function prlp_form_user_pass_reset_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $config = \Drupal::config('prlp.settings');
+  $form['pass'] = [
+    '#type' => 'password_confirm',
+    '#title' => t('Set New Password'),
+    '#description' => t('Please set a new password so that you can login next time.'),
+    '#weight' => -1,
+    '#required' => $config->get('password_required'),
+  ];
+}

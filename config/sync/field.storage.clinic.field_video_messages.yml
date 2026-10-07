@@ -1,0 +1,22 @@
+uuid: dd273265-1cce-4b2c-a810-c16f8ff8c26a
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: clinic.field_video_messages
+field_name: field_video_messages
+entity_type: clinic
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

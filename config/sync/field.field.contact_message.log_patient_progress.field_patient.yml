@@ -1,0 +1,36 @@
+uuid: ca012e0a-2347-4ab9-89ad-9693fc1cbda8
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.log_patient_progress
+    - field.storage.contact_message.field_patient
+id: contact_message.log_patient_progress.field_patient
+field_name: field_patient
+entity_type: contact_message
+bundle: log_patient_progress
+label: Patient
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    target_id: '[current-page:query:uid]'
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    view:
+      view_name: enrolled_patients
+      display_name: entityreference_1
+      args: {  }
+    behaviors:
+      field_default_token:
+        status: true
+      views-select-list:
+        status: 0
+field_type: entity_reference

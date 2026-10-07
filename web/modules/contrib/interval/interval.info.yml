@@ -1,0 +1,12 @@
+name: Interval Field
+type: module
+description: 'Provides a field and widget to allow entry of a date/time interval.'
+package: Field types
+core_version_requirement: ^9.1 || ^10 || ^11
+dependencies:
+  - drupal:field
+
+# Information added by Drupal.org packaging script on 2025-04-01
+version: '8.x-1.15'
+project: 'interval'
+datestamp: 1743543493

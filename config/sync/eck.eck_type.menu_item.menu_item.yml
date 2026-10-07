@@ -1,0 +1,9 @@
+uuid: 07ea348b-2ed3-4f48-90c0-66d708b03625
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_entity_type.menu_item
+name: 'Menu Item'
+type: menu_item
+description: 'Menu Item'

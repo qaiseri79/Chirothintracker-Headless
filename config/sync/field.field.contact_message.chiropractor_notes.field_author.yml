@@ -1,0 +1,35 @@
+uuid: 5defffa3-2096-4a6f-b6e9-0caf265517a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.chiropractor_notes
+    - field.storage.contact_message.field_author
+  module:
+    - epp
+third_party_settings:
+  epp:
+    value: '[current-user:uid]'
+    on_update: 0
+id: contact_message.chiropractor_notes.field_author
+field_name: field_author
+entity_type: contact_message
+bundle: chiropractor_notes
+label: Author
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    filter:
+      type: _none
+    include_anonymous: true
+field_type: entity_reference

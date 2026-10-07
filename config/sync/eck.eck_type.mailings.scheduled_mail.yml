@@ -1,0 +1,9 @@
+uuid: fb3c91bf-a719-4cc1-8f23-6ac065462a76
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_entity_type.mailings
+name: 'Scheduled Mail'
+type: scheduled_mail
+description: 'Scheduled Mail'

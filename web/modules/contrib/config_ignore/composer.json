@@ -1,0 +1,31 @@
+{
+  "name": "drupal/config_ignore",
+  "description": "Ignore certain configuration during import and export.",
+  "type": "drupal-module",
+  "homepage": "http://drupal.org/project/config_ignore",
+  "authors": [
+    {
+      "name": "Tommy Lynge Jørgensen",
+      "email": "tlyngej@gmail.com",
+      "homepage": "https://www.drupal.org/u/tlyngej",
+      "role": "Maintainer"
+    },
+    {
+      "name": "Fabian Bircher",
+      "homepage": "https://www.drupal.org/u/bircher",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "http://drupal.org/project/config_ignore",
+    "source": "https://git.drupalcode.org/project/config_ignore"
+  },
+  "license": "GPL-2.0-or-later",
+  "minimum-stability": "dev",
+  "require-dev": {
+    "composer-runtime-api": "^2.0",
+    "drupal/config_filter": "^1.8 || ^2.2",
+    "drupal/potx": "^1.1",
+    "drush/drush": ">=10"
+  }
+}

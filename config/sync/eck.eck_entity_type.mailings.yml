@@ -1,0 +1,11 @@
+uuid: aa4180e9-950c-4419-85b4-45838ff31131
+langcode: en
+status: null
+dependencies: {  }
+id: mailings
+label: Mailings
+uid: false
+created: false
+changed: false
+title: false
+standalone_url: true

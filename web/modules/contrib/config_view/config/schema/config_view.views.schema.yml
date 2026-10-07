@@ -1,0 +1,19 @@
+views.filter.config_view_numeric_filter:
+  type: views_filter
+  label: 'Config Numeric'
+
+views.filter_value.config_view_numeric_filter:
+  type: views.filter_value.numeric
+  label: 'Config Numeric'
+
+views.filter.config_view_permissions_filter:
+  type: views.filter.many_to_one
+  label: 'Config Permission'
+
+views.filter.config_view_string_filter:
+  type: views_filter
+  label: 'Config String'
+
+views.filter_value.config_view_string_filter:
+  type: views.filter_value.string
+  label: 'Config String'

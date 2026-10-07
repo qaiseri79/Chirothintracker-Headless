@@ -1,0 +1,50 @@
+uuid: 6d044ee0-5338-40a1-9e28-d3b767753bf0
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.test_entity.test_bundle
+    - field.field.test_entity.test_bundle.field_my_test_field
+  module:
+    - text
+id: test_entity.test_bundle.default
+targetEntityType: test_entity
+bundle: test_bundle
+mode: default
+content:
+  created:
+    type: timestamp
+    label: hidden
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_my_test_field:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  title:
+    label: hidden
+    type: string
+    weight: -5
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+hidden:
+  changed: true

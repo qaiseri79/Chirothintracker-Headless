@@ -1,0 +1,29 @@
+uuid: 37e5dfc5-4d36-4704-bd32-6fb64aeef438
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.clinic.clinic
+    - field.storage.clinic.field_laser_clinic
+  module:
+    - disable_field
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: clinic.clinic.field_laser_clinic
+field_name: field_laser_clinic
+entity_type: clinic
+bundle: clinic
+label: 'Laser Clinic'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

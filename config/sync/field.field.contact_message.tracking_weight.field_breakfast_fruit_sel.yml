@@ -1,0 +1,26 @@
+uuid: bbcaaa34-69b8-4d4f-bcae-6817810ec6b5
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_breakfast_fruit_sel
+    - taxonomy.vocabulary.fruit
+id: contact_message.tracking_weight.field_breakfast_fruit_sel
+field_name: field_breakfast_fruit_sel
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Breakfast Fruit'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      fruit: fruit
+    sort:
+      field: _none
+field_type: entity_reference

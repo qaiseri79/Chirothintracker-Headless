@@ -1,0 +1,6 @@
+services:
+  commerce_cart_redirection.cart_event_subscriber:
+    class: Drupal\commerce_cart_redirection\EventSubscriber\CommerceCartRedirectionSubscriber
+    arguments: ['@request_stack', '@router.route_provider']
+    tags:
+      - { name: event_subscriber }

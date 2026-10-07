@@ -1,0 +1,21 @@
+uuid: 06dd73ae-2175-4828-87c6-01d3da10217e
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_marital_status
+  module:
+    - options
+id: contact_message.patient_intake.field_marital_status
+field_name: field_marital_status
+entity_type: contact_message
+bundle: patient_intake
+label: 'Marital Status'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

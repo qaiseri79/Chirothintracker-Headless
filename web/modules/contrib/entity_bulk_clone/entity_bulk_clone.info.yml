@@ -1,0 +1,15 @@
+name: Entity Bulk Clone
+type: module
+description: 'Entity Bulk clone via Views Bull Operation.'
+core_version_requirement: ^8 || ^9 || ^10
+package: Clone
+
+dependencies:
+  - replicate:replicate
+  - entity:entity
+  - drupal:system (>=8.6)
+
+# Information added by Drupal.org packaging script on 2022-12-09
+version: '2.0.1'
+project: 'entity_bulk_clone'
+datestamp: 1670594762

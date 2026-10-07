@@ -1,0 +1,14 @@
+uuid: 4f7a62c4-bb00-47b6-9b16-1e7b8747f559
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.impersonator
+  module:
+    - user
+id: user_remove_role_action.impersonator
+label: 'Remove the Impersonator role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: impersonator

@@ -1,0 +1,21 @@
+{
+    "name": "drupal/signature_field",
+    "description": "",
+    "type": "drupal-module",
+    "homepage": "https://www.drupal.org/project/signature_field",
+    "authors": [
+        {
+            "name": "George Anderson (geoanders)",
+            "homepage": "https://www.drupal.org/u/geoanders",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/signature_field",
+        "source": "https://git.drupalcode.org/project/signature_field"
+    },
+    "license": "GPL-2.0+",
+    "require": {
+        "drupal/core": "^9.3 || ^10 || ^11"
+    }
+}

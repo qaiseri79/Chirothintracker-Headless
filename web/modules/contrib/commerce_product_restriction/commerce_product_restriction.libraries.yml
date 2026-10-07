@@ -1,0 +1,4 @@
+restrictions:
+  version: VERSION
+  js:
+    js/restrictions.js: {}

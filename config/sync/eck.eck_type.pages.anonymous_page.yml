@@ -1,0 +1,9 @@
+uuid: b5561ae2-c4f7-40f9-9446-ad8b76c517dd
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_entity_type.pages
+name: 'Anonymous Page'
+type: anonymous_page
+description: 'Anonymous Page'

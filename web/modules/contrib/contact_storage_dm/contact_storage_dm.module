@@ -1,0 +1,53 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for contact_storage_send_stop module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\contact\ContactFormInterface;
+
+ /**
+ * Implements hook_form_FORM_ID_alter() for contact_form_form().
+ */
+function contact_storage_dm_form_contact_form_form_alter(&$form, FormStateInterface $form_state) {
+  /** @var \Drupal\contact\ContactFormInterface $contact_form */
+
+  $form_object = $form_state->getFormObject();
+  if (!in_array($form_object->getOperation(), ['edit', 'add'], TRUE)) {
+    // Only alter the edit and add forms.
+    return;
+  }
+  $contact_form = $form_object->getEntity();
+  $form['contact_storage_dm'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Disable Mail Send'),
+    '#description' => t('Check this if you only want to store the submission.'),
+    '#default_value' => $contact_form->getThirdPartySetting('contact_storage_dm', 'disabled', FALSE),
+  ];
+  $form['#entity_builders'][] = 'contact_storage_dm_contact_form_builder';
+}
+
+/**
+ * Entity builder for the contact form edit form with third party options.
+ *
+ * @see contact_storage_test_form_contact_form_edit_form_alter()
+ */
+function contact_storage_dm_contact_form_builder($entity_type, ContactFormInterface $contact_form, &$form, FormStateInterface $form_state) {
+  $contact_form->setThirdPartySetting('contact_storage_dm', 'disabled', $form_state->getValue('contact_storage_dm'));
+}
+
+/**
+ * Implements hook_mail_alter().
+ */
+function contact_storage_dm_mail_alter(&$message) {
+  if (isset($message['params']['contact_form'])) {
+    $contact_form = $message['params']['contact_form'];
+    $is_mail_disabled = $contact_form->getThirdPartySetting('contact_storage_dm', 'disabled', FALSE);
+    if ($is_mail_disabled) {
+      $message['send'] = FALSE;
+      return;
+    }
+  }
+}

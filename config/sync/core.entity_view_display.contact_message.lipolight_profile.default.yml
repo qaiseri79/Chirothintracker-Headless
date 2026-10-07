@@ -1,0 +1,94 @@
+uuid: 323f7dda-a3c0-4df9-be84-3cd69714cc1c
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.lipolight_profile
+    - field.field.contact_message.lipolight_profile.field_abdomen
+    - field.field.contact_message.lipolight_profile.field_above_umbilicus
+    - field.field.contact_message.lipolight_profile.field_arm_left_bicep
+    - field.field.contact_message.lipolight_profile.field_arm_right_bicep
+    - field.field.contact_message.lipolight_profile.field_author
+    - field.field.contact_message.lipolight_profile.field_back_bra_line
+    - field.field.contact_message.lipolight_profile.field_before_and_after_photos
+    - field.field.contact_message.lipolight_profile.field_below_umbilicus
+    - field.field.contact_message.lipolight_profile.field_blood_pressure
+    - field.field.contact_message.lipolight_profile.field_calf_left
+    - field.field.contact_message.lipolight_profile.field_calf_right
+    - field.field.contact_message.lipolight_profile.field_chest
+    - field.field.contact_message.lipolight_profile.field_date
+    - field.field.contact_message.lipolight_profile.field_hips
+    - field.field.contact_message.lipolight_profile.field_neck
+    - field.field.contact_message.lipolight_profile.field_notes
+    - field.field.contact_message.lipolight_profile.field_patient_profile
+    - field.field.contact_message.lipolight_profile.field_shoulders
+    - field.field.contact_message.lipolight_profile.field_thigh_left
+    - field.field.contact_message.lipolight_profile.field_thigh_right
+    - field.field.contact_message.lipolight_profile.field_treatment_area
+    - field.field.contact_message.lipolight_profile.field_weight
+id: contact_message.lipolight_profile.default
+targetEntityType: contact_message
+bundle: lipolight_profile
+mode: default
+content:
+  field_author:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  mail:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: -2
+    region: content
+  message:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -3
+    region: content
+  subject:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -1
+    region: content
+hidden:
+  field_abdomen: true
+  field_above_umbilicus: true
+  field_arm_left_bicep: true
+  field_arm_right_bicep: true
+  field_back_bra_line: true
+  field_before_and_after_photos: true
+  field_below_umbilicus: true
+  field_blood_pressure: true
+  field_calf_left: true
+  field_calf_right: true
+  field_chest: true
+  field_date: true
+  field_hips: true
+  field_neck: true
+  field_notes: true
+  field_patient_profile: true
+  field_shoulders: true
+  field_thigh_left: true
+  field_thigh_right: true
+  field_treatment_area: true
+  field_weight: true

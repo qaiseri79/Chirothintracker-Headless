@@ -1,0 +1,25 @@
+uuid: ffe9bf3f-0ad6-47c5-be46-3fcac591ea6d
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.enrollment_package.enrollment_package
+    - field.storage.enrollment_package.field_enrollment_soft_limit
+id: enrollment_package.enrollment_package.field_enrollment_soft_limit
+field_name: field_enrollment_soft_limit
+entity_type: enrollment_package
+bundle: enrollment_package
+label: 'Enrollment Soft Limit'
+description: '0 = Unlimited'
+required: true
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

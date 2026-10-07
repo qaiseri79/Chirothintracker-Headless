@@ -1,0 +1,29 @@
+uuid: 0431334b-bdce-4d44-8b06-ef2d3f6730bc
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.lipolight_profile
+    - field.storage.contact_message.field_date
+  module:
+    - datetime
+    - disable_field
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: contact_message.lipolight_profile.field_date
+field_name: field_date
+entity_type: contact_message
+bundle: lipolight_profile
+label: Date
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    default_date_type: now
+    default_date: now
+default_value_callback: ''
+settings: {  }
+field_type: datetime

@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * Install, update & uninstall for Trim module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function trim_install() {
+  // Set a large weight in order to go last (and so validate first).
+  module_set_weight('trim', 1001);
+}

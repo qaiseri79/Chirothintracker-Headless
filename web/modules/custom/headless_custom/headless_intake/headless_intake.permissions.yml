@@ -1,0 +1,6 @@
+## Machine name intentionally unchanged from the definition that used to live in
+## ctt_patient_intake, so any permission grant already in the database stays
+## valid across the move. Changing it would silently revoke access.
+manage intake invite links:
+  title: 'Manage intake invite links'
+  description: 'Generate, copy and revoke patient intake invite links for their clinic.'

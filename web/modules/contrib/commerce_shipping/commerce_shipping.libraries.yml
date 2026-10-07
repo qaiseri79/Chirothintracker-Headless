@@ -1,0 +1,15 @@
+shipping_checkout:
+  version: VERSION
+  js:
+    js/shipping_checkout.js: {}
+  dependencies:
+    - core/drupalSettings
+    - core/drupal
+    - core/once
+
+resources:
+  version: VERSION
+  css:
+    theme:
+      css/commerce_shipping.resources.css: {}
+

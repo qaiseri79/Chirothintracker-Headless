@@ -1,0 +1,23 @@
+uuid: 84a33c65-6fdf-4b48-af78-d61ed7d06a1a
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+    - field_permissions
+    - text
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: pages.field_body
+field_name: field_body
+entity_type: pages
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

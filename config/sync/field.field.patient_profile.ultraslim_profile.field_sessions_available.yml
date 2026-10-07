@@ -1,0 +1,23 @@
+uuid: ac6b1f79-34d0-481a-a262-ba152017e7c9
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.ultraslim_profile
+    - field.storage.patient_profile.field_sessions_available
+id: patient_profile.ultraslim_profile.field_sessions_available
+field_name: field_sessions_available
+entity_type: patient_profile
+bundle: ultraslim_profile
+label: 'Sessions Available'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

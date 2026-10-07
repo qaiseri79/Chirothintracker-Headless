@@ -1,0 +1,11 @@
+uuid: 200d6433-459f-4ae1-b56c-d4aa20b2c31a
+langcode: en
+status: true
+dependencies: {  }
+id: log_patient_progress
+label: 'Log Patient Progress'
+recipients: {  }
+reply: ''
+weight: 0
+message: null
+redirect: null

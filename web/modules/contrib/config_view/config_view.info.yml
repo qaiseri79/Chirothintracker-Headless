@@ -1,0 +1,13 @@
+name: 'Views: Configuration Entities'
+description: 'Exposing Configuration Entities to Views.'
+type: module
+configure: config_view.settings
+core_version_requirement: ^8.8 || ^9 || ^10
+package: Views
+dependencies:
+  - drupal:views
+
+# Information added by Drupal.org packaging script on 2022-10-19
+version: '9.0.2'
+project: 'config_view'
+datestamp: 1666197154

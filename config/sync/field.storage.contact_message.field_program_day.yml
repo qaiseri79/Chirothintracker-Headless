@@ -1,0 +1,24 @@
+uuid: c2c4a27e-8ecd-4c25-ba59-55e283e5164c
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: contact_message.field_program_day
+field_name: field_program_day
+entity_type: contact_message
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

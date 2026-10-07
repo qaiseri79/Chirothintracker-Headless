@@ -1,0 +1,29 @@
+uuid: bd55c158-80d5-4a5a-a48f-fca8153cf02a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.daily_message
+  module:
+    - disable_field
+    - text
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: node.daily_message.body
+field_name: body
+entity_type: node
+bundle: daily_message
+label: Message
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+  required_summary: false
+  allowed_formats: {  }
+field_type: text_with_summary

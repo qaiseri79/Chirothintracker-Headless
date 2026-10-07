@@ -1,0 +1,20 @@
+uuid: 1647f5ba-6bab-4d79-b5d3-b05c698f0d32
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - user
+id: contact_message.field_chiropractor
+field_name: field_chiropractor
+entity_type: contact_message
+type: entity_reference
+settings:
+  target_type: user
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

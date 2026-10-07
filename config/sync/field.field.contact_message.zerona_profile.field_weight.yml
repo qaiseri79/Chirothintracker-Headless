@@ -1,0 +1,23 @@
+uuid: 3d6469ef-20fa-4aa2-b7fa-0dcee167576f
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.zerona_profile
+    - field.storage.contact_message.field_weight
+id: contact_message.zerona_profile.field_weight
+field_name: field_weight
+entity_type: contact_message
+bundle: zerona_profile
+label: Weight
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: lbs
+field_type: decimal

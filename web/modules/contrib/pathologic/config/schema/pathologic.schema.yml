@@ -1,0 +1,39 @@
+pathologic.settings:
+  type: config_object
+  mapping:
+    scheme_allow_list:
+      type: sequence
+      label: 'Scheme allow list'
+      sequence:
+        type: string
+        label: 'Scheme'
+    protocol_style:
+      type: string
+      label: 'Protocol style'
+    local_paths:
+      type: string
+      label: 'Also considered local'
+    keep_language_prefix:
+      type: boolean
+      label: 'Keep language prefix'
+
+filter_settings.filter_pathologic:
+  type: filter
+  label: 'Pathologic'
+  mapping:
+    settings_source:
+      type: string
+      label: 'Settings source'
+    local_settings:
+      type: mapping
+      label: 'Local settings'
+      mapping:
+        protocol_style:
+          type: string
+          label: 'Protocol style'
+        local_paths:
+          type: string
+          label: 'Also considered local'
+        keep_language_prefix:
+          type: boolean
+          label: 'Keep language prefix'

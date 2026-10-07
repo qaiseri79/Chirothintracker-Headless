@@ -1,0 +1,23 @@
+uuid: 12f0e3d3-6969-419d-8cad-49f504831817
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.video_message.video_message
+    - field.storage.video_message.field_program_day_select
+id: video_message.video_message.field_program_day_select
+field_name: field_program_day_select
+entity_type: video_message
+bundle: video_message
+label: 'Program Day'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 1
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

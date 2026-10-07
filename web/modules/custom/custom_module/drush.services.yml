@@ -1,0 +1,14 @@
+# modules/custom/custom_module/drush.services.yml
+services:
+  custom_module.drush_commands:
+    class: Drupal\custom_module\Commands\ChiropractorUpdateCommand
+    tags:
+      - { name: drush.command }
+  custom_module.add_subscriber_role_commands:
+    class: Drupal\custom_module\Commands\AddSubscriberRoleToSubscriber
+    tags:
+      - { name: drush.command }
+  custom_module.menu_items_commands:
+    class: Drupal\custom_module\Commands\MenuItemUpdateCommand
+    tags:
+      - { name: drush.command }

@@ -1,0 +1,19 @@
+uuid: e1aea512-be73-4374-a948-6138e7a6aa10
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_health_challenge
+id: contact_message.patient_intake.field_health_challenge
+field_name: field_health_challenge
+entity_type: contact_message
+bundle: patient_intake
+label: 'Do you have any other health challenge you feel is important for us to know about?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

@@ -1,0 +1,23 @@
+uuid: b3550c3d-2524-4ae4-8ee0-fcb834dbe91c
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.lipolight_profile
+    - field.storage.contact_message.field_weight
+id: contact_message.lipolight_profile.field_weight
+field_name: field_weight
+entity_type: contact_message
+bundle: lipolight_profile
+label: Weight
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: lbs
+field_type: decimal

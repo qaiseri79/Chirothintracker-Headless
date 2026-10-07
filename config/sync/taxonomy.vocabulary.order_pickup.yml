@@ -1,0 +1,9 @@
+uuid: 9748e7a9-5a1d-4e7c-b010-cb8f1a10b898
+langcode: en
+status: true
+dependencies: {  }
+name: 'Order Pickup'
+vid: order_pickup
+description: null
+weight: 0
+new_revision: false

@@ -1,0 +1,13 @@
+uuid: b399fccb-206d-4e8d-8d95-c41bbde391da
+langcode: en
+status: true
+dependencies:
+  module:
+    - xquantity_stock
+_core:
+  default_config_hash: MwJOtTEtrbNRiwJSImEIfPZOCgatlqhYL7XHR6JK1JM
+id: variation_xquantity_stock_adjust
+label: 'Adjust stock'
+type: commerce_product_variation
+plugin: variation_xquantity_stock_adjust
+configuration: {  }

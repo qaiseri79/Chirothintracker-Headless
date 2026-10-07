@@ -1,0 +1,37 @@
+uuid: 43000ded-ad08-49fb-8862-5fec23583254
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.menu_item.menu_item
+    - field.storage.menu_item.field_glyphicon
+    - taxonomy.vocabulary.glyphicons
+id: menu_item.menu_item.field_glyphicon
+field_name: field_glyphicon
+entity_type: menu_item
+bundle: menu_item
+label: Glyphicon
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    tid: '394'
+    vid: '34'
+    name: share-alt
+    description: ''
+    format: filtered_html
+    weight: '0'
+    uuid: 2799c821-d4c2-460f-a5e2-42e65307d3db
+    vocabulary_machine_name: glyphicons
+    path:
+      pathauto: '1'
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      glyphicons: glyphicons
+    sort:
+      field: _none
+field_type: entity_reference

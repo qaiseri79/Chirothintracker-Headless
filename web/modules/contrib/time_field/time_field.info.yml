@@ -1,0 +1,14 @@
+name: 'Time Field'
+type: module
+description: 'Provides "Time Field" and "Time Range Field".'
+package: 'Field types'
+dependencies:
+  - drupal:datetime
+test_dependencies:
+  - drupal:feeds
+core_version_requirement: ^10 || ^11
+
+# Information added by Drupal.org packaging script on 2026-02-26
+version: '2.2.1'
+project: 'time_field'
+datestamp: 1772091290

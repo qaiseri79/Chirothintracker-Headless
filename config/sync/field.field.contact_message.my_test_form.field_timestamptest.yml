@@ -1,0 +1,21 @@
+uuid: 61a0bfcb-43cd-4d4b-ad1a-0f9431eb222f
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.my_test_form
+    - field.storage.contact_message.field_timestamptest
+  module:
+    - datetime
+id: contact_message.my_test_form.field_timestamptest
+field_name: field_timestamptest
+entity_type: contact_message
+bundle: my_test_form
+label: 'My Test Field'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

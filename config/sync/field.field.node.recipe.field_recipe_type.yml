@@ -1,0 +1,26 @@
+uuid: b86e4a3a-15c8-4a7d-b1f2-217fb9183058
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_recipe_type
+    - node.type.recipe
+    - taxonomy.vocabulary.recipe_types
+id: node.recipe.field_recipe_type
+field_name: field_recipe_type
+entity_type: node
+bundle: recipe
+label: 'Recipe Type'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      recipe_types: recipe_types
+    sort:
+      field: _none
+field_type: entity_reference

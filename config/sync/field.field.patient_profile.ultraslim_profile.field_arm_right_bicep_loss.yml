@@ -1,0 +1,23 @@
+uuid: 4d4badac-086a-4ae1-9285-7a87f3f1bae9
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.ultraslim_profile
+    - field.storage.patient_profile.field_arm_right_bicep_loss
+id: patient_profile.ultraslim_profile.field_arm_right_bicep_loss
+field_name: field_arm_right_bicep_loss
+entity_type: patient_profile
+bundle: ultraslim_profile
+label: 'Arm Right Bicep Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

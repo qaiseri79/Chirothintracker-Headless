@@ -1,0 +1,18 @@
+uuid: 42a19a3e-1527-4be4-8c34-5abf6a133a62
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_order
+id: commerce_order.field_agreement
+field_name: field_agreement
+entity_type: commerce_order
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

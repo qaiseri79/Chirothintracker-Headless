@@ -1,0 +1,19 @@
+uuid: 069d6a2a-58a5-49fd-ac30-b85dba01810a
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+id: clinic.field_clinic_body
+field_name: field_clinic_body
+entity_type: clinic
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

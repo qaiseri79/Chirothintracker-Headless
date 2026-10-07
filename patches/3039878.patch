@@ -1,0 +1,92 @@
+diff --git a/src/Plugin/Commerce/PaymentGateway/Stripe.php b/src/Plugin/Commerce/PaymentGateway/Stripe.php
+index 608e3c3..42d194b 100755
+--- a/src/Plugin/Commerce/PaymentGateway/Stripe.php
++++ b/src/Plugin/Commerce/PaymentGateway/Stripe.php
+@@ -29,6 +29,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+  *   display_label = "Stripe",
+  *   forms = {
+  *     "add-payment-method" = "Drupal\commerce_stripe\PluginForm\Stripe\PaymentMethodAddForm",
++ *     "edit-payment-method" = "Drupal\commerce_stripe\PluginForm\Stripe\PaymentMethodEditForm",
+  *   },
+  *   payment_method_types = {"credit_card"},
+  *   credit_card_types = {
+@@ -333,6 +334,12 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
+     $payment_method->save();
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function updatePaymentMethod(PaymentMethodInterface $payment_method) {
++  }
++
+diff --git a/src/Plugin/Commerce/PaymentGateway/StripeInterface.php b/src/Plugin/Commerce/PaymentGateway/StripeInterface.php
+index 4b33de5..9228876 100755
+--- a/src/Plugin/Commerce/PaymentGateway/StripeInterface.php
++++ b/src/Plugin/Commerce/PaymentGateway/StripeInterface.php
+@@ -5,11 +5,12 @@ namespace Drupal\commerce_stripe\Plugin\Commerce\PaymentGateway;
+ use Drupal\commerce_payment\Plugin\Commerce\PaymentGateway\OnsitePaymentGatewayInterface;
+ use Drupal\commerce_payment\Plugin\Commerce\PaymentGateway\SupportsAuthorizationsInterface;
+ use Drupal\commerce_payment\Plugin\Commerce\PaymentGateway\SupportsRefundsInterface;
++use Drupal\commerce_payment\Plugin\Commerce\PaymentGateway\SupportsUpdatingStoredPaymentMethodsInterface;
+ 
+ /**
+  * Provides the interface for the Stripe payment gateway.
+  */
+-interface StripeInterface extends OnsitePaymentGatewayInterface, SupportsAuthorizationsInterface, SupportsRefundsInterface {
++interface StripeInterface extends OnsitePaymentGatewayInterface, SupportsAuthorizationsInterface, SupportsRefundsInterface, SupportsUpdatingStoredPaymentMethodsInterface {
+ 
+   /**
+    * Get the Stripe API Publisable key set for the payment gateway.
+diff --git a/src/PluginForm/Stripe/PaymentMethodEditForm.php b/src/PluginForm/Stripe/PaymentMethodEditForm.php
+new file mode 100755
+index 0000000..b8c09be
+--- /dev/null
++++ b/src/PluginForm/Stripe/PaymentMethodEditForm.php
+@@ -0,0 +1,46 @@
++<?php
++
++namespace Drupal\commerce_stripe\PluginForm\Stripe;
++
++use Drupal\commerce_payment\Entity\PaymentMethodInterface;
++use Drupal\commerce_payment\PluginForm\PaymentMethodEditForm as BasePaymentMethodEditForm;
++use Drupal\Core\Form\FormStateInterface;
++
++class PaymentMethodEditForm extends BasePaymentMethodEditForm {
++
++  /**
++   * {@inheritdoc}
++   */
++  public function buildCreditCardForm(PaymentMethodInterface $payment_method, FormStateInterface $form_state) {
++    return [];
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function validateCreditCardForm(array &$element, FormStateInterface $form_state) {
++    // The credit card subform is not editable.
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function submitCreditCardForm(array $element, FormStateInterface $form_state) {
++    // The credit card subform is not editable.
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
++    /** @var \Drupal\commerce\Plugin\Commerce\InlineForm\EntityInlineFormInterface $inline_form */
++    $inline_form = $form['billing_information']['#inline_form'];
++    /** @var \Drupal\profile\Entity\ProfileInterface $billing_profile */
++    $billing_profile = $inline_form->getEntity();
++    /** @var \Drupal\commerce_payment\Entity\PaymentMethodInterface $payment_method */
++    $payment_method = $this->entity;
++    $payment_method->setBillingProfile($billing_profile);
++    $payment_method->save();
++  }
++
++}

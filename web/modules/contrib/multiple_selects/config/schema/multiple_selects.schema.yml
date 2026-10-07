@@ -1,0 +1,9 @@
+# Schema for the configuration files of the Multiple Select module.
+
+field.widget.settings.multiple_options_select:
+  type: field.widget.settings.options_select
+  label: 'Multiple select widget'
+  mapping:
+    element_type:
+      type: string
+      label: 'Element type'

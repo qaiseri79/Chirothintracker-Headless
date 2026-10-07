@@ -1,0 +1,21 @@
+uuid: 4bb714b1-9a8d-48e6-bd72-0662c972f192
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.unsubscribe
+    - field.storage.contact_message.field_email_address
+id: contact_message.unsubscribe.field_email_address
+field_name: field_email_address
+entity_type: contact_message
+bundle: unsubscribe
+label: 'Email Address'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    email: '[current-page:query:mail]'
+default_value_callback: ''
+settings: {  }
+field_type: email

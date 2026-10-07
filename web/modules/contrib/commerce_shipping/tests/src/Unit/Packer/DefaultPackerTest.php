@@ -1,0 +1,125 @@
+<?php
+
+namespace Drupal\Tests\commerce_shipping\Unit\Packer;
+
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\Tests\UnitTestCase;
+use Drupal\commerce\PurchasableEntityInterface;
+use Drupal\commerce_order\Entity\OrderInterface;
+use Drupal\commerce_order\Entity\OrderItemInterface;
+use Drupal\commerce_order\Entity\OrderTypeInterface;
+use Drupal\commerce_price\Price;
+use Drupal\commerce_shipping\Packer\DefaultPacker;
+use Drupal\commerce_shipping\ProposedShipment;
+use Drupal\commerce_shipping\ShipmentItem;
+use Drupal\physical\Plugin\Field\FieldType\MeasurementItem;
+use Drupal\physical\Weight;
+use Drupal\profile\Entity\ProfileInterface;
+use Prophecy\Argument;
+
+/**
+ * @coversDefaultClass \Drupal\commerce_shipping\Packer\DefaultPacker
+ * @group commerce_shipping
+ */
+class DefaultPackerTest extends UnitTestCase {
+
+  /**
+   * The default packer.
+   *
+   * @var \Drupal\commerce_shipping\Packer\DefaultPacker
+   */
+  protected $packer;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+
+    $order_type = $this->prophesize(OrderTypeInterface::class);
+    $order_type->getThirdPartySetting('commerce_shipping', 'shipment_type')->willReturn('default');
+    $order_type_storage = $this->prophesize(EntityStorageInterface::class);
+    $order_type_storage->load('default')->willReturn($order_type->reveal());
+    $entity_type_manager = $this->prophesize(EntityTypeManagerInterface::class);
+    $entity_type_manager->getStorage('commerce_order_type')->willReturn($order_type_storage->reveal());
+    $string_translation = $this->prophesize(TranslationInterface::class);
+    $string_translation->translateString(Argument::type(TranslatableMarkup::class))
+      ->willReturn('Shipment #1');
+
+    $this->packer = new DefaultPacker($entity_type_manager->reveal(), $string_translation->reveal());
+  }
+
+  /**
+   * ::covers pack.
+   */
+  public function testPack() {
+    $order_items = [];
+    $first_order_item = $this->prophesize(OrderItemInterface::class);
+    $first_order_item->id()->willReturn(2001);
+    $first_order_item->getUnitPrice()->willReturn(NULL);
+    $first_order_item->getPurchasedEntity()->willReturn(NULL);
+    $first_order_item->getQuantity()->willReturn(1);
+    $order_items[] = $first_order_item->reveal(1);
+
+    $weight_item = $this->prophesize(MeasurementItem::class);
+    $weight_item->toMeasurement()->willReturn(new Weight('10', 'kg'));
+
+    $weight_list = $this->prophesize(FieldItemListInterface::class);
+    $weight_list->isEmpty()->willReturn(FALSE);
+    $weight_list->first()->willReturn($weight_item->reveal());
+
+    $purchased_entity = $this->prophesize(PurchasableEntityInterface::class);
+    $purchased_entity->id()->willReturn(3001);
+    $purchased_entity->getEntityTypeId()->willReturn('commerce_product_variation');
+    $purchased_entity->hasField('weight')->willReturn(TRUE);
+    $purchased_entity->get('weight')->willReturn($weight_list->reveal());
+    $purchased_entity = $purchased_entity->reveal();
+    $second_order_item = $this->prophesize(OrderItemInterface::class);
+    $second_order_item->id()->willReturn(2002);
+    $second_order_item->getTitle()->willReturn('T-shirt (red, small)');
+    $second_order_item->getPurchasedEntity()->willReturn($purchased_entity);
+    $second_order_item->getUnitPrice()->willReturn(new Price('15', 'USD'));
+    $second_order_item->getQuantity()->willReturn(3);
+    $order_items[] = $second_order_item->reveal();
+
+    $third_order_item = $this->prophesize(OrderItemInterface::class);
+    $third_order_item->id()->willReturn(2003);
+    $third_order_item->getTitle()->willReturn('T-shirt (black, small)');
+    $third_order_item->getUnitPrice()->willReturn(new Price('15', 'USD'));
+    $third_order_item->getPurchasedEntity()->willReturn(NULL);
+    $third_order_item->getQuantity()->willReturn(0);
+    $order_items[] = $third_order_item->reveal();
+
+    $order = $this->prophesize(OrderInterface::class);
+    $order->bundle()->willReturn('default');
+    $order->id()->willReturn(2);
+    $order->getItems()->willReturn($order_items);
+    $order = $order->reveal();
+    $shipping_profile = $this->prophesize(ProfileInterface::class);
+    $shipping_profile->id()->willReturn(3);
+    $shipping_profile = $shipping_profile->reveal();
+
+    $expected_proposed_shipment = new ProposedShipment([
+      'type' => 'default',
+      'order_id' => 2,
+      'title' => 'Shipment #1',
+      'items' => [
+        new ShipmentItem([
+          'order_item_id' => 2002,
+          'title' => 'T-shirt (red, small)',
+          'quantity' => 3,
+          'weight' => new Weight('30', 'kg'),
+          'declared_value' => new Price('45', 'USD'),
+        ]),
+      ],
+      'shipping_profile' => $shipping_profile,
+    ]);
+    $result = $this->packer->pack($order, $shipping_profile);
+    $this->assertEquals([$expected_proposed_shipment], $result);
+  }
+
+}

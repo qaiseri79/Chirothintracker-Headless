@@ -1,0 +1,12 @@
+uuid: a7eb0d56-8bb2-4eb9-b36f-0bb696e3c64d
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+id: patient_white_label
+label: 'Patient - White Label'
+weight: 19
+is_admin: null
+permissions:
+  - 'delete own files'

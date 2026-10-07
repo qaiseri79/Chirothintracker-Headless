@@ -1,0 +1,30 @@
+uuid: 0dadb402-9919-4053-96ee-59719e3309f4
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.message
+    - field.storage.contact_message.field_to
+id: contact_message.message.field_to
+field_name: field_to
+entity_type: contact_message
+bundle: message
+label: To
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    behaviors:
+      field_default_token:
+        status: true
+      views-select-list:
+        status: 0
+field_type: entity_reference

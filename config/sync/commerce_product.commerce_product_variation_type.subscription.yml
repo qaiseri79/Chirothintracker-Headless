@@ -1,0 +1,22 @@
+uuid: c360e921-1107-4852-9c09-ce75d5c9cd25
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_license
+third_party_settings:
+  commerce_license:
+    license_types:
+      role: role
+    activate_on_place: true
+    allow_renewal: true
+    interval: '1'
+    period: hour
+id: subscription
+label: Subscription
+traits:
+  - commerce_license
+  - purchasable_entity_subscription
+locked: false
+orderItemType: default
+generateTitle: true

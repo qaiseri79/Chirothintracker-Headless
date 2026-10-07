@@ -1,0 +1,19 @@
+uuid: fbcddee5-6f57-4835-b61b-3ecb09b3db35
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.clinic.clinic
+    - field.storage.clinic.field_clinic_mail
+id: clinic.clinic.field_clinic_mail
+field_name: field_clinic_mail
+entity_type: clinic
+bundle: clinic
+label: 'Clinic Mail'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: email

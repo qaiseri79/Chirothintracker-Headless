@@ -1,0 +1,7 @@
+uuid: ef551201-b164-4c1a-9df1-1dc422601a86
+langcode: en
+status: false
+dependencies: {  }
+formId: node_intake_form_template_form
+captchaType: default
+label: node_intake_form_template_form

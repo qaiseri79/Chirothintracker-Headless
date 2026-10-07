@@ -1,0 +1,24 @@
+uuid: 871ec6fa-7f9d-493e-a0d8-bf41029daadf
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+    - field_permissions
+    - user
+third_party_settings:
+  field_permissions:
+    permission_type: custom
+id: user.field_clinic_location
+field_name: field_clinic_location
+entity_type: user
+type: entity_reference
+settings:
+  target_type: clinic
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

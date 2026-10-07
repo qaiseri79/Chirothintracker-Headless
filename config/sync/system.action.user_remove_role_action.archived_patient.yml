@@ -1,0 +1,14 @@
+uuid: c56830db-fc66-49b0-aec0-be9ab4a86f5a
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.archived_patient
+  module:
+    - user
+id: user_remove_role_action.archived_patient
+label: 'Remove the Archived Patient role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: archived_patient

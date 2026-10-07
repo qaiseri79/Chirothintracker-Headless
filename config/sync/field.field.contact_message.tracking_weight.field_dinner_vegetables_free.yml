@@ -1,0 +1,26 @@
+uuid: 763c4b5c-168b-4a87-987d-4abd7081f7d5
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_dinner_vegetables_free
+    - taxonomy.vocabulary.vegetables_free_
+id: contact_message.tracking_weight.field_dinner_vegetables_free
+field_name: field_dinner_vegetables_free
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Free Dinner Vegetables'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      vegetables_free_: vegetables_free_
+    sort:
+      field: _none
+field_type: entity_reference

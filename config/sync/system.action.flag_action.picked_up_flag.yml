@@ -1,0 +1,15 @@
+uuid: 473c871a-37ed-4951-91ba-bbdf2665b60f
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.picked_up
+  module:
+    - flag
+id: flag_action.picked_up_flag
+label: 'Picked Up'
+type: commerce_order
+plugin: 'flag_action:picked_up_flag'
+configuration:
+  flag_id: picked_up
+  flag_action: flag

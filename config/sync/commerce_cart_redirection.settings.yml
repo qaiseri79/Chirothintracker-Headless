@@ -1,0 +1,9 @@
+product_bundles:
+  subscription: subscription
+  chironutraceutical_variations: 0
+  default: 0
+negate_product_bundles: 0
+redirection_route_path: checkout
+redirection_route_path_other: ''
+add_to_cart_replacement_text: ''
+clear_cart_before_add: 0

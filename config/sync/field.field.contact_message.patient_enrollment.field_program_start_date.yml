@@ -1,0 +1,21 @@
+uuid: cb1d48e2-b3a6-4c2a-aa92-d045cf744fdf
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_enrollment
+    - field.storage.contact_message.field_program_start_date
+  module:
+    - datetime
+id: contact_message.patient_enrollment.field_program_start_date
+field_name: field_program_start_date
+entity_type: contact_message
+bundle: patient_enrollment
+label: 'Program Start Date'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

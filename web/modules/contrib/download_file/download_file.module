@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file
+ * Provides a field formatter to enforce direct download of file.
+ */
+
+use Drupal\Core\Link;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function download_file_help($route_name, RouteMatchInterface $route_match): string {
+  $output = '';
+  if ($route_name == 'help.page.download_file') {
+    $output .= '<h3>' . t('About') . '</h3>';
+    $output .= '<p>' . t('DownloadFile is a module to direct download files or images.') . '</p>';
+  }
+  return $output;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function download_file_theme(): array {
+  return [
+    'direct_download_file_link' => [
+      'variables' => [
+        'file_id' => NULL,
+        'link_text' => NULL,
+        'url' => NULL,
+        'attributes' => [],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Render the direct download file link.
+ */
+function template_preprocess_direct_download_file_link(&$variables): void {
+  $variables['link'] = Link::fromTextAndUrl($variables['link_text'], $variables['url']);
+}

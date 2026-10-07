@@ -1,0 +1,27 @@
+uuid: 89f955a2-f8e3-4d0a-9a96-85d9c2d2fe71
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_product
+    - options
+id: commerce_product.field_product_type
+field_name: field_product_type
+entity_type: commerce_product
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: chironutraceuticals
+      label: ChiroNutraceuticals
+    -
+      value: non_chironutraceuticals
+      label: 'Non ChiroNutraceuticals'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

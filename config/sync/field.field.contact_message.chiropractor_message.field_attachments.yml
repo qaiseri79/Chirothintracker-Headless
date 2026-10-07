@@ -1,0 +1,32 @@
+uuid: 5a3f09a6-45c0-4eaf-bd94-c6598a8e0e94
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.chiropractor_message
+    - field.storage.contact_message.field_attachments
+  module:
+    - disable_field
+    - file
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: contact_message.chiropractor_message.field_attachments
+field_name: field_attachments
+entity_type: contact_message
+bundle: chiropractor_message
+label: Attachments
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: ''
+  file_extensions: 'pdf docx jpeg png xlsx doc xls'
+  max_filesize: '20 MB'
+  description_field: true
+field_type: file

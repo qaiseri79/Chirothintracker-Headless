@@ -1,0 +1,26 @@
+uuid: 46793a3a-de56-40b6-b82f-cfcf5b7b1453
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_lunch_vegetables
+    - taxonomy.vocabulary.vegetables
+id: contact_message.tracking_weight.field_lunch_vegetables
+field_name: field_lunch_vegetables
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Lunch Vegetables (4oz Total)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      vegetables: vegetables
+    sort:
+      field: _none
+field_type: entity_reference

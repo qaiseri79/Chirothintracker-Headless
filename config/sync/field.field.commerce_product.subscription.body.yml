@@ -1,0 +1,35 @@
+uuid: 20886c8c-e013-4034-a359-c1a92ee22326
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.subscription
+    - field.storage.commerce_product.body
+    - filter.format.basic_html
+    - filter.format.filtered_html
+    - filter.format.full_html
+  module:
+    - disable_field
+    - text
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: commerce_product.subscription.body
+field_name: body
+entity_type: commerce_product
+bundle: subscription
+label: Description
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: null
+settings:
+  display_summary: false
+  required_summary: false
+  allowed_formats:
+    - basic_html
+    - filtered_html
+    - full_html
+field_type: text_with_summary

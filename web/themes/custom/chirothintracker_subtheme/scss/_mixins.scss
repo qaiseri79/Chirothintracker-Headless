@@ -1,0 +1,53 @@
+
+@mixin responsive($device){
+	@if $device == mobile {
+		@media only screen and (max-width: 767px) { @content; } //mobile and tablet portrait operate the same
+	} @else if $device == medium-screen {
+		@media only screen and (min-width: 768px) and (max-width: 1200px){ @content; }
+	} @else if $device == wide-screen {
+		@media only screen and (min-width: 1201px){ @content; }
+	}
+}
+
+@mixin boxed{
+	@include wrapper;
+	padding: $gutter*2;
+	@include border-radius($border-radius);
+	min-height: 400px;
+	position: relative;
+	background: rgba(255,255,255,0.96);	
+}
+
+@mixin borderRadius($pixel...) {
+  border-radius: $pixel;
+  -webkit-border-radius: $pixel;
+  -moz-border-radius: $pixel;
+  -ms-border-radius: $pixel;
+  -o-border-radius: $pixel;
+}
+@mixin background($bg){
+  background-color: $bg;
+}
+@mixin transition($trans){
+  transition: $trans;
+  -webkit-transition: $trans;
+  -moz-transition: $trans;
+  -ms-transition: $trans;
+  -o-transition: $trans;
+}
+@mixin filter($filter){
+  filter: $filter;
+}
+@mixin user-select($option){
+  user-select: $option;
+}
+@mixin transform($trans){
+  transform: $trans;
+  -webkit-transform: $trans;
+  -moz-transform: $trans;
+  -ms-transform: $trans;
+  -o-transform: $trans;
+}
+@mixin input-placeholder {
+	@content;
+}

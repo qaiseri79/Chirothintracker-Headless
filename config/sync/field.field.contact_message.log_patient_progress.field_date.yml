@@ -1,0 +1,21 @@
+uuid: 0a1efdf7-1930-4dea-ac69-c2946c93b9b5
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.log_patient_progress
+    - field.storage.contact_message.field_date
+  module:
+    - datetime
+id: contact_message.log_patient_progress.field_date
+field_name: field_date
+entity_type: contact_message
+bundle: log_patient_progress
+label: Date
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

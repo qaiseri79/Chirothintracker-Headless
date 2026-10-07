@@ -1,0 +1,7 @@
+commerce_authnet.iframe_communicator:
+  path: '/commerce-authnet/accept-hosted-iframe-communicator'
+  defaults:
+    _controller: '\Drupal\commerce_authnet\Controller\AcceptHostedIframeCommunicator::page'
+    _title: 'iFrame communicator'
+  requirements:
+    _access: 'TRUE'

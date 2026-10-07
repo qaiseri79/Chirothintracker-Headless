@@ -1,0 +1,101 @@
+<?php
+
+/**
+ * @file
+ * Helper module for Time Field tests.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Set up required elements for Javascript States testing.
+ *
+ * @see \Drupal\Tests\time_field\FunctionalJavascript\TimeFieldJavascriptStatesTest
+ */
+function time_field_test_form_node_test_content_form_alter(&$form, FormStateInterface $form_state) {
+  // Add dependent fields that will be controlled by the time field.
+  $form['textfield_visible_when_time_empty'] = [
+    '#type' => 'textfield',
+    '#title' => 'Textfield visible when time empty',
+    '#states' => [
+      'visible' => [
+        ':input[name="field_test_time_trigger[0][value]"]' => ['empty' => TRUE],
+      ],
+    ],
+  ];
+  $form['textfield_visible_when_time_filled'] = [
+    '#type' => 'textfield',
+    '#title' => 'Textfield visible when time filled',
+    '#states' => [
+      'visible' => [
+        ':input[name="field_test_time_trigger[0][value]"]' => ['filled' => TRUE],
+      ],
+    ],
+  ];
+  $form['textfield_visible_when_time_value_empty'] = [
+    '#type' => 'textfield',
+    '#title' => 'Textfield visible when time value empty',
+    '#states' => [
+      'visible' => [
+        ':input[name="field_test_time_trigger[0][value]"]' => ['value' => ''],
+      ],
+    ],
+  ];
+  $form['textfield_visible_when_time_value_23_00'] = [
+    '#type' => 'textfield',
+    '#title' => 'Textfield visible when time value 23:00',
+    '#states' => [
+      'visible' => [
+        ':input[name="field_test_time_trigger[0][value]"]' => ['value' => '23:00'],
+      ],
+    ],
+  ];
+  $form['checkbox_trigger_enabled_a'] = [
+    '#type' => 'checkbox',
+    '#title' => 'Checkbox trigger enabled time field a',
+  ];
+  $form['checkbox_trigger_disabled_b'] = [
+    '#type' => 'checkbox',
+    '#title' => 'Checkbox trigger disabled time field b',
+  ];
+  $form['checkbox_trigger_required_a'] = [
+    '#type' => 'checkbox',
+    '#title' => 'Checkbox trigger required time field a',
+  ];
+  $form['checkbox_trigger_optional_b'] = [
+    '#type' => 'checkbox',
+    '#title' => 'Checkbox trigger optional  time field b',
+  ];
+  $form['checkbox_trigger_visible_a'] = [
+    '#type' => 'checkbox',
+    '#title' => 'Checkbox trigger visible time field a',
+  ];
+  $form['checkbox_trigger_invisible_b'] = [
+    '#type' => 'checkbox',
+    '#title' => 'Checkbox trigger invisible time field b',
+  ];
+  $form['field_test_time_a']['widget']['0']['value']['#states'] = [
+    'enabled' => [
+      ':input[name="checkbox_trigger_enabled_a"]' => ['checked' => TRUE],
+    ],
+    'required' => [
+      ':input[name="checkbox_trigger_required_a"]' => ['checked' => TRUE],
+    ],
+    'visible' => [
+      ':input[name="checkbox_trigger_visible_a"]' => ['checked' => TRUE],
+    ],
+  ];
+  $form['field_test_time_b']['widget']['0']['value']['#states'] = [
+    'disabled' => [
+      ':input[name="checkbox_trigger_disabled_b"]' => ['checked' => TRUE],
+    ],
+    'optional' => [
+      ':input[name="checkbox_trigger_optional_b"]' => ['checked' => TRUE],
+    ],
+    'invisible' => [
+      ':input[name="checkbox_trigger_invisible_b"]' => ['checked' => TRUE],
+    ],
+  ];
+}

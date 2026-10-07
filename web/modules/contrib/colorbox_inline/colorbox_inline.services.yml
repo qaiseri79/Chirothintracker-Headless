@@ -1,0 +1,3 @@
+services:
+  Drupal\colorbox\ColorboxAttachment:
+    alias: colorbox.attachment

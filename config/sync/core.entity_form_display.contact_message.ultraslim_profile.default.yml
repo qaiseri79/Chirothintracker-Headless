@@ -1,0 +1,467 @@
+uuid: 75bb468b-2594-476c-b65c-5a6831dc0caf
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.field.contact_message.ultraslim_profile.field_abdomen
+    - field.field.contact_message.ultraslim_profile.field_all_measurements
+    - field.field.contact_message.ultraslim_profile.field_arm_left_bicep
+    - field.field.contact_message.ultraslim_profile.field_arm_right_bicep
+    - field.field.contact_message.ultraslim_profile.field_author
+    - field.field.contact_message.ultraslim_profile.field_back_bra_line
+    - field.field.contact_message.ultraslim_profile.field_before_and_after_photos
+    - field.field.contact_message.ultraslim_profile.field_blood_pressure
+    - field.field.contact_message.ultraslim_profile.field_buttocks
+    - field.field.contact_message.ultraslim_profile.field_cellulite
+    - field.field.contact_message.ultraslim_profile.field_cellulite_protocol
+    - field.field.contact_message.ultraslim_profile.field_date
+    - field.field.contact_message.ultraslim_profile.field_facial_rejuvenation_protoc
+    - field.field.contact_message.ultraslim_profile.field_hips
+    - field.field.contact_message.ultraslim_profile.field_neck
+    - field.field.contact_message.ultraslim_profile.field_notes
+    - field.field.contact_message.ultraslim_profile.field_patient_profile
+    - field.field.contact_message.ultraslim_profile.field_skin_tightening
+    - field.field.contact_message.ultraslim_profile.field_skin_tightening_protocol
+    - field.field.contact_message.ultraslim_profile.field_subcutaneous_fat
+    - field.field.contact_message.ultraslim_profile.field_subcutaneous_fat_protocol
+    - field.field.contact_message.ultraslim_profile.field_thigh_left
+    - field.field.contact_message.ultraslim_profile.field_thigh_right
+    - field.field.contact_message.ultraslim_profile.field_treatment_protocol
+    - field.field.contact_message.ultraslim_profile.field_visceral_fat_protocol
+    - field.field.contact_message.ultraslim_profile.field_visceral_fat_zone_1
+    - field.field.contact_message.ultraslim_profile.field_visceral_fat_zone_2
+    - field.field.contact_message.ultraslim_profile.field_visceral_fat_zone_3
+    - field.field.contact_message.ultraslim_profile.field_visceral_fat_zone_4
+    - field.field.contact_message.ultraslim_profile.field_visceral_fat_zone_5
+    - field.field.contact_message.ultraslim_profile.field_visceral_fat_zone_6
+    - field.field.contact_message.ultraslim_profile.field_waist_buster_zone_6l
+    - field.field.contact_message.ultraslim_profile.field_waistbuster_protocol
+    - field.field.contact_message.ultraslim_profile.field_waistbuster_zone_1
+    - field.field.contact_message.ultraslim_profile.field_waistbuster_zone_2
+    - field.field.contact_message.ultraslim_profile.field_waistbuster_zone_3
+    - field.field.contact_message.ultraslim_profile.field_waistbuster_zone_4
+    - field.field.contact_message.ultraslim_profile.field_waistbuster_zone_5
+    - field.field.contact_message.ultraslim_profile.field_waistbuster_zone_6
+    - field.field.contact_message.ultraslim_profile.field_weight
+    - image.style.thumbnail
+  module:
+    - datetime
+    - field_group
+    - image
+third_party_settings:
+  field_group:
+    group_session_details:
+      children:
+        - group_vitals
+        - group_treatment_type
+        - group_notes
+        - group_body_measurements
+      label: 'Session Details'
+      region: content
+      parent_name: ''
+      weight: 1
+      format_type: tabs
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        direction: vertical
+        width_breakpoint: 640
+    group_vitals:
+      children:
+        - field_date
+        - field_weight
+        - field_blood_pressure
+      label: Vitals
+      region: content
+      parent_name: group_session_details
+      weight: 37
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: false
+    group_treatment_type:
+      children:
+        - field_treatment_protocol
+        - field_cellulite
+        - field_skin_tightening
+        - field_subcutaneous_fat
+      label: 'Treatment Type'
+      region: content
+      parent_name: group_session_details
+      weight: 38
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_notes:
+      children:
+        - field_notes
+        - field_before_and_after_photos
+      label: Notes
+      region: content
+      parent_name: group_session_details
+      weight: 39
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: false
+    group_body_measurements:
+      children:
+        - field_all_measurements
+        - field_neck
+        - field_arm_left_bicep
+        - field_arm_right_bicep
+        - field_back_bra_line
+        - field_abdomen
+        - field_hips
+        - field_buttocks
+        - field_thigh_left
+        - field_thigh_right
+        - field_waistbuster_zone_1
+        - field_waistbuster_zone_2
+        - field_waistbuster_zone_3
+        - field_waistbuster_zone_4
+        - field_waistbuster_zone_5
+        - field_waistbuster_zone_6
+        - field_waist_buster_zone_6l
+        - field_visceral_fat_zone_1
+        - field_visceral_fat_zone_2
+        - field_visceral_fat_zone_3
+        - field_visceral_fat_zone_4
+        - field_visceral_fat_zone_5
+        - field_visceral_fat_zone_6
+      label: 'Body Measurements'
+      region: content
+      parent_name: group_session_details
+      weight: 40
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: false
+    group_protocols:
+      children: {  }
+      label: Protocols
+      region: hidden
+      parent_name: ''
+      weight: 9
+      format_type: tab
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        formatter: closed
+        description: ''
+        required_fields: false
+id: contact_message.ultraslim_profile.default
+targetEntityType: contact_message
+bundle: ultraslim_profile
+mode: default
+content:
+  field_abdomen:
+    type: number
+    weight: 18
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_all_measurements:
+    type: boolean_checkbox
+    weight: 13
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_arm_left_bicep:
+    type: number
+    weight: 15
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_arm_right_bicep:
+    type: number
+    weight: 16
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_back_bra_line:
+    type: number
+    weight: 17
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_before_and_after_photos:
+    type: image_image
+    weight: 11
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_blood_pressure:
+    type: string_textfield
+    weight: 23
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_buttocks:
+    type: number
+    weight: 20
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_cellulite:
+    type: options_buttons
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_cellulite_protocol:
+    type: string_textarea
+    weight: 6
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_date:
+    type: datetime_default
+    weight: 21
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_facial_rejuvenation_protoc:
+    type: string_textarea
+    weight: 7
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_hips:
+    type: number
+    weight: 19
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_neck:
+    type: number
+    weight: 14
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_notes:
+    type: string_textarea
+    weight: 10
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_patient_profile:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_skin_tightening:
+    type: options_buttons
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_skin_tightening_protocol:
+    type: string_textarea
+    weight: 5
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_subcutaneous_fat:
+    type: options_buttons
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_subcutaneous_fat_protocol:
+    type: string_textarea
+    weight: 4
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_thigh_left:
+    type: number
+    weight: 21
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_thigh_right:
+    type: number
+    weight: 22
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_treatment_protocol:
+    type: options_buttons
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_visceral_fat_protocol:
+    type: string_textarea
+    weight: 3
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_visceral_fat_zone_1:
+    type: number
+    weight: 30
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_visceral_fat_zone_2:
+    type: number
+    weight: 31
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_visceral_fat_zone_3:
+    type: number
+    weight: 32
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_visceral_fat_zone_4:
+    type: number
+    weight: 33
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_visceral_fat_zone_5:
+    type: number
+    weight: 34
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_visceral_fat_zone_6:
+    type: number
+    weight: 35
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_waist_buster_zone_6l:
+    type: number
+    weight: 29
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_waistbuster_protocol:
+    type: string_textarea
+    weight: 2
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_waistbuster_zone_1:
+    type: number
+    weight: 23
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_waistbuster_zone_2:
+    type: number
+    weight: 24
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_waistbuster_zone_3:
+    type: number
+    weight: 25
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_waistbuster_zone_4:
+    type: number
+    weight: 26
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_waistbuster_zone_5:
+    type: number
+    weight: 27
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_waistbuster_zone_6:
+    type: number
+    weight: 28
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_weight:
+    type: number
+    weight: 22
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  copy: true
+  field_author: true
+  mail: true
+  message: true
+  name: true
+  preview: true
+  subject: true

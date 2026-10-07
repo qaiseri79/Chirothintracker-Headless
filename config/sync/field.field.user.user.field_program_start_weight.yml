@@ -1,0 +1,24 @@
+uuid: 68de1623-28bc-4699-aec6-ba5389511760
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_program_start_weight
+  module:
+    - user
+id: user.user.field_program_start_weight
+field_name: field_program_start_weight
+entity_type: user
+bundle: user
+label: 'Program Start Weight'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: lbs
+field_type: float

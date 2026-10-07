@@ -1,0 +1,199 @@
+custom_module.batchprocess:
+  path: '/admin/process'
+  defaults:
+    _title: 'Import Data'
+    _form: '\Drupal\custom_module\Form\ImportForm'
+  requirements:
+    _permission: 'access content'
+custom_module.batch_form:
+  path: '/admin/config/batch-form'
+  defaults:
+    _form: 'Drupal\custom_module\Form\BatchForm'
+    _title: 'Batch form'
+  requirements:
+    _permission: 'administer site configuration'
+  options:
+    _admin_route: TRUE
+custom_module.admin_training_resources_batch_form:
+  path: '/admin/content/training-resources-batch'
+  defaults:
+    _form: 'Drupal\custom_module\Form\AdminTrainingResourcesBatchForm'
+    _title: 'Update Training and Resources for subscriber clinics'
+  requirements:
+    _permission: 'administer site configuration'
+  options:
+    _admin_route: TRUE
+custom_module.archived_form:
+  path: '/archived-patient/{arg1}'
+  defaults:
+    _form: 'Drupal\custom_module\Form\ArchievedPatient'
+    _title: 'Are you sure you want to archive this patient?'
+  requirements:
+    _permission: 'access content'
+  options:
+    _admin_route: TRUE
+custom_module.request:
+  path: '/message-request'
+  defaults:
+    _controller: '\Drupal\custom_module\Controller\CustomRoute::MessageRequest'
+    _title: 'Message Request'
+  requirements:
+    _role: 'authenticated'  
+custom_module.custom_canned_message:
+  path: '/custom-canned-message/{nid}/{patient_id}'
+  defaults:
+    _controller: '\Drupal\custom_module\Controller\CustomRoute::CustomCannedMessage'
+    _title: 'Custom Canned Message'
+  requirements:
+    _role: 'authenticated'
+    nid: \d+
+    patient_id: \d+   
+custom_module.enrollment_limit:
+  path: '/enroll-limit'
+  defaults:
+    _controller: '\Drupal\custom_module\Controller\EnrollmentLimit::Limit'
+    _title: 'Enrollment Limit'
+  requirements:
+    _permission: 'access content'
+custom_module.recipe_view:
+  path: '/recipes'
+  defaults:
+    _controller: '\Drupal\custom_module\Controller\CustomRoute::RenderRecipeView'
+  options:
+    no_cache: 'TRUE'  
+  requirements:
+    _permission: 'access content'
+custom_module.training_view:
+  path: '/training'
+  defaults:
+    _controller: '\Drupal\custom_module\Controller\CustomRoute::RenderTrainingView'
+  options:
+    no_cache: 'TRUE'  
+  requirements:
+    _permission: 'access content'    
+custom_module.operations:
+  path: '/operation'
+  defaults:
+    _controller: '\Drupal\custom_module\Controller\Operations::perform'
+    _title: 'Perform Operations'
+  requirements:
+    _permission: 'access content'
+custom_module.subscription_payment_method_form:
+  path: '/subscription/{subscription_id}/payment-method'
+  defaults:
+    _form: '\Drupal\custom_module\Form\SubscriptionPaymentMethodForm'
+    _title: 'Change Payment Method for Active Subscription'
+  requirements:
+    _role: 'chiropractor_active_'
+    subscription_id: \d+
+  options:
+    _admin_route: FALSE
+custom_module.resend_email_op:
+  path: '/resend-welcome'
+  defaults:
+    _controller: '\Drupal\custom_module\Controller\CustomRoute::resendWelcome'
+    _title: 'Resend Welcome'
+  requirements:
+    _permission: 'access content'
+custom_module.zero_day_phase_op:
+  path: '/phase-0'
+  defaults:
+    _controller: '\Drupal\custom_module\Controller\CustomRoute::ZeroDay'
+    _title: 'Zero-Day Phase'
+  requirements:
+    _permission: 'access content'
+custom_module.loading_phase_op:
+  path: '/phase-1'
+  defaults:
+    _controller: '\Drupal\custom_module\Controller\CustomRoute::LoadingPhase'
+    _title: 'Loading Phase'
+  requirements:
+    _permission: 'access content'    
+custom_module.losing_phase_op:
+  path: '/phase-2'
+  defaults:
+    _controller: '\Drupal\custom_module\Controller\CustomRoute::losingPhase'
+    _title: 'Losing Phase'
+  requirements:
+    _permission: 'access content'
+custom_module.cycling_phase_op:
+  path: '/phase-3'
+  defaults:
+    _controller: '\Drupal\custom_module\Controller\CustomRoute::cyclingPhase'
+    _title: 'Cycling Phase'
+  requirements:
+    _permission: 'access content'
+custom_module.continuity_phase_op:
+  path: '/phase-4'
+  defaults:
+    _controller: '\Drupal\custom_module\Controller\CustomRoute::continuityPhase'
+    _title: 'Continuity Phase'
+  requirements:
+    _permission: 'access content'  
+custom_module.start_batch:
+  path: '/admin/start-batch'
+  defaults:
+    _controller: '\Drupal\custom_module\Controller\DataBatchController::startBatch'
+    _title: 'Start Batch Processing'
+  requirements:
+    _permission: 'administer site configuration'
+custom_module.pull_products_form:
+  path: '/admin/pull/products'
+  defaults:
+    _form: '\Drupal\custom_module\Form\PullProductsForm'
+    _title: 'Pull Products'
+  requirements:
+    _role: 'administrator'
+
+custom_module.expire_license_confirm:
+  path: '/admin/commerce/licenses/{commerce_license}/expire'
+  defaults:
+    _form: '\Drupal\custom_module\Form\ExpireLicenseConfirmForm'
+    _title: 'Expire License'
+  requirements:
+    _permission: 'administer site configuration'
+    commerce_license: '\d+'
+
+custom_module.block_chiropractor_confirm:
+  path: '/block-chiropractor/{user}'
+  defaults:
+    _form: '\Drupal\custom_module\Form\BlockChiropractorConfirmForm'
+    _title: 'Block Chiropractor'
+  requirements:
+    _custom_access: '\Drupal\custom_module\Access\ChiropractorBlockAccess::access'
+  options:
+    parameters:
+      user:
+        type: entity:user
+
+custom_module.ultraslim_profile:
+  path: 'add/ultraslim-profile/{user}'
+  defaults:
+    _form: '\Drupal\custom_module\Form\AddUltraSlimProfileForm'
+    _title: 'Add UltraSlim Profile'
+  requirements:
+    _custom_access: '\Drupal\custom_module\Access\AddUltraSlimProfileAccess::access'
+  options:
+    parameters:
+      user:
+        type: entity:user
+
+custom_module.red_light_therapy_profile:
+  path: 'add/red-light-therapy-profile/{user}'
+  defaults:
+    _form: '\Drupal\custom_module\Form\RedLightTherapyProfileForm'
+    _title: 'Add Red Light Therapy Profile'
+  requirements:
+    _custom_access: '\Drupal\custom_module\Access\AddUltraSlimProfileAccess::access'
+  options:
+    parameters:
+      user:
+        type: entity:user
+
+custom_module.test:
+  path: '/test-route'
+  defaults:
+    _controller: '\Drupal\custom_module\Controller\EnrollmentLimit::Test'
+    _title: 'Enrollment Limit'
+  requirements:
+    _permission: 'access content'

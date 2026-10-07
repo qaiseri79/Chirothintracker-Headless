@@ -1,0 +1,155 @@
+uuid: a3dba653-b5c2-4692-be49-dce32f7f5215
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d7_entityform_zerona_profile
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Content
+migration_group: migrate_drupal_7
+label: 'D8 Contact message migration from D7 entityform submission ()'
+source:
+  plugin: d7_entityform
+  constants:
+    langcode: en
+    module: contact_storage
+  bundle: zerona_profile
+process:
+  id:
+    -
+      plugin: get
+      source: entityform_id
+  contact_form:
+    -
+      plugin: get
+      source: type
+  uid:
+    -
+      plugin: get
+      source: uid
+  created:
+    -
+      plugin: get
+      source: created
+  changed:
+    -
+      plugin: get
+      source: changed
+  langcode:
+    -
+      plugin: default_value
+      source: language
+      default_value: en
+  'dependencies/module/[]':
+    -
+      plugin: get
+      source: constants/module
+  field_patient_profile:
+    -
+      plugin: get
+      source: field_patient_profile
+  field_date:
+    -
+      plugin: sub_process
+      source: field_date
+      process:
+        value:
+          plugin: format_date
+          from_format: 'Y-m-d H:i:s'
+          to_format: Y-m-d
+          source: value
+  field_weight:
+    -
+      plugin: get
+      source: field_weight
+  field_blood_pressure:
+    -
+      plugin: get
+      source: field_blood_pressure
+  field_notes:
+    -
+      plugin: get
+      source: field_notes
+  field_treatment_area:
+    -
+      plugin: sub_process
+      source: field_treatment_area
+      process:
+        target_id: tid
+  field_neck:
+    -
+      plugin: get
+      source: field_neck
+  field_shoulders:
+    -
+      plugin: get
+      source: field_shoulders
+  field_arm_left_bicep:
+    -
+      plugin: get
+      source: field_arm_left_bicep
+  field_arm_right_bicep:
+    -
+      plugin: get
+      source: field_arm_right_bicep
+  field_chest:
+    -
+      plugin: get
+      source: field_chest
+  field_back_bra_line:
+    -
+      plugin: get
+      source: field_back_bra_line
+  field_abdomen:
+    -
+      plugin: get
+      source: field_abdomen
+  field_hips:
+    -
+      plugin: get
+      source: field_hips
+  field_thigh_left:
+    -
+      plugin: get
+      source: field_thigh_left
+  field_thigh_right:
+    -
+      plugin: get
+      source: field_thigh_right
+  field_calf_left:
+    -
+      plugin: get
+      source: field_calf_left
+  field_calf_right:
+    -
+      plugin: get
+      source: field_calf_right
+  field_before_and_after_photos:
+    -
+      plugin: sub_process
+      source: field_before_and_after_photos
+      process:
+        target_id: fid
+        alt: alt
+        title: title
+        width: width
+        height: height
+  field_above_umbilicus:
+    -
+      plugin: get
+      source: field_above_umbilicus
+  field_below_umbilicus:
+    -
+      plugin: get
+      source: field_below_umbilicus
+destination:
+  plugin: 'entity:contact_message'
+  default_bundle: zerona_profile
+migration_dependencies:
+  required:
+    - ''
+  optional:
+    - upgrade_d7_field_instance

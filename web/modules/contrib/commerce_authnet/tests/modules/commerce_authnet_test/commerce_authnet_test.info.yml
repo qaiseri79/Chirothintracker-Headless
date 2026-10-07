@@ -1,0 +1,11 @@
+name: Commerce Authorize.net Test
+description: Provides testing items for Authorize.net
+type: module
+package: Testing
+dependencies:
+  - commerce_authnet:commerce_authnet
+
+# Information added by Drupal.org packaging script on 2026-04-27
+version: '8.x-1.14'
+project: 'commerce_authnet'
+datestamp: 1777273334

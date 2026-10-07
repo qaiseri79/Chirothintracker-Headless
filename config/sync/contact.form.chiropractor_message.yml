@@ -1,0 +1,24 @@
+uuid: fc71b3ca-8fa7-4fb3-8b01-46c7c78be2c2
+langcode: en
+status: true
+dependencies:
+  module:
+    - contact_storage
+    - contact_storage_dm
+third_party_settings:
+  contact_storage:
+    submit_text: 'Send message'
+    show_preview: true
+    disabled_form_message: 'This contact form has been disabled.'
+    maximum_submissions_user: 0
+    page_autoreply_format: plain_text
+  contact_storage_dm:
+    disabled: true
+id: chiropractor_message
+label: 'Chiropractor Message'
+recipients:
+  - webmaster@example.com
+reply: ''
+weight: 0
+message: 'Message sent Successfully.'
+redirect: ''

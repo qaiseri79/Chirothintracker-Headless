@@ -1,0 +1,23 @@
+uuid: f781483b-ccdb-4eea-9498-a81456e81df4
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_weight
+id: contact_message.tracking_weight.field_weight
+field_name: field_weight
+entity_type: contact_message
+bundle: tracking_weight
+label: "Today's Weight"
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: lbs
+field_type: decimal

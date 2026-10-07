@@ -1,0 +1,15 @@
+uuid: f5882836-6ddc-4df6-9240-da3049265aa9
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.local_pickup
+  module:
+    - flag
+id: flag_action.local_pickup_flag
+label: 'Local Pickup'
+type: commerce_order
+plugin: 'flag_action:local_pickup_flag'
+configuration:
+  flag_id: local_pickup
+  flag_action: flag

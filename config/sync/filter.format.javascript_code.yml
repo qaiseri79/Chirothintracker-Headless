@@ -1,0 +1,8 @@
+uuid: 581a3d51-399a-404b-b2ea-337d57ec5a2b
+langcode: en
+status: true
+dependencies: {  }
+name: 'Javascript Code'
+format: javascript_code
+weight: -6
+filters: {  }

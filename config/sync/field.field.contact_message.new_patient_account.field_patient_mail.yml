@@ -1,0 +1,19 @@
+uuid: 4fe29d1f-0c9f-4a2c-95b5-41d3b957e150
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.new_patient_account
+    - field.storage.contact_message.field_patient_mail
+id: contact_message.new_patient_account.field_patient_mail
+field_name: field_patient_mail
+entity_type: contact_message
+bundle: new_patient_account
+label: 'Patient Email Address'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: email

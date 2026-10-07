@@ -1,0 +1,503 @@
+uuid: c8cce197-543b-467b-b837-ee89684bd6f5
+langcode: en
+status: open
+dependencies: {  }
+weight: 0
+open: null
+close: null
+uid: 1
+template: false
+archive: false
+id: tracking_weight
+title: 'Log Your Progress'
+description: ''
+categories: {  }
+elements: |-
+  group_weight_body:
+    '#type': fieldset
+    '#title': 'Weight and Water'
+    field_grade:
+      '#type': select
+      '#title': 'On a scale of 1 to 10, grade your adherence to the plan, yesterday, with 10 being perfect.'
+      '#options':
+        1: '1'
+        2: '2'
+        3: '3'
+        4: '4'
+        5: '5'
+        6: '6'
+        7: '7'
+        8: '8'
+        9: '9'
+        10: '10'
+      '#default_value': '5'
+      '#required': true
+    field_date:
+      '#type': date
+      '#title': Date
+      '#default_value': '[current-date:c]'
+      '#date_part_order':
+        - year
+        - month
+        - day
+      '#date_text_parts':
+        - month
+        - day
+        - year
+    field_weight:
+      '#type': textfield
+      '#title': "Today's Weight"
+      '#field_suffix': lbs
+      '#required': true
+    field_water_intake:
+      '#type': textfield
+      '#title': "Yesterday's Water Intake"
+      '#field_suffix': oz
+      '#required': true
+    field_sleep_hours:
+      '#type': textfield
+      '#title': 'Sleep Hours'
+      '#field_suffix': hrs
+    field_mind_set_work:
+      '#type': radios
+      '#title': 'Mind Set Work'
+      '#options':
+        - 'No'
+        - 'Yes'
+      '#access_create_roles':
+        - anonymous
+        - administrator
+        - chiropractor_mind_set
+      '#access_update_roles':
+        - administrator
+        - chiropractor_mind_set
+      '#access_view_roles':
+        - administrator
+        - chiropractor_mind_set
+    field_chiroburst_bend:
+      '#type': radios
+      '#title': 'ChiroBurst Bend'
+      '#options':
+        _none: N/A
+        0: 'No'
+        1: 'Yes'
+      '#default_value': '0'
+    field_aggr:
+      '#type': checkboxes
+      '#title': AGGR
+      '#options':
+        1: 'AGGR with Lunch'
+        2: 'AGGR with Dinner'
+  group_food_log_yesterday:
+    '#type': details
+    '#title': 'Food Log (Yesterday)'
+    group_breakfast:
+      '#type': details
+      '#title': 'Breakfast (Lock In Phase Only)'
+      '#format': details-closed
+      field_breakfast_protein:
+        '#type': webform_term_select
+        '#title': 'Breakfast Protein'
+        '#vocabulary': protein
+        '#breadcrumb_delimiter': ','
+        '#tree_delimiter': '--'
+      field_breakfast_fruit_sel:
+        '#type': webform_term_select
+        '#title': 'Breakfast Fruit'
+        '#multiple': true
+        '#vocabulary': fruit
+        '#breadcrumb_delimiter': ›
+      field_breakfast_other:
+        '#type': textfield
+        '#title': 'Other Breakfast'
+        '#multiple': true
+        '#multiple__sorting': false
+    group_lunch:
+      '#type': details
+      '#title': Lunch
+      field_lunch_protein:
+        '#type': webform_term_select
+        '#title': 'Lunch Protein (4oz Total)'
+        '#vocabulary': protein
+        '#breadcrumb_delimiter': ›
+        '#tree_delimiter': '--'
+      field_lunch_vegetables:
+        '#type': webform_term_select
+        '#title': 'Lunch Vegetables (4oz Total)'
+        '#multiple': true
+        '#vocabulary': vegetables
+        '#breadcrumb_delimiter': ›
+      field_lunch_fruit_sel:
+        '#type': webform_term_select
+        '#title': 'Lunch Fruit (4oz Total)'
+        '#multiple': true
+        '#vocabulary': fruit
+        '#breadcrumb_delimiter': ›
+        '#tree_delimiter': '--'
+      field_lunch_fruit:
+        '#type': textfield
+        '#title': 'Other Lunch Fruit'
+      field_lunch_bread:
+        '#type': webform_term_select
+        '#title': 'Lunch Bread'
+        '#vocabulary': bread
+        '#breadcrumb_delimiter': ›
+      field_lunch_vegetables_free:
+        '#type': webform_term_select
+        '#title': 'Free Lunch Vegetables'
+        '#multiple': true
+        '#vocabulary': vegetables_free_
+        '#breadcrumb_delimiter': ›
+      field_lunch_other:
+        '#type': textfield
+        '#title': 'Other Lunch Foods'
+        '#multiple': true
+        '#multiple__sorting': false
+    group_dinner:
+      '#type': details
+      '#title': Dinner
+      field_dinner_protein:
+        '#type': webform_term_select
+        '#title': 'Dinner Protein (4oz Total)'
+        '#vocabulary': protein
+        '#breadcrumb_delimiter': ›
+        '#tree_delimiter': '--'
+      field_dinner_vegetables:
+        '#type': webform_term_select
+        '#title': 'Dinner Vegetables (4oz Total)'
+        '#multiple': true
+        '#vocabulary': vegetables
+        '#breadcrumb_delimiter': ›
+      field_dinner_fruit_sel:
+        '#type': webform_term_select
+        '#title': 'Dinner Fruit (4oz Total)'
+        '#multiple': true
+        '#vocabulary': fruit
+        '#breadcrumb_delimiter': ›
+      field_dinner_fruit:
+        '#type': textfield
+        '#title': 'Other Dinner Fruit'
+      dinner_bread:
+        '#type': webform_term_select
+        '#title': 'Dinner Bread'
+        '#vocabulary': bread
+        '#breadcrumb_delimiter': ›
+      field_dinner_vegetables_free:
+        '#type': webform_term_select
+        '#title': 'Free Dinner Vegetables'
+        '#multiple': true
+        '#vocabulary': vegetables_free_
+        '#breadcrumb_delimiter': ›
+      field_dinner_other:
+        '#type': textfield
+        '#title': 'Other Dinner Foods'
+        '#multiple': true
+        '#multiple__sorting': false
+    group_other_food:
+      '#type': details
+      '#title': Other
+      field_other_food:
+        '#type': textfield
+        '#title': 'Other Foods'
+        '#multiple': true
+        '#multiple__sorting': false
+  group_notes:
+    '#type': details
+    '#title': 'Flags and Notes'
+    field_flags:
+      '#type': webform_term_checkboxes
+      '#title': Flags
+      '#wrapper_type': form_element
+      '#vocabulary': patient_flags
+      '#breadcrumb_delimiter': ›
+    field_chiropractor_flags:
+      '#type': webform_term_checkboxes
+      '#title': 'Chiropractor Flags'
+      '#access_create_roles':
+        - administrator
+        - chiropractor_active_
+      '#access_update_roles':
+        - administrator
+        - chiropractor_active_
+      '#access_view_roles':
+        - administrator
+        - chiropractor_active_
+      '#vocabulary': chiropractor_flags
+      '#breadcrumb_delimiter': ›
+    field_notes:
+      '#type': textarea
+      '#title': 'Personal Notes'
+  group_diabetes:
+    '#type': details
+    '#title': 'Blood Sugar (Today)'
+    field_blood_sugar:
+      '#type': textfield
+      '#title': 'Morning Blood Sugar'
+  group_hypertension:
+    '#type': details
+    '#title': 'Blood Pressure (Today)'
+    field_blood_pressure:
+      '#type': textfield
+      '#title': 'Blood Pressure'
+  group_measurements:
+    '#type': details
+    '#title': 'Body Measurements (Today)'
+    markup:
+      '#type': webform_markup
+      '#markup': '<p>Watch Video: <a href="https://vimeo.com/272650849">Taking your body measurements</a></p>'
+    field_neck:
+      '#type': number
+      '#title': Neck
+    field_shoulders:
+      '#type': number
+      '#title': Shoulders
+    field_chest:
+      '#type': number
+      '#title': Chest
+    field_arm_left_bicep:
+      '#type': number
+      '#title': 'Arm - Left Bicep'
+    field_arm_right_bicep:
+      '#type': number
+      '#title': 'Arm - Right Bicep'
+    field_abdomen:
+      '#type': number
+      '#title': Abdomen
+    field_hips:
+      '#type': number
+      '#title': Hips
+    field_thigh_left:
+      '#type': number
+      '#title': 'Thigh - Left'
+    field_thigh_right:
+      '#type': number
+      '#title': 'Thigh - Right'
+    field_calf_left:
+      '#type': number
+      '#title': 'Calf - Left'
+    field_calf_right:
+      '#type': number
+      '#title': 'Calf - Right'
+  group_questions:
+    '#type': webform_section
+    '#title': 'Message your Doctor'
+    field_question:
+      '#type': text_format
+      '#title': 'Send a message to your doctor'
+      '#allowed_formats':
+        webform_default: webform_default
+      '#hide_help': true
+  current_phase:
+    '#type': hidden
+    '#title': 'Current Phase'
+  field_weight_loss_to_date:
+    '#type': textfield
+    '#title': 'Weight Loss To Date'
+  field_program_day:
+    '#type': textfield
+    '#title': 'Program Day'
+  field_total_measurements:
+    '#type': number
+    '#title': 'Total Measurements'
+  field_archive:
+    '#type': checkbox
+    '#title': Archive
+  field_program_day_computed:
+    '#type': number
+    '#title': 'Program Day Computed'
+  field_weight_loss_computed:
+    '#type': number
+    '#title': 'Weight Loss To Date Computed'
+css: ''
+javascript: ''
+settings:
+  ajax: false
+  ajax_scroll_top: form
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: /track_old
+  page_confirm_path: ''
+  page_theme_name: chirothintracker_subtheme
+  form_title: source_entity_webform
+  form_submit_once: false
+  form_open_message: ''
+  form_close_message: ''
+  form_exception_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_disable_remote_addr: false
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_unsaved: false
+  form_disable_back: true
+  form_submit_back: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_reset: false
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  form_attributes: {  }
+  form_method: ''
+  form_action: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
+  submission_label: ''
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_log: false
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: false
+  autofill_message: ''
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: false
+  wizard_progress_states: false
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_auto_forward: true
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: false
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  wizard_page_type: container
+  wizard_page_title_tag: h2
+  preview: 0
+  preview_label: ''
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: none
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: ''
+  draft_pending_multiple_message: ''
+  confirmation_type: url_message
+  confirmation_url: /history
+  confirmation_title: ''
+  confirmation_message: '<p>You &nbsp;logged your data Successfully.</p>'
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: true
+  confirmation_exclude_token: true
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  token_delete: false
+  serial_disabled: false
+access:
+  create:
+    roles:
+      - chiropractor_active_
+      - enrolled_patient
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles:
+      - chiropractor_active_
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles:
+      - administrator
+      - chiropractor_active_
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles:
+      - administrator
+      - chiropractor_active_
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles:
+      - enrolled_patient
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles:
+      - enrolled_patient
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles:
+      - enrolled_patient
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers: {  }
+variants: {  }

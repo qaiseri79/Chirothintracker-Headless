@@ -1,0 +1,26 @@
+uuid: 6c347cb5-89ab-4722-9276-4d726dde6645
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.lipolight_profile
+    - field.storage.contact_message.field_treatment_area
+    - taxonomy.vocabulary.laser_treatment_area
+id: contact_message.lipolight_profile.field_treatment_area
+field_name: field_treatment_area
+entity_type: contact_message
+bundle: lipolight_profile
+label: 'Treatment Areas'
+description: '20 Minute Session Per Treatment Area'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      laser_treatment_area: laser_treatment_area
+    sort:
+      field: _none
+field_type: entity_reference

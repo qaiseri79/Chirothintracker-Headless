@@ -1,0 +1,29 @@
+uuid: 68deaea2-bd01-4e2c-a10a-de8cc78c73d5
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.zerona_profile
+    - field.storage.patient_profile.field_profile_inches_lost
+  module:
+    - disable_field
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: patient_profile.zerona_profile.field_profile_inches_lost
+field_name: field_profile_inches_lost
+entity_type: patient_profile
+bundle: zerona_profile
+label: 'Total Inches Lost'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

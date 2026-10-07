@@ -1,0 +1,9 @@
+uuid: 41cc7a4e-433d-4303-bd8a-dd402ee12271
+langcode: en
+status: true
+dependencies: {  }
+name: 'Laser Patient Status'
+vid: laser_patient_status
+description: null
+weight: 0
+new_revision: false

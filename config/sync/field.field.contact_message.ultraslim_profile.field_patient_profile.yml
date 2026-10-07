@@ -1,0 +1,40 @@
+uuid: e98faeb5-ab60-46a2-b954-163e0e64ae66
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_patient_profile
+  module:
+    - disable_field
+    - epp
+third_party_settings:
+  epp:
+    value: "target_id: '[current-page:query:profile_id]'"
+    on_update: 1
+  disable_field:
+    add_disable: roles
+    add_roles:
+      - chiropractor_active_
+    edit_disable: roles
+    edit_roles:
+      - chiropractor_active_
+id: contact_message.ultraslim_profile.field_patient_profile
+field_name: field_patient_profile
+entity_type: contact_message
+bundle: ultraslim_profile
+label: 'Patient Profile'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: my_patient_profiles
+      display_name: entity_reference_1
+      arguments:
+        - '[current-page:query:uid]'
+field_type: entity_reference

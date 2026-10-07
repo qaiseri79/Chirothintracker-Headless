@@ -1,0 +1,34 @@
+langcode: en
+attributes:
+  class:
+    label: 'Link class(es)'
+    description: 'CSS class for the link (&lt;a href&gt;). Separate multiple classes by space.'
+  target:
+    label: 'Link target'
+    description: ''
+    options:
+      _blank: 'New window (_blank)'
+      _self: 'Same window (_self)'
+    default_value: ''
+  data-after-text:
+    label: ''
+    description: ''
+    options:
+      _optioin1: 'option 1'
+      _option2: 'optioin 2'
+    default_value: ' '
+  data-after-type:
+    label: ''
+    description: ''
+    options:
+      empty_circle: 'red circle'
+  message-type:
+    label: ''
+    description: ''
+    options:
+      message_type: 'Message Type'
+      intake_type: 'Intake Type'
+      task_type: 'Task Type'
+  container_class:
+    label: 'Container class(es)'
+    description: 'CSS class for the menu list item (&lt;li&gt;). Separate multiple classes by space.'

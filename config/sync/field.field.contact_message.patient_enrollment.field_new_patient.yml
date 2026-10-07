@@ -1,0 +1,36 @@
+uuid: 0170042d-fef1-46db-9988-de672d91581e
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_enrollment
+    - field.storage.contact_message.field_new_patient
+id: contact_message.patient_enrollment.field_new_patient
+field_name: field_new_patient
+entity_type: contact_message
+bundle: patient_enrollment
+label: 'New Patient'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    target_id: '[current-page:url:args:last]'
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    behaviors:
+      field_default_token:
+        status: true
+      views-select-list:
+        status: 0
+    view:
+      args: {  }
+      display_name: entityreference_1
+      view_name: new_patients
+field_type: entity_reference

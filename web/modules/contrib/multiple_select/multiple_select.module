@@ -1,0 +1,167 @@
+<?php
+
+/**
+ * @file
+ * Multiple select module file.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements node_form_alter().
+ */
+function multiple_select_form_node_form_alter(&$form, $form_state, $form_id) {
+  $form = multiple_select($form, $form_state, $form_id);
+}
+
+/**
+ * Implements media_form_alter().
+ */
+function multiple_select_form_media_form_alter(&$form, $form_state, $form_id) {
+  $form = multiple_select($form, $form_state, $form_id);
+}
+
+/**
+ * Implements taxonomy_term_form_alter().
+ */
+function multiple_select_form_taxonomy_term_form_alter(&$form, $form_state, $form_id) {
+  $form = multiple_select($form, $form_state, $form_id);
+}
+
+/**
+ * Implements site_setting_entity_form_alter().
+ */
+function multiple_select_form_site_setting_entity_form_alter(&$form, $form_state, $form_id) {
+  $form = multiple_select($form, $form_state, $form_id);
+}
+
+/**
+ * Custom callback().
+ */
+function multiple_select(&$form, $form_state, $form_id) {
+  $shared_bulk_config = multiple_select_get_bulk_configs();
+  if (is_null($shared_bulk_config)) {
+    return $form;
+  }
+
+  $is_original_language = TRUE;
+  if (!strContains($form_id, 'taxonomy_term')) {
+    if ($form_state->getFormObject()->getEntity()->hasField('default_langcode') && $form_state->getFormObject()->getEntity()->get('default_langcode')) {
+      $is_original_language = $form_state->getFormObject()->getEntity()->get('default_langcode')->value;
+    }
+  }
+
+  $entity = $form_state->getFormObject()->getEntity();
+  $entity_type = $entity->getEntityTypeId();
+  $entities = array_keys($shared_bulk_config);
+
+  foreach ($entities as $type) {
+    $form_type = str_replace($entity_type . "-", "", $type);
+    if (strpos($form_id, $form_type) !== FALSE) {
+      foreach (array_keys($form) as $item) {
+        if (is_array($form[$item]) && isset($form[$item]['widget']['#type'])
+          && in_array($form[$item]['widget']['#field_name'], $shared_bulk_config[$type])
+          && $form[$item]['widget']['#type'] == 'checkboxes'
+          && !(!$is_original_language && !$form_state->getFormObject()->getEntity()
+            ->get($form[$item]['widget']['#field_name'])
+            ->getFieldDefinition()->isTranslatable())) {
+
+          $name = str_replace('_', '-', $item);
+          // Set the default value for check all field.
+          $default = 0;
+          if (!$entity->isNew()) {
+            $options_count = count($form[$item]['widget']['#options']);
+            $values = count($entity->get($item)->getValue());
+            if ($values > 0 && $values == $options_count) {
+              $default = 1;
+            }
+          }
+
+          $form['#attached']['library'][] = 'multiple_select/selectall';
+          $label = $form[$item]['widget']['#title'];
+          $form['checkall' . $name] = [
+            '#type' => 'checkbox',
+            '#title' => t('Select All / Uncheck All')->__toString() . ' ' . $label,
+            '#weight' => isset($form[$item]['#weight']) ?
+            $form[$item]['#weight'] - 1 : 0,
+            '#required' => FALSE,
+            '#attributes' => ['id' => "multiple_select-$item"],
+            '#default_value' => $default,
+          ];
+
+          // Detect if the given field is inside a field group and
+          // the "check all" pseudo field needs to be moved inside it too.
+          if (\Drupal::moduleHandler()->moduleExists('field_group')) {
+            foreach (array_keys($form) as $form_key) {
+              if ( isset($form[$form_key]) &&
+                is_array($form[$form_key]) &&
+                isset($form[$form_key]['#type']) &&
+                ($form[$form_key]['#type'] === 'container') &&
+                ($form_key === $item)) {
+                  $selectall_name = 'checkall' . $name;
+                  $form[$form_key][$selectall_name] = $form[$selectall_name];
+                  $form[$form_key][$selectall_name]['#weight'] = -10;
+                  unset($form[$selectall_name]);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return $form;
+}
+
+/**
+ * Check if string contains.
+ */
+function strContains($string, $contains) {
+  if (strpos($string, $contains) !== FALSE) {
+    return TRUE;
+  }
+}
+
+/**
+ * Get multiple select configurations.
+ */
+function multiple_select_get_bulk_configs() {
+  $data = \Drupal::config('multiple_select.settings')->get('table');
+  if (is_null($data)) {
+    return;
+  }
+  return json_decode($data, TRUE);
+}
+
+/**
+ * Implements hook_help().
+ */
+function multiple_select_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.multiple_select':
+      $output = '';
+      $output .= '<h2>' . t('About') . '</h2>';
+      $output .= '<p>' . t('The Multiple Select module provides a Form API checkbox element with a
+				"Select / Unselect All" functionality for checkboxes fields. This module has
+				a configuration page in which this functionality can be applied to one (or more)
+				<a href=":node_help" title="Node module help">node</a> or <a href=":media_help" title="Node module help">media</a> types.</a>',
+        [
+          ':field_help' => Url::fromRoute('help.page', ['name' => 'field'])->toString(),
+          ':node_help' => Url::fromRoute('help.page', ['name' => 'node'])->toString(),
+          ':media_help' => Url::fromRoute('help.page', ['name' => 'media'])->toString(),
+        ])
+        . '</p>';
+      $output .= '<h2>' . t('Uses') . '</h2>';
+      $output .= '<dl>';
+      $output .= '<dt>' . t('Enabling bulk select') . '</dt>';
+      $output .= '<dd>' . t('	In order to add a bulk select helper, the website must have at least one
+				field which its field settings allows more than one values and with widget settings
+				(on Form display)set to "Check boxes".
+				You can define which field (or fields) of a content entity (node or media) should
+				display this helper.')
+        . '</dd>';
+      $output .= '</dl>';
+      return $output;
+  }
+}

@@ -1,0 +1,14 @@
+name: Migrate URL2Link
+type: module
+description: 'Migrates the URL field on D7 to the Link module to D8/9.'
+package: Migration
+core_version_requirement: ^8 || ^9 || ^10 || ^11
+dependencies:
+  - drupal:link
+  - drupal:migrate
+  - migrate_plus:migrate_plus
+
+# Information added by Drupal.org packaging script on 2025-05-02
+version: '1.0.1'
+project: 'migrate_url2link'
+datestamp: 1746182736

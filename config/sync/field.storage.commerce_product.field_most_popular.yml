@@ -1,0 +1,18 @@
+uuid: 45b9d829-ae25-4ff1-8679-0ea8da622d53
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_product
+id: commerce_product.field_most_popular
+field_name: field_most_popular
+entity_type: commerce_product
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

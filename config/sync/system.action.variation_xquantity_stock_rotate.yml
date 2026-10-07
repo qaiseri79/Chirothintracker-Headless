@@ -1,0 +1,13 @@
+uuid: aba2fc52-c95c-448a-9df3-ec94a6cd2587
+langcode: en
+status: true
+dependencies:
+  module:
+    - xquantity_stock
+_core:
+  default_config_hash: IQ9g8Zy8OvTTFsVEqjGdI1J5j6pVRjcnnpiqA23QE3U
+id: variation_xquantity_stock_rotate
+label: 'Rotate stock'
+type: commerce_product_variation
+plugin: variation_xquantity_stock_rotate
+configuration: {  }

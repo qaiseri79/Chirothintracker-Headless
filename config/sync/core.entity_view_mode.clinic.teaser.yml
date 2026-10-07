@@ -1,0 +1,11 @@
+uuid: 87687d24-bc28-4f57-90dc-839b45eda338
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+id: clinic.teaser
+label: Teaser
+description: ''
+targetEntityType: clinic
+cache: true

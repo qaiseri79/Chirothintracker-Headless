@@ -1,0 +1,21 @@
+uuid: 5532af2d-c6cb-412c-b47b-90a7bf9d2bda
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_emergency_contact_phone
+  module:
+    - telephone
+id: contact_message.patient_intake.field_emergency_contact_phone
+field_name: field_emergency_contact_phone
+entity_type: contact_message
+bundle: patient_intake
+label: 'Emergency Contact Phone'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: telephone

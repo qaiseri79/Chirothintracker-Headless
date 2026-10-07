@@ -1,0 +1,15 @@
+uuid: ea15a7a1-09a6-4142-84c2-f87ed82da9bb
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.pin
+  module:
+    - flag
+id: flag_action.pin_flag
+label: '<span class="glyphicon glyphicon-pushpin"></span>'
+type: webform_submission
+plugin: 'flag_action:pin_flag'
+configuration:
+  flag_id: pin
+  flag_action: flag

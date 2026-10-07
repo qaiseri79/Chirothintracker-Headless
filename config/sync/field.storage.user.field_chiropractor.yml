@@ -1,0 +1,23 @@
+uuid: bb9dfe22-b0df-476a-9784-8ec5b9cb6cd8
+langcode: und
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - user
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: user.field_chiropractor
+field_name: field_chiropractor
+entity_type: user
+type: entity_reference
+settings:
+  target_type: user
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

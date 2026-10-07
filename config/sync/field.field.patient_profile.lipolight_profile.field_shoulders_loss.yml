@@ -1,0 +1,23 @@
+uuid: a99a7b46-2967-4a93-9203-017ad6d6b66e
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.lipolight_profile
+    - field.storage.patient_profile.field_shoulders_loss
+id: patient_profile.lipolight_profile.field_shoulders_loss
+field_name: field_shoulders_loss
+entity_type: patient_profile
+bundle: lipolight_profile
+label: 'Shoulders Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

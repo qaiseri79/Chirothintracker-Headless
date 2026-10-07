@@ -1,0 +1,23 @@
+uuid: 923619e6-23c6-46f4-93f5-0e70cb574fde
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.unsubscribe
+    - field.storage.contact_message.field_cancel_my_account
+id: contact_message.unsubscribe.field_cancel_my_account
+field_name: field_cancel_my_account
+entity_type: contact_message
+bundle: unsubscribe
+label: 'Also cancel my account'
+description: 'If selected, your account will also be deactivated. Select this option only if you are no longer participating in a ChiroThin program.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: ''
+  off_label: ''
+field_type: boolean

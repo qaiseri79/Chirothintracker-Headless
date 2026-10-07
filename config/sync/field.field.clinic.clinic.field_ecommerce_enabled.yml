@@ -1,0 +1,23 @@
+uuid: a76c51b4-db9b-4368-9980-62bc2197ddab
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.clinic.clinic
+    - field.storage.clinic.field_ecommerce_enabled
+id: clinic.clinic.field_ecommerce_enabled
+field_name: field_ecommerce_enabled
+entity_type: clinic
+bundle: clinic
+label: 'eCommerce Enabled'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: ''
+  off_label: ''
+field_type: boolean

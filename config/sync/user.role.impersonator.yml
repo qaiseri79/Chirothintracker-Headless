@@ -1,0 +1,12 @@
+uuid: 3eb5dcd1-abfa-415e-bcc9-784256cd31b9
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+id: impersonator
+label: Impersonator
+weight: 13
+is_admin: null
+permissions:
+  - 'delete own files'

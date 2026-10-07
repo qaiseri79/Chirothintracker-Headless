@@ -1,0 +1,21 @@
+uuid: 6e3ac9b2-4f71-4c58-9d0a-1b8f2e7c53a4
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+id: clinic.field_intake_token
+field_name: field_intake_token
+entity_type: clinic
+type: string
+settings:
+  max_length: 64
+  is_ascii: false
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

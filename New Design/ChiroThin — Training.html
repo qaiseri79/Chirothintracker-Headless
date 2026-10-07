@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>ChiroThin — Training</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { canvas:"#F3F4F1", surface:"#FFFFFF", ink:"#101827", muted:"#6B7280", line:"#E4E2DC",
+      primary:{DEFAULT:"#0B5D52",soft:"#E4EEEC",dark:"#08423A"}, accent:{DEFAULT:"#C7522A",soft:"#F6E4DC"} },
+    fontFamily:{ serif:["Newsreader","Georgia","serif"], sans:["Inter","system-ui","sans-serif"] },
+    boxShadow:{ panel:"0 1px 2px rgba(16,24,39,0.04), 0 8px 24px -12px rgba(16,24,39,0.08)" },
+  } } };
+</script>
+<style>
+  :root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  html, body { height: 100%; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; } ::-webkit-scrollbar-thumb { background: #E4E2DC; border-radius: 8px; }
+  /* Styles the Drupal "Body" rich-text output (p, a, strong, ul, h3...) */
+  .body-html p { margin: 0 0 .6rem; } .body-html p:last-child { margin: 0; }
+  .body-html a { color: #C7522A; font-weight: 500; text-decoration: underline; text-underline-offset: 2px; }
+  .body-html strong { color: #101827; font-weight: 600; }
+  .body-html ul { list-style: disc; padding-left: 1.2rem; margin: 0 0 .6rem; }
+</style>
+</head>
+<body class="bg-canvas font-sans text-ink antialiased h-full">
+<div class="flex h-full">
+  <aside class="group/sidebar hidden md:flex w-[72px] shrink-0 flex-col overflow-hidden border-r border-line bg-surface transition-[width] duration-200 hover:w-64">
+    <div class="flex h-16 shrink-0 items-center gap-3 border-b border-line px-5">
+      <svg class="h-6 w-6 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <div class="whitespace-nowrap opacity-0 transition-opacity group-hover/sidebar:opacity-100"><p class="font-serif text-base leading-none">ChiroThin</p><p class="text-[10px] tracking-wide text-muted">Provider Portal</p></div>
+    </div>
+    <nav id="nav" class="flex-1 space-y-0.5 overflow-y-auto px-3 py-4"></nav>
+  </aside>
+
+  <div class="flex min-w-0 flex-1 flex-col">
+    <header class="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-4 border-b border-line bg-surface/90 px-4 backdrop-blur sm:px-6">
+      <h1 class="font-serif text-lg">Training</h1><div class="flex-1"></div>
+      <div class="hidden items-center gap-2 rounded-full border border-accent/40 px-3 py-1 text-[11px] sm:flex"><span class="text-muted">Subscription</span><b>Unlimited</b><span class="text-line">|</span><span class="text-muted">Enrolled</span><b>12</b></div>
+      <div class="flex items-center gap-2 border-l border-line pl-4"><div class="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-primary-soft text-[11px] font-semibold text-primary">JS</div><span class="hidden text-sm font-medium xl:block">Dr. John Schellenberg</span></div>
+    </header>
+    <main class="flex-1 overflow-y-auto"><div class="mx-auto max-w-5xl px-4 py-6 sm:px-6">
+      <div class="mb-6"><h2 class="font-serif text-2xl">Training videos</h2><p class="mt-1 text-sm text-muted">Resources and walkthroughs for you and your clinic team.</p></div>
+      <div id="list" class="space-y-5"></div>
+    </div></main>
+  </div>
+</div>
+
+<!-- Video popup -->
+<div id="theater" class="fixed inset-0 z-50 hidden items-center justify-center bg-ink/70 p-3 sm:p-8">
+  <div class="w-full max-w-4xl overflow-hidden rounded-2xl bg-surface shadow-panel">
+    <div class="flex items-center gap-3 border-b border-line px-5 py-3"><h3 id="tTitle" class="min-w-0 flex-1 truncate font-serif text-lg"></h3>
+      <button id="tClose" aria-label="Close" class="flex h-8 w-8 items-center justify-center rounded-lg text-muted hover:bg-canvas"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <div id="tFrame" class="relative aspect-video w-full bg-black"></div>
+    <div id="tBody" class="hidden border-t border-line px-5 py-4 text-sm leading-relaxed text-ink/75"></div>
+  </div>
+</div>
+
+<script>
+const list=document.getElementById('list');
+const IC={
+ life:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="m4.9 4.9 4.3 4.3M14.8 14.8l4.3 4.3M14.8 9.2l4.3-4.3M4.9 19.1l4.3-4.3"/>',
+ food:'<path d="M3 2v7a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V2M7 2v20M17 2v20M17 2c-2.5 0-4 3-4 6.5S14.5 15 17 15"/>',
+ tool:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z"/>',
+ grad:'<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/>',
+ link:'<path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>',
+ card:'<rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M15 9h3M15 13h3M6 17c.5-2 5.5-2 6 0"/>',
+ msg:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+ users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+ clinic:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 11v6M9 14h6"/>',
+ more:'<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',
+ play:'<polygon points="6 3 20 12 6 21 6 3" fill="currentColor"/>',
+ pause:'<rect x="6" y="4" width="4" height="16" fill="currentColor"/><rect x="14" y="4" width="4" height="16" fill="currentColor"/>',
+ fs:'<path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/>',
+ info:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>',
+ ext:'<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/>',
+};
+const icon=(n,c='h-[18px] w-[18px]')=>`<svg class="${c} shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${IC[n]}</svg>`;
+const NAV=[['Support Center','life'],['Recipes','food'],['Resources','tool'],['Training','grad',0,1],['Intake Links','link'],['Patient Summary','card'],['Messages','msg',3],['Patients','users',6],['My Clinic Page','clinic',1],['Extras','more']];
+document.getElementById('nav').innerHTML=NAV.map(([l,i,b,a])=>`<a href="#" class="flex items-center gap-3 rounded-lg px-2.5 py-2.5 text-sm font-medium ${a?'bg-primary text-white':'text-ink/70 hover:bg-primary-soft hover:text-primary'}">${icon(i)}<span class="flex flex-1 items-center justify-between whitespace-nowrap opacity-0 transition-opacity group-hover/sidebar:opacity-100">${l}${b?`<span class="rounded-full bg-accent px-1.5 text-[10px] font-semibold text-white">${b}</span>`:''}</span></a>`).join('');
+
+/* Drupal node = Title (required) + Body (optional rich text) + Video (optional uploaded file) */
+const TRAINING=[
+ {title:'ChiroThin Training Videos', body:'<p>Visit <a href="#">www.howtochirothin.com</a> to learn about the ChiroThin program, from <a href="#">ChiroNutraceutical</a>.</p><p>Password: <strong>thinkthin</strong></p>', video:null},
+ {title:'ChiroThinTracker Patient Portal Training Video', body:'<p>All registered patients can watch this 16 minute video to learn how to effectively use every feature of their patient portal.</p>', video:'portal.mp4'},
+ {title:'CRuSH Technique', body:'', video:'crush.mp4'},
+ {title:'Maverick with a Cat', body:'', video:'maverick.mp4'},
+ {title:'Clinic holiday hours', body:'', video:null},
+];
+/* Next.js: <video controls preload="metadata" src={node.video.url} className="aspect-video w-full" /> */
+const thumb=i=>`<button data-play="${i}" aria-label="Play video" class="group relative block aspect-video w-full shrink-0 overflow-hidden bg-gradient-to-br from-primary-dark to-ink lg:w-[22rem]">
+  <span class="absolute inset-0 opacity-30" style="background:radial-gradient(circle at 70% 20%,#fff3,transparent 55%)"></span>
+  <span class="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 text-primary shadow-lg transition group-hover:scale-110">${icon('play','h-6 w-6 translate-x-0.5')}</span></button>`;
+list.innerHTML=TRAINING.map((n,i)=>{
+ const body=n.body?`<div class="body-html mt-2 text-sm leading-relaxed text-ink/75">${n.body}</div>`:'';
+ if(n.video) return `<article class="overflow-hidden rounded-2xl border border-line bg-surface shadow-panel lg:flex">${thumb(i)}
+   <div class="flex min-w-0 flex-1 flex-col p-5 sm:p-6"><h3 class="font-serif text-xl leading-snug">${n.title}</h3>${body}
+   <div class="mt-auto pt-4"><button data-play="${i}" class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark">${icon('play','h-3.5 w-3.5')}Watch video</button></div></div></article>`;
+ if(n.body) return `<article class="flex gap-4 rounded-2xl border border-primary/20 bg-primary-soft p-5 sm:p-6">
+   <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-surface text-primary">${icon('info','h-5 w-5')}</span>
+   <div class="min-w-0"><h3 class="font-serif text-xl leading-snug">${n.title}</h3>${body}</div></article>`;
+ return `<article class="rounded-2xl border border-line bg-surface px-5 py-4 shadow-panel"><h3 class="font-serif text-lg">${n.title}</h3></article>`;
+}).join('');
+/* Popup. Prototype simulates playback; in Next.js render <video controls autoPlay src={node.video.url} className="h-full w-full" /> here */
+const T=document.getElementById('theater'),$t=id=>document.getElementById(id);let tm=null;
+function setPlay(on){clearInterval(tm);tm=null;$t('tCtl').innerHTML=icon(on?'pause':'play','h-5 w-5');$t('tBig').style.display=on?'none':'flex';
+ if(on){let p=parseFloat($t('tBar').style.width)||0;if(p>=100)p=0;tm=setInterval(()=>{p+=.8;$t('tBar').style.width=p+'%';if(p>=100)setPlay(false);},100);}}
+function closeV(){clearInterval(tm);tm=null;T.classList.replace('flex','hidden');$t('tFrame').innerHTML='';}
+list.addEventListener('click',e=>{const b=e.target.closest('[data-play]');if(!b)return;const n=TRAINING[+b.dataset.play];
+ $t('tTitle').textContent=n.title;
+ $t('tFrame').innerHTML=`<button data-t aria-label="Play or pause" class="absolute inset-0 flex items-center justify-center"><span id="tBig" class="flex h-16 w-16 items-center justify-center rounded-full bg-white/95 text-primary shadow-lg">${icon('play','h-7 w-7 translate-x-0.5')}</span></button>
+  <div class="absolute inset-x-0 bottom-0 flex items-center gap-3 bg-gradient-to-t from-black/75 to-transparent px-4 pb-3 pt-8 text-white"><button data-t id="tCtl" aria-label="Play or pause" class="flex h-7 w-7 items-center justify-center"></button>
+  <div class="h-1.5 flex-1 overflow-hidden rounded-full bg-white/30"><div id="tBar" class="h-full w-0 rounded-full bg-white"></div></div>${icon('fs','h-5 w-5')}</div>`;
+ const tb=$t('tBody');tb.innerHTML=n.body?`<div class="body-html">${n.body}</div>`:'';tb.classList.toggle('hidden',!n.body);
+ T.classList.replace('hidden','flex');setPlay(true);});
+$t('tFrame').addEventListener('click',e=>{if(e.target.closest('[data-t]'))setPlay(!tm);});
+$t('tClose').onclick=closeV;T.addEventListener('click',e=>{if(e.target===T)closeV();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeV();});
+</script>
+</body>
+</html>

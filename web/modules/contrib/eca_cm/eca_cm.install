@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * ECA Classic Modeler install file.
+ */
+
+use Drupal\eca_cm\EcaInfo;
+
+/**
+ * Implements hook_install().
+ */
+function eca_cm_install() {
+  if (!EcaInfo::service()->usesModelerApi() && !\Drupal::moduleHandler()->moduleExists('eca_ui')) {
+    // For any ECA version below v3, the eca_ui module must be installed.
+    $installer = \Drupal::service('module_installer');
+    $installer->install(['eca_ui']);
+  }
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function eca_cm_update_dependencies() {
+  $dependencies['eca_cm'][8001] = [
+    'eca' => 8003,
+  ];
+  return $dependencies;
+}

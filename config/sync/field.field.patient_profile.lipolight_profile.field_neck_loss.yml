@@ -1,0 +1,23 @@
+uuid: 12dd4835-6b3e-46a3-b5dc-c71d4049ed9b
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.lipolight_profile
+    - field.storage.patient_profile.field_neck_loss
+id: patient_profile.lipolight_profile.field_neck_loss
+field_name: field_neck_loss
+entity_type: patient_profile
+bundle: lipolight_profile
+label: 'Neck Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

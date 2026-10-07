@@ -1,0 +1,21 @@
+uuid: 00060a1f-8a5f-4eaf-942a-0627657e5f28
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.edit_patient_account
+    - field.storage.contact_message.field_full_name
+id: contact_message.edit_patient_account.field_full_name
+field_name: field_full_name
+entity_type: contact_message
+bundle: edit_patient_account
+label: 'Full Name'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: '[current-page:query:n]'
+default_value_callback: ''
+settings: {  }
+field_type: string

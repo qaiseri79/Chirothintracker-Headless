@@ -1,0 +1,19 @@
+uuid: 144e50c5-6be0-4f2f-87c4-93e1c209f8e5
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.menu_item.menu_item
+    - field.storage.menu_item.field_link
+id: menu_item.menu_item.field_link
+field_name: field_link
+entity_type: menu_item
+bundle: menu_item
+label: Link
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

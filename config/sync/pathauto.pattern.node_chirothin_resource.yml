@@ -1,0 +1,21 @@
+uuid: e3038e92-8306-4dc3-aff6-44132f8fa316
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node_chirothin_resource
+label: 'Content - Resource'
+type: 'canonical_entities:node'
+pattern: 'resources/[node:title]'
+selection_criteria:
+  -
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: node
+    bundles:
+      chirothin_resource: chirothin_resource
+selection_logic: and
+weight: 0
+relationships: {  }

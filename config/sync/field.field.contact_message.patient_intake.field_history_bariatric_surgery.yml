@@ -1,0 +1,21 @@
+uuid: 4c3d219d-646e-4ebe-8efd-efcca12aeecc
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_history_bariatric_surgery
+  module:
+    - options
+id: contact_message.patient_intake.field_history_bariatric_surgery
+field_name: field_history_bariatric_surgery
+entity_type: contact_message
+bundle: patient_intake
+label: 'History of Bariatric Surgery'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

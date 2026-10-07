@@ -1,0 +1,31 @@
+uuid: 3b5d11be-a558-4a96-b40a-a0136fcbd4a1
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.menu-header-left
+  module:
+    - system
+  theme:
+    - olivero
+id: olivero_headerleft
+theme: olivero
+region: primary_menu
+weight: -18
+provider: null
+plugin: 'system_menu_block:menu-header-left'
+settings:
+  id: 'system_menu_block:menu-header-left'
+  label: 'Header Left'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  response_status:
+    id: response_status
+    negate: false
+    status_codes:
+      - 200
+      - 403

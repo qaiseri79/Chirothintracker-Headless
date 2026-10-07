@@ -1,0 +1,2 @@
+eca_cm:
+  deriver: Drupal\eca_cm\Plugin\Derivative\EcaCmLocalActionDeriver

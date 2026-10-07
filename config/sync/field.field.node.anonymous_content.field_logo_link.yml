@@ -1,0 +1,19 @@
+uuid: a760d409-7432-4067-8637-380dc67f8a0f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_logo_link
+    - node.type.anonymous_content
+id: node.anonymous_content.field_logo_link
+field_name: field_logo_link
+entity_type: node
+bundle: anonymous_content
+label: 'Logo Link'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

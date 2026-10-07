@@ -1,0 +1,177 @@
+<?php
+/**
+ * @file
+ * Chirothintracker Sub Theme theme file.
+ */
+use Drupal\views\Views;
+use Drupal\user\Entity\User;
+
+function chirothintracker_subtheme_preprocess_menu__menu_header_right(&$variables)
+{
+    foreach ($variables['items'] as &$item) {
+        $title_string = is_object($item['title']) ? $item['title']->__toString() : (string) $item['title'];
+        $title_text = strip_tags($title_string);
+        $title = trim($title_text);
+        $url = $item['url']->toString();
+        if ($title === "Messages") {
+            if ($url == "/my-messages") {
+                $item['attributes']['patient-message-count'] = enrolledMessageCount();
+            }
+            $item['attributes']['doctor-message-count'] = chiropractorMessageCount();
+        } else if ($title === "Patients") {
+            $item['attributes']['intake-count'] = IntakeCount();
+        } else if ($title === "My Clinic Page") {
+            $item['attributes']['task-count'] = TaskCount();
+            $item['attributes']['order-count'] = OrderCount();
+        }
+    }
+    $variables['#cache']['max-age'] = 0;
+}
+
+function OrderCount()
+{
+    $count = "";
+    $view = Views::getView('commerce_orders');
+    $view->setDisplay('block_1');
+    //$view->setArguments([\Drupal::currentUser()->id()]);
+    $view->execute();
+    if ($view->result) {
+        $count = count($view->result);
+    } else {
+        $count = "";
+    }
+    return $count;
+}
+
+function TaskCount()
+{
+    $user_role = "chiropractor_active_";
+    $count = "";
+    $view = Views::getView('to_do_count');
+    $view->setDisplay('default');
+    $view->setArguments([\Drupal::currentUser()->id()]);
+    $view->execute();
+    if ($view->result) {
+        $count = count($view->result);
+    } else {
+        $count = "";
+    }
+    return $count;
+}
+
+function IntakeCount()
+{
+    $account = User::load(\Drupal::currentUser()->id());
+    $roles = $account->getRoles();
+    $count = "";
+    $user_role = "";
+    if (in_array("chiropractor_active_", $roles)) {
+        $clinic = $account->get("field_clinic")->getValue();
+        if ($clinic) {
+            $user_role = "chiropractor_active_";
+            $view = Views::getView('intake_forms_cs');
+            $view->setDisplay('block_1');
+            $view->setArguments([$clinic[0]["target_id"]]);
+            $view->execute();
+            if ($view->result) {
+                $count = count($view->result);
+            } else {
+                $count = "";
+            }
+        }
+
+    }
+    return $count;
+}
+
+
+function chiropractorMessageCount()
+{
+    $account = User::load(\Drupal::currentUser()->id());
+    $roles = $account->getRoles();
+    $count = "";
+    $user_role = "";
+    if (in_array("chiropractor_active_", $roles)) {
+        $user_role = "chiropractor_active_";
+        $view = Views::getView('badge_unread_messages_clinic');
+        $view->storage->invalidateCaches();
+        $view->setDisplay('menu_badge_1');
+        $view->setArguments([\Drupal::currentUser()->id()]);
+        $view->execute();
+        if ($view->result) {
+            $count = count($view->result);
+        } else {
+            $count = "";
+        }
+    }
+
+    return $count;
+}
+
+
+function enrolledMessageCount()
+{
+    $user_id = \Drupal::currentUser()->id();
+    $account = User::load($user_id);
+    $roles = $account->getRoles();
+    $count = "";
+    $user_role = "";
+    if (in_array("enrolled_patient", $roles)) {
+        $user_role = "enrolled_patient";
+        $patient_view = Views::getView('unread_messages_cs');
+        $patient_view->storage->invalidateCaches();
+        $patient_view->setDisplay('default');
+        $patient_view->setArguments([$account->get("field_chiropractor")->getValue()[0]["target_id"]]);
+        //$patient_view->setArguments([$user_id]);
+        $patient_view->execute();
+        if ($patient_view->result) {
+            $count = count($patient_view->result);
+        } else {
+            $count = "";
+        }
+    }
+    return $count;
+}
+
+/**
+ * Implements hook_preprocess_block() for cart block.
+ */
+function chirothintracker_subtheme_preprocess_block(&$variables)
+{
+    if ($variables['plugin_id'] === 'commerce_cart') {
+        $variables['#cache']['contexts'][] = 'user';
+        $variables['#cache']['contexts'][] = 'session';
+        $variables['#cache']['max-age'] = 0;
+    }
+}
+
+/**
+ * Implements hook_preprocess_file_link() for chirothin_resource.
+ */
+function chirothintracker_subtheme_preprocess_file_link(array &$variables)
+{
+    // Early return if no node usage found.
+    $usages = \Drupal::service('file.usage')->listUsage($variables['file']);
+    if (empty($usages['file']['node'])) {
+        return;
+    }
+
+    // Load first matching chirothin_resource node.
+    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+    foreach (array_keys($usages['file']['node']) as $node_id) {
+        $node = $node_storage->load($node_id);
+
+        if (!$node || $node->getType() !== 'chirothin_resource') {
+            continue;
+        }
+
+        // Found a match — set target and stop.
+        $url = $variables['link']['#url'];
+        $url->setOption('attributes', ($url->getOption('attributes') ?? []) + [
+            'target' => '_blank',
+            'rel' => 'noopener noreferrer',
+        ]);
+
+        break;
+    }
+}

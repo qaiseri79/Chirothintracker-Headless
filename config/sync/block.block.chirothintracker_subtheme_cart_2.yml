@@ -1,0 +1,33 @@
+uuid: 8731d965-6fd4-4ad7-862d-530323530c73
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_xquantity
+    - user
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_cart_2
+theme: chirothintracker_subtheme
+region: sidebar_menu
+weight: -18
+provider: null
+plugin: commerce_cart
+settings:
+  id: commerce_cart
+  label: Cart
+  label_display: '0'
+  provider: commerce_xquantity
+  dropdown: true
+  show_if_empty: true
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      chiropractor_active_: chiropractor_active_
+      chiropractor_inactive_: chiropractor_inactive_
+      enrolled_patient: enrolled_patient
+      archived_patient: archived_patient

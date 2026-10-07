@@ -1,0 +1,31 @@
+uuid: 2f412ed4-5ab7-4146-a8ec-1225b4234dd6
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_authnet
+id: authorize_net
+label: 'Authorize (subscription)'
+weight: null
+plugin: authorizenet_acceptjs
+configuration:
+  display_label: Authorize.net
+  mode: live
+  payment_method_types:
+    - credit_card
+  collect_billing_information: true
+  api_login: 655AxrT39
+  transaction_key: 67qbdg5VPkBV564N
+  client_key: 6V82qjEN7ZgALayzTH48Fae8E7J9b94Pd2hSGLa42Wc58sfzsJNxvaLRPQ4TBzn9
+  cca_status: false
+  cca_api_id: ''
+  cca_org_unit_id: ''
+  cca_api_key: ''
+  enable_credit_card_icons: true
+conditions:
+  -
+    plugin: order_product_type
+    configuration:
+      product_types:
+        - subscription
+conditionOperator: AND

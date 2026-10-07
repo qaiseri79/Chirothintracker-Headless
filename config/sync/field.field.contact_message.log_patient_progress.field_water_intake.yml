@@ -1,0 +1,23 @@
+uuid: 2b856bc8-655c-48f5-8e24-a30291ff7b6c
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.log_patient_progress
+    - field.storage.contact_message.field_water_intake
+id: contact_message.log_patient_progress.field_water_intake
+field_name: field_water_intake
+entity_type: contact_message
+bundle: log_patient_progress
+label: "Yesterday's Water Intake"
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: oz
+field_type: decimal

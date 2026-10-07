@@ -1,0 +1,24 @@
+uuid: 8c37a756-162f-4c92-a077-eb487655b563
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: contact_message.field_diabetes_diagnosis_year
+field_name: field_diabetes_diagnosis_year
+entity_type: contact_message
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

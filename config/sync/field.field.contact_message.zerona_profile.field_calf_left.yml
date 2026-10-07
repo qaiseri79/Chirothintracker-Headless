@@ -1,0 +1,23 @@
+uuid: 9c15b9f9-0e38-427b-be7d-530bb82322e9
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.zerona_profile
+    - field.storage.contact_message.field_calf_left
+id: contact_message.zerona_profile.field_calf_left
+field_name: field_calf_left
+entity_type: contact_message
+bundle: zerona_profile
+label: 'Calf - Left'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

@@ -1,0 +1,16 @@
+.signature-inner {
+  padding: 15px 0;
+  text-align: center;
+  border: 1px solid #ccc;
+  background: rgb(240 240 240);
+}
+.signature canvas {
+  border-bottom: 2px dotted #999;
+  background: #fff;
+  display: block;
+  margin: 0 auto;
+}
+.signature-thumb {
+  width: 120px;
+  height: 60px;
+}

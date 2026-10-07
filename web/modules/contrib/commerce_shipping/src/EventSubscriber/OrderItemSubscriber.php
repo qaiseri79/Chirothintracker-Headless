@@ -1,0 +1,75 @@
+<?php
+
+namespace Drupal\commerce_shipping\EventSubscriber;
+
+use Drupal\commerce_order\Entity\OrderInterface;
+use Drupal\commerce_order\Event\OrderItemEvent;
+use Drupal\commerce_shipping\ShippingOrderManagerInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+class OrderItemSubscriber implements EventSubscriberInterface {
+
+  /**
+   * Constructs a new OrderSubscriber object.
+   *
+   * @param \Drupal\commerce_shipping\ShippingOrderManagerInterface $shippingOrderManager
+   *   The shipping order manager.
+   */
+  public function __construct(protected ShippingOrderManagerInterface $shippingOrderManager) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getSubscribedEvents(): array {
+    return [
+      'commerce_order.commerce_order_item.update' => ['onOrderItemUpdate'],
+      'commerce_order.commerce_order_item.delete' => ['onOrderItemDelete'],
+    ];
+  }
+
+  /**
+   * Force repack/rates recalculation when quantity is updated.
+   *
+   * @param \Drupal\commerce_order\Event\OrderItemEvent $order_item_event
+   *   Order item event.
+   */
+  public function onOrderItemUpdate(OrderItemEvent $order_item_event) {
+    $order_item = $order_item_event->getOrderItem();
+    $order = $order_item->getOrder();
+    if (!$order || !$this->shouldRefresh($order)) {
+      return;
+    }
+    if (!$order_item->get('quantity')->equals($order_item->original->get('quantity'))) {
+      $order->setData(ShippingOrderManagerInterface::FORCE_REFRESH, TRUE);
+    }
+  }
+
+  /**
+   * Force repack/rates recalculation when an order item is removed.
+   *
+   * @param \Drupal\commerce_order\Event\OrderItemEvent $order_item_event
+   *   Order item event.
+   */
+  public function onOrderItemDelete(OrderItemEvent $order_item_event) {
+    $order_item = $order_item_event->getOrderItem();
+    $order = $order_item->getOrder();
+    if (!$order || !$this->shouldRefresh($order)) {
+      return;
+    }
+    $order->setData(ShippingOrderManagerInterface::FORCE_REFRESH, TRUE);
+  }
+
+  /**
+   * Checks whether we should force a shipping refresh.
+   *
+   * @param \Drupal\commerce_order\Entity\OrderInterface $order
+   *   Order entity.
+   *
+   * @return bool
+   *   Whether we should force a shipping refresh.
+   */
+  protected function shouldRefresh(OrderInterface $order) {
+    return $order->getState()->getId() == 'draft' && $this->shippingOrderManager->hasShipments($order);
+  }
+
+}

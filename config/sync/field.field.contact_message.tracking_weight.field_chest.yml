@@ -1,0 +1,23 @@
+uuid: 31c43569-891c-4d96-a7f2-372e39e3ec6d
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_chest
+id: contact_message.tracking_weight.field_chest
+field_name: field_chest
+entity_type: contact_message
+bundle: tracking_weight
+label: Chest
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

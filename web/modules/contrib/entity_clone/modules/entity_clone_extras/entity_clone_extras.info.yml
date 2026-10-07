@@ -1,0 +1,13 @@
+name: 'Entity Clone Extras'
+type: module
+description: 'Allow for bundle-level permissions for Node (and Media) entity types'
+core_version_requirement: ^10.3 || ^11
+package: 'Entity Clone'
+dependencies:
+  - drupal:entity_clone
+  - drupal:node
+
+# Information added by Drupal.org packaging script on 2026-05-21
+version: '2.2.0-beta1'
+project: 'entity_clone'
+datestamp: 1779357307

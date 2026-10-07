@@ -1,0 +1,12 @@
+hide_preview:
+  form_names:
+    - node_daily_message_form
+    - node_daily_message_edit_form
+    - node_review_messages_form
+    - node_review_messages_edit_form
+    - node_recipe_form
+    - node_recipe_edit_form
+    - node_chirothin_resource_form
+    - node_chirothin_resource_edit_form
+    - node_training_form
+    - node_training_edit_form

@@ -1,0 +1,11 @@
+uuid: 1e3277f0-99b7-4b01-a005-adaf39c197c6
+langcode: en
+status: null
+dependencies: {  }
+id: activity_log
+label: 'Activity Log'
+uid: false
+created: true
+changed: false
+title: true
+standalone_url: true

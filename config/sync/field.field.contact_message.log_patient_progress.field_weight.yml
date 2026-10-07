@@ -1,0 +1,23 @@
+uuid: b37a72b2-c31a-4267-b49e-2c272e5a571a
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.log_patient_progress
+    - field.storage.contact_message.field_weight
+id: contact_message.log_patient_progress.field_weight
+field_name: field_weight
+entity_type: contact_message
+bundle: log_patient_progress
+label: "Today's Weight"
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: lbs
+field_type: decimal

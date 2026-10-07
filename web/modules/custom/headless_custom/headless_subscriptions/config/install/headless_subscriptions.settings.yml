@@ -1,0 +1,4 @@
+checkout_enabled: false
+registration_enabled: true
+grace_days: 0
+cart_ttl: 3600

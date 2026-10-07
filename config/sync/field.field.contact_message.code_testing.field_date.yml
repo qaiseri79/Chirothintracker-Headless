@@ -1,0 +1,21 @@
+uuid: 5f7d11f5-99f6-43a5-a22c-361eebf69431
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.code_testing
+    - field.storage.contact_message.field_date
+  module:
+    - datetime
+id: contact_message.code_testing.field_date
+field_name: field_date
+entity_type: contact_message
+bundle: code_testing
+label: Date
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

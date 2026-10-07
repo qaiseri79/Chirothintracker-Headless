@@ -1,0 +1,34 @@
+uuid: bf6705e0-f510-407d-8d66-5efd363c5972
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_class
+    - custom_module
+    - system
+    - user
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_alertinactivesubscriber
+theme: chirothintracker_subtheme
+region: content
+weight: -22
+provider: null
+plugin: alert_inactive_subscriber
+settings:
+  id: alert_inactive_subscriber
+  label: 'Alert Inactive Subscriber'
+  label_display: '0'
+  provider: custom_module
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      chiropractor_inactive_: chiropractor_inactive_
+  request_path:
+    id: request_path
+    negate: true
+    pages: "/pricing/listing\r\n/product/*\r\n/cart\r\n/checkout/*/order_information\r\n/checkout/*/payment"

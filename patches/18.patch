@@ -1,0 +1,551 @@
+From b0f87e0c1b98e787200d3bba7affa3fdc0c030a9 Mon Sep 17 00:00:00 2001
+From: Jonathan Bourland <jonathanbourland@hotmail.com>
+Date: Thu, 17 Oct 2024 10:27:33 -0400
+Subject: [PATCH 1/4] Issue #2724503: Add protect option and permissions per
+ form
+
+---
+ .../schema/contact_permissions.schema.yml     |  7 ++
+ .../contact_permissions.info.yml              |  6 ++
+ .../contact_permissions.module                | 61 +++++++++++++++
+ .../contact_permissions.permissions.yml       |  2 +
+ .../src/ContactFormAccessControlHandler.php   | 36 +++++++++
+ .../src/ContactPermissions.php                | 55 +++++++++++++
+ .../src/Functional/ContactAccessTest.php      | 77 +++++++++++++++++++
+ 7 files changed, 244 insertions(+)
+ create mode 100644 modules/contact_permissions/config/schema/contact_permissions.schema.yml
+ create mode 100644 modules/contact_permissions/contact_permissions.info.yml
+ create mode 100644 modules/contact_permissions/contact_permissions.module
+ create mode 100644 modules/contact_permissions/contact_permissions.permissions.yml
+ create mode 100644 modules/contact_permissions/src/ContactFormAccessControlHandler.php
+ create mode 100644 modules/contact_permissions/src/ContactPermissions.php
+ create mode 100644 modules/contact_permissions/tests/src/Functional/ContactAccessTest.php
+
+diff --git a/modules/contact_permissions/config/schema/contact_permissions.schema.yml b/modules/contact_permissions/config/schema/contact_permissions.schema.yml
+new file mode 100644
+index 0000000..6456475
+--- /dev/null
++++ b/modules/contact_permissions/config/schema/contact_permissions.schema.yml
+@@ -0,0 +1,7 @@
++contact.form.*.third_party.contact_permissions:
++  type: mapping
++  label: 'Contact form protection'
++  mapping:
++    protect:
++      type: string
++      label: 'Protect Contact Form'
+diff --git a/modules/contact_permissions/contact_permissions.info.yml b/modules/contact_permissions/contact_permissions.info.yml
+new file mode 100644
+index 0000000..c173afd
+--- /dev/null
++++ b/modules/contact_permissions/contact_permissions.info.yml
+@@ -0,0 +1,6 @@
++name: Contact Permissions
++type: module
++description: 'Provides the ability to add a new permission to each contact form to limit access.'
++core_version_requirement: ^9.1 || ^10 || ^11
++dependencies:
++  - contact_storage
+diff --git a/modules/contact_permissions/contact_permissions.module b/modules/contact_permissions/contact_permissions.module
+new file mode 100644
+index 0000000..0cdb1b9
+--- /dev/null
++++ b/modules/contact_permissions/contact_permissions.module
+@@ -0,0 +1,61 @@
++<?php
++
++/**
++ * @file
++ * Contains contact_permissions.module.
++ */
++
++use Drupal\contact\ContactFormInterface;
++use Drupal\Core\Form\FormStateInterface;
++use Drupal\Core\Routing\RouteMatchInterface;
++
++/**
++ * Implements hook_help().
++ */
++function contact_permissions_help($route_name, RouteMatchInterface $route_match) {
++  switch ($route_name) {
++    // Main module help for the contact_permissions module.
++    case 'help.page.contact_permissions':
++      $output = '';
++      $output .= '<h3>' . t('About') . '</h3>';
++      $output .= '<p>' . t('Provides permissions for having a personal contact form') . '</p>';
++      return $output;
++
++    default:
++  }
++}
++
++/**
++ * Implements hook_form_FORM_ID_alter() for contact_form_form().
++ */
++function contact_permissions_form_contact_form_form_alter(&$form, FormStateInterface $form_state) {
++  $form_object = $form_state->getFormObject();
++  if (!in_array($form_object->getOperation(), ['edit', 'add'], TRUE)) {
++    // Only alter the edit and add forms.
++    return;
++  }
++  $contact_form = $form_object->getEntity();
++  $form['contact_permissions_protect'] = [
++    '#type' => 'checkbox',
++    '#title' => t('Make Protected'),
++    '#description' => t('Require a unique permission to access this form.'),
++    '#default_value' => $contact_form->getThirdPartySetting('contact_permissions', 'protect', FALSE),
++  ];
++  $form['#entity_builders'][] = 'contact_permissions_contact_form_form_builder';
++}
++
++/**
++ * Entity builder for the contact form edit form with third party options.
++ */
++function contact_permissions_contact_form_form_builder($entity_type, ContactFormInterface $contact_form, &$form, FormStateInterface $form_state) {
++  $contact_form->setThirdPartySetting('contact_permissions', 'protect', $form_state->getValue('contact_permissions_protect'));
++}
++
++
++/**
++ * Implements hook_entity_type_alter().
++ */
++function contact_permissions_entity_type_alter(array &$entity_types) {
++  /** @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
++  $entity_types['contact_form']->setAccessClass('\Drupal\contact_permissions\ContactFormAccessControlHandler');
++}
+diff --git a/modules/contact_permissions/contact_permissions.permissions.yml b/modules/contact_permissions/contact_permissions.permissions.yml
+new file mode 100644
+index 0000000..e7b7970
+--- /dev/null
++++ b/modules/contact_permissions/contact_permissions.permissions.yml
+@@ -0,0 +1,2 @@
++permission_callbacks:
++  - \Drupal\contact_permissions\ContactPermissions::contactFormPermissions
+diff --git a/modules/contact_permissions/src/ContactFormAccessControlHandler.php b/modules/contact_permissions/src/ContactFormAccessControlHandler.php
+new file mode 100644
+index 0000000..94794c1
+--- /dev/null
++++ b/modules/contact_permissions/src/ContactFormAccessControlHandler.php
+@@ -0,0 +1,36 @@
++<?php
++
++namespace Drupal\contact_permissions;
++
++use Drupal\Core\Access\AccessResult;
++use Drupal\contact\ContactFormAccessControlHandler as CoreContactFormAccessControlHandler;
++use Drupal\Core\Entity\EntityInterface;
++use Drupal\Core\Session\AccountInterface;
++
++/**
++ * Defines the access control handler for the contact form entity type.
++ *
++ * @see \Drupal\contact\Entity\ContactForm
++ */
++class ContactFormAccessControlHandler extends CoreContactFormAccessControlHandler {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
++    if ($operation == 'view') {
++      // Handle protected forms.
++      $protected = $entity->getThirdPartySetting('contact_permissions', 'protect', FALSE);
++      if ($protected) {
++        $type_id = $entity->id();
++        return AccessResult::allowedIf($account->hasPermission("access $type_id contact form"))->cachePerPermissions();
++      }
++      else {
++        // Do not allow access personal form via site-wide route.
++        return AccessResult::allowedIf($account->hasPermission('access site-wide contact form') && $entity->id() !== 'personal')->cachePerPermissions();
++      }
++    }
++
++    return parent::checkAccess($entity, $operation, $account);
++  }
++}
+diff --git a/modules/contact_permissions/src/ContactPermissions.php b/modules/contact_permissions/src/ContactPermissions.php
+new file mode 100644
+index 0000000..ef6dfd9
+--- /dev/null
++++ b/modules/contact_permissions/src/ContactPermissions.php
+@@ -0,0 +1,55 @@
++<?php
++
++namespace Drupal\contact_permissions;
++
++use Drupal\contact\Entity\ContactForm;
++use Drupal\Core\StringTranslation\StringTranslationTrait;
++
++/**
++ * Provides dynamic view permissions for contact forms.
++ */
++class ContactPermissions {
++
++  use StringTranslationTrait;
++
++  /**
++   * Returns an array of contact form permissions.
++   *
++   * @return array
++   *   The contact form permissions.
++   *   @see \Drupal\user\PermissionHandlerInterface::getPermissions()
++   */
++  public function contactFormPermissions() {
++    $perms = array();
++    // Generate permissions for all contact forms.
++    foreach (ContactForm::loadMultiple() as $type) {
++      $protected = $type->getThirdPartySetting('contact_permissions', 'protect', FALSE);
++      if ($protected) {
++        $perms += $this->buildPermissions($type);
++      }
++    }
++
++    return $perms;
++  }
++
++  /**
++   * Returns a list of contact form permissions for a given contact form.
++   *
++   * @param \Drupal\contact\Entity\ContactForm $contact_form
++   *   The contact form.
++   *
++   * @return array
++   *   An associative array of permission names and descriptions.
++   */
++  protected function buildPermissions(ContactForm $contact_form) {
++    $type_id = $contact_form->id();
++    $type_params = array('%type_name' => $contact_form->label());
++
++    return array(
++      "access $type_id contact form" => array(
++        'title' => $this->t('Use the %type_name contact form', $type_params),
++      ),
++    );
++  }
++
++}
+diff --git a/modules/contact_permissions/tests/src/Functional/ContactAccessTest.php b/modules/contact_permissions/tests/src/Functional/ContactAccessTest.php
+new file mode 100644
+index 0000000..d428226
+--- /dev/null
++++ b/modules/contact_permissions/tests/src/Functional/ContactAccessTest.php
+@@ -0,0 +1,77 @@
++<?php
++
++namespace Drupal\Tests\contact_permissions\Functional;
++
++use Drupal\Tests\contact_storage\Functional\ContactStorageTestBase;
++
++/**
++ * Tests protected contact forms.
++ *
++ * @group contact_permissions
++ */
++class ContactAccessTest extends ContactStorageTestBase {
++
++  /**
++   * {inheritdoc}
++   */
++  public static $modules = [
++    'user',
++    'contact',
++    'field_ui',
++    'contact_test',
++    'contact_storage',
++    'contact_permissions',
++  ];
++
++  /**
++   * An administrative user with permission to administer contact forms.
++   *
++   * @var \Drupal\user\UserInterface
++   */
++  protected $adminUser;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp() {
++    parent::setUp();
++  }
++
++  /**
++   * Tests contact view builder functionality.
++   */
++  public function testContactViewBuilder() {
++    // Create test admin user.
++    $this->adminUser = $this->drupalCreateUser([
++      'administer contact forms',
++    ]);
++
++    // Login as admin user.
++    $this->drupalLogin($this->adminUser);
++
++    // Create first valid contact form.
++    $mail = 'simpletest@example.com';
++    $this->addContactForm('test_id', 'test_label', $mail, FALSE, ['contact_permissions_protect' => TRUE]);
++    $this->assertText(t('Contact form test_label has been added.'));
++
++    // Access protected contact form without permissions.
++    $this->drupalGet('contact/test_id');
++    $this->assertResponse(403, 'Access denied.');
++
++    // Create test2 admin user.
++    $admin_user2 = $this->drupalCreateUser([
++      'access test_id contact form',
++    ]);
++    // Login as admin user.
++    $this->drupalLogin($admin_user2);
++    // Access protected contact form with permissions.
++    $this->drupalGet('contact/test_id');
++    $this->assertResponse(200, 'Users with proper permissions can access protected form.');
++    $this->drupalLogout();
++
++    // Access the form via logout user.
++    $this->drupalGet('contact/test_id');
++    $this->assertResponse(403, 'Anonymous users cannot access protected form.');
++  }
++
++}
+-- 
+GitLab
+
+
+From 100d13e6e3b16b92e80ece900ea64a024594238c Mon Sep 17 00:00:00 2001
+From: Jonathan Bourland <jonathanbourland@hotmail.com>
+Date: Thu, 17 Oct 2024 10:50:13 -0400
+Subject: [PATCH 2/4] Issue #2724503: Use BundlePermissionHandlerTrait when
+ generating our permissions
+
+---
+ .../src/ContactPermissions.php                | 33 ++++++++++---------
+ 1 file changed, 17 insertions(+), 16 deletions(-)
+
+diff --git a/modules/contact_permissions/src/ContactPermissions.php b/modules/contact_permissions/src/ContactPermissions.php
+index ef6dfd9..88b083d 100644
+--- a/modules/contact_permissions/src/ContactPermissions.php
++++ b/modules/contact_permissions/src/ContactPermissions.php
+@@ -3,6 +3,7 @@
+ namespace Drupal\contact_permissions;
+ 
+ use Drupal\contact\Entity\ContactForm;
++use Drupal\core\Entity\BundlePermissionHandlerTrait;
+ use Drupal\Core\StringTranslation\StringTranslationTrait;
+ 
+ /**
+@@ -10,6 +11,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
+  */
+ class ContactPermissions {
+ 
++  use BundlePermissionHandlerTrait;
+   use StringTranslationTrait;
+ 
+   /**
+@@ -20,16 +22,11 @@ class ContactPermissions {
+    *   @see \Drupal\user\PermissionHandlerInterface::getPermissions()
+    */
+   public function contactFormPermissions() {
+-    $perms = array();
+     // Generate permissions for all contact forms.
+-    foreach (ContactForm::loadMultiple() as $type) {
+-      $protected = $type->getThirdPartySetting('contact_permissions', 'protect', FALSE);
+-      if ($protected) {
+-        $perms += $this->buildPermissions($type);
+-      }
+-    }
+-
+-    return $perms;
++    return $this->generatePermissions(ContactForm::loadMultiple(), [
++      $this,
++      'buildPermissions',
++    ]);
+   }
+ 
+   /**
+@@ -44,12 +41,16 @@ class ContactPermissions {
+   protected function buildPermissions(ContactForm $contact_form) {
+     $type_id = $contact_form->id();
+     $type_params = array('%type_name' => $contact_form->label());
+-
+-    return array(
+-      "access $type_id contact form" => array(
+-        'title' => $this->t('Use the %type_name contact form', $type_params),
+-      ),
+-    );
++    $protect = $contact_form->getThirdPartySetting('contact_permissions', 'protect', FALSE);
++    
++    if ($protect) {
++      return array(
++        "access $type_id contact form" => array(
++          'title' => $this->t('Use the %type_name contact form', $type_params),
++        ),
++      );
++    } 
++
++    return [];
+   }
+-
+ }
+-- 
+GitLab
+
+
+From 5c452ffa2e60a786939c40ecc5bf72cf03b57975 Mon Sep 17 00:00:00 2001
+From: Jonathan Bourland <jonathanbourland@hotmail.com>
+Date: Thu, 17 Oct 2024 12:57:26 -0400
+Subject: [PATCH 3/4] Issue #2724503: Make test compatible with Browser Test
+ Base
+
+---
+ .../tests/src/Functional/ContactAccessTest.php             | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/modules/contact_permissions/tests/src/Functional/ContactAccessTest.php b/modules/contact_permissions/tests/src/Functional/ContactAccessTest.php
+index d428226..8b36024 100644
+--- a/modules/contact_permissions/tests/src/Functional/ContactAccessTest.php
++++ b/modules/contact_permissions/tests/src/Functional/ContactAccessTest.php
+@@ -23,6 +23,11 @@ class ContactAccessTest extends ContactStorageTestBase {
+     'contact_permissions',
+   ];
+ 
++  /**
++   * {@inheritdoc}
++   */
++  protected $defaultTheme = 'stark';
++
+   /**
+    * An administrative user with permission to administer contact forms.
+    *
+@@ -33,7 +38,7 @@ class ContactAccessTest extends ContactStorageTestBase {
+   /**
+    * {@inheritdoc}
+    */
+-  protected function setUp() {
++  protected function setUp(): void {
+     parent::setUp();
+   }
+ 
+-- 
+GitLab
+
+
+From fe951dc9f688b41352d21835eed38407d6d0d737 Mon Sep 17 00:00:00 2001
+From: Jonathan Bourland <jonathanbourland@hotmail.com>
+Date: Sun, 20 Oct 2024 21:55:44 -0400
+Subject: [PATCH 4/4] Issue #2724503: Update deprecated methods in functional
+ test
+
+---
+ .../src/Functional/ContactAccessTest.php      | 59 +++++++++----------
+ 1 file changed, 28 insertions(+), 31 deletions(-)
+
+diff --git a/modules/contact_permissions/tests/src/Functional/ContactAccessTest.php b/modules/contact_permissions/tests/src/Functional/ContactAccessTest.php
+index 8b36024..98b73b5 100644
+--- a/modules/contact_permissions/tests/src/Functional/ContactAccessTest.php
++++ b/modules/contact_permissions/tests/src/Functional/ContactAccessTest.php
+@@ -2,26 +2,17 @@
+ 
+ namespace Drupal\Tests\contact_permissions\Functional;
+ 
++use Drupal\Core\Entity\BundlePermissionHandlerTrait;
+ use Drupal\Tests\contact_storage\Functional\ContactStorageTestBase;
+ 
+ /**
+- * Tests protected contact forms.
++ * Tests access to individual contact forms.
+  *
+  * @group contact_permissions
+  */
+ class ContactAccessTest extends ContactStorageTestBase {
+ 
+-  /**
+-   * {inheritdoc}
+-   */
+-  public static $modules = [
+-    'user',
+-    'contact',
+-    'field_ui',
+-    'contact_test',
+-    'contact_storage',
+-    'contact_permissions',
+-  ];
++  use BundlePermissionHandlerTrait;
+ 
+   /**
+    * {@inheritdoc}
+@@ -36,47 +27,53 @@ class ContactAccessTest extends ContactStorageTestBase {
+   protected $adminUser;
+ 
+   /**
+-   * {@inheritdoc}
++   * Modules to enable.
++   *
++   * @var array
+    */
++  protected static $modules = [
++    'contact',
++    'contact_storage',
++    'contact_permissions',
++  ];
++
+   protected function setUp(): void {
+     parent::setUp();
+-  }
+ 
+-  /**
+-   * Tests contact view builder functionality.
+-   */
+-  public function testContactViewBuilder() {
+-    // Create test admin user.
++    // Create and login administrative user.
+     $this->adminUser = $this->drupalCreateUser([
+       'administer contact forms',
+     ]);
+-
+-    // Login as admin user.
+     $this->drupalLogin($this->adminUser);
++  }
+ 
++  /**
++   * Tests access to individual contact forms.
++   */
++  public function testContactAccess() {
+     // Create first valid contact form.
+     $mail = 'simpletest@example.com';
+     $this->addContactForm('test_id', 'test_label', $mail, FALSE, ['contact_permissions_protect' => TRUE]);
+-    $this->assertText(t('Contact form test_label has been added.'));
++    $this->assertSession()->pageTextContains(t('Contact form test_label has been added.'));
+ 
+     // Access protected contact form without permissions.
+     $this->drupalGet('contact/test_id');
+-    $this->assertResponse(403, 'Access denied.');
++    $this->assertSession()->statusCodeEquals(403, 'Access denied.');
+ 
+-    // Create test2 admin user.
+-    $admin_user2 = $this->drupalCreateUser([
++    // Create authenticated user with permission to see our form.
++    $auth_user = $this->drupalCreateUser([
+       'access test_id contact form',
+     ]);
+-    // Login as admin user.
+-    $this->drupalLogin($admin_user2);
++
++    // Login as authenticated user.
++    $this->drupalLogin($auth_user);
+     // Access protected contact form with permissions.
+     $this->drupalGet('contact/test_id');
+-    $this->assertResponse(200, 'Users with proper permissions can access protected form.');
++    $this->assertSession()->statusCodeEquals(200, 'Users with proper permissions can access protected form.');
+     $this->drupalLogout();
+ 
+-    // Access the form via logout user.
++    // Access the form via logged out user.
+     $this->drupalGet('contact/test_id');
+-    $this->assertResponse(403, 'Anonymous users cannot access protected form.');
++    $this->assertSession()->statusCodeEquals(403, 'Anonymous users cannot access protected form.');
+   }
+-
+ }
+-- 
+GitLab
+

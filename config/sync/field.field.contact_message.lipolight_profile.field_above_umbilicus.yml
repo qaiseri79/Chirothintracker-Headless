@@ -1,0 +1,23 @@
+uuid: c7232ce9-e5b4-499b-8930-b6adc16e3f8e
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.lipolight_profile
+    - field.storage.contact_message.field_above_umbilicus
+id: contact_message.lipolight_profile.field_above_umbilicus
+field_name: field_above_umbilicus
+entity_type: contact_message
+bundle: lipolight_profile
+label: 'Above Umbilicus'
+description: 'Measure 2 inches above umbilicus.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

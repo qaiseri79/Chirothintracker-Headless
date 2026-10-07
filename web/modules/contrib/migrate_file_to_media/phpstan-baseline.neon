@@ -1,0 +1,57 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '''
+				#^Access to property \$entityType of deprecated class Drupal\\migrate_drupal\\Plugin\\migrate\\source\\ContentEntity\:
+				in drupal\:11\.2\.0 and is removed from drupal\:12\.0\.0\. Use
+				\\Drupal\\migrate\\Plugin\\migrate\\source\\ContentEntity instead\.$#
+			'''
+			identifier: property.deprecatedClass
+			count: 1
+			path: src/Plugin/migrate/source/MediaContentEntity.php
+
+		-
+			message: '''
+				#^Access to property \$entityTypeManager of deprecated class Drupal\\migrate_drupal\\Plugin\\migrate\\source\\ContentEntity\:
+				in drupal\:11\.2\.0 and is removed from drupal\:12\.0\.0\. Use
+				\\Drupal\\migrate\\Plugin\\migrate\\source\\ContentEntity instead\.$#
+			'''
+			identifier: property.deprecatedClass
+			count: 1
+			path: src/Plugin/migrate/source/MediaContentEntity.php
+
+		-
+			message: '''
+				#^Call to method query\(\) of deprecated class Drupal\\migrate_drupal\\Plugin\\migrate\\source\\ContentEntity\:
+				in drupal\:11\.2\.0 and is removed from drupal\:12\.0\.0\. Use
+				\\Drupal\\migrate\\Plugin\\migrate\\source\\ContentEntity instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 1
+			path: src/Plugin/migrate/source/MediaContentEntity.php
+
+		-
+			message: '''
+				#^Call to method toArray\(\) of deprecated class Drupal\\migrate_drupal\\Plugin\\migrate\\source\\ContentEntity\:
+				in drupal\:11\.2\.0 and is removed from drupal\:12\.0\.0\. Use
+				\\Drupal\\migrate\\Plugin\\migrate\\source\\ContentEntity instead\.$#
+			'''
+			identifier: method.deprecatedClass
+			count: 2
+			path: src/Plugin/migrate/source/MediaContentEntity.php
+
+		-
+			message: '''
+				#^Class Drupal\\migrate_file_to_media\\Plugin\\migrate\\source\\MediaContentEntity extends deprecated class Drupal\\migrate_drupal\\Plugin\\migrate\\source\\ContentEntity\:
+				in drupal\:11\.2\.0 and is removed from drupal\:12\.0\.0\. Use
+				\\Drupal\\migrate\\Plugin\\migrate\\source\\ContentEntity instead\.$#
+			'''
+			identifier: class.extendsDeprecatedClass
+			count: 1
+			path: src/Plugin/migrate/source/MediaContentEntity.php
+
+		-
+			message: '#^Out of 53 possible return types, only 26 \- 49\.0 %% actually have it\. Add more return types to get over 99 %%$#'
+			identifier: typeCoverage.returnTypeCoverage
+			count: 2
+			path: src/Plugin/migrate/source/MediaContentEntity.php

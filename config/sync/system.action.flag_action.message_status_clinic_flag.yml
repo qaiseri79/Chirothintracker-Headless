@@ -1,0 +1,15 @@
+uuid: e2416cad-b9d2-4667-96b5-50fa03808e78
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.message_status_clinic
+  module:
+    - flag
+id: flag_action.message_status_clinic_flag
+label: '<span class="btn btn-primary">Mark as New</span>'
+type: webform_submission
+plugin: 'flag_action:message_status_clinic_flag'
+configuration:
+  flag_id: message_status_clinic
+  flag_action: flag

@@ -1,0 +1,47 @@
+uuid: 14f17b43-1f11-4a40-b21c-4b83713c2f6d
+langcode: en
+status: true
+dependencies:
+  module:
+    - contact_storage
+    - contact_storage_dm
+    - entity_redirect
+third_party_settings:
+  contact_storage:
+    submit_text: Submit
+    show_preview: true
+    disabled_form_message: 'This contact form has been disabled.'
+    maximum_submissions_user: 0
+    page_autoreply_format: plain_text
+  contact_storage_dm:
+    disabled: true
+  entity_redirect:
+    redirect:
+      anonymous:
+        active: false
+        destination: default
+        url: ''
+        external: ''
+      add:
+        active: true
+        destination: previous_page
+        url: ''
+        external: ''
+      edit:
+        active: true
+        destination: previous_page
+        url: ''
+        external: ''
+      delete:
+        active: true
+        destination: previous_page
+        url: ''
+        external: ''
+id: chiropractor_notes
+label: 'Chiropractor Notes'
+recipients:
+  - webmaster@example.com
+reply: ''
+weight: 0
+message: 'The content has been created successfully.'
+redirect: ''

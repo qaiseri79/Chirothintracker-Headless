@@ -1,0 +1,25 @@
+uuid: d0d1ef2a-f21a-4080-8104-f8839638e179
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: clinic.field_domain_base_no_protocol
+field_name: field_domain_base_no_protocol
+entity_type: clinic
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

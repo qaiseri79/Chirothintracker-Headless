@@ -1,0 +1,29 @@
+uuid: 6ef3b9bd-31bc-447d-8aa4-ec5ee657bed0
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.zerona_profile
+    - field.storage.contact_message.field_date
+  module:
+    - datetime
+    - disable_field
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: contact_message.zerona_profile.field_date
+field_name: field_date
+entity_type: contact_message
+bundle: zerona_profile
+label: Date
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    default_date_type: now
+    default_date: now
+default_value_callback: ''
+settings: {  }
+field_type: datetime

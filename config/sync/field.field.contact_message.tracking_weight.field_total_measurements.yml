@@ -1,0 +1,23 @@
+uuid: bcd14b14-67c3-4189-a020-e1b99b7d49ae
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_total_measurements
+id: contact_message.tracking_weight.field_total_measurements
+field_name: field_total_measurements
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Total Measurements'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

@@ -1,0 +1,15 @@
+uuid: 98a44abb-92ae-49d9-b2a9-3747f417557c
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.pin_cs
+  module:
+    - flag
+id: flag_action.pin_cs_flag
+label: '<span class="custom-pin"><i class="fa-solid fa-thumbtack"></i></span>'
+type: contact_message
+plugin: 'flag_action:pin_cs_flag'
+configuration:
+  flag_id: pin_cs
+  flag_action: flag

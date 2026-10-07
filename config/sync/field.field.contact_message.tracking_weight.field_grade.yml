@@ -1,0 +1,23 @@
+uuid: f9178793-335d-48a3-9738-90c44d004614
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_grade
+  module:
+    - options
+id: contact_message.tracking_weight.field_grade
+field_name: field_grade
+entity_type: contact_message
+bundle: tracking_weight
+label: 'On a scale of 1 to 10, grade your adherence to the plan, yesterday, with 10 being perfect.'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: 5
+default_value_callback: ''
+settings: {  }
+field_type: list_integer

@@ -1,0 +1,13 @@
+name: 'Webform Element Properties Example'
+type: module
+description: 'Provides an example that shows how to add custom properties to Webform elements.'
+package: 'Webform example'
+core_version_requirement: ^10.2
+dependencies:
+  - 'webform:webform'
+  - 'webform:webform_ui'
+
+# Information added by Drupal.org packaging script on 2026-03-19
+version: '6.2.10'
+project: 'webform'
+datestamp: 1773926339

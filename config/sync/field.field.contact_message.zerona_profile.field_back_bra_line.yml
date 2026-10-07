@@ -1,0 +1,23 @@
+uuid: 10bf8c2e-99cd-4f73-b5ac-c4b902c69bc2
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.zerona_profile
+    - field.storage.contact_message.field_back_bra_line
+id: contact_message.zerona_profile.field_back_bra_line
+field_name: field_back_bra_line
+entity_type: contact_message
+bundle: zerona_profile
+label: 'Back / Bra-Line'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

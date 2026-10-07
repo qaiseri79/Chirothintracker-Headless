@@ -1,0 +1,34 @@
+uuid: d078a064-ef78-4bfc-ad6d-62b2dcce6d6d
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_entity_type.patient_profile
+  module:
+    - entity_redirect
+third_party_settings:
+  entity_redirect:
+    redirect:
+      add:
+        active: 0
+        destination: default
+        url: ''
+        external: ''
+      edit:
+        active: 1
+        destination: previous_page
+        url: ''
+        external: ''
+      delete:
+        active: 1
+        destination: previous_page
+        url: ''
+        external: ''
+      anonymous:
+        active: 0
+        destination: default
+        url: ''
+        external: ''
+name: 'Lipo/Contour/Ideal Light'
+type: lipolight_profile
+description: 'Lipo/Contour/Ideal Light'

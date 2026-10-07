@@ -1,0 +1,29 @@
+uuid: 1c342577-8706-4c85-abf2-9fbfedcf4f0f
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.zerona_profile
+    - field.storage.patient_profile.field_above_umbilicus_loss
+  module:
+    - disable_field
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: patient_profile.zerona_profile.field_above_umbilicus_loss
+field_name: field_above_umbilicus_loss
+entity_type: patient_profile
+bundle: zerona_profile
+label: 'Above Umbilicus Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

@@ -1,0 +1,17 @@
+name: Migrate File To Media Example
+type: module
+description: Migrate file fields to media fields.
+package: Examples
+core_version_requirement: ^10.2 || ^11
+dependencies:
+- migrate_file_to_media:migrate_file_to_media
+config_devel:
+  install:
+  - migrate_plus.migration.migrate_file_to_media_example_article_images_step1
+  - migrate_plus.migration.migrate_file_to_media_example_article_images_step1_de
+  - migrate_plus.migration.migrate_file_to_media_example_article_images_step2
+
+# Information added by Drupal.org packaging script on 2026-02-13
+version: '2.0.15'
+project: 'migrate_file_to_media'
+datestamp: 1771004846

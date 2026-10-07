@@ -1,0 +1,11 @@
+uuid: 04e51308-be9f-4629-a472-00ab2b2a6150
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.yes_no
+id: taxonomy_term--yes_no
+disabled: false
+path: taxonomy_term--yes_no
+resourceType: taxonomy_term--yes_no
+resourceFields: {  }

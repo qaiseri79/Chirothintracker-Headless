@@ -1,0 +1,23 @@
+uuid: dca7860d-1980-4189-a9a6-d219d98fa2ab
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_archive
+id: contact_message.tracking_weight.field_archive
+field_name: field_archive
+entity_type: contact_message
+bundle: tracking_weight
+label: Archive
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: ''
+  off_label: ''
+field_type: boolean

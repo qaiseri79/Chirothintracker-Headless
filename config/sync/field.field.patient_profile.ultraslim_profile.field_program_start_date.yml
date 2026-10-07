@@ -1,0 +1,24 @@
+uuid: e0c28525-f012-495f-ac7e-bfb357dfcb62
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.ultraslim_profile
+    - field.storage.patient_profile.field_program_start_date
+  module:
+    - datetime
+id: patient_profile.ultraslim_profile.field_program_start_date
+field_name: field_program_start_date
+entity_type: patient_profile
+bundle: ultraslim_profile
+label: 'Program Start Date'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    default_date_type: now
+    default_date: now
+default_value_callback: ''
+settings: {  }
+field_type: datetime

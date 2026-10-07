@@ -1,0 +1,20 @@
+{#
+  Convert the existing Drupal item-list UL into a Bootstrap list-group.
+#}
+
+{% set out = output|render %}
+
+{# STEP 1: Remove the outer `<div class="item-list">` #}
+{% set out = out
+  |replace({'<div class="item-list">': ''})
+  |replace({'</div>': ''})
+%}
+
+{# STEP 2: Replace UL and LI with your desired Bootstrap classes #}
+{% set out = out
+  |replace({'<ul>': '<ul class="list-group small">'})
+  |replace({'<li>': '<li class="list-group-item">'})
+%}
+
+{# STEP 3: Output the modified markup AS RAW HTML #}
+{{ out|raw }}

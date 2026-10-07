@@ -1,0 +1,23 @@
+uuid: 324a2f9c-ec77-40eb-8d1c-ed7f22609c76
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: contact_message.field_visceral_fat_protocol
+field_name: field_visceral_fat_protocol
+entity_type: contact_message
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

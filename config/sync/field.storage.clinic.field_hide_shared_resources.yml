@@ -1,0 +1,22 @@
+uuid: e231f7aa-a6a1-48d9-9f4e-e6c165b8afc9
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: clinic.field_hide_shared_resources
+field_name: field_hide_shared_resources
+entity_type: clinic
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

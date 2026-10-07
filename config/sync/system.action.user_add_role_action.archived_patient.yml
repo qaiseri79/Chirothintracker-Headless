@@ -1,0 +1,14 @@
+uuid: 9e0010ac-41f6-4d58-b26b-27bb139faf9c
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.archived_patient
+  module:
+    - user
+id: user_add_role_action.archived_patient
+label: 'Add the Archived Patient role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: archived_patient

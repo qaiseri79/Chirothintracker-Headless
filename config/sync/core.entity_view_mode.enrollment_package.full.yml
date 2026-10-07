@@ -1,0 +1,11 @@
+uuid: 839f810a-368d-4ebc-84cd-f3d2b23cd7bf
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+id: enrollment_package.full
+label: Full
+description: ''
+targetEntityType: enrollment_package
+cache: true

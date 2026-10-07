@@ -1,0 +1,25 @@
+uuid: dafe1d3e-bd0f-4707-8181-2cb5db1fb937
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.chirothin_profile
+    - field.storage.patient_profile.field_patient
+id: patient_profile.chirothin_profile.field_patient
+field_name: field_patient
+entity_type: patient_profile
+bundle: chirothin_profile
+label: Patient
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: enrolled_patients
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

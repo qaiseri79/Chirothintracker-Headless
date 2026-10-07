@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Installation actions for menu_markup.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function menu_markup_install() {
+  // No specific installation actions required.
+}

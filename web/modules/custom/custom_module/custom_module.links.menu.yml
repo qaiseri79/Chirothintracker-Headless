@@ -1,0 +1,6 @@
+custom_module.admin_training_resources_batch_form:
+  title: 'Update Training and Resources for subscriber clinics'
+  route_name: custom_module.admin_training_resources_batch_form
+  description: 'Update training and resources for subscriber clinics'
+  parent: system.admin_content
+  weight: 10

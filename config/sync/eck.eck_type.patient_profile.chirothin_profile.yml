@@ -1,0 +1,9 @@
+uuid: ef13ba1d-ecfb-4c98-93c0-1eb7948a2226
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_entity_type.patient_profile
+name: 'Weight Loss'
+type: chirothin_profile
+description: 'Weight Loss'

@@ -1,0 +1,29 @@
+uuid: a833f98c-4233-4274-bd66-bedfbd5880a1
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.recipes
+  module:
+    - system
+    - views
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_views_block__recipes_block_3
+theme: chirothintracker_subtheme
+region: content
+weight: -8
+provider: null
+plugin: 'views_block:recipes-block_3'
+settings:
+  id: 'views_block:recipes-block_3'
+  label: 'Recipe Shared Resources'
+  label_display: '0'
+  provider: views
+  views_label: 'Recipe Shared Resources'
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /recipes

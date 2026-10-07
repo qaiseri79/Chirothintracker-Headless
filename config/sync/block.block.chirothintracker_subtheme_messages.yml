@@ -1,0 +1,22 @@
+uuid: 22f0ae06-0490-416e-9545-56772965cde6
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - chirothintracker_subtheme
+_core:
+  default_config_hash: oyOEIs369ROnfPi6gyhk6jwT-0bn5jVZFsdPlZ_jjuw
+id: chirothintracker_subtheme_messages
+theme: chirothintracker_subtheme
+region: content
+weight: -23
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: Messages
+  label_display: '0'
+  provider: system
+visibility: {  }

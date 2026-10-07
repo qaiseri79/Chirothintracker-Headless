@@ -1,0 +1,11 @@
+uuid: 87f1d4a8-8fa3-4bcf-b9e3-b3307ff16419
+langcode: en
+status: true
+dependencies: {  }
+id: patient_account
+label: 'Patient Account'
+recipients: {  }
+reply: ''
+weight: 0
+message: null
+redirect: null

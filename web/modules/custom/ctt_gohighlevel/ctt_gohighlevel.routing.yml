@@ -1,0 +1,7 @@
+ctt_gohighlevel.settings:
+  path: '/admin/config/services/ctt-gohighlevel'
+  defaults:
+    _form: '\Drupal\ctt_gohighlevel\Form\GoHighLevelSettingsForm'
+    _title: 'CTT GoHighLevel Settings'
+  requirements:
+    _permission: 'administer site configuration'

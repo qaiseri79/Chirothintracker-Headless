@@ -1,0 +1,21 @@
+uuid: cdf1fd19-b880-4991-b7df-48594d83fca1
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_current_phase
+id: contact_message.tracking_weight.field_current_phase
+field_name: field_current_phase
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Current Phase'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: '[current-user:field_gross_weight_loss]'
+default_value_callback: ''
+settings: {  }
+field_type: string

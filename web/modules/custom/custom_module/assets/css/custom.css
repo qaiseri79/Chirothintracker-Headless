@@ -1,0 +1,119 @@
+/*.legend {
+    float: left;
+    display: inline-block;
+    border: thin solid black;
+    padding: 0.1em;
+    font-weight: 500;
+    background-color: white;
+    margin: 0.1em;
+}
+.weight-flag-3 {
+    border: 0.2em solid #b77a22;
+    background-color: #b77a22;
+    color: white;
+}
+.weight-flag-4 {
+    border: 0.2em solid #9a3347;
+    background-color: #9a3347;
+    color: white;
+}
+.weight-flag-5 {
+    border: 0.2em solid #c9688c;
+    background-color: #c9688c;
+}
+.weight-flag-84 {
+    border: 0.2em solid #5f8dcc;
+    background-color: #5f8dcc;
+}
+.weight-flag-7 {
+    border: 0.2em solid #fbd005;
+    background-color: #fbd005;
+}
+.weight-flag-8 {
+    border: 0.2em solid #4b8060;
+    background-color: #4b8060;
+    color: white;
+}
+.weight-flag-9 {
+    border: 0.2em solid #715090;
+    background-color: #715090;
+    color: white;
+}
+.weight-flag-10 {
+    border: 0.2em solid #2298a9;
+    background-color: #2298a9;
+    color: white;
+}
+.weight-flag-11 {
+    border: 0.2em solid #a03884;
+    background-color: #a03884;
+    color: white;
+}
+.weight-flag-15 {
+    border: 0.2em solid #000;
+}
+.weight-flag-18 {
+    border: 0.2em solid #ef2125;
+}
+.home-button {
+    color: white;
+    background-color: #022f5a;
+    display: block;
+    float: left;
+    margin: 1em;
+    padding: 1em;
+    padding-top: 2em;
+    width: 125px;
+    height: 125px;
+    box-shadow: 10px 10px 5px #888888;
+    text-align: center;
+    font-size: 120%;
+    border-style: 1 solid darkblue;
+    border-radius: 1em;
+}*/
+/*.panel-primary {
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    border-color: #428bca;
+}*/
+.panel {
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    border-color: #428bca;
+}
+.panel-primary > .panel-heading {
+    color: #fff;
+    background-color: #428bca;
+    border-color: #428bca;
+}
+.panel-heading {
+    display: block;
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+}
+.panel-body {
+    padding: 15px;
+}
+.panel-default {
+    border-color: #ddd;
+}
+.panel-default > .panel-heading {
+    color: #333333;
+    background-color: #f5f5f5;
+    border-color: #ddd;
+}
+.panel-footer {
+    padding: 10px 15px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+}

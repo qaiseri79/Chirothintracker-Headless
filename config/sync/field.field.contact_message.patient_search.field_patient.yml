@@ -1,0 +1,34 @@
+uuid: 652c3b42-3859-4433-8b6e-e808a69a7174
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_search
+    - field.storage.contact_message.field_patient
+id: contact_message.patient_search.field_patient
+field_name: field_patient
+entity_type: contact_message
+bundle: patient_search
+label: Patient
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    view:
+      view_name: enrolled_patients
+      display_name: entityreference_1
+      args: {  }
+    behaviors:
+      field_default_token:
+        status: true
+      views-select-list:
+        status: 0
+field_type: entity_reference

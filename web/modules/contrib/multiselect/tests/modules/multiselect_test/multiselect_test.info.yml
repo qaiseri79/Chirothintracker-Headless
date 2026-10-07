@@ -1,0 +1,12 @@
+name: 'Multiselect test module'
+description: 'Provides a test page with a multiselect form element.'
+type: module
+core_version_requirement: ^9 || ^10 || ^11
+package: Testing
+dependencies:
+  - multiselect:multiselect
+
+# Information added by Drupal.org packaging script on 2024-03-26
+version: '2.0.0-beta4'
+project: 'multiselect'
+datestamp: 1711477685

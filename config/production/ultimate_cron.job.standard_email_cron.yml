@@ -1,0 +1,30 @@
+uuid: 32c8c758-82a7-4428-bf44-99951fbc4491
+langcode: en
+status: true
+dependencies:
+  module:
+    - custom_module
+title: 'Standard Mail'
+id: standard_email_cron
+weight: 0
+module: custom_module
+callback: standard_email_cron
+scheduler:
+  id: crontab
+  configuration:
+    rules:
+      - '20 6 * * *'
+    catch_up: 0
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: database
+  configuration:
+    method: '3'
+    expire: 1209600
+    retain: 1000

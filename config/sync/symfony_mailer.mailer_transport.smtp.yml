@@ -1,0 +1,18 @@
+uuid: 260d6cf0-d260-4ebb-b8db-f3f96fc5a80b
+langcode: en
+status: true
+dependencies: {  }
+id: smtp
+label: SMTP
+plugin: smtp
+configuration:
+  user: qaiseri79@gmail.com
+  pass: 'cdcx braj qfbe groz'
+  host: smtp.gmail.com
+  port: 465
+  query:
+    verify_peer: true
+    local_domain: ''
+    restart_threshold: null
+    restart_threshold_sleep: null
+    ping_threshold: null

@@ -1,0 +1,25 @@
+uuid: 0770e58e-1be0-4008-b04b-97e4fdd0e7b2
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.zerona_profile
+    - field.storage.patient_profile.field_sessions_available
+id: patient_profile.zerona_profile.field_sessions_available
+field_name: field_sessions_available
+entity_type: patient_profile
+bundle: zerona_profile
+label: 'Sessions Available'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  min: 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

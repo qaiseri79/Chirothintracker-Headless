@@ -1,0 +1,21 @@
+uuid: a73d9ed7-4ebf-4a11-871e-fdde5c4e1fa3
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node_training
+label: 'Content - Training'
+type: 'canonical_entities:node'
+pattern: 'training/[node:title]'
+selection_criteria:
+  -
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: node
+    bundles:
+      training: training
+selection_logic: and
+weight: 0
+relationships: {  }

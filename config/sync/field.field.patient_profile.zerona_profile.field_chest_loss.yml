@@ -1,0 +1,23 @@
+uuid: a12be360-caee-4335-bfbc-9c43cbcbaa87
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.zerona_profile
+    - field.storage.patient_profile.field_chest_loss
+id: patient_profile.zerona_profile.field_chest_loss
+field_name: field_chest_loss
+entity_type: patient_profile
+bundle: zerona_profile
+label: 'Chest Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

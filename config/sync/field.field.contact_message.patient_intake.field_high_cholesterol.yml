@@ -1,0 +1,23 @@
+uuid: 7348a5f8-ab28-4f01-ad98-304d8dd50b81
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_high_cholesterol
+  module:
+    - options
+id: contact_message.patient_intake.field_high_cholesterol
+field_name: field_high_cholesterol
+entity_type: contact_message
+bundle: patient_intake
+label: 'Have you been diagnosed with high cholesterol?'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: '0'
+default_value_callback: ''
+settings: {  }
+field_type: list_string

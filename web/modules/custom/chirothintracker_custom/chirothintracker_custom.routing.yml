@@ -1,0 +1,79 @@
+chirothintracker_custom.my_controller:
+  path: '/my-controller'
+  defaults:
+    _controller: '\Drupal\chirothintracker_custom\Controller\MyController::MyMethod'
+    _title: 'My Controller'
+  requirements:
+    _permission: 'access content' 
+chirothintracker_custom.my_controller_training:
+  path: '/my-controller-training'
+  defaults:
+    _controller: '\Drupal\chirothintracker_custom\Controller\MyController::MyMethodTraining'
+    _title: 'My Controller Training'
+  requirements:
+    _permission: 'access content'
+chirothintracker_custom.my_controller_recipe:
+  path: '/my-controller-recipe'
+  defaults:
+    _controller: '\Drupal\chirothintracker_custom\Controller\MyController::MyMethodRecipe'
+    _title: 'My Controller Training'
+  requirements:
+    _permission: 'access content'
+chirothintracker_custom.my_controller_clinic:
+  path: '/my-eck-clinic'
+  defaults:
+    _controller: '\Drupal\chirothintracker_custom\Controller\MyECKController::MyMethodClinic'
+    _title: 'My ECK Controller'
+  requirements:
+    _permission: 'access content'
+chirothintracker_custom.my_controller_clinic_location:
+  path: '/my-eck-clinic-location'
+  defaults:
+    _controller: '\Drupal\chirothintracker_custom\Controller\MyECKController::MyMethodClinicLocation'
+    _title: 'My ECK Controller'
+  requirements:
+    _permission: 'access content' 
+chirothintracker_custom.my_controller_chirothin_profile:
+  path: '/my-patient-profile-chirothin-profile'
+  defaults:
+    _controller: '\Drupal\chirothintracker_custom\Controller\MyECKController::MyMethodChirothinProfile'
+    _title: 'My ECK Controller'
+  requirements:
+    _permission: 'access content'        
+chirothintracker_custom.my_controller_ultraslim:
+  path: '/my-patient-profile-ultraslim'
+  defaults:
+    _controller: '\Drupal\chirothintracker_custom\Controller\MyECKController::MyMethodUlrtraSlim'
+    _title: 'My ECK Controller'
+  requirements:
+    _permission: 'access content'
+chirothintracker_custom.my_controller_lipolight:
+  path: '/my-patient-profile-lipolight'
+  defaults:
+    _controller: '\Drupal\chirothintracker_custom\Controller\MyECKController::MyMethodLipoLight'
+    _title: 'My ECK Controller'
+  requirements:
+    _permission: 'access content'  
+chirothintracker_custom.my_controller_zerona:
+  path: '/my-patient-profile-zerona'
+  defaults:
+    _controller: '\Drupal\chirothintracker_custom\Controller\MyECKController::MyMethodZerona'
+    _title: 'My ECK Controller'
+  requirements:
+    _permission: 'access content'        
+chirothintracker_custom.my_controller_intake:
+  path: '/entity-form-intake'
+  defaults:
+    _controller: '\Drupal\chirothintracker_custom\Controller\MyECKController::MyMethodIntake'
+    _title: 'My ECK Controller'
+  requirements:
+    _permission: 'access content'
+chirothintracker_custom.my_controller_daily_message:
+  path: '/my-controller-daily-message'
+  defaults:
+    _controller: '\Drupal\chirothintracker_custom\Controller\MyController::MyMethodDailyMessage'
+    _title: 'My Controller Daily Message'
+  requirements:
+    _permission: 'access content'   
+
+

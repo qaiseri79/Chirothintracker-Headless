@@ -1,0 +1,39 @@
+uuid: 2e4b276a-c23c-4774-adc6-5d7bf348c7fb
+langcode: en
+status: true
+dependencies:
+  module:
+    - entity_redirect
+third_party_settings:
+  entity_redirect:
+    redirect:
+      add:
+        active: 0
+        destination: default
+        url: ''
+        external: ''
+      edit:
+        active: 0
+        destination: default
+        url: ''
+        external: ''
+      delete:
+        active: 0
+        destination: default
+        url: ''
+        external: ''
+      anonymous:
+        active: 0
+        destination: default
+        url: ''
+        external: ''
+id: chironutraceutical
+label: Chironutraceutical
+traits: {  }
+locked: false
+description: ''
+variationTypes:
+  - chironutraceutical_ns
+  - chironutraceutical_variations
+multipleVariations: true
+injectVariationFields: true

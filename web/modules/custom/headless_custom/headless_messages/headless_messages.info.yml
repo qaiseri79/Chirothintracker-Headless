@@ -1,0 +1,15 @@
+name: 'Headless Messages'
+type: module
+description: 'Headless API endpoints for patient/chiropractor messaging.'
+package: 'ChiroThin'
+core_version_requirement: ^10
+dependencies:
+  - drupal:contact
+  - drupal:user
+  - drupal:flag
+  - drupal:file
+  - drupal:filter
+  - headless_custom:headless_session
+  # Routes are gated by PortalMemberAccess; the role list lives here, not in this
+  # module. See the access notes in headless_messages.routing.yml.
+  - headless_custom:headless_access

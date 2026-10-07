@@ -1,0 +1,24 @@
+uuid: efe540b4-09df-4316-a959-18835afb8194
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_date
+  module:
+    - datetime
+id: contact_message.tracking_weight.field_date
+field_name: field_date
+entity_type: contact_message
+bundle: tracking_weight
+label: Date
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    default_date_type: now
+    default_date: now
+default_value_callback: ''
+settings: {  }
+field_type: datetime

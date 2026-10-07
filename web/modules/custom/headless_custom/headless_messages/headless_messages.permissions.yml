@@ -1,0 +1,20 @@
+# No permissions are declared here on purpose.
+#
+# This module used to declare `access headless messages` and grant it to the four
+# portal roles in hook_install(), with an update hook to catch older installations.
+# That arrangement is gone.
+#
+# Access now comes from the shared policy classes in the headless_access module.
+# The routes are gated by `PortalMemberAccess`, which reads the role machine names
+# from `PortalRoles::PORTAL_MEMBERS` — the same four roles this module used to
+# spell out in its own list.
+#
+# A permission per module means the same question — who is a chiropractor, who is a
+# patient — gets answered again in every module, and the answers drift. They had
+# already drifted once: this module granted its permission to the patient roles
+# while headless_patients deliberately did not, and nothing in code held the
+# difference in place.
+#
+# Deleting the permission definition also removes the ability to grant it by hand,
+# which is the point: the roles are now the only thing that decides who may reach
+# these endpoints.

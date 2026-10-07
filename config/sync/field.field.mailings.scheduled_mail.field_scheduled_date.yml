@@ -1,0 +1,21 @@
+uuid: 247bb4c3-3f74-4053-949a-2110e0ad5d00
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.mailings.scheduled_mail
+    - field.storage.mailings.field_scheduled_date
+  module:
+    - datetime
+id: mailings.scheduled_mail.field_scheduled_date
+field_name: field_scheduled_date
+entity_type: mailings
+bundle: scheduled_mail
+label: 'Scheduled Date'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

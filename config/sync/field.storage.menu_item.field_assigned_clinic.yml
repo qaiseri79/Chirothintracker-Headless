@@ -1,0 +1,23 @@
+uuid: 6fba9822-aa43-450a-80b9-870a48f83e3d
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: custom
+id: menu_item.field_assigned_clinic
+field_name: field_assigned_clinic
+entity_type: menu_item
+type: entity_reference
+settings:
+  target_type: clinic
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

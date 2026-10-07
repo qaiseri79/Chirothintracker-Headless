@@ -1,0 +1,37 @@
+uuid: a150e0cb-3c5a-40d2-b507-4439972bc584
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+    - options
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: contact_message.field_history_bariatric_surgery
+field_name: field_history_bariatric_surgery
+entity_type: contact_message
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '1'
+      label: 'Gastric Bypass (Roux-en-Y-Gastric Bypass)'
+    -
+      value: '2'
+      label: 'Lap Band (Laparoscopic Adjustable Gastric Banding)'
+    -
+      value: '3'
+      label: 'Sleeve Gastrectomy'
+    -
+      value: '4'
+      label: 'Biliopancratic Diversion with Duodenal Switch'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

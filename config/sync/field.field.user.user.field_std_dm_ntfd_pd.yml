@@ -1,0 +1,29 @@
+uuid: 6003ee5a-6903-413f-a45d-db2891c3f00c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_std_dm_ntfd_pd
+  module:
+    - disable_field
+    - user
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: user.user.field_std_dm_ntfd_pd
+field_name: field_std_dm_ntfd_pd
+entity_type: user
+bundle: user
+label: 'Standard Daily Msg Notified Program Day'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

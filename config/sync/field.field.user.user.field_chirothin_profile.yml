@@ -1,0 +1,26 @@
+uuid: ad88685e-a6fc-42d3-89eb-908a5f026803
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_chirothin_profile
+  module:
+    - user
+id: user.user.field_chirothin_profile
+field_name: field_chirothin_profile
+entity_type: user
+bundle: user
+label: 'ChiroThin Profile'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: my_patient_profiles
+      display_name: entity_reference_2
+      arguments: {  }
+field_type: entity_reference

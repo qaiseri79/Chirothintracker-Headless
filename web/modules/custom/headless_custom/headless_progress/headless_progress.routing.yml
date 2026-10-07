@@ -1,0 +1,120 @@
+# Headless Progress routes.
+#
+# ## Access
+#
+# Every route is gated by `PortalMemberAccess` from the headless_access module
+# rather than by a permission declared here.
+#
+# This module previously declared `access headless progress` and granted it to four
+# roles from its own `hook_install()`. That is the arrangement headless_access
+# exists to replace: the role list was a third copy of the portal's roles and it
+# had already drifted once — headless_progress granted its permission to the
+# patient roles while headless_patients deliberately did not, with nothing in code
+# holding the two apart. The gate is now stated once, in
+# {@see \Drupal\headless_access\PortalRoles::PORTAL_MEMBERS}.
+#
+# `PORTAL_MEMBERS` and not a chiropractor-only policy: progress is the patient's
+# own data. The chiropractor has no business reading one patient's progress
+# through this endpoint — the roster is the chiropractor's view — and the read is
+# scoped to the current user by ProgressService regardless.
+#
+# This gate admits; it does not widen. It gets a caller to the controller, and
+# ProgressService decides whose data comes back.
+#
+# ## Requirements, not defaults
+#
+# `_custom_access` sits in `requirements` because that is the only block Drupal
+# evaluates for access. `_auth` is an option, read by AuthenticationManager, so it
+# belongs in `options` rather than `requirements` as it did before.
+#
+# No `_access: 'TRUE'` is written anywhere. AccessAwareRouter adds that
+# requirement itself to every route; hand-writing it only obscures whether a gate
+# is actually present.
+#
+# ## One path, two methods
+#
+# `get_entry` and `delete_entry` share `/entry/{message_id}` and are disambiguated
+# by the HTTP method. Sharing the path keeps one resource per entry instead of
+# inventing a second URL shape for the same entity.
+#
+# ## No CSRF token on the POST routes
+#
+# The session cookie is forwarded from the Next.js server and is HttpOnly, so a
+# cross-site form post cannot carry it, and no browser JS in this system holds a
+# cookie. Do not add a token check without first giving the client a way to obtain
+# a valid one, or every write fails with a 403 that looks like a permissions
+# problem.
+
+headless_progress.current:
+  path: '/api/headless/progress'
+  defaults:
+    _controller: '\Drupal\headless_progress\Controller\ProgressController::current'
+    _title: 'Current patient progress'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\PortalMemberAccess::access'
+  options:
+    _auth: ['cookie']
+    no_cache: true
+
+headless_progress.submit:
+  path: '/api/headless/progress/submit'
+  defaults:
+    _controller: '\Drupal\headless_progress\Controller\ProgressController::submit'
+    _title: 'Submit progress log'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WritePatientAccess::access'
+  options:
+    _auth: ['cookie']
+    no_cache: true
+  methods: [POST]
+
+headless_progress.update:
+  path: '/api/headless/progress/update/{message_id}'
+  defaults:
+    _controller: '\Drupal\headless_progress\Controller\ProgressController::update'
+    _title: 'Update progress log entry'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WritePatientAccess::access'
+    message_id: \d+
+  options:
+    _auth: ['cookie']
+    no_cache: true
+  methods: [POST]
+
+headless_progress.get_entry:
+  path: '/api/headless/progress/entry/{message_id}'
+  defaults:
+    _controller: '\Drupal\headless_progress\Controller\ProgressController::getEntry'
+    _title: 'Get progress log entry for editing'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\PortalMemberAccess::access'
+    message_id: \d+
+  options:
+    _auth: ['cookie']
+    no_cache: true
+  methods: [GET]
+
+headless_progress.delete_entry:
+  path: '/api/headless/progress/entry/{message_id}'
+  defaults:
+    _controller: '\Drupal\headless_progress\Controller\ProgressController::deleteEntry'
+    _title: 'Delete a progress log entry'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WritePatientAccess::access'
+    message_id: \d+
+  options:
+    _auth: ['cookie']
+    no_cache: true
+  methods: [DELETE]
+
+headless_progress.sync:
+  path: '/api/headless/progress/sync'
+  defaults:
+    _controller: '\Drupal\headless_progress\Controller\ProgressController::sync'
+    _title: 'Sync progress logs'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WritePatientAccess::access'
+  options:
+    _auth: ['cookie']
+    no_cache: true
+  methods: [POST]

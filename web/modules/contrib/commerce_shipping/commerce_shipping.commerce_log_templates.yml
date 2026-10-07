@@ -1,0 +1,4 @@
+shipment_state_updated:
+  category: commerce_order
+  label: 'Shipment state updated'
+  template: '<p><a href="{{ shipment_url }}">{{ shipment_label }}</a> moved from <em>{{ from_state }}</em> to <em>{{ to_state }}</em> by the <em>{{ transition_label }}</em> transition.</p>'

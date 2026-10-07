@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * @file
+ * Test module for the xnumber fields testing.
+ */
+
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function xnumber_test_entity_base_field_info(EntityTypeInterface $entity_type) {
+  $fields = [];
+
+  if ($entity_type->id() === 'entity_test') {
+    $fields['xinteger_base'] = BaseFieldDefinition::create('xinteger')
+      ->setLabel('Xinteger Base Field')
+      ->setDescription('Tests xinteger field declared as a base field.')
+      ->setDefaultValue(12345)
+      ->setDisplayOptions('form', [
+        'type' => 'xnumber',
+        'weight' => -1,
+      ])
+      ->setDisplayOptions('view', [
+        'type' => 'number_integer',
+        'weight' => -1,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['xdecimal_base'] = BaseFieldDefinition::create('xdecimal')
+      ->setLabel('Xdecimal Base Field')
+      ->setDescription('Tests xdecimal field declared as a base field.')
+      ->setDefaultValue(12345.67)
+      ->setDisplayOptions('form', [
+        'type' => 'xnumber',
+        'weight' => -1,
+      ])
+      ->setDisplayOptions('view', [
+        'type' => 'number_decimal',
+        'weight' => -1,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['xfloat_base'] = BaseFieldDefinition::create('xfloat')
+      ->setLabel('Xfloat Base Field')
+      ->setDescription('Tests xfloat field declared as a base field.')
+      ->setDefaultValue(123456789.98765)
+      ->setDisplayOptions('form', [
+        'type' => 'xnumber',
+        'weight' => -1,
+      ])
+      ->setDisplayOptions('view', [
+        'type' => 'number_decimal',
+        'weight' => -1,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('view', TRUE);
+  }
+
+  return $fields;
+}

@@ -1,0 +1,12 @@
+uuid: f9157f39-5b99-4ef9-aa25-75e9b17c40ba
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+id: ecommerce_manager
+label: 'eCommerce Manager'
+weight: 11
+is_admin: null
+permissions:
+  - 'delete own files'

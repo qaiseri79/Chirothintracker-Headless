@@ -1,0 +1,28 @@
+uuid: 6f580a9a-6f44-4bdd-87bb-0f160406339f
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.clinic.clinic
+    - field.storage.clinic.field_fulfillment_type
+  module:
+    - disable_field
+    - options
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: clinic.clinic.field_fulfillment_type
+field_name: field_fulfillment_type
+entity_type: clinic
+bundle: clinic
+label: 'Product Fulfillment Type'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: both
+default_value_callback: ''
+settings: {  }
+field_type: list_string

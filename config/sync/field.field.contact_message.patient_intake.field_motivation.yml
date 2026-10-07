@@ -1,0 +1,19 @@
+uuid: 1734f2d6-2d33-46fa-b6c1-8d14bb5f4b52
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_motivation
+id: contact_message.patient_intake.field_motivation
+field_name: field_motivation
+entity_type: contact_message
+bundle: patient_intake
+label: 'What is your motivation for losing weight?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

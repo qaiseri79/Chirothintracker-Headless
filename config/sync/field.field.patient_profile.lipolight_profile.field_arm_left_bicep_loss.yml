@@ -1,0 +1,23 @@
+uuid: 7801639f-d5eb-420d-9d82-ad03dc3f7f64
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.lipolight_profile
+    - field.storage.patient_profile.field_arm_left_bicep_loss
+id: patient_profile.lipolight_profile.field_arm_left_bicep_loss
+field_name: field_arm_left_bicep_loss
+entity_type: patient_profile
+bundle: lipolight_profile
+label: 'Arm Left Bicep Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

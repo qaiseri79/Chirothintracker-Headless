@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * Implements hook_uninstall().
+*/
+function commerce_cart_redirection_uninstall() {
+  $logger = \Drupal::logger('commerce_cart_redirection');
+  $config = \Drupal::configFactory()->getEditable('commerce_cart_redirection.settings');
+  try {
+    $config->delete();
+    $logger->warning('Uninstalled config commerce_cart_redirection.settings');
+  }
+  catch (\Exception $e) {
+    $logger->warning('Unable to uninstall config commerce_cart_redirection.settings');
+  }
+}

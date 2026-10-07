@@ -1,0 +1,32 @@
+uuid: 35babf79-ec0f-4a3d-b915-ca364832a8b7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_shipping_methods
+  module:
+    - disable_field
+    - user
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: user.user.field_shipping_methods
+field_name: field_shipping_methods
+entity_type: user
+bundle: user
+label: 'Shipping methods'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:commerce_shipping_method'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+field_type: entity_reference

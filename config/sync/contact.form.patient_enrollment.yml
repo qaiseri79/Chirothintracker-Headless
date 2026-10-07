@@ -1,0 +1,11 @@
+uuid: 9640a290-099b-4372-9372-d89404dea127
+langcode: en
+status: true
+dependencies: {  }
+id: patient_enrollment
+label: 'Patient Enrollment'
+recipients: {  }
+reply: ''
+weight: 0
+message: null
+redirect: null

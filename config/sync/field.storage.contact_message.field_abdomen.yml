@@ -1,0 +1,24 @@
+uuid: 4b14c5c1-ba5e-4065-9f12-1395ca5a2d3a
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: contact_message.field_abdomen
+field_name: field_abdomen
+entity_type: contact_message
+type: decimal
+settings:
+  precision: 10
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

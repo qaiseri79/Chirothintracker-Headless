@@ -1,0 +1,22 @@
+uuid: 8cd782d5-ef66-46b7-912f-8b55865d3564
+langcode: und
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - user
+third_party_settings:
+  field_permissions:
+    permission_type: custom
+id: user.field_overall_start_weight
+field_name: field_overall_start_weight
+entity_type: user
+type: float
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

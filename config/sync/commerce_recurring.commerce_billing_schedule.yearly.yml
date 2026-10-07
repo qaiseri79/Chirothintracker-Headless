@@ -1,0 +1,22 @@
+uuid: 45250981-df04-4134-adf1-2f60ddfa171e
+langcode: en
+status: true
+dependencies: {  }
+id: yearly
+label: Yearly
+displayLabel: Yearly
+billingType: prepaid
+combineSubscriptions: false
+retrySchedule:
+  - 1
+  - 2
+  - 3
+unpaidSubscriptionState: canceled
+plugin: rolling
+configuration:
+  trial_interval: {  }
+  interval:
+    number: 1
+    unit: year
+prorater: proportional
+proraterConfiguration: {  }

@@ -1,0 +1,25 @@
+custom_module.add_variation_chironutraceutical_ns:
+  route_name: entity.commerce_product_variation.add_form
+  route_parameters:
+    commerce_product_variation_type: chironutraceutical_ns
+  title: 'Add variation (Not Shippable)'
+  appears_on:
+    - entity.commerce_product_variation.collection
+  options:
+    attributes:
+      class:
+        - button
+        - button--primary
+
+custom_module.add_variation_chironutraceutical_shippable:
+  route_name: entity.commerce_product_variation.add_form
+  route_parameters:
+    commerce_product_variation_type: chironutraceutical_variations
+  title: 'Add variation (Shippable)'
+  appears_on:
+    - entity.commerce_product_variation.collection
+  options:
+    attributes:
+      class:
+        - button
+        - button--primary

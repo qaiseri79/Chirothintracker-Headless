@@ -1,0 +1,5 @@
+name: 'Headless session'
+type: module
+description: 'Headless API endpoint that reports the account behind the current Drupal session. Part of the headless API module family in custom/headless_custom.'
+package: 'ChiroThin'
+core_version_requirement: ^10 || ^11

@@ -1,0 +1,14 @@
+uuid: 1ed6a513-6eac-4bcd-9230-18288d2b47e3
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.impersonator
+  module:
+    - user
+id: user_add_role_action.impersonator
+label: 'Add the Impersonator role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: impersonator

@@ -1,0 +1,19 @@
+uuid: f7dec104-ace3-467b-95aa-39b36484c76c
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_emergency_contact_name
+id: contact_message.patient_intake.field_emergency_contact_name
+field_name: field_emergency_contact_name
+entity_type: contact_message
+bundle: patient_intake
+label: 'Emergency Contact Name'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

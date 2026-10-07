@@ -1,0 +1,23 @@
+uuid: 3657992b-0e6e-48a6-acf8-da0b906227f5
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_buttocks
+id: contact_message.ultraslim_profile.field_buttocks
+field_name: field_buttocks
+entity_type: contact_message
+bundle: ultraslim_profile
+label: Buttocks
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

@@ -1,0 +1,29 @@
+uuid: 0bc55474-8153-4f7a-8983-29fe10c6fa9f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.review_messages.field_message
+    - field.field.node.review_messages.field_published_to
+    - node.type.review_messages
+  module:
+    - user
+id: node.review_messages.default
+targetEntityType: node
+bundle: review_messages
+mode: default
+content:
+  field_message:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_published_to: true

@@ -1,0 +1,23 @@
+uuid: 5e61976b-d72e-4a22-bd92-67787152b367
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_blood_sugar
+id: contact_message.tracking_weight.field_blood_sugar
+field_name: field_blood_sugar
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Morning Blood Sugar'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

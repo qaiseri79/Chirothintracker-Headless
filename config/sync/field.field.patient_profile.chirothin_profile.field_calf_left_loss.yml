@@ -1,0 +1,23 @@
+uuid: b8257719-be36-4b24-b46a-a15e95c74d21
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.chirothin_profile
+    - field.storage.patient_profile.field_calf_left_loss
+id: patient_profile.chirothin_profile.field_calf_left_loss
+field_name: field_calf_left_loss
+entity_type: patient_profile
+bundle: chirothin_profile
+label: 'Calf - Left Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

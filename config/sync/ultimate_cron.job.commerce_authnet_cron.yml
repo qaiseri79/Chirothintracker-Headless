@@ -1,0 +1,17 @@
+uuid: ba070634-3bf7-4788-8e31-5c8d0c2e5a78
+langcode: en
+status: false
+dependencies:
+  module:
+    - commerce_authnet
+title: 'Default cron handler'
+id: commerce_authnet_cron
+weight: 0
+module: commerce_authnet
+callback: 'commerce_authnet#cron'
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database

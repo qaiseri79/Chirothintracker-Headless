@@ -1,0 +1,20 @@
+parameters:
+  level: 6
+  reportUnmatchedIgnoredErrors: false
+  customRulesetUsed: true
+  checkMissingIterableValueType: false
+  checkGenericClassInNonGenericObjectType: false
+  fileExtensions:
+    - module
+    - theme
+    - inc
+    - install
+    - profile
+    - engine
+  ignoreErrors:
+    - '#Plugin definitions cannot be altered.#'
+  excludePaths:
+    - '*/tests/*.php'
+includes:
+  - ../../../../vendor/mglaman/phpstan-drupal/extension.neon
+  - ../../../../vendor/phpstan/phpstan-deprecation-rules/rules.neon

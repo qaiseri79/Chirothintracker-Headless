@@ -1,0 +1,9 @@
+uuid: 793d9cf8-4e65-40b8-a57d-8113ae9613a2
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_entity_type.customization
+name: 'Standard Messages'
+type: standard_messages
+description: 'Standard Messages'

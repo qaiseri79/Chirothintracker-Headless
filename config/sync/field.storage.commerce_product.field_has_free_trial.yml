@@ -1,0 +1,18 @@
+uuid: ddb39203-eb94-4f49-a5df-31bf908c3a83
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_product
+id: commerce_product.field_has_free_trial
+field_name: field_has_free_trial
+entity_type: commerce_product
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

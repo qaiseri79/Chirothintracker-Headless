@@ -1,0 +1,23 @@
+uuid: f2c0e067-6b32-4348-99ab-ed03bda7eede
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_age
+    - paragraphs.paragraphs_type.significant_emotional_trauma
+id: paragraph.significant_emotional_trauma.field_age
+field_name: field_age
+entity_type: paragraph
+bundle: significant_emotional_trauma
+label: Age
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

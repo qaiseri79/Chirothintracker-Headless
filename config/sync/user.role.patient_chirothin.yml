@@ -1,0 +1,15 @@
+uuid: dec17d6b-348e-480f-8c38-789a30f02a6b
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+    - pfdp
+id: patient_chirothin
+label: 'Patient - ChiroThin'
+weight: 16
+is_admin: null
+permissions:
+  - 'bypass pfdp'
+  - 'bypass pfdp for temporary files'
+  - 'delete own files'

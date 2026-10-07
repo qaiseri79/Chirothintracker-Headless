@@ -1,0 +1,64 @@
+<?php
+
+/**
+ * @file
+ * Contains hooks for Commerce Authorize.net.
+ */
+
+use Drupal\commerce_authnet\Plugin\Commerce\PaymentGateway\AcceptHosted;
+use Drupal\commerce_authnet\Plugin\Commerce\PaymentGateway\VisaCheckout;
+use Drupal\commerce_checkout\Plugin\Commerce\CheckoutFlow\CheckoutFlowInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\Context\EntityContext;
+
+/**
+ * Implements hook_theme().
+ */
+function commerce_authnet_theme() {
+  $theme = [
+    'commerce_authnet_credit_card_logos' => [
+      'variables' => [
+        'credit_cards' => [],
+      ],
+    ],
+  ];
+
+  return $theme;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function commerce_authnet_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
+  if ($form_state->getFormObject() instanceof CheckoutFlowInterface) {
+    /** @var Drupal\commerce_checkout\Plugin\Commerce\CheckoutFlow\CheckoutFlowInterface $form_object */
+    $form_object = $form_state->getFormObject();
+    $order = $form_object->getOrder();
+    if (!$order->get('payment_gateway')->isEmpty()) {
+      /** @var \Drupal\commerce_payment\Entity\PaymentGatewayInterface $payment_gateway */
+      $payment_gateway = $order->get('payment_gateway')->entity;
+      $payment_gateway_plugin = $payment_gateway->getPlugin();
+      if ($form['#step_id'] == 'review') {
+        if ($payment_gateway_plugin instanceof VisaCheckout) {
+          $form['actions']['next']['#value'] = t('Proceed to next step to finish with Visa Checkout');
+        }
+        elseif ($payment_gateway_plugin instanceof AcceptHosted && $order->get('payment_method')->isEmpty()) {
+          // Add the Order entity to the context.
+          $contexts['order'] = EntityContext::fromEntity($order);
+          $form = $payment_gateway_plugin->getAcceptHostedCheckoutForm($form, $contexts);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function commerce_authnet_cron() {
+  $verifier = \Drupal::getContainer()->get('commerce_authnet.echeck_transaction_verifier');
+  $payments = $verifier->getPayments();
+  foreach ($payments as $payment) {
+    $verifier->processPayment($payment);
+  }
+}

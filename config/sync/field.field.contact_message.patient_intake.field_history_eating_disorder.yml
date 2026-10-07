@@ -1,0 +1,21 @@
+uuid: 3fc90421-471f-413f-955f-fdc5105f70f9
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_history_eating_disorder
+  module:
+    - options
+id: contact_message.patient_intake.field_history_eating_disorder
+field_name: field_history_eating_disorder
+entity_type: contact_message
+bundle: patient_intake
+label: 'History of Eating Disorder (Diagnosed)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

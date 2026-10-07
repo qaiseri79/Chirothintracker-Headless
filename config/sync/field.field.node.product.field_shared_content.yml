@@ -1,0 +1,23 @@
+uuid: 77f8640e-fb36-4e2a-9e2e-d904a7140a35
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_shared_content
+    - node.type.product
+id: node.product.field_shared_content
+field_name: field_shared_content
+entity_type: node
+bundle: product
+label: 'Shared Content'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: ''
+  off_label: ''
+field_type: boolean

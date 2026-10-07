@@ -1,0 +1,23 @@
+uuid: ba4fd8a6-550f-4db8-8de2-24171c3b69f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.ultraslim_profile
+    - field.storage.patient_profile.field_visceral_fat_zone_4_loss
+id: patient_profile.ultraslim_profile.field_visceral_fat_zone_4_loss
+field_name: field_visceral_fat_zone_4_loss
+entity_type: patient_profile
+bundle: ultraslim_profile
+label: 'Visceral Fat Zone 4 Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

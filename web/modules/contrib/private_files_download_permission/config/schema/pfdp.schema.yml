@@ -1,0 +1,48 @@
+pfdp.pfdp_directory.*:
+  type: config_entity
+  label: 'Private files download permission directory'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    path:
+      type: path
+      label: 'Path'
+    bypass:
+      type: boolean
+      label: 'Bypass'
+    grant_file_owners:
+      type: boolean
+      label: 'Grant file owners'
+    users:
+      type: sequence
+      label: 'Users'
+      sequence:
+        type: string
+        label: 'User'
+    roles:
+      type: sequence
+      label: 'Roles'
+      sequence:
+        type: string
+        label: 'Role'
+
+pfdp.settings:
+  type: config_object
+  label: 'Settings'
+  mapping:
+    by_user_checks:
+      type: boolean
+      label: 'Enable by-user checks'
+    cache_users:
+      type: boolean
+      label: 'Cache user list'
+    attachment_mode:
+      type: boolean
+      label: 'Enable attachment mode'
+    override_mode:
+      type: boolean
+      label: 'Enable override mode'
+    debug_mode:
+      type: boolean
+      label: 'Enable debug mode'

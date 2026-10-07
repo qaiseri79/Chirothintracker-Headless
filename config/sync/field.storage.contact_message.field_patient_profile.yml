@@ -1,0 +1,20 @@
+uuid: 62e08b06-c917-499d-bb95-cc468bbfb39d
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - eck
+id: contact_message.field_patient_profile
+field_name: field_patient_profile
+entity_type: contact_message
+type: entity_reference
+settings:
+  target_type: patient_profile
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

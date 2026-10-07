@@ -1,0 +1,10 @@
+uuid: 34048653-6604-46bb-b995-99bde17e358d
+langcode: en
+status: true
+dependencies: {  }
+id: shop
+label: Shop
+traits: {  }
+locked: false
+purchasableEntityType: commerce_product_variation
+orderType: shop

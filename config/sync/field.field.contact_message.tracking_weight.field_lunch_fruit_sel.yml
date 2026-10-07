@@ -1,0 +1,26 @@
+uuid: 9ac1035b-8da6-4200-9862-04bf2a7694a0
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_lunch_fruit_sel
+    - taxonomy.vocabulary.fruit
+id: contact_message.tracking_weight.field_lunch_fruit_sel
+field_name: field_lunch_fruit_sel
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Lunch Fruit (4oz Total)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      fruit: fruit
+    sort:
+      field: _none
+field_type: entity_reference

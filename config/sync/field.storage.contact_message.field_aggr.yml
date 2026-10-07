@@ -1,0 +1,27 @@
+uuid: 7b85ffc0-5689-472c-b2c1-ecde339f6a6e
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - options
+id: contact_message.field_aggr
+field_name: field_aggr
+entity_type: contact_message
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '1'
+      label: 'AGGR with Lunch'
+    -
+      value: '2'
+      label: 'AGGR with Dinner'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 2
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,41 @@
+uuid: fe36afb5-94b4-4495-bf33-0870dd6377a4
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_photos
+    - field.storage.contact_message.field_patient
+  module:
+    - disable_field
+    - epp
+third_party_settings:
+  epp:
+    value: '[current-page:query:uid]'
+    on_update: 0
+  disable_field:
+    add_disable: roles
+    add_roles:
+      - chiropractor_active_
+      - enrolled_patient
+    edit_disable: roles
+    edit_roles:
+      - chiropractor_active_
+      - enrolled_patient
+id: contact_message.patient_photos.field_patient
+field_name: field_patient
+entity_type: contact_message
+bundle: patient_photos
+label: Patient
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: enrolled_patients
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

@@ -1,0 +1,17 @@
+services:
+  logger.channel.headless_intake:
+    parent: logger.channel_base
+    class: Drupal\Core\Logger\LoggerChannel
+    arguments: ['headless_intake']
+  headless_intake.invite:
+    class: Drupal\headless_intake\IntakeInviteService
+    arguments:
+      - '@database'
+      - '@entity_type.manager'
+      - '@config.factory'
+      - '@request_stack'
+  headless_intake.clinic_link:
+    class: Drupal\headless_intake\ClinicIntakeLinkService
+    arguments:
+      - '@entity_type.manager'
+      - '@headless_intake.invite'

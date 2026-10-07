@@ -1,0 +1,31 @@
+uuid: 4db7a515-8dbf-490a-a269-4c0767381fe0
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.menu_item.menu_item
+    - field.storage.menu_item.field_my_clinic
+  module:
+    - epp
+third_party_settings:
+  epp:
+    value: "target_id: '[current-user:field_clinic:target_id]'"
+    on_update: 1
+id: menu_item.menu_item.field_my_clinic
+field_name: field_my_clinic
+entity_type: menu_item
+bundle: menu_item
+label: 'My Clinic'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: my_clinic
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

@@ -1,0 +1,11 @@
+uuid: 70732873-afae-4acd-9313-bcbdce2b2fed
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+id: customization.full
+label: Full
+description: ''
+targetEntityType: customization
+cache: true

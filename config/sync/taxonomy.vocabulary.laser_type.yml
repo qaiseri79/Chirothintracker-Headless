@@ -1,0 +1,9 @@
+uuid: 02cd14db-5ede-4091-a4f7-700925792b76
+langcode: en
+status: true
+dependencies: {  }
+name: 'Laser Type'
+vid: laser_type
+description: null
+weight: 0
+new_revision: false

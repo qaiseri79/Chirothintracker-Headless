@@ -1,0 +1,23 @@
+uuid: 73fa08a0-ac7f-449c-93aa-b4e44dbf61ca
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.zerona_profile
+    - field.storage.contact_message.field_thigh_right
+id: contact_message.zerona_profile.field_thigh_right
+field_name: field_thigh_right
+entity_type: contact_message
+bundle: zerona_profile
+label: 'Thigh - Right'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

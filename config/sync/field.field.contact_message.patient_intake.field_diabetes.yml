@@ -1,0 +1,23 @@
+uuid: cbddd45f-e18f-4d77-bb2e-ebaede1e2000
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_diabetes
+  module:
+    - options
+id: contact_message.patient_intake.field_diabetes
+field_name: field_diabetes
+entity_type: contact_message
+bundle: patient_intake
+label: 'Have you been diagnosed with diabetes?'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: '0'
+default_value_callback: ''
+settings: {  }
+field_type: list_string

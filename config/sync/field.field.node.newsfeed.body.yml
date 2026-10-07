@@ -1,0 +1,23 @@
+uuid: ed7c7c84-2c90-418e-9b06-46e8855b7fc3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.newsfeed
+  module:
+    - text
+id: node.newsfeed.body
+field_name: body
+entity_type: node
+bundle: newsfeed
+label: Body
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

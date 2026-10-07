@@ -1,0 +1,19 @@
+uuid: a699d5f6-5ef5-4324-a8c0-aa509b174a26
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_dinner_other
+id: contact_message.tracking_weight.field_dinner_other
+field_name: field_dinner_other
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Other Dinner Foods'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

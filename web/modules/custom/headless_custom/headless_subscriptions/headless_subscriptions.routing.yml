@@ -1,0 +1,224 @@
+headless_subscriptions.plans:
+  path: '/api/headless/subscriptions/plans'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionController::handle'
+    _format: json
+    action: 'plans'
+  methods: [GET]
+  requirements:
+    _custom_access: '\Drupal\headless_subscriptions\Access\PublicSubscriptionAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_subscriptions.register:
+  path: '/api/headless/subscriptions/register'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionController::handle'
+    _format: json
+    action: 'register'
+  methods: [POST]
+  requirements:
+    _custom_access: '\Drupal\headless_subscriptions\Access\PublicSubscriptionAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_subscriptions.cart_create:
+  path: '/api/headless/subscriptions/cart/create'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionController::handle'
+    _format: json
+    action: 'cart_create'
+  methods: [POST]
+  requirements:
+    _custom_access: '\Drupal\headless_subscriptions\Access\PublicSubscriptionAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_subscriptions.cart_read:
+  path: '/api/headless/subscriptions/cart'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionController::handle'
+    _format: json
+    action: 'cart_read'
+  methods: [GET]
+  requirements:
+    _custom_access: '\Drupal\headless_subscriptions\Access\PublicSubscriptionAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_subscriptions.checkout:
+  path: '/api/headless/subscriptions/checkout'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionController::handle'
+    _format: json
+    action: 'checkout'
+  methods: [POST]
+  requirements:
+    _custom_access: '\Drupal\headless_subscriptions\Access\BillingAccountAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_subscriptions.current:
+  path: '/api/headless/subscriptions/current'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionController::handle'
+    _format: json
+    action: 'status'
+  methods: [GET]
+  requirements:
+    _custom_access: '\Drupal\headless_subscriptions\Access\BillingAccountAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_subscriptions.cancel:
+  path: '/api/headless/subscriptions/cancel'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionController::handle'
+    _format: json
+    action: 'cancel'
+  methods: [POST]
+  requirements:
+    _custom_access: '\Drupal\headless_subscriptions\Access\BillingAccountAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_subscriptions.payment_method:
+  path: '/api/headless/subscriptions/payment-method'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionController::handle'
+    _format: json
+    action: 'payment_method'
+  methods: [POST]
+  requirements:
+    _custom_access: '\Drupal\headless_subscriptions\Access\BillingAccountAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_subscriptions.webhook:
+  path: '/api/headless/subscriptions/webhook/authorize-net'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionController::handle'
+    _format: json
+    action: 'webhook'
+  methods: [POST]
+  requirements:
+    _custom_access: '\Drupal\headless_subscriptions\Access\PublicSubscriptionAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_subscriptions.settings:
+  path: '/admin/config/people/portal-subscriptions'
+  defaults:
+    _form: '\Drupal\headless_subscriptions\Form\SubscriptionSettingsForm'
+    _title: 'Portal subscriptions'
+  requirements:
+    _permission: 'administer site configuration'
+
+headless_subscriptions.management:
+  path: '/api/headless/subscriptions/management'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionController::handle'
+    _format: json
+    action: 'management'
+  methods: [GET]
+  requirements:
+    _custom_access: '\Drupal\headless_subscriptions\Access\BillingAccountAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_subscriptions.refresh:
+  path: '/api/headless/subscriptions/refresh'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionController::handle'
+    _format: json
+    action: 'refresh'
+  methods: [POST]
+  requirements:
+    _custom_access: '\Drupal\headless_subscriptions\Access\BillingAccountAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_subscriptions.change_plan:
+  path: '/api/headless/subscriptions/change-plan'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionController::handle'
+    _format: json
+    action: 'change_plan'
+  methods: [POST]
+  requirements:
+    _custom_access: '\Drupal\headless_subscriptions\Access\BillingAccountAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_subscriptions.admin:
+  path: '/admin/commerce/portal-subscriptions'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionAdminController::listing'
+    _title: 'Portal subscriptions'
+  requirements:
+    _permission: 'administer portal subscriptions'
+
+headless_subscriptions.admin_detail:
+  path: '/admin/commerce/portal-subscriptions/{uid}'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionAdminController::detail'
+    _title: 'Doctor subscription'
+  requirements:
+    _permission: 'administer portal subscriptions'
+    uid: '\d+'
+
+headless_subscriptions.admin_refresh:
+  path: '/admin/commerce/portal-subscriptions/{uid}/refresh'
+  defaults:
+    _form: '\Drupal\headless_subscriptions\Form\SubscriptionAdminActionForm'
+    _title: 'Manage doctor subscription'
+    operation: 'refresh'
+  requirements:
+    _permission: 'administer portal subscriptions'
+    uid: '\d+'
+
+headless_subscriptions.admin_cancel:
+  path: '/admin/commerce/portal-subscriptions/{uid}/cancel'
+  defaults:
+    _form: '\Drupal\headless_subscriptions\Form\SubscriptionAdminActionForm'
+    _title: 'Manage doctor subscription'
+    operation: 'cancel'
+  requirements:
+    _permission: 'administer portal subscriptions'
+    uid: '\d+'
+
+headless_subscriptions.change_quote:
+  path: '/api/headless/subscriptions/change-plan/quote'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionController::handle'
+    _format: json
+    action: 'change_quote'
+  methods: [POST]
+  requirements:
+    _custom_access: '\Drupal\headless_subscriptions\Access\BillingAccountAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_subscriptions.change_patients:
+  path: '/api/headless/subscriptions/change-plan/patients'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionController::handle'
+    _format: json
+    action: 'change_patients'
+  methods: [GET]
+  requirements:
+    _custom_access: '\Drupal\headless_subscriptions\Access\BillingAccountAccess::access'
+  options:
+    no_cache: TRUE
+
+headless_subscriptions.change_archive:
+  path: '/api/headless/subscriptions/change-plan/archive'
+  defaults:
+    _controller: '\Drupal\headless_subscriptions\Controller\SubscriptionController::handle'
+    _format: json
+    action: 'change_archive'
+  methods: [POST]
+  requirements:
+    _custom_access: '\Drupal\headless_subscriptions\Access\BillingAccountAccess::access'
+  options:
+    no_cache: TRUE

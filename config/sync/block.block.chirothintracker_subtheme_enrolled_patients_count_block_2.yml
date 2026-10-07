@@ -1,0 +1,39 @@
+uuid: 92846459-8525-4b8f-913f-49a54be0deef
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.enrolled_patients_count
+  module:
+    - system
+    - user
+    - views
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_enrolled_patients_count_block_2
+theme: chirothintracker_subtheme
+region: content
+weight: -13
+provider: null
+plugin: 'views_block:enrolled_patients_count-block_2'
+settings:
+  id: 'views_block:enrolled_patients_count-block_2'
+  label: ''
+  label_display: '0'
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /home
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      enrolled_patient: enrolled_patient
+      archived_patient: archived_patient

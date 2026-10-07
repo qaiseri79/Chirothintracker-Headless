@@ -1,0 +1,10 @@
+prlp.settings:
+  type: config_object
+  label: 'PRLP module settings'
+  mapping:
+    password_required:
+      type: integer
+      label: 'Password Required'
+    login_destination:
+      type: string
+      label: 'Login Destination'

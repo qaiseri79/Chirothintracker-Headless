@@ -1,0 +1,9 @@
+uuid: c3286750-59f8-4457-a578-ecb5ad46ad23
+langcode: en
+status: true
+dependencies: {  }
+name: 'Measure Application'
+vid: measure_application
+description: null
+weight: 0
+new_revision: false

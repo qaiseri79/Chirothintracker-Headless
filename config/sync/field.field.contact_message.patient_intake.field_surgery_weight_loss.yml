@@ -1,0 +1,23 @@
+uuid: 34b2df8b-6750-4f6f-91d3-b5ceb44120e0
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_surgery_weight_loss
+id: contact_message.patient_intake.field_surgery_weight_loss
+field_name: field_surgery_weight_loss
+entity_type: contact_message
+bundle: patient_intake
+label: 'How much weight have you lost with surgery?'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: lbs
+field_type: decimal

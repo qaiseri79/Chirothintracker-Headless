@@ -1,0 +1,22 @@
+uuid: d195d1a5-991c-4adb-be8e-9fa91fdd5013
+langcode: en
+status: true
+dependencies: {  }
+id: one_day
+label: 'One Day'
+displayLabel: 'One Day'
+billingType: prepaid
+combineSubscriptions: false
+retrySchedule:
+  - 1
+  - 1
+  - 1
+unpaidSubscriptionState: canceled
+plugin: rolling
+configuration:
+  trial_interval: {  }
+  interval:
+    number: 1
+    unit: day
+prorater: full_price
+proraterConfiguration: {  }

@@ -1,0 +1,19 @@
+uuid: 4d6bd1b3-790c-41bd-b947-cc6903531eeb
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_notes
+id: contact_message.tracking_weight.field_notes
+field_name: field_notes
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Personal Notes'
+description: 'Use this space to record any notes for yourself. Your doctor may not see these notes; please use the "Message Your Doctor" box or use the "Messages" link on the menu to send a message to your doctor.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

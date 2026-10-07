@@ -1,0 +1,212 @@
+uuid: 451de645-3a64-4280-b5a3-a5bafa2264f0
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d7_user
+class: Drupal\user\Plugin\migrate\User
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Content
+migration_group: migrate_drupal_7
+label: 'User accounts'
+source:
+  plugin: d7_user
+process:
+  uid:
+    -
+      plugin: get
+      source: uid
+  name:
+    -
+      plugin: get
+      source: name
+  pass:
+    -
+      plugin: get
+      source: pass
+  mail:
+    -
+      plugin: get
+      source: mail
+  created:
+    -
+      plugin: get
+      source: created
+  access:
+    -
+      plugin: get
+      source: access
+  login:
+    -
+      plugin: get
+      source: login
+  status:
+    -
+      plugin: get
+      source: status
+  timezone:
+    -
+      plugin: get
+      source: timezone
+  langcode:
+    -
+      plugin: user_langcode
+      source: entity_language
+      fallback_to_site_default: false
+  preferred_langcode:
+    -
+      plugin: user_langcode
+      source: language
+      fallback_to_site_default: true
+  preferred_admin_langcode:
+    -
+      plugin: user_langcode
+      source: language
+      fallback_to_site_default: true
+  init:
+    -
+      plugin: get
+      source: init
+  roles:
+    -
+      plugin: migration_lookup
+      migration: upgrade_d7_user_role
+      source: roles
+  user_picture:
+    -
+      plugin: default_value
+      source: picture
+      default_value: null
+    -
+      plugin: migration_lookup
+      migration: upgrade_d7_file
+  field_full_name:
+    -
+      plugin: get
+      source: field_full_name
+  field_program_start_date:
+    -
+      plugin: sub_process
+      source: field_program_start_date
+      process:
+        value:
+          plugin: format_date
+          from_format: 'Y-m-d H:i:s'
+          to_format: Y-m-d
+          source: value
+  field_program_start_weight:
+    -
+      plugin: get
+      source: field_program_start_weight
+  field_chiropractor:
+    -
+      plugin: get
+      source: field_chiropractor
+  field_weight_loss_phase:
+    -
+      plugin: get
+      source: field_weight_loss_phase
+  field_current_program_day:
+    -
+      plugin: get
+      source: field_current_program_day
+  field_email_optout:
+    -
+      plugin: get
+      source: field_email_optout
+  field_program_start_inches:
+    -
+      plugin: get
+      source: field_program_start_inches
+  field_net_weight_loss:
+    -
+      plugin: get
+      source: field_net_weight_loss
+  field_net_inches_lost:
+    -
+      plugin: get
+      source: field_net_inches_lost
+  field_goal_weight:
+    -
+      plugin: get
+      source: field_goal_weight
+  field_phone_number:
+    -
+      plugin: get
+      source: field_phone_number
+  field_clinic:
+    -
+      plugin: get
+      source: field_clinic
+  field_clinic_location:
+    -
+      plugin: get
+      source: field_clinic_location
+  field_gross_weight_loss:
+    -
+      plugin: get
+      source: field_gross_weight_loss
+  field_overall_start_weight:
+    -
+      plugin: get
+      source: field_overall_start_weight
+  field_last_seen:
+    -
+      plugin: sub_process
+      source: field_last_seen
+      process:
+        value:
+          plugin: format_date
+          from_format: 'Y-m-d H:i:s'
+          to_format: Y-m-d
+          source: value
+  field_program_day_term:
+    -
+      plugin: sub_process
+      source: field_program_day_term
+      process:
+        target_id: tid
+  field_laser_patient_status:
+    -
+      plugin: sub_process
+      source: field_laser_patient_status
+      process:
+        target_id: tid
+  field_late:
+    -
+      plugin: get
+      source: field_late
+  field_intake_form:
+    -
+      plugin: get
+      source: field_intake_form
+  field_timezone:
+    -
+      plugin: get
+      source: field_timezone
+  field_chirothin_profile:
+    -
+      plugin: get
+      source: field_chirothin_profile
+  field_locked:
+    -
+      plugin: get
+      source: field_locked
+  field_goal_achieved:
+    -
+      plugin: get
+      source: field_goal_achieved
+destination:
+  plugin: 'entity:user'
+migration_dependencies:
+  required:
+    - upgrade_d7_user_role
+  optional:
+    - upgrade_d7_field_instance
+    - upgrade_d7_file
+    - upgrade_user_picture_field_instance
+    - upgrade_user_picture_entity_display
+    - upgrade_user_picture_entity_form_display
+    - upgrade_d7_user_role

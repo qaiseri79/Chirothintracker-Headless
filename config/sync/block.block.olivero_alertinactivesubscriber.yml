@@ -1,0 +1,28 @@
+uuid: d9344934-756f-435d-86a2-f6f3eddf75bd
+langcode: en
+status: true
+dependencies:
+  module:
+    - custom_module
+    - user
+  theme:
+    - olivero
+id: olivero_alertinactivesubscriber
+theme: olivero
+region: hero
+weight: -22
+provider: null
+plugin: alert_inactive_subscriber
+settings:
+  id: alert_inactive_subscriber
+  label: 'Alert Inactive Subscriber'
+  label_display: '0'
+  provider: custom_module
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      chiropractor_inactive_: chiropractor_inactive_

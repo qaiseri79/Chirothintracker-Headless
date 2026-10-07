@@ -1,0 +1,392 @@
+/*******Generic Form Style**********/
+//.user-login-form
+
+/* .block-user-login-block {
+   width: 100%;
+  max-width: 600px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding: 40.8px 47.8px 40.8px 46.6px;
+  background-color: $navy-normal-blue;
+  margin: 50px auto;
+  @include borderRadius(12px); 
+
+  & h2 {
+    color: $white;
+    text-transform: uppercase;
+    font-weight: 400;
+    text-align: center;
+  }
+
+  & .item-list {
+    & ul {
+      margin-left: 0 !important;
+      & li {
+        margin-left: 0 !important;
+      }
+      & a.request-password-link {
+        font-weight: 600;
+        color: $normal-orange;
+        text-decoration: underline;
+      }
+    }
+  }
+} */
+
+body.path-pricing {
+  & .block-page-title-block {
+    & h1 {
+      text-align: center;
+      color: $home-page-menu;
+      font-size: 50px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      margin-bottom: 30px;
+    }
+  }
+}
+
+/********Login & Reset Password Form***********/
+body:not(.path-pricing):not(.user-logged-in):not(.path-admin):not(
+    .path-product
+  ):not(.path-cart):not(.path-checkout):not(
+    .page-node-type-anonymous-content
+  ):not(.path-webform):not(.page-node-type-page):not(.path-faq-page):not(.path-contact) {
+  & .region-content {
+    width: 100%;
+    max-width: 600px;
+    max-height: 600px;
+    padding: 40px 46px 40px 46px;
+    background-color: $navy-normal-blue;
+    margin: 50px auto;
+    overflow-y: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    @include borderRadius(12px);
+  }
+  & h2 {
+    color: $white;
+    text-transform: uppercase;
+    font-weight: 400;
+    text-align: center;
+  }
+
+  & .item-list {
+    & ul {
+      margin-left: 0 !important;
+      & li {
+        margin-left: 0 !important;
+      }
+      & a.request-password-link {
+        font-weight: 600;
+        color: $normal-orange;
+        text-decoration: underline;
+      }
+    }
+  }
+  & input,
+  select,
+  textarea {
+    color: $dark-blue;
+  }
+  & label {
+    color: $white;
+  }
+  & h2 {
+    color: $white;
+    text-transform: uppercase;
+    font-weight: 400;
+    text-align: center;
+  }
+  & input,
+  select {
+    height: 40px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 0 10px;
+    margin: 10px 0;
+    &:focus {
+      border-color: $normal-orange;
+      box-shadow: 0 0 0 0.25rem $normal-orange;
+    }
+  }
+  & .form-actions {
+    & .form-submit {
+      height: 40px;
+      background: white;
+      border-radius: 50px;
+      padding: 8px 40px;
+      font-weight: 600;
+      color: $dark-blue;
+      border: 1px solid $white;
+      transition: all 0.3s ease-in;
+      &:hover {
+        color: $white;
+        background: transparent;
+      }
+    }
+  }
+  & .description,
+  p {
+    color: $normal-orange;
+    font-size: 14px;
+  }
+}
+
+.block-user-login-block {
+  width: 100%;
+  max-width: 600px;
+  max-height: 600px;
+  overflow-y: auto;
+  padding: 40px 46px 40px 46px;
+  background-color: $navy-normal-blue;
+  margin: 50px auto;
+  @include borderRadius(12px);
+  & h2 {
+    color: $white;
+    text-transform: uppercase;
+    font-weight: 400;
+    text-align: center;
+  }
+
+  & .item-list {
+    & ul {
+      margin-left: 0 !important;
+      & li {
+        margin-left: 0 !important;
+      }
+      & a.request-password-link {
+        font-weight: 600;
+        color: $normal-orange;
+        text-decoration: underline;
+      }
+    }
+  }
+  & input,
+  select,
+  textarea {
+    color: $dark-blue;
+  }
+  & label {
+    color: $white;
+  }
+  & h2 {
+    color: $white;
+    text-transform: uppercase;
+    font-weight: 400;
+    text-align: center;
+  }
+  & input,
+  select {
+    height: 40px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 0 10px;
+    margin: 10px 0;
+    &:focus {
+      border-color: $normal-orange;
+      box-shadow: 0 0 0 0.25rem $normal-orange;
+    }
+  }
+  & .form-actions {
+    & .form-submit {
+      height: 40px;
+      background: white;
+      border-radius: 50px;
+      padding: 8px 40px;
+      font-weight: 600;
+      color: $dark-blue;
+      border: 1px solid $white;
+      transition: all 0.3s ease-in;
+      &:hover {
+        color: $white;
+        background: transparent;
+      }
+    }
+  }
+  & .description,
+  p {
+    color: $normal-orange;
+    font-size: 14px;
+  }
+}
+
+/* body.path-frontpage {
+  & .region.region-content {
+    width: 100%;
+    max-width: 600px;
+    max-height: 600px;
+    overflow-y: auto;
+    padding: 40px 46px 40px 46px;
+    background-color: $navy-normal-blue;
+    margin: 50px auto;
+    @include borderRadius(12px);
+  }
+} */
+
+.user-login-form,
+.user-pass {
+  & input,
+  select,
+  textarea {
+    color: $dark-blue;
+  }
+  & label {
+    color: $white;
+  }
+  & h2 {
+    color: $white;
+    text-transform: uppercase;
+    font-weight: 400;
+    text-align: center;
+  }
+  & input,
+  select {
+    height: 40px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 0 10px;
+    margin: 10px 0;
+    &:focus {
+      border-color: $normal-orange;
+      box-shadow: 0 0 0 0.25rem $normal-orange;
+    }
+  }
+  & .form-actions {
+    & .form-submit {
+      height: 40px;
+      background: white;
+      border-radius: 50px;
+      padding: 8px 40px;
+      font-weight: 600;
+      color: $dark-blue;
+      border: 1px solid $white;
+      transition: all 0.3s ease-in;
+      &:hover {
+        color: $white;
+        background: transparent;
+      }
+    }
+  }
+  & .description,
+  p {
+    color: $normal-orange;
+    font-size: 14px;
+  }
+}
+
+.block-page-title-block {
+  & h1 {
+    color: $normal-orange;
+    text-transform: uppercase;
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+      @include responsive(mobile) {
+         font-size: 15px;
+      }
+  }
+  & .placeholder {
+    font-style: normal;
+  }
+}
+
+body.path-summary {
+  .block-page-title-block {
+    & h1 {
+      color: $white;
+    }
+  }
+  & #block-chirothintracker-subtheme-content {
+    color: $white;
+  }
+}
+
+/* body.path-user h1 {
+  color: #fff;
+} */
+
+// Reset password section
+body.anonymous {
+  & .tabs-wrapper {
+    margin: 36px 0;
+    & .nav-tabs {
+      gap: 10px;
+      margin-left: 0 !important;
+      border-bottom: 1px solid $normal-orange;
+      @include responsive(mobile) {
+        gap: 0px;
+        border: 0;
+        border-radius: 0;
+        border-bottom: 1px solid #e46238;
+      }
+
+      & li.nav-item {
+        margin-left: 0;
+        transition: all 0.3s ease-in;
+        border-left: 1px solid $normal-orange;
+        border-right: 1px solid $normal-orange;
+        border-top: 1px solid $normal-orange;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        & a.nav-link {
+          border: 0;
+          color: $white;
+          padding: 12px 30px;
+          background-color: transparent;
+          border-color: transparent;
+          transition: all 0.3s ease-in;
+          &:hover {
+            color: $white;
+            border-color: $white;
+          }
+        }
+        &.active {
+          margin-left: 0;
+          background-color: $normal-orange;
+          border-top-left-radius: 4px;
+          border-top-right-radius: 4px;
+          &:hover {
+            border-color: $white;
+            background-color: transparent;
+            & a.is-active {
+              color: $white;
+            }
+          }
+          & a.is-active {
+            color: $white;
+            font-weight: 600;
+          }
+        }
+        &:hover {
+          border-color: $white;
+        }
+        @include responsive(mobile) {
+          border-bottom: 1px solid #e46238;
+          border-top: 0 !important;
+          &:active {
+            border-top: 1px solid #fff !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+body:not(.path-ser) {
+  & form.user-pass,
+  form.user-login-form {
+    padding: 10px 0px;
+    box-shadow: none;
+    overflow: unset !important;
+  }
+} 

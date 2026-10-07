@@ -1,0 +1,23 @@
+uuid: a810bc61-86d2-43b7-89a3-f67527e86a5b
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_weight_loss_computed
+id: contact_message.tracking_weight.field_weight_loss_computed
+field_name: field_weight_loss_computed
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Weight Loss To Date Computed'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

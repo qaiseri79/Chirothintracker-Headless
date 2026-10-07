@@ -1,0 +1,63 @@
+headless_clinic.snapshot:
+  path: '/api/headless/clinic'
+  defaults:
+    _controller: '\Drupal\headless_clinic\Controller\ClinicController::handle'
+    action: snapshot
+  methods: [GET]
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\ReadChiropractorAccess::access'
+  options:
+    no_cache: TRUE
+headless_clinic.doctor_create:
+  path: '/api/headless/clinic/doctors'
+  defaults:
+    _controller: '\Drupal\headless_clinic\Controller\ClinicController::handle'
+    action: doctor_create
+  methods: [POST]
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+  options:
+    no_cache: TRUE
+headless_clinic.doctor_update:
+  path: '/api/headless/clinic/doctors/{id}'
+  defaults:
+    _controller: '\Drupal\headless_clinic\Controller\ClinicController::handle'
+    action: doctor_update
+  methods: [PATCH]
+  requirements:
+    id: '\d+'
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+  options:
+    no_cache: TRUE
+headless_clinic.doctor_block:
+  path: '/api/headless/clinic/doctors/{id}/access'
+  defaults:
+    _controller: '\Drupal\headless_clinic\Controller\ClinicController::handle'
+    action: doctor_access
+  methods: [POST]
+  requirements:
+    id: '\d+'
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+  options:
+    no_cache: TRUE
+headless_clinic.location_create:
+  path: '/api/headless/clinic/locations'
+  defaults:
+    _controller: '\Drupal\headless_clinic\Controller\ClinicController::handle'
+    action: location_create
+  methods: [POST]
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+  options:
+    no_cache: TRUE
+headless_clinic.location_update:
+  path: '/api/headless/clinic/locations/{id}'
+  defaults:
+    _controller: '\Drupal\headless_clinic\Controller\ClinicController::handle'
+    action: location_update
+  methods: [PATCH]
+  requirements:
+    id: '\d+'
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+  options:
+    no_cache: TRUE

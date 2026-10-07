@@ -1,0 +1,11 @@
+uuid: 2f7752cc-a113-485b-adec-89a53ba711bd
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+id: pages.full
+label: Full
+description: ''
+targetEntityType: pages
+cache: true

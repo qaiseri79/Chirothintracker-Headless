@@ -1,0 +1,21 @@
+uuid: a95d3f6a-3355-4352-9cf7-2a146125010d
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_waistbuster_protocol
+id: contact_message.ultraslim_profile.field_waistbuster_protocol
+field_name: field_waistbuster_protocol
+entity_type: contact_message
+bundle: ultraslim_profile
+label: 'WaistBuster Protocol'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: "Distance: 6 inches\r\nTime: 8 minutes, 4 sides (32 minutes total)"
+default_value_callback: ''
+settings: {  }
+field_type: string_long

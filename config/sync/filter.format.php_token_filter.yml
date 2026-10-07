@@ -1,0 +1,17 @@
+uuid: 0c095aa0-3831-4de6-bf5e-60389c9890ae
+langcode: en
+status: true
+dependencies:
+  module:
+    - token_filter
+name: 'PHP Token Filter'
+format: php_token_filter
+weight: -5
+filters:
+  token_filter:
+    id: token_filter
+    provider: token_filter
+    status: true
+    weight: 0
+    settings:
+      replace_empty: false

@@ -1,0 +1,21 @@
+uuid: 524d1bf3-8114-4c3d-8281-9b5b2a522ce5
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.video_message.video_message
+    - field.storage.video_message.field_video_message
+  module:
+    - text
+id: video_message.video_message.field_video_message
+field_name: field_video_message
+entity_type: video_message
+bundle: video_message
+label: Message
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

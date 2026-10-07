@@ -1,0 +1,36 @@
+uuid: 0bfd4a2d-2328-4127-9c3b-1ce4adc6e1cc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.user_guide.field_attachments
+    - node.type.user_guide
+  module:
+    - pdf
+    - user
+id: node.user_guide.default
+targetEntityType: node
+bundle: user_guide
+mode: default
+content:
+  field_attachments:
+    type: pdf_default
+    label: hidden
+    settings:
+      keep_pdfjs: '1'
+      width: 100%
+      height: 800px
+      page: ''
+      zoom: page-width
+      custom_zoom: ''
+      pagemode: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  private_message_link: true

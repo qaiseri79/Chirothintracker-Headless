@@ -1,0 +1,31 @@
+uuid: 9d27580e-9cd1-499b-b1ca-34c9bf7746f2
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_xquantity
+    - user
+  theme:
+    - olivero
+id: olivero_cart
+theme: olivero
+region: primary_menu
+weight: 0
+provider: null
+plugin: commerce_cart
+settings:
+  id: commerce_cart
+  label: Cart
+  label_display: '0'
+  provider: commerce_xquantity
+  dropdown: true
+  show_if_empty: true
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      chiropractor_active_: chiropractor_active_
+      chiropractor_inactive_: chiropractor_inactive_

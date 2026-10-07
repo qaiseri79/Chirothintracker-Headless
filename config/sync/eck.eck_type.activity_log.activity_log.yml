@@ -1,0 +1,9 @@
+uuid: c75692fd-0c89-4bbb-987b-e37ccd701eee
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_entity_type.activity_log
+name: 'Activity Log'
+type: activity_log
+description: 'Activity Log'

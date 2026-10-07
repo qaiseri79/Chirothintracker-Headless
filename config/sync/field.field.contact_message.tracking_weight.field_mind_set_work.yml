@@ -1,0 +1,21 @@
+uuid: a68bdc00-feb1-450a-9347-212720932f22
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_mind_set_work
+id: contact_message.tracking_weight.field_mind_set_work
+field_name: field_mind_set_work
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Mind Set Work'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

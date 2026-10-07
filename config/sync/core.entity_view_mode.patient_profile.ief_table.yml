@@ -1,0 +1,11 @@
+uuid: 27386f18-a75c-43ab-a4b9-355c2725ef4b
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+id: patient_profile.ief_table
+label: ief_table
+description: ''
+targetEntityType: patient_profile
+cache: true

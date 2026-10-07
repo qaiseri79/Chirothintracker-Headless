@@ -1,0 +1,39 @@
+uuid: 1fcc6ba6-d3b1-4f1f-9698-98806087dc62
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.clinic.clinic
+    - eck.eck_type.enrollment_package.enrollment_package
+    - field.storage.clinic.field_enrollment_package
+  content:
+    - 'enrollment_package:enrollment_package:9cf005dd-a390-4f3e-80c2-ee7ba9678614'
+  module:
+    - disable_field
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: clinic.clinic.field_enrollment_package
+field_name: field_enrollment_package
+entity_type: clinic
+bundle: clinic
+label: 'Enrollment Package'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    target_uuid: 9cf005dd-a390-4f3e-80c2-ee7ba9678614
+default_value_callback: ''
+settings:
+  handler: 'default:enrollment_package'
+  handler_settings:
+    target_bundles:
+      enrollment_package: enrollment_package
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

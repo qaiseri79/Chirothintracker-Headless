@@ -1,0 +1,14 @@
+uuid: a6594d01-6d30-4bba-bc79-8fac4b06c50f
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.patient_mind_set
+  module:
+    - user
+id: user_remove_role_action.patient_mind_set
+label: 'Remove the Patient - Mind Set role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: patient_mind_set

@@ -1,0 +1,20 @@
+uuid: 66eecff4-d0fe-481d-9625-093d1360b3db
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+id: patient_profile.field_above_umbilicus_loss
+field_name: field_above_umbilicus_loss
+entity_type: patient_profile
+type: decimal
+settings:
+  precision: 10
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,11 @@
+uuid: 8363b0f3-59ae-4b51-b366-c4b640a6aafc
+langcode: en
+status: true
+dependencies: {  }
+id: patient_search
+label: 'Patient Search'
+recipients: {  }
+reply: ''
+weight: 0
+message: null
+redirect: null

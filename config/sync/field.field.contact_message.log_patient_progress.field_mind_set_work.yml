@@ -1,0 +1,21 @@
+uuid: 20c87dc5-3098-4ced-a4e4-ac4973348678
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.log_patient_progress
+    - field.storage.contact_message.field_mind_set_work
+id: contact_message.log_patient_progress.field_mind_set_work
+field_name: field_mind_set_work
+entity_type: contact_message
+bundle: log_patient_progress
+label: 'Mind Set Work'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

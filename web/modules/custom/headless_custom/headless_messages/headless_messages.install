@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @file
+ * Uninstall behaviour for the headless messages API.
+ *
+ * ## There are no grants here any more
+ *
+ * This module used to declare `access headless messages` and grant it to
+ * `enrolled_patient`, `archived_patient`, `chiropractor_active_` and
+ * `chiropractor_inactive_` from `hook_install()`, with an update hook to catch
+ * installations that predated the file.
+ *
+ * Those grants are gone along with the permission. The routes are now gated by
+ * {@see \Drupal\headless_access\Access\PortalMemberAccess}, which reads the role
+ * list from {@see \Drupal\headless_access\PortalRoles::PORTAL_MEMBERS} — the same
+ * four roles this file spelled out. Keeping the grant as well would leave two
+ * answers to "who may reach these routes", and the drift that causes is exactly
+ * what headless_access was written to end: headless_progress granted its own
+ * permission to the patient roles while headless_patients deliberately did not,
+ * and nothing in code held the difference in place.
+ *
+ * The read-only half of the model is unaffected. `archived_patient` and
+ * `chiropractor_inactive_` reach the endpoints and cannot write, because
+ * `MessagesService::canSend()` names only the two active roles.
+ */
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Revokes the permission where it is still held, so uninstalling leaves no role
+ * carrying a permission that no longer exists. Additive grants made before this
+ * file was written are otherwise permanent and invisible: the permissions page
+ * stops listing the permission, but the grant stays in user_role.
+ */
+function headless_messages_uninstall(): void {
+  $storage = \Drupal::entityTypeManager()->getStorage('user_role');
+  $revoked = [];
+
+  foreach ($storage->loadMultiple() as $role) {
+    if ($role->hasPermission('access headless messages')) {
+      $role->revokePermission('access headless messages');
+      $role->save();
+      $revoked[] = $role->id();
+    }
+  }
+
+  if ($revoked !== []) {
+    \Drupal::logger('headless_messages')->notice(
+      'Revoked `access headless messages` from: @roles. Routes are now gated by PortalMemberAccess.',
+      ['@roles' => implode(', ', $revoked)]
+    );
+  }
+}

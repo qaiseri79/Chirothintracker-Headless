@@ -1,0 +1,87 @@
+uuid: 80feb556-9cab-41e8-a4fb-1a7a0f993584
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_d7_field
+class: Drupal\migrate_drupal\Plugin\migrate\FieldMigration
+field_plugin_method: alterFieldMigration
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Configuration
+migration_group: migrate_drupal_7
+label: 'Field configuration'
+source:
+  plugin: d7_field
+  constants:
+    status: true
+    langcode: und
+process:
+  entity_type:
+    0:
+      plugin: get
+      source: entity_type
+    entityform:
+      plugin: static_map
+      map:
+        entityform: contact_message
+      bypass: true
+  status:
+    -
+      plugin: get
+      source: constants/status
+  langcode:
+    -
+      plugin: get
+      source: constants/langcode
+  field_name:
+    -
+      plugin: get
+      source: field_name
+  type:
+    -
+      plugin: process_field
+      source: type
+      method: getFieldType
+      map:
+        d7_text:
+          d7_text: d7_text
+        datetime:
+          datetime: datetime
+        number_default:
+          number_default: number_default
+        entityreference:
+          entityreference: entityreference
+        list:
+          list: list
+        telephone:
+          telephone: telephone
+        taxonomy_term_reference:
+          taxonomy_term_reference: taxonomy_term_reference
+        image:
+          image: image
+        file:
+          file: file
+        email:
+          email: email
+        addressfield:
+          addressfield: addressfield
+        field_url:
+          field_url: field_url
+  cardinality:
+    -
+      plugin: get
+      source: cardinality
+  settings:
+    -
+      plugin: d7_field_settings
+  third_party_settings/field_permissions:
+    -
+      plugin: d7_field_permission_settings
+destination:
+  plugin: 'entity:field_storage_config'
+migration_dependencies:
+  required:
+    - upgrade_d7_eck_type
+  optional:
+    - upgrade_d7_entityform_type

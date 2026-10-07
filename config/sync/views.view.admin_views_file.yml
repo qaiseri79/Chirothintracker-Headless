@@ -1,0 +1,632 @@
+uuid: e7655321-71f0-4f1c-83d0-39a2194d4f6a
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+    - user
+    - views_bulk_operations
+id: admin_views_file
+label: 'Administration: Files'
+module: views
+description: 'Find and manage files.'
+tag: admin
+base_table: file_managed
+base_field: fid
+display:
+  default:
+    id: default
+    display_title: Master
+    display_plugin: default
+    position: 1
+    display_options:
+      title: Files
+      fields:
+        views_bulk_operations:
+          id: views_bulk_operations
+          table: views
+          field: views_bulk_operations_bulk_form
+          plugin_id: views_bulk_operations_bulk_form
+          label: ''
+          element_label_colon: false
+          vbo_settings:
+            display_type: '0'
+            enable_select_all_pages: 1
+            force_single: 0
+            entity_load_capacity: '10'
+          vbo_operations:
+            'action::views_bulk_operations_archive_action':
+              selected: 1
+              postpone_processing: 0
+              skip_confirmation: 0
+              override_label: 1
+              label: Archive
+              settings:
+                scheme: public
+                temporary: 1
+            'action::views_bulk_operations_delete_item':
+              selected: 1
+              postpone_processing: 0
+              skip_confirmation: 0
+              override_label: 1
+              label: Delete
+            'action::views_bulk_operations_script_action':
+              selected: 0
+              postpone_processing: 0
+              skip_confirmation: 0
+              override_label: 0
+              label: ''
+            'action::views_bulk_operations_modify_action':
+              selected: 1
+              postpone_processing: 0
+              skip_confirmation: 1
+              override_label: 1
+              label: 'Change value'
+              settings:
+                show_all_tokens: 1
+                display_values:
+                  _all_: _all_
+            'action::views_bulk_operations_argument_selector_action':
+              selected: 0
+              skip_confirmation: 0
+              override_label: 0
+              label: ''
+              settings:
+                url: ''
+            'action::system_send_email_action':
+              selected: 0
+              postpone_processing: 0
+              skip_confirmation: 0
+              override_label: 0
+              label: ''
+            'action::panelizer_set_status_action':
+              selected: 0
+              postpone_processing: 0
+              skip_confirmation: 0
+              override_label: 0
+              label: ''
+        filename:
+          id: filename
+          table: file_managed
+          field: filename
+          plugin_id: field
+          label: Title
+        type:
+          id: type
+          table: file_managed
+          field: type
+          machine_name: 0
+        filesize:
+          id: filesize
+          table: file_managed
+          field: filesize
+          plugin_id: field
+          empty: '0 bytes'
+        name:
+          id: name
+          table: users_field_data
+          field: name
+          relationship: uid
+          plugin_id: field
+          label: Author
+        timestamp:
+          id: timestamp
+          table: file_managed
+          field: timestamp
+          label: Updated
+          second_date_format: long
+          settings:
+            date_format: short
+        usage:
+          id: usage
+          table: file_managed
+          field: usage
+          label: 'Used in'
+          element_label_colon: false
+        edit:
+          id: edit
+          table: file_managed
+          field: edit
+          label: ''
+          exclude: true
+          element_label_colon: false
+        delete:
+          id: delete
+          table: file_managed
+          field: delete
+          label: ''
+          exclude: true
+          alter:
+            text: |-
+              <ul class="links inline">
+              <li>{{ edit }}</li>
+              <li>{{ delete }}</li>
+              </ul>
+          element_label_colon: false
+        download:
+          id: download
+          table: file_managed
+          field: download
+          relationship: none
+          group_type: group
+          label: ''
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: null
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          ui_name: ''
+          text: ''
+        link:
+          id: link
+          table: file_managed
+          field: link
+          relationship: none
+          group_type: group
+          label: ''
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: null
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          ui_name: ''
+          text: ''
+        nothing:
+          id: nothing
+          table: views
+          field: nothing
+          relationship: none
+          group_type: group
+          plugin_id: custom
+          label: Operations
+          exclude: false
+          alter:
+            alter_text: true
+            text: |-
+              <ul class="links inline">
+              <li>{{ edit }}</li>
+              <li>{{ delete }}</li>
+              <li>{{ link }}</li>
+              </ul>
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: null
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: false
+          ui_name: ''
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 50
+          id: 0
+          quantity: 9
+          pagination_heading_level: h4
+      exposed_form:
+        type: basic
+        options:
+          reset_button: true
+      access:
+        type: perm
+        options:
+          perm: 'access administration pages'
+        perm: 'access administration pages'
+      cache:
+        type: none
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          empty: true
+          content: 'No files available.'
+      filters:
+        filename:
+          id: filename
+          table: file_managed
+          field: filename
+          plugin_id: string
+          operator: contains
+          group: 1
+          exposed: true
+          expose:
+            operator_id: filename_op
+            label: Name
+            operator: filename_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: filename
+            remember: true
+            remember_roles:
+              authenticated: authenticated
+              anonymous: anonymous
+              administrator: administrator
+        type:
+          id: type
+          table: file_managed
+          field: type
+          operator: in
+          group: 1
+          exposed: true
+          expose:
+            operator_id: type_op
+            label: Type
+            operator: type_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: type
+            remember: true
+            remember_roles:
+              authenticated: authenticated
+              anonymous: anonymous
+              administrator: administrator
+        uid:
+          id: uid
+          table: users_field_data
+          field: uid
+          relationship: uid
+          plugin_id: user_name
+          operator: in
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: uid_op
+            label: User
+            operator: in
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: uid
+            remember: true
+            remember_roles:
+              authenticated: authenticated
+              anonymous: anonymous
+              administrator: administrator
+      style:
+        type: table
+        options:
+          columns:
+            views_bulk_operations: views_bulk_operations
+            filename: filename
+            type: type
+            name: name
+            filesize: filesize
+            timestamp: timestamp
+            edit: edit
+            delete: delete
+          default: timestamp
+          info:
+            views_bulk_operations:
+              align: ''
+              separator: ''
+              empty_column: false
+            filename:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+            type:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+            name:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+            filesize:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+            timestamp:
+              sortable: true
+              default_sort_order: desc
+              align: ''
+              separator: ''
+              empty_column: false
+            edit:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+            usage:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+            delete:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+          sticky: true
+          empty_table: true
+      query:
+        type: views_query
+        options: {  }
+      relationships:
+        uid:
+          id: uid
+          table: file_managed
+          field: uid
+          admin_label: user
+          entity_type: file
+          plugin_id: standard
+          label: user
+      css_class: admin-views-view
+      use_ajax: true
+      use_more_always: false
+      display_extenders: {  }
+      style_plugin: table
+      style_options:
+        columns:
+          views_bulk_operations: views_bulk_operations
+          filename: filename
+          type: type
+          name: name
+          filesize: filesize
+          timestamp: timestamp
+          edit: edit
+          delete: delete
+        default: timestamp
+        info:
+          views_bulk_operations:
+            align: ''
+            separator: ''
+            empty_column: 0
+          filename:
+            sortable: 1
+            default_sort_order: asc
+            align: ''
+            separator: ''
+            empty_column: 0
+          type:
+            sortable: 1
+            default_sort_order: asc
+            align: ''
+            separator: ''
+            empty_column: 0
+          name:
+            sortable: 1
+            default_sort_order: asc
+            align: ''
+            separator: ''
+            empty_column: 0
+          filesize:
+            sortable: 1
+            default_sort_order: asc
+            align: ''
+            separator: ''
+            empty_column: 0
+          timestamp:
+            sortable: 1
+            default_sort_order: desc
+            align: ''
+            separator: ''
+            empty_column: 0
+          edit:
+            sortable: 0
+            default_sort_order: asc
+            align: ''
+            separator: ''
+            empty_column: 0
+          usage:
+            sortable: 1
+            default_sort_order: asc
+            align: ''
+            separator: ''
+            empty_column: 0
+          delete:
+            sortable: 0
+            default_sort_order: asc
+            align: ''
+            separator: ''
+            empty_column: 0
+        sticky: true
+        empty_table: true
+    cache_metadata:
+      max-age: 0
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user.permissions
+      tags: {  }
+  system_1:
+    id: system_1
+    display_title: System
+    display_plugin: default
+    position: 2
+    display_options:
+      fields:
+        filename:
+          id: filename
+          table: file_managed
+          field: filename
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: file
+          entity_field: filename
+          plugin_id: field
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+      query:
+        type: views_query
+        options: {  }
+      defaults:
+        access: false
+        hide_admin_links: false
+      display_extenders: {  }
+      hide_admin_links: true
+      path: admin/content/file
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url.query_args
+      tags: {  }

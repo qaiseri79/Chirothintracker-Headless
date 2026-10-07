@@ -1,0 +1,48 @@
+uuid: 1be89bd6-9bd3-4d34-83ba-cfd56cc13d6c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.daily_message.body
+    - field.field.node.daily_message.field_my_clinic
+    - field.field.node.daily_message.field_program_day_select
+    - node.type.daily_message
+  module:
+    - text
+    - user
+id: node.daily_message.default
+targetEntityType: node
+bundle: daily_message
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_my_clinic:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_program_day_select:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  private_message_link: true

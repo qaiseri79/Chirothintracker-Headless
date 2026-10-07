@@ -1,0 +1,14 @@
+uuid: 0d29a3a7-8e94-4c23-8b2b-1a7619690c82
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.patient_laser
+  module:
+    - user
+id: user_remove_role_action.patient_laser
+label: 'Remove the Patient - Laser role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: patient_laser

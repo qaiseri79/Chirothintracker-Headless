@@ -1,0 +1,127 @@
+login:
+  authenticated:
+    redirect_url: ''
+    weight: '-10'
+  administrator:
+    redirect_url: /admin/people
+    weight: '-10'
+  content_editor:
+    redirect_url: ''
+    weight: '-10'
+  system_manager:
+    redirect_url: ''
+    weight: '-10'
+  chiropractor_active_:
+    redirect_url: /summary
+    weight: '-10'
+  chiropractor_inactive_:
+    redirect_url: ''
+    weight: '-10'
+  chiropractor_white_label:
+    redirect_url: ''
+    weight: '-10'
+  chiropractor_ghost:
+    redirect_url: ''
+    weight: '-10'
+  chiropractor_mind_set:
+    redirect_url: ''
+    weight: '-10'
+  chiropractor_laser:
+    redirect_url: /summary
+    weight: '-10'
+  ecommerce:
+    redirect_url: ''
+    weight: '-10'
+  ecommerce_manager:
+    redirect_url: /summary
+    weight: '-10'
+  video_message_manager:
+    redirect_url: ''
+    weight: '-10'
+  impersonator:
+    redirect_url: ''
+    weight: '-10'
+  enrolled_patient:
+    redirect_url: /home
+    weight: '-10'
+  archived_patient:
+    redirect_url: /history
+    weight: '-10'
+  patient_chirothin:
+    redirect_url: ''
+    weight: '-10'
+  patient_laser:
+    redirect_url: ''
+    weight: '-10'
+  patient_mind_set:
+    redirect_url: ''
+    weight: '-10'
+  patient_white_label:
+    redirect_url: ''
+    weight: '-10'
+logout:
+  authenticated:
+    redirect_url: ''
+    weight: '-10'
+  administrator:
+    redirect_url: ''
+    weight: '-10'
+  content_editor:
+    redirect_url: ''
+    weight: '-10'
+  system_manager:
+    redirect_url: ''
+    weight: '-10'
+  chiropractor_active_:
+    redirect_url: ''
+    weight: '-10'
+  chiropractor_inactive_:
+    redirect_url: ''
+    weight: '-10'
+  chiropractor_white_label:
+    redirect_url: ''
+    weight: '-10'
+  chiropractor_ghost:
+    redirect_url: ''
+    weight: '-10'
+  chiropractor_mind_set:
+    redirect_url: ''
+    weight: '-10'
+  chiropractor_laser:
+    redirect_url: ''
+    weight: '-10'
+  ecommerce:
+    redirect_url: ''
+    weight: '-10'
+  ecommerce_manager:
+    redirect_url: ''
+    weight: '-10'
+  video_message_manager:
+    redirect_url: ''
+    weight: '-10'
+  impersonator:
+    redirect_url: ''
+    weight: '-10'
+  enrolled_patient:
+    redirect_url: ''
+    weight: '-10'
+  archived_patient:
+    redirect_url: ''
+    weight: '-10'
+  patient_chirothin:
+    redirect_url: ''
+    weight: '-10'
+  patient_laser:
+    redirect_url: ''
+    weight: '-10'
+  patient_mind_set:
+    redirect_url: ''
+    weight: '-10'
+  patient_white_label:
+    redirect_url: ''
+    weight: '-10'
+ignore:
+  - '/user/reset/*'
+ignore_for:
+  login: login
+  logout: 0

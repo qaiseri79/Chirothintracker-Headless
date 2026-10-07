@@ -1,0 +1,23 @@
+uuid: 28f9a472-bfa8-4405-8655-f7fe43b6125e
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.lipolight_profile
+    - field.storage.contact_message.field_calf_right
+id: contact_message.lipolight_profile.field_calf_right
+field_name: field_calf_right
+entity_type: contact_message
+bundle: lipolight_profile
+label: 'Calf - Right'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

@@ -1,0 +1,2372 @@
+{
+    "form": "tracking_weight",
+    "generated": "2026-09-27T11:20:36-05:00",
+    "source": "drupal",
+    "fieldCount": 46,
+    "steps": [
+        {
+            "id": "basics",
+            "title": "Daily Check-in",
+            "subtitle": "Start with today's weight and how you're feeling",
+            "fields": [
+                {
+                    "name": "field_date",
+                    "drupalField": "field_date",
+                    "part": null,
+                    "widget": "date",
+                    "label": "Date",
+                    "required": true,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "The date for this log entry",
+                    "placeholder": "mm/dd/yyyy",
+                    "drupalType": "datetime",
+                    "maxLength": 10
+                },
+                {
+                    "name": "field_weight",
+                    "drupalField": "field_weight",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Today's Weight",
+                    "required": true,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Your weight this morning in pounds",
+                    "placeholder": "e.g. 185.5",
+                    "drupalType": "decimal",
+                    "min": 50,
+                    "max": 500,
+                    "suffix": "lbs"
+                },
+                {
+                    "name": "field_water_intake",
+                    "drupalField": "field_water_intake",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Water Intake",
+                    "required": true,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Total ounces of water consumed yesterday",
+                    "placeholder": "e.g. 100",
+                    "drupalType": "decimal",
+                    "min": 0,
+                    "max": 200,
+                    "suffix": "oz"
+                },
+                {
+                    "name": "field_grade",
+                    "drupalField": "field_grade",
+                    "part": null,
+                    "widget": "select",
+                    "label": "Adherence Grade",
+                    "required": true,
+                    "half": true,
+                    "options": [
+                        {
+                            "value": "10",
+                            "label": "10 - Perfect"
+                        },
+                        {
+                            "value": "9",
+                            "label": "9"
+                        },
+                        {
+                            "value": "8",
+                            "label": "8"
+                        },
+                        {
+                            "value": "7",
+                            "label": "7"
+                        },
+                        {
+                            "value": "6",
+                            "label": "6"
+                        },
+                        {
+                            "value": "5",
+                            "label": "5"
+                        },
+                        {
+                            "value": "4",
+                            "label": "4"
+                        },
+                        {
+                            "value": "3",
+                            "label": "3"
+                        },
+                        {
+                            "value": "2",
+                            "label": "2"
+                        },
+                        {
+                            "value": "1",
+                            "label": "1"
+                        }
+                    ],
+                    "default": null,
+                    "description": "On a scale of 1-10, how well did you follow the plan yesterday?",
+                    "placeholder": "Select a grade",
+                    "drupalType": "list_integer"
+                },
+                {
+                    "name": "field_mind_set_work",
+                    "drupalField": "field_mind_set_work",
+                    "part": null,
+                    "widget": "checkbox",
+                    "label": "Completed Mindset Work",
+                    "required": true,
+                    "half": false,
+                    "options": [],
+                    "default": "0",
+                    "description": "Did you complete your mindset exercises yesterday?",
+                    "placeholder": "",
+                    "drupalType": "boolean"
+                }
+            ]
+        },
+        {
+            "id": "measurements",
+            "title": "Body Measurements",
+            "subtitle": "Track your inches lost (all optional)",
+            "fields": [
+                {
+                    "name": "field_neck",
+                    "drupalField": "field_neck",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Neck",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Neck circumference",
+                    "placeholder": "inches",
+                    "drupalType": "decimal",
+                    "min": 8,
+                    "max": 24,
+                    "suffix": "in"
+                },
+                {
+                    "name": "field_chest",
+                    "drupalField": "field_chest",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Chest",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Chest circumference",
+                    "placeholder": "inches",
+                    "drupalType": "decimal",
+                    "min": 28,
+                    "max": 60,
+                    "suffix": "in"
+                },
+                {
+                    "name": "field_shoulders",
+                    "drupalField": "field_shoulders",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Shoulders",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Shoulders circumference",
+                    "placeholder": "inches",
+                    "drupalType": "decimal",
+                    "min": 30,
+                    "max": 60,
+                    "suffix": "in"
+                },
+                {
+                    "name": "field_arm_left_bicep",
+                    "drupalField": "field_arm_left_bicep",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Left Bicep",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Left bicep circumference",
+                    "placeholder": "inches",
+                    "drupalType": "decimal",
+                    "min": 8,
+                    "max": 22,
+                    "suffix": "in"
+                },
+                {
+                    "name": "field_arm_right_bicep",
+                    "drupalField": "field_arm_right_bicep",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Right Bicep",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Right bicep circumference",
+                    "placeholder": "inches",
+                    "drupalType": "decimal",
+                    "min": 8,
+                    "max": 22,
+                    "suffix": "in"
+                },
+                {
+                    "name": "field_abdomen",
+                    "drupalField": "field_abdomen",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Abdomen",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Abdomen circumference at navel",
+                    "placeholder": "inches",
+                    "drupalType": "decimal",
+                    "min": 20,
+                    "max": 60,
+                    "suffix": "in"
+                },
+                {
+                    "name": "field_hips",
+                    "drupalField": "field_hips",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Hips",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Hips circumference",
+                    "placeholder": "inches",
+                    "drupalType": "decimal",
+                    "min": 28,
+                    "max": 60,
+                    "suffix": "in"
+                },
+                {
+                    "name": "field_thigh_left",
+                    "drupalField": "field_thigh_left",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Left Thigh",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Left thigh circumference",
+                    "placeholder": "inches",
+                    "drupalType": "decimal",
+                    "min": 14,
+                    "max": 36,
+                    "suffix": "in"
+                },
+                {
+                    "name": "field_thigh_right",
+                    "drupalField": "field_thigh_right",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Right Thigh",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Right thigh circumference",
+                    "placeholder": "inches",
+                    "drupalType": "decimal",
+                    "min": 14,
+                    "max": 36,
+                    "suffix": "in"
+                },
+                {
+                    "name": "field_calf_left",
+                    "drupalField": "field_calf_left",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Left Calf",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Left calf circumference",
+                    "placeholder": "inches",
+                    "drupalType": "decimal",
+                    "min": 10,
+                    "max": 24,
+                    "suffix": "in"
+                },
+                {
+                    "name": "field_calf_right",
+                    "drupalField": "field_calf_right",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Right Calf",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Right calf circumference",
+                    "placeholder": "inches",
+                    "drupalType": "decimal",
+                    "min": 10,
+                    "max": 24,
+                    "suffix": "in"
+                }
+            ]
+        },
+        {
+            "id": "breakfast",
+            "title": "Breakfast",
+            "subtitle": "What you ate for breakfast",
+            "fields": [
+                {
+                    "name": "field_breakfast_protein",
+                    "drupalField": "field_breakfast_protein",
+                    "part": null,
+                    "widget": "select",
+                    "label": "Protein",
+                    "required": false,
+                    "half": true,
+                    "options": [
+                        {
+                            "value": "107",
+                            "label": "Alaskan King Crab"
+                        },
+                        {
+                            "value": "88",
+                            "label": "Beef (Ground 93/7)"
+                        },
+                        {
+                            "value": "412",
+                            "label": "Boar"
+                        },
+                        {
+                            "value": "100",
+                            "label": "Chicken"
+                        },
+                        {
+                            "value": "397",
+                            "label": "Kangaroo"
+                        },
+                        {
+                            "value": "103",
+                            "label": "Cornish Game Hen"
+                        },
+                        {
+                            "value": "98",
+                            "label": "Lean Loin Chop"
+                        },
+                        {
+                            "value": "125",
+                            "label": "Lunchmeat (Lean)"
+                        },
+                        {
+                            "value": "411",
+                            "label": "Rabbit"
+                        },
+                        {
+                            "value": "417",
+                            "label": "Tuna (in water)"
+                        },
+                        {
+                            "value": "90",
+                            "label": "Bison"
+                        },
+                        {
+                            "value": "108",
+                            "label": "Cod"
+                        },
+                        {
+                            "value": "101",
+                            "label": "Emu"
+                        },
+                        {
+                            "value": "97",
+                            "label": "Lean Pork Loin"
+                        },
+                        {
+                            "value": "91",
+                            "label": "Elk"
+                        },
+                        {
+                            "value": "109",
+                            "label": "Flounder"
+                        },
+                        {
+                            "value": "102",
+                            "label": "Ostrich"
+                        },
+                        {
+                            "value": "92",
+                            "label": "Filet Mignon (trimmed)"
+                        },
+                        {
+                            "value": "110",
+                            "label": "Grouper"
+                        },
+                        {
+                            "value": "105",
+                            "label": "Quail"
+                        },
+                        {
+                            "value": "214",
+                            "label": "Beef"
+                        },
+                        {
+                            "value": "111",
+                            "label": "Halibut"
+                        },
+                        {
+                            "value": "89",
+                            "label": "Sirloin (Ground)"
+                        },
+                        {
+                            "value": "104",
+                            "label": "Turkey"
+                        },
+                        {
+                            "value": "113",
+                            "label": "Mahi Mahi"
+                        },
+                        {
+                            "value": "93",
+                            "label": "Sirloin Strip Steak"
+                        },
+                        {
+                            "value": "114",
+                            "label": "Monkfish"
+                        },
+                        {
+                            "value": "94",
+                            "label": "Veal (ground)"
+                        },
+                        {
+                            "value": "115",
+                            "label": "Orange Roughy"
+                        },
+                        {
+                            "value": "95",
+                            "label": "Venison"
+                        },
+                        {
+                            "value": "116",
+                            "label": "Perch"
+                        },
+                        {
+                            "value": "117",
+                            "label": "Pike"
+                        },
+                        {
+                            "value": "119",
+                            "label": "Scallops"
+                        },
+                        {
+                            "value": "112",
+                            "label": "Lobster"
+                        },
+                        {
+                            "value": "118",
+                            "label": "Sea Bass"
+                        },
+                        {
+                            "value": "120",
+                            "label": "Shrimp"
+                        },
+                        {
+                            "value": "121",
+                            "label": "Swordfish"
+                        },
+                        {
+                            "value": "122",
+                            "label": "Tilapia"
+                        },
+                        {
+                            "value": "123",
+                            "label": "Walleye"
+                        },
+                        {
+                            "value": "124",
+                            "label": "White Roughy"
+                        },
+                        {
+                            "value": "215",
+                            "label": "Poultry"
+                        },
+                        {
+                            "value": "217",
+                            "label": "Pork"
+                        },
+                        {
+                            "value": "216",
+                            "label": "Seafood"
+                        },
+                        {
+                            "value": "218",
+                            "label": "Other"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Select protein option",
+                    "placeholder": "Select protein",
+                    "drupalType": "entity_reference"
+                },
+                {
+                    "name": "field_breakfast_fruit_sel",
+                    "drupalField": "field_breakfast_fruit_sel",
+                    "part": null,
+                    "widget": "checkbox-grid",
+                    "label": "Fruit",
+                    "required": false,
+                    "half": true,
+                    "options": [
+                        {
+                            "value": "220",
+                            "label": "Apple"
+                        },
+                        {
+                            "value": "221",
+                            "label": "Apricot"
+                        },
+                        {
+                            "value": "222",
+                            "label": "Bilberry"
+                        },
+                        {
+                            "value": "223",
+                            "label": "Blackberry"
+                        },
+                        {
+                            "value": "224",
+                            "label": "Blueberry"
+                        },
+                        {
+                            "value": "225",
+                            "label": "Boysenberry"
+                        },
+                        {
+                            "value": "227",
+                            "label": "Cherry"
+                        },
+                        {
+                            "value": "228",
+                            "label": "Cloud Fruit"
+                        },
+                        {
+                            "value": "229",
+                            "label": "Cranberry"
+                        },
+                        {
+                            "value": "226",
+                            "label": "Currant"
+                        },
+                        {
+                            "value": "230",
+                            "label": "Damson"
+                        },
+                        {
+                            "value": "231",
+                            "label": "Dragon Fruit"
+                        },
+                        {
+                            "value": "232",
+                            "label": "Elderberry"
+                        },
+                        {
+                            "value": "233",
+                            "label": "Grapefruit"
+                        },
+                        {
+                            "value": "234",
+                            "label": "Honeyberry"
+                        },
+                        {
+                            "value": "235",
+                            "label": "Huckleberry"
+                        },
+                        {
+                            "value": "236",
+                            "label": "Kiwi"
+                        },
+                        {
+                            "value": "237",
+                            "label": "Kumquat"
+                        },
+                        {
+                            "value": "238",
+                            "label": "Lemon"
+                        },
+                        {
+                            "value": "239",
+                            "label": "Lime"
+                        },
+                        {
+                            "value": "240",
+                            "label": "Loquat"
+                        },
+                        {
+                            "value": "241",
+                            "label": "Melon (all varieties)"
+                        },
+                        {
+                            "value": "242",
+                            "label": "Mulberry"
+                        },
+                        {
+                            "value": "243",
+                            "label": "Nectarine (October 16 - May 14)"
+                        },
+                        {
+                            "value": "244",
+                            "label": "Orange (all varieties)"
+                        },
+                        {
+                            "value": "245",
+                            "label": "Papaya"
+                        },
+                        {
+                            "value": "246",
+                            "label": "Peach (October 16 - May 14)"
+                        },
+                        {
+                            "value": "247",
+                            "label": "Pear (October 16 - May 14)"
+                        },
+                        {
+                            "value": "249",
+                            "label": "Pineberry"
+                        },
+                        {
+                            "value": "248",
+                            "label": "Plum"
+                        },
+                        {
+                            "value": "250",
+                            "label": "Pluot"
+                        },
+                        {
+                            "value": "251",
+                            "label": "Pomello"
+                        },
+                        {
+                            "value": "252",
+                            "label": "Purple Mangosteen"
+                        },
+                        {
+                            "value": "253",
+                            "label": "Quince"
+                        },
+                        {
+                            "value": "254",
+                            "label": "Raspberry"
+                        },
+                        {
+                            "value": "255",
+                            "label": "Sapodilla"
+                        },
+                        {
+                            "value": "256",
+                            "label": "Star Fruit"
+                        },
+                        {
+                            "value": "257",
+                            "label": "Strawberry"
+                        },
+                        {
+                            "value": "258",
+                            "label": "Tamarillo"
+                        },
+                        {
+                            "value": "404",
+                            "label": "Watermelon"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Select all that apply",
+                    "placeholder": "",
+                    "drupalType": "entity_reference"
+                },
+                {
+                    "name": "field_breakfast_other",
+                    "drupalField": "field_breakfast_other",
+                    "part": null,
+                    "widget": "text",
+                    "label": "Other",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Any other breakfast items",
+                    "placeholder": "e.g. oatmeal, toast",
+                    "drupalType": "string",
+                    "maxLength": 255
+                }
+            ]
+        },
+        {
+            "id": "lunch",
+            "title": "Lunch",
+            "subtitle": "What you ate for lunch",
+            "fields": [
+                {
+                    "name": "field_lunch_protein",
+                    "drupalField": "field_lunch_protein",
+                    "part": null,
+                    "widget": "select",
+                    "label": "Protein",
+                    "required": false,
+                    "half": true,
+                    "options": [
+                        {
+                            "value": "107",
+                            "label": "Alaskan King Crab"
+                        },
+                        {
+                            "value": "88",
+                            "label": "Beef (Ground 93/7)"
+                        },
+                        {
+                            "value": "412",
+                            "label": "Boar"
+                        },
+                        {
+                            "value": "100",
+                            "label": "Chicken"
+                        },
+                        {
+                            "value": "397",
+                            "label": "Kangaroo"
+                        },
+                        {
+                            "value": "103",
+                            "label": "Cornish Game Hen"
+                        },
+                        {
+                            "value": "98",
+                            "label": "Lean Loin Chop"
+                        },
+                        {
+                            "value": "125",
+                            "label": "Lunchmeat (Lean)"
+                        },
+                        {
+                            "value": "411",
+                            "label": "Rabbit"
+                        },
+                        {
+                            "value": "417",
+                            "label": "Tuna (in water)"
+                        },
+                        {
+                            "value": "90",
+                            "label": "Bison"
+                        },
+                        {
+                            "value": "108",
+                            "label": "Cod"
+                        },
+                        {
+                            "value": "101",
+                            "label": "Emu"
+                        },
+                        {
+                            "value": "97",
+                            "label": "Lean Pork Loin"
+                        },
+                        {
+                            "value": "91",
+                            "label": "Elk"
+                        },
+                        {
+                            "value": "109",
+                            "label": "Flounder"
+                        },
+                        {
+                            "value": "102",
+                            "label": "Ostrich"
+                        },
+                        {
+                            "value": "92",
+                            "label": "Filet Mignon (trimmed)"
+                        },
+                        {
+                            "value": "110",
+                            "label": "Grouper"
+                        },
+                        {
+                            "value": "105",
+                            "label": "Quail"
+                        },
+                        {
+                            "value": "214",
+                            "label": "Beef"
+                        },
+                        {
+                            "value": "111",
+                            "label": "Halibut"
+                        },
+                        {
+                            "value": "89",
+                            "label": "Sirloin (Ground)"
+                        },
+                        {
+                            "value": "104",
+                            "label": "Turkey"
+                        },
+                        {
+                            "value": "113",
+                            "label": "Mahi Mahi"
+                        },
+                        {
+                            "value": "93",
+                            "label": "Sirloin Strip Steak"
+                        },
+                        {
+                            "value": "114",
+                            "label": "Monkfish"
+                        },
+                        {
+                            "value": "94",
+                            "label": "Veal (ground)"
+                        },
+                        {
+                            "value": "115",
+                            "label": "Orange Roughy"
+                        },
+                        {
+                            "value": "95",
+                            "label": "Venison"
+                        },
+                        {
+                            "value": "116",
+                            "label": "Perch"
+                        },
+                        {
+                            "value": "117",
+                            "label": "Pike"
+                        },
+                        {
+                            "value": "119",
+                            "label": "Scallops"
+                        },
+                        {
+                            "value": "112",
+                            "label": "Lobster"
+                        },
+                        {
+                            "value": "118",
+                            "label": "Sea Bass"
+                        },
+                        {
+                            "value": "120",
+                            "label": "Shrimp"
+                        },
+                        {
+                            "value": "121",
+                            "label": "Swordfish"
+                        },
+                        {
+                            "value": "122",
+                            "label": "Tilapia"
+                        },
+                        {
+                            "value": "123",
+                            "label": "Walleye"
+                        },
+                        {
+                            "value": "124",
+                            "label": "White Roughy"
+                        },
+                        {
+                            "value": "215",
+                            "label": "Poultry"
+                        },
+                        {
+                            "value": "217",
+                            "label": "Pork"
+                        },
+                        {
+                            "value": "216",
+                            "label": "Seafood"
+                        },
+                        {
+                            "value": "218",
+                            "label": "Other"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Select protein option",
+                    "placeholder": "Select protein",
+                    "drupalType": "entity_reference"
+                },
+                {
+                    "name": "field_lunch_fruit_sel",
+                    "drupalField": "field_lunch_fruit_sel",
+                    "part": null,
+                    "widget": "checkbox-grid",
+                    "label": "Fruit",
+                    "required": false,
+                    "half": true,
+                    "options": [
+                        {
+                            "value": "220",
+                            "label": "Apple"
+                        },
+                        {
+                            "value": "221",
+                            "label": "Apricot"
+                        },
+                        {
+                            "value": "222",
+                            "label": "Bilberry"
+                        },
+                        {
+                            "value": "223",
+                            "label": "Blackberry"
+                        },
+                        {
+                            "value": "224",
+                            "label": "Blueberry"
+                        },
+                        {
+                            "value": "225",
+                            "label": "Boysenberry"
+                        },
+                        {
+                            "value": "227",
+                            "label": "Cherry"
+                        },
+                        {
+                            "value": "228",
+                            "label": "Cloud Fruit"
+                        },
+                        {
+                            "value": "229",
+                            "label": "Cranberry"
+                        },
+                        {
+                            "value": "226",
+                            "label": "Currant"
+                        },
+                        {
+                            "value": "230",
+                            "label": "Damson"
+                        },
+                        {
+                            "value": "231",
+                            "label": "Dragon Fruit"
+                        },
+                        {
+                            "value": "232",
+                            "label": "Elderberry"
+                        },
+                        {
+                            "value": "233",
+                            "label": "Grapefruit"
+                        },
+                        {
+                            "value": "234",
+                            "label": "Honeyberry"
+                        },
+                        {
+                            "value": "235",
+                            "label": "Huckleberry"
+                        },
+                        {
+                            "value": "236",
+                            "label": "Kiwi"
+                        },
+                        {
+                            "value": "237",
+                            "label": "Kumquat"
+                        },
+                        {
+                            "value": "238",
+                            "label": "Lemon"
+                        },
+                        {
+                            "value": "239",
+                            "label": "Lime"
+                        },
+                        {
+                            "value": "240",
+                            "label": "Loquat"
+                        },
+                        {
+                            "value": "241",
+                            "label": "Melon (all varieties)"
+                        },
+                        {
+                            "value": "242",
+                            "label": "Mulberry"
+                        },
+                        {
+                            "value": "243",
+                            "label": "Nectarine (October 16 - May 14)"
+                        },
+                        {
+                            "value": "244",
+                            "label": "Orange (all varieties)"
+                        },
+                        {
+                            "value": "245",
+                            "label": "Papaya"
+                        },
+                        {
+                            "value": "246",
+                            "label": "Peach (October 16 - May 14)"
+                        },
+                        {
+                            "value": "247",
+                            "label": "Pear (October 16 - May 14)"
+                        },
+                        {
+                            "value": "249",
+                            "label": "Pineberry"
+                        },
+                        {
+                            "value": "248",
+                            "label": "Plum"
+                        },
+                        {
+                            "value": "250",
+                            "label": "Pluot"
+                        },
+                        {
+                            "value": "251",
+                            "label": "Pomello"
+                        },
+                        {
+                            "value": "252",
+                            "label": "Purple Mangosteen"
+                        },
+                        {
+                            "value": "253",
+                            "label": "Quince"
+                        },
+                        {
+                            "value": "254",
+                            "label": "Raspberry"
+                        },
+                        {
+                            "value": "255",
+                            "label": "Sapodilla"
+                        },
+                        {
+                            "value": "256",
+                            "label": "Star Fruit"
+                        },
+                        {
+                            "value": "257",
+                            "label": "Strawberry"
+                        },
+                        {
+                            "value": "258",
+                            "label": "Tamarillo"
+                        },
+                        {
+                            "value": "404",
+                            "label": "Watermelon"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Select all that apply",
+                    "placeholder": "",
+                    "drupalType": "entity_reference"
+                },
+                {
+                    "name": "field_lunch_vegetables",
+                    "drupalField": "field_lunch_vegetables",
+                    "part": null,
+                    "widget": "checkbox-grid",
+                    "label": "Vegetables (4oz)",
+                    "required": false,
+                    "half": true,
+                    "options": [
+                        {
+                            "value": "127",
+                            "label": "Acorn Squash"
+                        },
+                        {
+                            "value": "126",
+                            "label": "Amaranth"
+                        },
+                        {
+                            "value": "128",
+                            "label": "Asparagus"
+                        },
+                        {
+                            "value": "152",
+                            "label": "Asparagus (Purple)"
+                        },
+                        {
+                            "value": "129",
+                            "label": "Belgian Endive"
+                        },
+                        {
+                            "value": "132",
+                            "label": "Broccoflower"
+                        },
+                        {
+                            "value": "131",
+                            "label": "Broccoli"
+                        },
+                        {
+                            "value": "133",
+                            "label": "Broccolini"
+                        },
+                        {
+                            "value": "134",
+                            "label": "Brussel Sprouts"
+                        },
+                        {
+                            "value": "136",
+                            "label": "Cactus"
+                        },
+                        {
+                            "value": "413",
+                            "label": "Carrots (3 oz)"
+                        },
+                        {
+                            "value": "261",
+                            "label": "Cauliflower"
+                        },
+                        {
+                            "value": "138",
+                            "label": "Celery Root"
+                        },
+                        {
+                            "value": "406",
+                            "label": "Cherry Tomatoes"
+                        },
+                        {
+                            "value": "142",
+                            "label": "Eggplant"
+                        },
+                        {
+                            "value": "140",
+                            "label": "Eggplant (Chinese)"
+                        },
+                        {
+                            "value": "143",
+                            "label": "Fennel"
+                        },
+                        {
+                            "value": "144",
+                            "label": "Fiddlehead Ferns"
+                        },
+                        {
+                            "value": "145",
+                            "label": "Green Beans"
+                        },
+                        {
+                            "value": "146",
+                            "label": "Horseradish Root"
+                        },
+                        {
+                            "value": "147",
+                            "label": "Kale"
+                        },
+                        {
+                            "value": "148",
+                            "label": "Kohlrabi"
+                        },
+                        {
+                            "value": "149",
+                            "label": "Leeks"
+                        },
+                        {
+                            "value": "130",
+                            "label": "Lettuce (Boston Bib)"
+                        },
+                        {
+                            "value": "135",
+                            "label": "Lettuce (Butter)"
+                        },
+                        {
+                            "value": "163",
+                            "label": "Onion (White)"
+                        },
+                        {
+                            "value": "151",
+                            "label": "Pumpkin"
+                        },
+                        {
+                            "value": "153",
+                            "label": "Radicchio"
+                        },
+                        {
+                            "value": "154",
+                            "label": "Radish Leaves"
+                        },
+                        {
+                            "value": "155",
+                            "label": "Radishes"
+                        },
+                        {
+                            "value": "156",
+                            "label": "Ramps (wild leeks)"
+                        },
+                        {
+                            "value": "157",
+                            "label": "Rhubarb"
+                        },
+                        {
+                            "value": "150",
+                            "label": "Snow Peas"
+                        },
+                        {
+                            "value": "162",
+                            "label": "Squash"
+                        },
+                        {
+                            "value": "158",
+                            "label": "Squash (Chayote)"
+                        },
+                        {
+                            "value": "141",
+                            "label": "Squash (Crookneck)"
+                        },
+                        {
+                            "value": "159",
+                            "label": "Squash (Spaghetti)"
+                        },
+                        {
+                            "value": "160",
+                            "label": "Squash (Summer)"
+                        },
+                        {
+                            "value": "161",
+                            "label": "Squash (Sweet Dumpling)"
+                        },
+                        {
+                            "value": "414",
+                            "label": "Sugar Snap Peas"
+                        },
+                        {
+                            "value": "139",
+                            "label": "Tomatoes (Cherry)"
+                        },
+                        {
+                            "value": "262",
+                            "label": "Zucchini"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Select all that apply",
+                    "placeholder": "",
+                    "drupalType": "entity_reference"
+                },
+                {
+                    "name": "field_lunch_vegetables_free",
+                    "drupalField": "field_lunch_vegetables_free",
+                    "part": null,
+                    "widget": "checkbox-grid",
+                    "label": "Free Vegetables",
+                    "required": false,
+                    "half": true,
+                    "options": [
+                        {
+                            "value": "167",
+                            "label": "Bok Choy"
+                        },
+                        {
+                            "value": "168",
+                            "label": "Cabbage"
+                        },
+                        {
+                            "value": "169",
+                            "label": "Celery"
+                        },
+                        {
+                            "value": "170",
+                            "label": "Chives"
+                        },
+                        {
+                            "value": "171",
+                            "label": "Collard Greens"
+                        },
+                        {
+                            "value": "172",
+                            "label": "Cucumbers"
+                        },
+                        {
+                            "value": "173",
+                            "label": "Daikon Radish"
+                        },
+                        {
+                            "value": "174",
+                            "label": "Garlic"
+                        },
+                        {
+                            "value": "176",
+                            "label": "Lettuce (Iceberg)"
+                        },
+                        {
+                            "value": "177",
+                            "label": "Lettuce (Manoah)"
+                        },
+                        {
+                            "value": "178",
+                            "label": "Lettuce (Red Leaf)"
+                        },
+                        {
+                            "value": "179",
+                            "label": "Lettuce (Romaine)"
+                        },
+                        {
+                            "value": "180",
+                            "label": "Mushrooms"
+                        },
+                        {
+                            "value": "181",
+                            "label": "Onion (Red)"
+                        },
+                        {
+                            "value": "166",
+                            "label": "Peppers (Banana)"
+                        },
+                        {
+                            "value": "165",
+                            "label": "Peppers (Bell)"
+                        },
+                        {
+                            "value": "175",
+                            "label": "Peppers (Jalapeño)"
+                        },
+                        {
+                            "value": "182",
+                            "label": "Sauerkraut"
+                        },
+                        {
+                            "value": "183",
+                            "label": "Spinach"
+                        },
+                        {
+                            "value": "184",
+                            "label": "Swiss Chard"
+                        },
+                        {
+                            "value": "185",
+                            "label": "Tomatillo"
+                        },
+                        {
+                            "value": "186",
+                            "label": "Tomato"
+                        },
+                        {
+                            "value": "187",
+                            "label": "Watercress"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Select all that apply",
+                    "placeholder": "",
+                    "drupalType": "entity_reference"
+                },
+                {
+                    "name": "field_lunch_bread",
+                    "drupalField": "field_lunch_bread",
+                    "part": null,
+                    "widget": "select",
+                    "label": "Bread",
+                    "required": false,
+                    "half": true,
+                    "options": [
+                        {
+                            "value": "263",
+                            "label": "Flatout Flavor!t"
+                        },
+                        {
+                            "value": "190",
+                            "label": "Grissini Breadstick (2 sticks)"
+                        },
+                        {
+                            "value": "410",
+                            "label": "Joseph Lavash Pita Bread"
+                        },
+                        {
+                            "value": "191",
+                            "label": "Light Flatout (half)"
+                        },
+                        {
+                            "value": "188",
+                            "label": "Melba Toast (1 piece)"
+                        },
+                        {
+                            "value": "189",
+                            "label": "Melba Toast Snacks (3-4 snacks)"
+                        },
+                        {
+                            "value": "409",
+                            "label": "Ole Brand Extreme Wellness Tortilla"
+                        },
+                        {
+                            "value": "264",
+                            "label": "Wasa Sourdough/multigrain Crispbread (2 crackers)"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Select bread option",
+                    "placeholder": "Select bread",
+                    "drupalType": "entity_reference"
+                },
+                {
+                    "name": "field_lunch_other",
+                    "drupalField": "field_lunch_other",
+                    "part": null,
+                    "widget": "text",
+                    "label": "Other",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Any other lunch items",
+                    "placeholder": "e.g. soup, salad",
+                    "drupalType": "string",
+                    "maxLength": 255
+                }
+            ]
+        },
+        {
+            "id": "dinner",
+            "title": "Dinner",
+            "subtitle": "What you ate for dinner",
+            "fields": [
+                {
+                    "name": "field_dinner_protein",
+                    "drupalField": "field_dinner_protein",
+                    "part": null,
+                    "widget": "select",
+                    "label": "Protein",
+                    "required": false,
+                    "half": true,
+                    "options": [
+                        {
+                            "value": "107",
+                            "label": "Alaskan King Crab"
+                        },
+                        {
+                            "value": "88",
+                            "label": "Beef (Ground 93/7)"
+                        },
+                        {
+                            "value": "412",
+                            "label": "Boar"
+                        },
+                        {
+                            "value": "100",
+                            "label": "Chicken"
+                        },
+                        {
+                            "value": "397",
+                            "label": "Kangaroo"
+                        },
+                        {
+                            "value": "103",
+                            "label": "Cornish Game Hen"
+                        },
+                        {
+                            "value": "98",
+                            "label": "Lean Loin Chop"
+                        },
+                        {
+                            "value": "125",
+                            "label": "Lunchmeat (Lean)"
+                        },
+                        {
+                            "value": "411",
+                            "label": "Rabbit"
+                        },
+                        {
+                            "value": "417",
+                            "label": "Tuna (in water)"
+                        },
+                        {
+                            "value": "90",
+                            "label": "Bison"
+                        },
+                        {
+                            "value": "108",
+                            "label": "Cod"
+                        },
+                        {
+                            "value": "101",
+                            "label": "Emu"
+                        },
+                        {
+                            "value": "97",
+                            "label": "Lean Pork Loin"
+                        },
+                        {
+                            "value": "91",
+                            "label": "Elk"
+                        },
+                        {
+                            "value": "109",
+                            "label": "Flounder"
+                        },
+                        {
+                            "value": "102",
+                            "label": "Ostrich"
+                        },
+                        {
+                            "value": "92",
+                            "label": "Filet Mignon (trimmed)"
+                        },
+                        {
+                            "value": "110",
+                            "label": "Grouper"
+                        },
+                        {
+                            "value": "105",
+                            "label": "Quail"
+                        },
+                        {
+                            "value": "214",
+                            "label": "Beef"
+                        },
+                        {
+                            "value": "111",
+                            "label": "Halibut"
+                        },
+                        {
+                            "value": "89",
+                            "label": "Sirloin (Ground)"
+                        },
+                        {
+                            "value": "104",
+                            "label": "Turkey"
+                        },
+                        {
+                            "value": "113",
+                            "label": "Mahi Mahi"
+                        },
+                        {
+                            "value": "93",
+                            "label": "Sirloin Strip Steak"
+                        },
+                        {
+                            "value": "114",
+                            "label": "Monkfish"
+                        },
+                        {
+                            "value": "94",
+                            "label": "Veal (ground)"
+                        },
+                        {
+                            "value": "115",
+                            "label": "Orange Roughy"
+                        },
+                        {
+                            "value": "95",
+                            "label": "Venison"
+                        },
+                        {
+                            "value": "116",
+                            "label": "Perch"
+                        },
+                        {
+                            "value": "117",
+                            "label": "Pike"
+                        },
+                        {
+                            "value": "119",
+                            "label": "Scallops"
+                        },
+                        {
+                            "value": "112",
+                            "label": "Lobster"
+                        },
+                        {
+                            "value": "118",
+                            "label": "Sea Bass"
+                        },
+                        {
+                            "value": "120",
+                            "label": "Shrimp"
+                        },
+                        {
+                            "value": "121",
+                            "label": "Swordfish"
+                        },
+                        {
+                            "value": "122",
+                            "label": "Tilapia"
+                        },
+                        {
+                            "value": "123",
+                            "label": "Walleye"
+                        },
+                        {
+                            "value": "124",
+                            "label": "White Roughy"
+                        },
+                        {
+                            "value": "215",
+                            "label": "Poultry"
+                        },
+                        {
+                            "value": "217",
+                            "label": "Pork"
+                        },
+                        {
+                            "value": "216",
+                            "label": "Seafood"
+                        },
+                        {
+                            "value": "218",
+                            "label": "Other"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Select protein option",
+                    "placeholder": "Select protein",
+                    "drupalType": "entity_reference"
+                },
+                {
+                    "name": "field_dinner_fruit_sel",
+                    "drupalField": "field_dinner_fruit_sel",
+                    "part": null,
+                    "widget": "checkbox-grid",
+                    "label": "Fruit",
+                    "required": false,
+                    "half": true,
+                    "options": [
+                        {
+                            "value": "220",
+                            "label": "Apple"
+                        },
+                        {
+                            "value": "221",
+                            "label": "Apricot"
+                        },
+                        {
+                            "value": "222",
+                            "label": "Bilberry"
+                        },
+                        {
+                            "value": "223",
+                            "label": "Blackberry"
+                        },
+                        {
+                            "value": "224",
+                            "label": "Blueberry"
+                        },
+                        {
+                            "value": "225",
+                            "label": "Boysenberry"
+                        },
+                        {
+                            "value": "227",
+                            "label": "Cherry"
+                        },
+                        {
+                            "value": "228",
+                            "label": "Cloud Fruit"
+                        },
+                        {
+                            "value": "229",
+                            "label": "Cranberry"
+                        },
+                        {
+                            "value": "226",
+                            "label": "Currant"
+                        },
+                        {
+                            "value": "230",
+                            "label": "Damson"
+                        },
+                        {
+                            "value": "231",
+                            "label": "Dragon Fruit"
+                        },
+                        {
+                            "value": "232",
+                            "label": "Elderberry"
+                        },
+                        {
+                            "value": "233",
+                            "label": "Grapefruit"
+                        },
+                        {
+                            "value": "234",
+                            "label": "Honeyberry"
+                        },
+                        {
+                            "value": "235",
+                            "label": "Huckleberry"
+                        },
+                        {
+                            "value": "236",
+                            "label": "Kiwi"
+                        },
+                        {
+                            "value": "237",
+                            "label": "Kumquat"
+                        },
+                        {
+                            "value": "238",
+                            "label": "Lemon"
+                        },
+                        {
+                            "value": "239",
+                            "label": "Lime"
+                        },
+                        {
+                            "value": "240",
+                            "label": "Loquat"
+                        },
+                        {
+                            "value": "241",
+                            "label": "Melon (all varieties)"
+                        },
+                        {
+                            "value": "242",
+                            "label": "Mulberry"
+                        },
+                        {
+                            "value": "243",
+                            "label": "Nectarine (October 16 - May 14)"
+                        },
+                        {
+                            "value": "244",
+                            "label": "Orange (all varieties)"
+                        },
+                        {
+                            "value": "245",
+                            "label": "Papaya"
+                        },
+                        {
+                            "value": "246",
+                            "label": "Peach (October 16 - May 14)"
+                        },
+                        {
+                            "value": "247",
+                            "label": "Pear (October 16 - May 14)"
+                        },
+                        {
+                            "value": "249",
+                            "label": "Pineberry"
+                        },
+                        {
+                            "value": "248",
+                            "label": "Plum"
+                        },
+                        {
+                            "value": "250",
+                            "label": "Pluot"
+                        },
+                        {
+                            "value": "251",
+                            "label": "Pomello"
+                        },
+                        {
+                            "value": "252",
+                            "label": "Purple Mangosteen"
+                        },
+                        {
+                            "value": "253",
+                            "label": "Quince"
+                        },
+                        {
+                            "value": "254",
+                            "label": "Raspberry"
+                        },
+                        {
+                            "value": "255",
+                            "label": "Sapodilla"
+                        },
+                        {
+                            "value": "256",
+                            "label": "Star Fruit"
+                        },
+                        {
+                            "value": "257",
+                            "label": "Strawberry"
+                        },
+                        {
+                            "value": "258",
+                            "label": "Tamarillo"
+                        },
+                        {
+                            "value": "404",
+                            "label": "Watermelon"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Select all that apply",
+                    "placeholder": "",
+                    "drupalType": "entity_reference"
+                },
+                {
+                    "name": "field_dinner_vegetables",
+                    "drupalField": "field_dinner_vegetables",
+                    "part": null,
+                    "widget": "checkbox-grid",
+                    "label": "Vegetables (4oz)",
+                    "required": false,
+                    "half": true,
+                    "options": [
+                        {
+                            "value": "127",
+                            "label": "Acorn Squash"
+                        },
+                        {
+                            "value": "126",
+                            "label": "Amaranth"
+                        },
+                        {
+                            "value": "128",
+                            "label": "Asparagus"
+                        },
+                        {
+                            "value": "152",
+                            "label": "Asparagus (Purple)"
+                        },
+                        {
+                            "value": "129",
+                            "label": "Belgian Endive"
+                        },
+                        {
+                            "value": "132",
+                            "label": "Broccoflower"
+                        },
+                        {
+                            "value": "131",
+                            "label": "Broccoli"
+                        },
+                        {
+                            "value": "133",
+                            "label": "Broccolini"
+                        },
+                        {
+                            "value": "134",
+                            "label": "Brussel Sprouts"
+                        },
+                        {
+                            "value": "136",
+                            "label": "Cactus"
+                        },
+                        {
+                            "value": "413",
+                            "label": "Carrots (3 oz)"
+                        },
+                        {
+                            "value": "261",
+                            "label": "Cauliflower"
+                        },
+                        {
+                            "value": "138",
+                            "label": "Celery Root"
+                        },
+                        {
+                            "value": "406",
+                            "label": "Cherry Tomatoes"
+                        },
+                        {
+                            "value": "142",
+                            "label": "Eggplant"
+                        },
+                        {
+                            "value": "140",
+                            "label": "Eggplant (Chinese)"
+                        },
+                        {
+                            "value": "143",
+                            "label": "Fennel"
+                        },
+                        {
+                            "value": "144",
+                            "label": "Fiddlehead Ferns"
+                        },
+                        {
+                            "value": "145",
+                            "label": "Green Beans"
+                        },
+                        {
+                            "value": "146",
+                            "label": "Horseradish Root"
+                        },
+                        {
+                            "value": "147",
+                            "label": "Kale"
+                        },
+                        {
+                            "value": "148",
+                            "label": "Kohlrabi"
+                        },
+                        {
+                            "value": "149",
+                            "label": "Leeks"
+                        },
+                        {
+                            "value": "130",
+                            "label": "Lettuce (Boston Bib)"
+                        },
+                        {
+                            "value": "135",
+                            "label": "Lettuce (Butter)"
+                        },
+                        {
+                            "value": "163",
+                            "label": "Onion (White)"
+                        },
+                        {
+                            "value": "151",
+                            "label": "Pumpkin"
+                        },
+                        {
+                            "value": "153",
+                            "label": "Radicchio"
+                        },
+                        {
+                            "value": "154",
+                            "label": "Radish Leaves"
+                        },
+                        {
+                            "value": "155",
+                            "label": "Radishes"
+                        },
+                        {
+                            "value": "156",
+                            "label": "Ramps (wild leeks)"
+                        },
+                        {
+                            "value": "157",
+                            "label": "Rhubarb"
+                        },
+                        {
+                            "value": "150",
+                            "label": "Snow Peas"
+                        },
+                        {
+                            "value": "162",
+                            "label": "Squash"
+                        },
+                        {
+                            "value": "158",
+                            "label": "Squash (Chayote)"
+                        },
+                        {
+                            "value": "141",
+                            "label": "Squash (Crookneck)"
+                        },
+                        {
+                            "value": "159",
+                            "label": "Squash (Spaghetti)"
+                        },
+                        {
+                            "value": "160",
+                            "label": "Squash (Summer)"
+                        },
+                        {
+                            "value": "161",
+                            "label": "Squash (Sweet Dumpling)"
+                        },
+                        {
+                            "value": "414",
+                            "label": "Sugar Snap Peas"
+                        },
+                        {
+                            "value": "139",
+                            "label": "Tomatoes (Cherry)"
+                        },
+                        {
+                            "value": "262",
+                            "label": "Zucchini"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Select all that apply",
+                    "placeholder": "",
+                    "drupalType": "entity_reference"
+                },
+                {
+                    "name": "field_dinner_vegetables_free",
+                    "drupalField": "field_dinner_vegetables_free",
+                    "part": null,
+                    "widget": "checkbox-grid",
+                    "label": "Free Vegetables",
+                    "required": false,
+                    "half": true,
+                    "options": [
+                        {
+                            "value": "167",
+                            "label": "Bok Choy"
+                        },
+                        {
+                            "value": "168",
+                            "label": "Cabbage"
+                        },
+                        {
+                            "value": "169",
+                            "label": "Celery"
+                        },
+                        {
+                            "value": "170",
+                            "label": "Chives"
+                        },
+                        {
+                            "value": "171",
+                            "label": "Collard Greens"
+                        },
+                        {
+                            "value": "172",
+                            "label": "Cucumbers"
+                        },
+                        {
+                            "value": "173",
+                            "label": "Daikon Radish"
+                        },
+                        {
+                            "value": "174",
+                            "label": "Garlic"
+                        },
+                        {
+                            "value": "176",
+                            "label": "Lettuce (Iceberg)"
+                        },
+                        {
+                            "value": "177",
+                            "label": "Lettuce (Manoah)"
+                        },
+                        {
+                            "value": "178",
+                            "label": "Lettuce (Red Leaf)"
+                        },
+                        {
+                            "value": "179",
+                            "label": "Lettuce (Romaine)"
+                        },
+                        {
+                            "value": "180",
+                            "label": "Mushrooms"
+                        },
+                        {
+                            "value": "181",
+                            "label": "Onion (Red)"
+                        },
+                        {
+                            "value": "166",
+                            "label": "Peppers (Banana)"
+                        },
+                        {
+                            "value": "165",
+                            "label": "Peppers (Bell)"
+                        },
+                        {
+                            "value": "175",
+                            "label": "Peppers (Jalapeño)"
+                        },
+                        {
+                            "value": "182",
+                            "label": "Sauerkraut"
+                        },
+                        {
+                            "value": "183",
+                            "label": "Spinach"
+                        },
+                        {
+                            "value": "184",
+                            "label": "Swiss Chard"
+                        },
+                        {
+                            "value": "185",
+                            "label": "Tomatillo"
+                        },
+                        {
+                            "value": "186",
+                            "label": "Tomato"
+                        },
+                        {
+                            "value": "187",
+                            "label": "Watercress"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Select all that apply",
+                    "placeholder": "",
+                    "drupalType": "entity_reference"
+                },
+                {
+                    "name": "field_dinner_bread",
+                    "drupalField": "field_dinner_bread",
+                    "part": null,
+                    "widget": "select",
+                    "label": "Bread",
+                    "required": false,
+                    "half": true,
+                    "options": [
+                        {
+                            "value": "263",
+                            "label": "Flatout Flavor!t"
+                        },
+                        {
+                            "value": "190",
+                            "label": "Grissini Breadstick (2 sticks)"
+                        },
+                        {
+                            "value": "410",
+                            "label": "Joseph Lavash Pita Bread"
+                        },
+                        {
+                            "value": "191",
+                            "label": "Light Flatout (half)"
+                        },
+                        {
+                            "value": "188",
+                            "label": "Melba Toast (1 piece)"
+                        },
+                        {
+                            "value": "189",
+                            "label": "Melba Toast Snacks (3-4 snacks)"
+                        },
+                        {
+                            "value": "409",
+                            "label": "Ole Brand Extreme Wellness Tortilla"
+                        },
+                        {
+                            "value": "264",
+                            "label": "Wasa Sourdough/multigrain Crispbread (2 crackers)"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Select bread option",
+                    "placeholder": "Select bread",
+                    "drupalType": "entity_reference"
+                },
+                {
+                    "name": "field_dinner_other",
+                    "drupalField": "field_dinner_other",
+                    "part": null,
+                    "widget": "text",
+                    "label": "Other",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Any other dinner items",
+                    "placeholder": "e.g. dessert, snack",
+                    "drupalType": "string",
+                    "maxLength": 255
+                }
+            ]
+        },
+        {
+            "id": "additional",
+            "title": "Additional Notes",
+            "subtitle": "Optional health markers and notes",
+            "fields": [
+                {
+                    "name": "field_blood_pressure",
+                    "drupalField": "field_blood_pressure",
+                    "part": null,
+                    "widget": "text",
+                    "label": "Blood Pressure",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "e.g. 120/80",
+                    "placeholder": "120/80",
+                    "drupalType": "string",
+                    "maxLength": 20
+                },
+                {
+                    "name": "field_blood_sugar",
+                    "drupalField": "field_blood_sugar",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Morning Blood Sugar",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Fasting blood glucose",
+                    "placeholder": "mg/dL",
+                    "drupalType": "integer",
+                    "min": 50,
+                    "max": 400,
+                    "suffix": "mg/dL"
+                },
+                {
+                    "name": "field_chiroburst_bend",
+                    "drupalField": "field_chiroburst_bend",
+                    "part": null,
+                    "widget": "checkbox",
+                    "label": "Completed ChiroBurst Bend",
+                    "required": false,
+                    "half": false,
+                    "options": [],
+                    "default": "0",
+                    "description": "Did you do your ChiroBurst exercises?",
+                    "placeholder": "",
+                    "drupalType": "boolean"
+                },
+                {
+                    "name": "field_sleep_hours",
+                    "drupalField": "field_sleep_hours",
+                    "part": null,
+                    "widget": "number",
+                    "label": "Sleep Hours",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Hours of sleep last night",
+                    "placeholder": "e.g. 7.5",
+                    "drupalType": "decimal",
+                    "min": 0,
+                    "max": 24,
+                    "suffix": "hrs"
+                },
+                {
+                    "name": "field_flags",
+                    "drupalField": "field_flags",
+                    "part": null,
+                    "widget": "radio",
+                    "label": "Patient Flags",
+                    "required": false,
+                    "half": false,
+                    "options": [
+                        {
+                            "value": "84",
+                            "label": "Missed Drops"
+                        },
+                        {
+                            "value": "3",
+                            "label": "Constipation"
+                        },
+                        {
+                            "value": "4",
+                            "label": "Period Cycle"
+                        },
+                        {
+                            "value": "5",
+                            "label": "Ovulation"
+                        },
+                        {
+                            "value": "7",
+                            "label": "Cheated on Program"
+                        },
+                        {
+                            "value": "8",
+                            "label": "Increased Activity"
+                        },
+                        {
+                            "value": "9",
+                            "label": "Lack of Sleep"
+                        },
+                        {
+                            "value": "10",
+                            "label": "Skipped Meal Portion(s)"
+                        },
+                        {
+                            "value": "11",
+                            "label": "Medical Issue"
+                        },
+                        {
+                            "value": "12",
+                            "label": "Other"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Select any flags",
+                    "placeholder": "",
+                    "drupalType": "entity_reference"
+                },
+                {
+                    "name": "field_chiropractor_flags",
+                    "drupalField": "field_chiropractor_flags",
+                    "part": null,
+                    "widget": "radio",
+                    "label": "Chiropractor Flags",
+                    "required": false,
+                    "half": false,
+                    "options": [
+                        {
+                            "value": "13",
+                            "label": "Attitude (Positive)"
+                        },
+                        {
+                            "value": "14",
+                            "label": "Attitude (Negative)"
+                        },
+                        {
+                            "value": "15",
+                            "label": "Protein Day"
+                        },
+                        {
+                            "value": "16",
+                            "label": "Apple Steak Tomato Day"
+                        },
+                        {
+                            "value": "17",
+                            "label": "Apple Cucumber Salad Day"
+                        },
+                        {
+                            "value": "18",
+                            "label": "Apple Day"
+                        }
+                    ],
+                    "default": null,
+                    "description": "Select any flags",
+                    "placeholder": "",
+                    "drupalType": "entity_reference"
+                },
+                {
+                    "name": "field_notes",
+                    "drupalField": "field_notes",
+                    "part": null,
+                    "widget": "textarea",
+                    "label": "Notes",
+                    "required": false,
+                    "half": false,
+                    "options": [],
+                    "default": null,
+                    "description": "Any additional notes for your clinician",
+                    "placeholder": "Optional notes...",
+                    "drupalType": "string_long"
+                },
+                {
+                    "name": "field_question",
+                    "drupalField": "field_question",
+                    "part": null,
+                    "widget": "textarea",
+                    "label": "Question for your Clinician",
+                    "required": false,
+                    "half": false,
+                    "options": [],
+                    "default": null,
+                    "description": "Any questions for your clinician about today's log",
+                    "placeholder": "e.g. How do I handle cravings?",
+                    "drupalType": "string_long"
+                },
+                {
+                    "name": "field_other_food",
+                    "drupalField": "field_other_food",
+                    "part": null,
+                    "widget": "text",
+                    "label": "Other Food",
+                    "required": false,
+                    "half": true,
+                    "options": [],
+                    "default": null,
+                    "description": "Any other food not captured above",
+                    "placeholder": "e.g. supplements, snacks",
+                    "drupalType": "string",
+                    "maxLength": 255
+                }
+            ]
+        }
+    ]
+}

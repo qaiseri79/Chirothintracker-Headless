@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - entity_bulk_clone
+    - entity
+id: bulk_clone_node_action
+label: 'Bulk Clone'
+type: node
+plugin: "bulk_clone_node_action"
+configuration: {  }

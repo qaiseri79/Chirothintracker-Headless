@@ -1,0 +1,24 @@
+uuid: a10412e3-269b-47bb-8935-8056eeecb263
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_goal_achieved
+  module:
+    - user
+id: user.user.field_goal_achieved
+field_name: field_goal_achieved
+entity_type: user
+bundle: user
+label: 'Goal Achieved'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

@@ -1,0 +1,31 @@
+uuid: 0698587d-223e-42d7-b574-0d3a8dab8e1c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_published_to
+    - node.type.review_messages
+  module:
+    - disable_field
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: node.review_messages.field_published_to
+field_name: field_published_to
+entity_type: node
+bundle: review_messages
+label: 'Published To'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: my_clinic
+      display_name: entity_reference_2
+      arguments: {  }
+field_type: entity_reference

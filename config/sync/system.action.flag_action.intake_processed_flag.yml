@@ -1,0 +1,15 @@
+uuid: 63f9939a-f31b-432c-9d62-cbd53a234f57
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.intake_processed
+  module:
+    - flag
+id: flag_action.intake_processed_flag
+label: '<span class="btn btn-default btn-sm">New</span>'
+type: webform_submission
+plugin: 'flag_action:intake_processed_flag'
+configuration:
+  flag_id: intake_processed
+  flag_action: flag

@@ -1,0 +1,30 @@
+uuid: fd85479a-16ad-43a6-8942-b23b5e9cbdd3
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.training
+  module:
+    - system
+    - views
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_views_block__training_block_1
+theme: chirothintracker_subtheme
+region: content
+weight: -7
+provider: null
+plugin: 'views_block:training-block_1'
+settings:
+  id: 'views_block:training-block_1'
+  label: ''
+  label_display: visible
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/training\r\n"

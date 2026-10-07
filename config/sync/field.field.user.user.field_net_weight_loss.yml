@@ -1,0 +1,24 @@
+uuid: f02e0c98-4a43-4feb-bc3d-41872793d125
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_net_weight_loss
+  module:
+    - user
+id: user.user.field_net_weight_loss
+field_name: field_net_weight_loss
+entity_type: user
+bundle: user
+label: 'Net Weight Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: lbs
+field_type: float

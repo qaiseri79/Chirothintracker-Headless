@@ -1,0 +1,17 @@
+{
+  "name": "drupal/colorbox_inline",
+  "type": "drupal-module",
+  "description": "Provides inline colorbox functionality.",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0-or-later",
+  "homepage": "https://www.drupal.org/project/colorbox_inline",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "http://drupal.org/project/issues/colorbox_inline",
+    "source": "http://cgit.drupalcode.org/colorbox_inline"
+  },
+  "require": {
+    "drupal/core": "^10.3 || ^11",
+    "drupal/colorbox": "*"
+  }
+}

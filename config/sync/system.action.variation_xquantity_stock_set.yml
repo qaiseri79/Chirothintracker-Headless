@@ -1,0 +1,13 @@
+uuid: 683f2fcb-9bea-4ee4-a0c1-2a92dbb9b1c3
+langcode: en
+status: true
+dependencies:
+  module:
+    - xquantity_stock
+_core:
+  default_config_hash: 714GFVbdznoLQ2hUTg7OdFLHeQIKb2YxtVVufelkm7w
+id: variation_xquantity_stock_set
+label: 'Set stock'
+type: commerce_product_variation
+plugin: variation_xquantity_stock_set
+configuration: {  }

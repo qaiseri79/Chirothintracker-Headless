@@ -1,0 +1,7 @@
+ctt_shop.ns_variations_batch:
+  path: '/admin/commerce/products/create-ns-variations'
+  defaults:
+    _form: '\Drupal\ctt_shop\Form\ChironutraceuticalNotShippableBatchForm'
+    _title: 'Create Chironutraceutical (Not Shippable) Variations for All Administrator-Created Chironutraceutical Products'
+  requirements:
+    _permission: 'administer site configuration'

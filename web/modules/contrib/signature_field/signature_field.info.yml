@@ -1,0 +1,12 @@
+name: Signature Field
+type: module
+description: Provides a field to capture signatures.
+core_version_requirement: ^9.3 || ^10 || ^11
+dependencies:
+  - drupal:field
+  - drupal:field_ui
+
+# Information added by Drupal.org packaging script on 2026-02-18
+version: '3.0.4'
+project: 'signature_field'
+datestamp: 1771452125

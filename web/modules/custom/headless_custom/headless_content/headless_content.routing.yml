@@ -1,0 +1,226 @@
+# Headless Content routes.
+#
+# ## Access
+#
+# Every route is gated by `PortalMemberAccess` from headless_access, because the
+# audience for this module is both doctors and patients reading the same library.
+# A chiropractor-only policy would lock every patient out of the recipes their
+# program is built on, and a patient-only policy would hide the doctor's own
+# content from the doctor who wrote it.
+#
+# This is the clearest case so far of a policy that *admits* without *narrowing*:
+# holding a portal role gets a caller to the controller, and ContentScope decides
+# which rows come back. Every read in this module is scoped by
+# `field_published_to` and the clinic's `field_hide_shared_resources` toggle, and
+# nothing else here decides visibility.
+#
+# ## Read-only apart from the star and the chiropractor creates
+#
+# There is no update or delete route. Content appears here in two ways: the
+# per-caller favourite (below), and a chiropractor adding a recipe, resource or
+# training item of their own (`headless_content.create`), which is the one write
+# that changes a node and so the one route gated by the narrower
+# `WriteChiropractorAccess` rather than by `PortalMemberAccess`. Everything else
+# is authored in the Drupal admin UI, which is a different surface from
+# `/api/headless`. `ContentCapabilities` reports `canCreate` as TRUE only for an
+# active chiropractor on the recipe, resource and training bundles — describing
+# a real route rather than a Drupal-side permission the API does not have.
+# `canDelete` and `canManageOwnContent` remain FALSE.
+#
+# The single write here is `headless_content.favourite`, which creates a flagging
+# belonging to the caller rather than changing a node. It is the one per-user piece
+# of state the legacy Views kept in the `favorites` flag.
+#
+# ## Administrators are not an audience
+#
+# `PortalMemberAccess` names `PortalRoles::PORTAL_MEMBERS`, which is the four portal
+# roles and does not include `administrator`. An admin session is refused by every
+# route here. That is intentional: administrators do their work in `/admin`, and an
+# admin token carrying the same API as a patient would make the tenant boundary in
+# `ContentScope` a policy rather than a guarantee. See `PortalRoles::ADMINISTRATOR`,
+# which exists so a module can *name* the role without *granting* it.
+#
+# ## Favourites are gated twice, and the second gate is the real one
+#
+# The route admits all four portal roles, because the route cannot know which bundles
+# the `favorites` flag covers. `ContentFavorites` then asks the flag itself via
+# `actionAccess()` — the flag module's own check — and refuses with 403 unless the
+# account holds `flag favorites`. In current config that is `enrolled_patient` only,
+# on the `recipe` bundle only, so a chiropractor POSTing to a training node gets a 400
+# for the bundle and an enrolled patient POSTing to another clinic's recipe gets a
+# 404. Both are the answers the legacy ajax link gave.
+#
+# ## The clinic is never a parameter
+#
+# Same rule as headless_patients. The caller's identity is the only input to
+# scoping; there is no query parameter, body field or route default that selects
+# whose content is returned. `page` and `pageSize` choose *which page of the caller's
+# own rows*, never *whose* rows. The resource library in particular widens to every
+# published resource for a clinic whose `field_hide_shared_resources` is off, and
+# that widening comes from the clinic's own field — a caller cannot ask for it.
+#
+# `page` and `page_size` are DECLARED HERE BUT NOT READ HERE.
+#
+# They are not path placeholders, so these `requirements` are inert: a requirement
+# constrains a placeholder, and Symfony resolves controller arguments from request
+# attributes, which a query string does not populate. So `?page=3&page_size=200`
+# used to arrive at the controller as `page=1, page_size=50`, and every request
+# returned page one. `ContentController::list()` now reads `$request->query` itself.
+#
+# The defaults are kept because they document the intended values and because
+# ContentController::pagingValue() mirrors them — if you change one, change both.
+#
+# Once readable, an oversized value is clamped and a too-small one is a 400:
+# `page_size=99999` yields the maximum, `page=0` yields an error. Pages are 1-based,
+# so `page=0` names no page, and clamping it to page one is what let a 0-indexed client
+# receive page one twice. See ContentService::normalisePaging(). A value that is
+# present but not a plain integer is also a 400, because "you sent me nonsense" and
+# "I am adjusting your value" should not look the same to the caller.
+#
+# ## Requirements, not defaults
+#
+# `_custom_access` sits in `requirements`, the only block Drupal evaluates for
+# access. `_auth` is an option read by AuthenticationManager, so it belongs in
+# `options`.
+#
+# No `_access: 'TRUE'` anywhere: AccessAwareRouter adds that itself, and writing it
+# obscures whether a gate is present.
+#
+# ## No CSRF token on the favourite route
+#
+# Same arrangement as headless_messages: the session cookie is forwarded from the
+# Next.js server and is HttpOnly, so a cross-site form post cannot carry it, and no
+# browser JS here holds a cookie. Do not add a token check without first giving the
+# client a way to obtain a valid one.
+
+headless_content.list:
+  path: '/api/headless/content/{bundle}'
+  defaults:
+    _controller: '\Drupal\headless_content\Controller\ContentController::list'
+    _title: 'Content list'
+    # Documentation, not plumbing — see the note in the header. Read by
+    # ContentController::list() from the query string, not by argument resolution.
+    page: '1'
+    page_size: '50'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\PortalMemberAccess::access'
+    # Constrained to the three known bundles by ContentService's allowlist as
+    # well. The regex here keeps a nonsense bundle from reaching the controller
+    # at all; the service check is what actually makes it safe, and this is only
+    # the cheap first pass.
+    bundle: 'recipe|training|chirothin_resource'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [GET]
+
+headless_content.get:
+  path: '/api/headless/content/{bundle}/{node}'
+  defaults:
+    _controller: '\Drupal\headless_content\Controller\ContentController::get'
+    _title: 'Content item'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\PortalMemberAccess::access'
+    bundle: 'recipe|training|chirothin_resource'
+    node: '\d+'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [GET]
+
+# Favourite / unfavourite one node.
+#
+# A distinct path rather than a method on `headless_content.get`, per README §2.3:
+# two routes on one path cannot coexist, so the GET would shadow the POST. The
+# literal `favourite` segment is also what keeps this from clashing with the numeric
+# `{node}` placeholder above — `/content/recipe/9/favourite` cannot be read as a
+# node id.
+#
+# The body is optional: absent or empty flips the current state, and
+# {"favourite": true|false} is idempotent. See ContentController::wantedFavourite().
+headless_content.favourite:
+  path: '/api/headless/content/{bundle}/{node}/favourite'
+  defaults:
+    _controller: '\Drupal\headless_content\Controller\ContentController::favourite'
+    _title: 'Favourite content'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\PortalMemberAccess::access'
+    bundle: 'recipe|training|chirothin_resource'
+    node: '\d+'
+    _method: 'POST'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [POST]
+
+# The option lists the standalone "Add recipe" / "Add resource" forms render.
+#
+# `recipe` and `chirothin_resource` only, so the frontend is never handed a form
+# with no choices. A distinct path rather than a query flag on
+# `headless_content.list`, per README §2.3. The literal `options` segment cannot
+# clash with the numeric `{node}` placeholder on the get route.
+#
+# Read-gated like every other read: the payload is taxonomy labels, the same ones
+# the library rows already carry.
+headless_content.options:
+  path: '/api/headless/content/{bundle}/options'
+  defaults:
+    _controller: '\Drupal\headless_content\Controller\ContentController::options'
+    _title: 'Content options'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\PortalMemberAccess::access'
+    bundle: 'recipe|chirothin_resource'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [GET]
+
+# Add a recipe, resource or training item in the caller's own clinic.
+#
+# This is the one write that changes a node, so it is gated by
+# `WriteChiropractorAccess` (active chiropractors only) rather than by the
+# `PortalMemberAccess` every other route here shares. A distinct path per README
+# §2.3, kept clear of the numeric `{node}` placeholder like the favourite route;
+# the `{bundle}` regex is pinned to the bundles ContentService::create() serves,
+# so the route cannot grow a write for a bundle it does not.
+#
+# The audience field is never a body key: ContentService::create() derives
+# `field_published_to` from the caller's own clinic (`user.field_clinic`) and
+# ignores any submitted `field_published_to` or `field_my_clinic`. See the
+# "clinic is never a parameter" note above.
+headless_content.create:
+  path: '/api/headless/content/{bundle}/create'
+  defaults:
+    _controller: '\Drupal\headless_content\Controller\ContentController::createContent'
+    _title: 'Create content'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+    bundle: 'recipe|training|chirothin_resource'
+    _method: 'POST'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [POST]
+
+# Store a chiropractor-uploaded content file and return its fid.
+#
+# The first half of a resource or training create with a file: the multipart
+# upload lands the bytes under public:// and answers with `{fid,...}`, which the
+# create route then stores on `field_resource` or `field_video`. The bundle
+# decides the rules — `chirothin_resource` accepts the document union up to
+# 20 MB, `training` MP4 only up to 100 MB, matching the fields each stores into.
+# Gated by the same `WriteChiropractorAccess` as the create route so a file
+# cannot be stored by any caller the create would refuse.
+headless_content.upload:
+  path: '/api/headless/content/{bundle}/upload'
+  defaults:
+    _controller: '\Drupal\headless_content\Controller\ContentController::upload'
+    _title: 'Upload content file'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
+    bundle: 'chirothin_resource|training'
+    _method: 'POST'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+  methods: [POST]

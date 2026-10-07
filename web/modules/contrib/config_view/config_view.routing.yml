@@ -1,0 +1,9 @@
+config_view.settings:
+  path: '/admin/structure/views/settings/config_view'
+  defaults:
+    _form: '\Drupal\config_view\Form\ConfigViewForm'
+    _title: 'Configuration entity settings'
+  requirements:
+    _permission: 'administer site configuration'
+  options:
+    _admin_route: TRUE

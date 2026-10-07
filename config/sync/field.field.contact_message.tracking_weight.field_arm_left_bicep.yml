@@ -1,0 +1,23 @@
+uuid: d5b7cfd8-b0a8-4f58-a2e5-1758cd8a481d
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_arm_left_bicep
+id: contact_message.tracking_weight.field_arm_left_bicep
+field_name: field_arm_left_bicep
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Arm - Left Bicep'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

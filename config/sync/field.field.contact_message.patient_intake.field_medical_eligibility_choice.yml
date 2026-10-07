@@ -1,0 +1,21 @@
+uuid: 38896b96-0f77-4d2b-ac7b-f514d97dbeb7
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_medical_eligibility_choice
+  module:
+    - options
+id: contact_message.patient_intake.field_medical_eligibility_choice
+field_name: field_medical_eligibility_choice
+entity_type: contact_message
+bundle: patient_intake
+label: 'Select all that apply.'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

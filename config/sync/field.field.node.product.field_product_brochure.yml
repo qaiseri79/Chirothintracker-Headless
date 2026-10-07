@@ -1,0 +1,27 @@
+uuid: 255360a1-2963-4f93-a30e-45b3f74d3bfe
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_product_brochure
+    - node.type.product
+  module:
+    - file
+id: node.product.field_product_brochure
+field_name: field_product_brochure
+entity_type: node
+bundle: product
+label: 'Product Brochure'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: ''
+  file_extensions: pdf
+  max_filesize: ''
+  description_field: false
+field_type: file

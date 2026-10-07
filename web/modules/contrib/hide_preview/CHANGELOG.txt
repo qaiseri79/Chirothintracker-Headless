@@ -1,0 +1,18 @@
+8.x-1.3, 2019-12-27
+--------------------
+- Fixed: Add the Drupal9 support mention
+- New: Add the changelog file
+
+8.x-1.2, 2019-12-27
+--------------------
+- Fixed: Change the module name to be compliant with the Drupal conventions
+
+8.x-1.1, 2019-07-23
+--------------------
+- Fixed: PHP Code Sniffer
+- Fixed: Drupal8 compliancy
+
+8.x-1.0, 2017-04-15
+--------------------
+- Initial release
+- Add the basic logic and configuration to hide the preview button

@@ -1,0 +1,18 @@
+services:
+  # Replaces core's identifier resolver (Drupal\user\UserAuthentication) with a
+  # subclass that also accepts an email address. Only lookupAccount() changes, so
+  # the password check, flood control, blocked-account handling, session
+  # creation and the response payload all stay in core.
+  #
+  # Drupal 10.3 added UserAuthenticationInterface::lookupAccount() as the
+  # supported seam for this, and core already calls it from the JSON login
+  # route (user.login.http), the core login form (UserLoginForm) and
+  # basic_auth — so overriding the service updates all three at once.
+  user.auth:
+    class: Drupal\headless_auth\Authentication\EmailOrNameAuthentication
+    arguments: ['@entity_type.manager', '@password']
+  Drupal\user\UserAuthenticationInterface: '@user.auth'
+
+  headless_auth.password_reset:
+    class: Drupal\headless_auth\PasswordResetService
+    arguments: ['@entity_type.manager', '@config.factory', '@flood', '@datetime.time', '@lock', '@headless_mail.mailer']

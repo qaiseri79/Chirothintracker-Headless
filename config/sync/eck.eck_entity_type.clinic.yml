@@ -1,0 +1,11 @@
+uuid: 3a7601e0-f7e1-4b17-ab18-8d93772abdbf
+langcode: en
+status: null
+dependencies: {  }
+id: clinic
+label: Clinic
+uid: true
+created: true
+changed: true
+title: true
+standalone_url: true

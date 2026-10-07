@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Contains install and update functions for Commerce License.
+ */
+
+/**
+ * Implements hook_update_last_removed().
+ */
+function commerce_license_update_last_removed() {
+  return 8207;
+}

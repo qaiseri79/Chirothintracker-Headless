@@ -1,0 +1,21 @@
+uuid: d241f3e2-0bd5-4cd8-ac73-760aecd333ef
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.test_entity.test_bundle
+    - field.storage.test_entity.field_my_test_field
+  module:
+    - text
+id: test_entity.test_bundle.field_my_test_field
+field_name: field_my_test_field
+entity_type: test_entity
+bundle: test_bundle
+label: 'My Test Field'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

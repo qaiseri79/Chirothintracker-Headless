@@ -1,0 +1,23 @@
+uuid: 291fbbcf-9d41-4309-b745-f35251a37a06
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+    - telephone
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: contact_message.field_emergency_contact_phone
+field_name: field_emergency_contact_phone
+entity_type: contact_message
+type: telephone
+settings: {  }
+module: telephone
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

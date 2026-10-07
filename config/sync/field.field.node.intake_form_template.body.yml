@@ -1,0 +1,23 @@
+uuid: 2acd97a6-c8dd-4042-8981-013ebd0338e9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.intake_form_template
+  module:
+    - text
+id: node.intake_form_template.body
+field_name: body
+entity_type: node
+bundle: intake_form_template
+label: Body
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

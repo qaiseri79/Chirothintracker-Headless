@@ -1,0 +1,21 @@
+uuid: 9ec54122-1402-4785-82fb-d53aa5fbb272
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_description
+    - node.type.chirothin_resource
+  module:
+    - text
+id: node.chirothin_resource.field_description
+field_name: field_description
+entity_type: node
+bundle: chirothin_resource
+label: Description
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

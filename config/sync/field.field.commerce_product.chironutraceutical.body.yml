@@ -1,0 +1,30 @@
+uuid: 9b1d579e-297d-4430-aadb-4db507671371
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.chironutraceutical
+    - field.storage.commerce_product.body
+    - filter.format.basic_html
+    - filter.format.filtered_html
+    - filter.format.full_html
+  module:
+    - text
+id: commerce_product.chironutraceutical.body
+field_name: body
+entity_type: commerce_product
+bundle: chironutraceutical
+label: Description
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: null
+settings:
+  display_summary: false
+  required_summary: false
+  allowed_formats:
+    - basic_html
+    - filtered_html
+    - full_html
+field_type: text_with_summary

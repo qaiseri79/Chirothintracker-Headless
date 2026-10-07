@@ -1,0 +1,24 @@
+uuid: 34007ee8-f268-4426-b10b-af42ddfc0da2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_program_start_date
+  module:
+    - datetime
+    - user
+id: user.user.field_program_start_date
+field_name: field_program_start_date
+entity_type: user
+bundle: user
+label: 'Program Start Date'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    default_date_type: now
+    default_date: now
+default_value_callback: ''
+settings: {  }
+field_type: datetime

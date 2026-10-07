@@ -1,0 +1,19 @@
+uuid: 97282e87-20a0-4867-aff9-64ed1baa7f7a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_message
+    - node.type.review_messages
+id: node.review_messages.field_message
+field_name: field_message
+entity_type: node
+bundle: review_messages
+label: Message
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

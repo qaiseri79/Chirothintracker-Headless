@@ -1,0 +1,23 @@
+uuid: cb420fe3-c3da-4f41-9a30-977ace85f5d6
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_account
+    - field.storage.contact_message.field_phone_number
+  module:
+    - telephone
+id: contact_message.patient_account.field_phone_number
+field_name: field_phone_number
+entity_type: contact_message
+bundle: patient_account
+label: 'Phone Number'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: '[current-page:query:p]'
+default_value_callback: ''
+settings: {  }
+field_type: telephone

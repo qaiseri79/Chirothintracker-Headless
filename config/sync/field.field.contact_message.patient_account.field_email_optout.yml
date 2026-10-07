@@ -1,0 +1,23 @@
+uuid: b982ff12-0e92-46ef-8a54-f94537ab5ee6
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_account
+    - field.storage.contact_message.field_email_optout
+id: contact_message.patient_account.field_email_optout
+field_name: field_email_optout
+entity_type: contact_message
+bundle: patient_account
+label: 'Disable Daily Email Notifications'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Disable Daily Email Notifications'
+  off_label: 'Enable Daily Email Notifications'
+field_type: boolean

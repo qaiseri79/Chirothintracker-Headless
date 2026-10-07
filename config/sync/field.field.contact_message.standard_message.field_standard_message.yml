@@ -1,0 +1,34 @@
+uuid: 1a5e3cbe-ed42-4fd2-b893-d477488c4f6b
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.standard_message
+    - field.storage.contact_message.field_standard_message
+id: contact_message.standard_message.field_standard_message
+field_name: field_standard_message
+entity_type: contact_message
+bundle: standard_message
+label: 'Standard Message'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:customization'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    view:
+      view_name: my_standard_messages
+      display_name: entityreference_1
+      args: {  }
+    behaviors:
+      field_default_token:
+        status: true
+      views-select-list:
+        status: 0
+field_type: entity_reference

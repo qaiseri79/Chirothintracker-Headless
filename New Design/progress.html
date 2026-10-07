@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>ChiroThin — My Progress</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: {
+      canvas: "#F3F4F1", surface: "#FFFFFF", ink: "#101827", muted: "#6B7280", line: "#E4E2DC",
+      primary: { DEFAULT: "#0B5D52", soft: "#E4EEEC", dark: "#08423A" },
+      accent: { DEFAULT: "#C7522A", soft: "#F6E4DC" },
+      success: { DEFAULT: "#3D8361", soft: "#E4F0E9" },
+    },
+    fontFamily: { serif: ["Newsreader","Georgia","serif"], sans: ["Inter","system-ui","sans-serif"] },
+    boxShadow: { panel: "0 1px 2px rgba(16,24,39,0.04), 0 8px 24px -12px rgba(16,24,39,0.08)" },
+  } } };
+</script>
+<style>
+  :root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  html, body { height: 100%; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #E4E2DC; border-radius: 8px; }
+  .chevron { transition: transform 0.2s ease; }
+  .expanded .chevron { transform: rotate(180deg); }
+  .entry-body { display: none; }
+  .expanded .entry-body { display: block; }
+</style>
+</head>
+<body class="bg-canvas font-sans text-ink antialiased h-full">
+<div class="flex h-full">
+  <aside class="group/sidebar hidden md:flex w-[72px] shrink-0 flex-col overflow-hidden border-r border-line bg-surface transition-[width] duration-200 hover:w-64">
+    <div class="flex h-16 shrink-0 items-center gap-3 border-b border-line px-5">
+      <svg class="h-6 w-6 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <div class="whitespace-nowrap opacity-0 transition-opacity duration-150 group-hover/sidebar:opacity-100"><p class="font-serif text-base leading-none text-ink">ChiroThin</p><p class="text-[10px] tracking-wide text-muted">My Account</p></div>
+    </div>
+    <nav id="nav" class="flex-1 space-y-0.5 px-3 py-4"></nav>
+  </aside>
+  <div class="flex min-w-0 flex-1 flex-col">
+    <header class="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-line bg-surface/90 px-6 backdrop-blur">
+      <button class="md:hidden rounded-lg p-2 text-muted hover:bg-canvas"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-2 border-l border-line pl-4"><div class="h-8 w-8 overflow-hidden rounded-full border border-line bg-accent-soft"><img src="https://i.pravatar.cc/64?u=erik" class="h-full w-full object-cover" /></div><span class="hidden text-sm font-medium text-ink xl:block">Erik Madsen</span></div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto px-6 py-6 lg:px-8 lg:py-8">
+      <div class="mx-auto max-w-[1200px] space-y-8">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <div><h1 class="font-serif text-2xl text-ink">Welcome back, Erik 👋</h1><p id="subtitle" class="mt-1 text-sm text-muted"></p></div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="refreshBtn" aria-live="polite" title="Re-sync all logs from the start" class="relative min-w-[168px] overflow-hidden rounded-lg border border-line bg-surface px-4 py-2.5 text-sm font-semibold text-ink shadow-panel transition-colors hover:bg-canvas disabled:cursor-progress disabled:hover:bg-surface">
+              <span id="syncFill" class="absolute inset-y-0 left-0 bg-primary-soft" style="width:0;transition:width .25s ease"></span>
+              <span id="syncBar" class="absolute inset-x-0 bottom-0 h-0.5 bg-transparent"><span id="syncBarFill" class="block h-full bg-primary" style="width:0;transition:width .25s ease"></span></span>
+              <span class="relative flex items-center justify-center gap-2"><span id="syncIcon"></span><span id="syncLabel">Sync logs</span></span>
+            </button>
+            <button id="meetBtn" class="flex items-center gap-2 rounded-lg border border-line bg-surface px-4 py-2.5 text-sm font-semibold text-ink shadow-panel transition-colors hover:border-accent hover:bg-accent-soft hover:text-accent"></button>
+            <button id="logBtn" class="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-panel transition-colors hover:bg-primary-dark"></button>
+          </div>
+        </div>
+
+        <div id="stats" class="space-y-4"></div>
+
+        <div class="rounded-xl border border-line bg-surface p-6 shadow-panel">
+          <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+            <h2 class="font-serif text-lg text-ink">Weight vs. goal</h2>
+            <div class="flex items-center gap-4 text-xs text-muted">
+              <span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-primary"></span>Today's Weight</span>
+              <span class="flex items-center gap-1.5"><span class="h-0.5 w-3 bg-accent"></span>Goal Weight</span>
+            </div>
+          </div>
+          <div id="chart"></div>
+        </div>
+
+        <div>
+          <div class="mb-4 flex items-center justify-between">
+            <h2 class="font-serif text-lg text-ink">Log history</h2>
+            <span class="rounded-full bg-primary-soft px-2.5 py-1 text-xs font-semibold text-primary" id="entryCount"></span>
+          </div>
+          <div id="entries" class="space-y-3"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+const ICONS = {
+  home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  utensils:'<path d="M3 2v7c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2V2M7 2v20M17 2v20M17 2c-2.5 0-4 3-4 6.5S14.5 15 17 15"/>',
+  wrench:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/>',
+  grad:'<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/>',
+  scale:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v4l2.5 2.5"/>',
+  trending:'<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
+  message:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  cart:'<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 2-1.58l1.65-8.42H5.12"/>',
+  more:'<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',
+  refresh:'<path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>',
+  check:'<polyline points="20 6 9 17 4 12"/>',
+  video:'<rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4z"/>',
+  plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+  ruler:'<path d="M21.3 8.7 8.7 21.3a1 1 0 0 1-1.4 0l-4.6-4.6a1 1 0 0 1 0-1.4L15.3 2.7a1 1 0 0 1 1.4 0l4.6 4.6a1 1 0 0 1 0 1.4z"/><path d="m7.5 10.5 2 2M10.5 7.5l2 2M13.5 4.5l2 2M4.5 13.5l2 2"/>',
+  chevronDown:'<path d="m6 9 6 6 6-6"/>', flag:'<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>',
+};
+function icon(n,c){return `<svg class="${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]}</svg>`;}
+const NAV = [
+  {label:"Home",icon:"home"},{label:"Recipes",icon:"utensils"},{label:"Resources",icon:"wrench"},{label:"Training",icon:"grad"},
+  {label:"Log My Weight",icon:"scale"},{label:"My Progress",icon:"trending",active:true},{label:"Messages",icon:"message"},{label:"Shop",icon:"cart"},{label:"Extras",icon:"more"},
+];
+document.getElementById('nav').innerHTML = NAV.map(i=>`
+  <a href="#" class="relative flex items-center gap-3 rounded-lg px-2.5 py-2.5 text-sm font-medium transition-colors ${i.active?'bg-primary text-white':'text-ink/70 hover:bg-primary-soft hover:text-primary'}">
+    ${icon(i.icon,'h-[18px] w-[18px] shrink-0')}<span class="flex-1 whitespace-nowrap opacity-0 transition-opacity duration-150 group-hover/sidebar:opacity-100">${i.label}</span>
+  </a>`).join('');
+
+const GOAL = 215;
+const ENTRIES = [
+  { date:"09/25/2026", m:{hips:32,rThigh:18,lThigh:14,rCalf:13,lCalf:12}, day:14, adherence:10, weight:219.0, loss:15.60, water:112, sleep:8, note:null,
+    lunch:"Beef, Beef (4 additional oz.)", dinner:"Chicken, Broccoli, Kale, Orange (all varieties), Cabbage", other:"AGGR with Lunch, AGGR with Dinner" },
+  { date:"09/24/2026", day:13, adherence:10, weight:222.5, loss:12.10, water:120, sleep:8, note:null,
+    lunch:"Pork, Broccoli, Strawberry", dinner:"Chicken, Broccoli, Kale (all varieties), Cabbage", other:"AGGR with Lunch, AGGR with Dinner" },
+  { date:"09/23/2026", day:12, adherence:10, weight:223.5, loss:11.60, water:96, sleep:8, note:null,
+    lunch:"Chicken, Broccoli", dinner:"Pork, Broccoli, Strawberry, Kale, Cabbage", other:"—" },
+  { date:"09/22/2026", day:11, adherence:8, weight:223.8, loss:10.80, water:96, sleep:8, note:null,
+    lunch:"Pork, Broccoli, Strawberry", dinner:"Beef, Broccoli, Carrots (3 oz), Apple", other:"—" },
+  { date:"09/21/2026", m:{hips:34.5}, day:10, adherence:5, weight:223.0, loss:11.60, water:96, sleep:6, note:"Cheated on Program. Had 3 birthday cookies at Joseph's farewell.",
+    lunch:"Pork, Broccoli, Carrots (3 oz), Blueberry, Watermelon, Strawberry", dinner:"Pork, Broccoli, Strawberry", other:"—" },
+  { date:"09/20/2026", day:9, adherence:5, weight:225.0, loss:9.60, water:96, sleep:7, note:"Constipation. Increased activity — wired Chandler's house and walked 18 holes of golf. Increased lean protein by 6 oz to offset calorie burn.",
+    lunch:"Chicken, Carrots (3 oz), Strawberry", dinner:"Beef (Ground 93/7), Carrots (3 oz), Strawberry, additional lean protein (beef, 6 oz)", other:"—" },
+  { date:"09/19/2026", day:8, adherence:8, weight:223.8, loss:10.80, water:64, sleep:8, note:null,
+    lunch:"Chicken, Broccolini, Strawberry, Lettuce (Romaine)", dinner:"Beef, Broccolini, Blueberry, Onion (Red)", other:"—" },
+  { date:"09/18/2026", day:7, adherence:8, weight:224.4, loss:10.20, water:64, sleep:7, note:null,
+    lunch:"Chicken, Carrots (3 oz), Blueberry", dinner:"Chicken, Carrots (3 oz), Apple", other:"—" },
+  { date:"09/17/2026", day:6, adherence:10, weight:225.0, loss:8.60, water:96, sleep:7.5, note:null,
+    lunch:"Chicken, Carrots (3 oz), Apple, Celery", dinner:"Chicken, Broccoli, Blueberry, Lettuce (Romaine)", other:"—" },
+  { date:"09/16/2026", m:{hips:36.5,rThigh:21.5,lThigh:17,rCalf:14.5,lCalf:14}, day:5, adherence:10, weight:227.0, loss:7.00, water:120, sleep:7, note:"Constipation",
+    lunch:"Chicken, Carrots (3 oz), Apple", dinner:"Beef (Ground 93/7), Carrots (3 oz), Strawberry, Lettuce (Romaine)", other:"—" },
+];
+
+// ---- Header buttons ----
+document.getElementById('logBtn').innerHTML = icon('plus','h-4 w-4') + 'Log My Weight';
+document.getElementById('meetBtn').innerHTML = icon('video','h-4 w-4') + 'Meet Now';
+
+// ---- Stats (derived from data) ----
+(function renderStats(){
+  const latest = ENTRIES[0];
+  const chrono = [...ENTRIES].reverse();
+  const start = +(latest.weight + latest.loss).toFixed(1);
+  const total = start - GOAL;
+  const pct = Math.max(0, Math.min(100, Math.round(latest.loss / total * 100)));
+  const toGo = Math.max(0, latest.weight - GOAL);
+  document.getElementById('subtitle').textContent = `Day ${latest.day} of your program · ${pct}% of the way to goal.`;
+
+  // sparkline of weight
+  const sw=160, sh=44, ws=chrono.map(e=>e.weight), lo=Math.min(...ws), hi=Math.max(...ws);
+  const sx=i=>2+i/(ws.length-1)*(sw-4), sy=v=>4+(1-(v-lo)/(hi-lo||1))*(sh-8);
+  const pts=ws.map((v,i)=>`${sx(i)},${sy(v)}`).join(' ');
+  const spark=`<svg viewBox="0 0 ${sw} ${sh}" class="h-11 w-full" preserveAspectRatio="none"><defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3D8361" stop-opacity=".25"/><stop offset="1" stop-color="#3D8361" stop-opacity="0"/></linearGradient></defs><polygon points="2,${sh} ${pts} ${sw-2},${sh}" fill="url(#sg)"/><polyline points="${pts}" fill="none" stroke="#3D8361" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/><circle cx="${sx(ws.length-1)}" cy="${sy(ws[ws.length-1])}" r="3" fill="#3D8361"/></svg>`;
+
+  // body measurements are optional fields on each daily log (e.m). start = oldest log with a value, current = newest.
+  const KEYS=[["hips","Hips"],["rThigh","Right Thigh"],["lThigh","Left Thigh"],["rCalf","Right Calf"],["lCalf","Left Calf"]];
+  const SITES=KEYS.map(([k,name])=>{
+    const r=chrono.filter(e=>e.m && e.m[k]!=null);
+    if(!r.length) return null;
+    const start=r[0].m[k], current=r[r.length-1].m[k];
+    return {name,start,current,readings:r.length,lost:r.length>1?+(start-current).toFixed(1):null};
+  }).filter(Boolean);
+  const inchesTotal=+SITES.reduce((t,x)=>t+(x.lost||0),0).toFixed(1);
+  const maxStart=Math.max(1,...SITES.map(x=>x.start));
+  const topSites=SITES.filter(x=>x.lost!=null).sort((x,y)=>y.lost-x.lost).slice(0,3);
+  const topMax=topSites.length?topSites[0].lost:1;
+
+  // cumulative loss bars
+  const ls=chrono.map(e=>e.loss), lmax=Math.max(...ls);
+  const bars=`<div class="flex h-11 items-end gap-1">${ls.map((v,i)=>`<div class="flex-1 rounded-sm ${i===ls.length-1?'bg-primary':'bg-primary/25'}" style="height:${Math.max(8,v/lmax*100)}%" title="Day ${chrono[i].day}: ${v.toFixed(1)} lbs"></div>`).join('')}</div>`;
+
+  const circ=2*Math.PI*52;
+  const label='text-[11px] font-medium uppercase tracking-wide text-muted';
+
+  document.getElementById('stats').innerHTML = `
+    <div class="grid grid-cols-1 gap-6 rounded-xl border border-line bg-surface p-6 shadow-panel md:grid-cols-[auto_1fr] md:items-center md:gap-10">
+      <div class="flex items-center gap-5">
+        <div class="relative h-32 w-32 shrink-0">
+          <svg viewBox="0 0 128 128" class="h-32 w-32 -rotate-90">
+            <circle cx="64" cy="64" r="52" fill="none" stroke="#E4EEEC" stroke-width="12"/>
+            <circle id="ring" cx="64" cy="64" r="52" fill="none" stroke="#0B5D52" stroke-width="12" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ}" style="transition:stroke-dashoffset 1s ease"/>
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center"><span class="font-serif text-3xl leading-none text-ink">${pct}<span class="text-base text-muted">%</span></span><span class="mt-1 text-[10px] font-medium uppercase tracking-wide text-muted">Goal achieved</span></div>
+        </div>
+        <div class="md:hidden">
+          <p class="${label}">Goal Weight</p><p class="mt-1 font-serif text-3xl text-ink">${GOAL.toFixed(1)}<span class="text-lg text-muted">lbs</span></p>
+        </div>
+      </div>
+      <div class="min-w-0">
+        <div class="mb-5 grid grid-cols-3 gap-4">
+          <div class="hidden md:block"><p class="${label}">Goal Weight</p><p class="mt-1 font-serif text-3xl text-ink">${GOAL.toFixed(1)}<span class="text-lg text-muted">lbs</span></p></div>
+          <div><p class="${label}">Current</p><p class="mt-1 font-serif text-3xl text-ink">${latest.weight.toFixed(1)}<span class="text-lg text-muted">lbs</span></p></div>
+          <div><p class="${label}">To go</p><p class="mt-1 font-serif text-3xl text-accent">${toGo.toFixed(1)}<span class="text-lg text-muted">lbs</span></p></div>
+        </div>
+        <div class="relative h-3 rounded-full bg-primary-soft">
+          <div id="track" class="h-full rounded-full bg-gradient-to-r from-primary to-success" style="width:0;transition:width 1s ease"></div>
+          <div id="thumb" class="absolute top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-white bg-primary shadow" style="left:0;transition:left 1s ease"></div>
+        </div>
+        <div class="mt-2 flex justify-between text-xs text-muted"><span>Start ${start.toFixed(1)} lbs</span><span class="flex items-center gap-1 font-medium text-accent">${icon('flag','h-3 w-3')}Goal ${GOAL.toFixed(1)} lbs</span></div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div class="rounded-xl border border-line bg-surface p-5 shadow-panel">
+        <p class="${label}">Net Weight Loss</p>
+        <p class="mt-1.5 font-serif text-3xl text-success">${latest.loss.toFixed(1)}<span class="text-lg text-muted">lbs</span></p>
+        <div class="mt-3">${spark}</div>
+        <p class="mt-1 text-xs text-muted">Weight trend · ${chrono.length} entries</p>
+      </div>
+      <div class="rounded-xl border border-line bg-surface p-5 shadow-panel">
+        <p class="${label}">Overall Weight Loss</p>
+        <p class="mt-1.5 font-serif text-3xl text-success">${latest.loss.toFixed(1)}<span class="text-lg text-muted">lbs</span></p>
+        <div class="mt-3">${bars}</div>
+        <p class="mt-1 text-xs text-muted">${latest.loss.toFixed(1)} of ${total.toFixed(1)} lbs target</p>
+      </div>
+      <div class="rounded-xl border border-line bg-surface p-5 shadow-panel">
+        <p class="${label}">Net Inches Lost</p>
+        <p class="mt-1.5 font-serif text-3xl text-accent">${SITES.length?inchesTotal.toFixed(1)+'<span class="text-lg text-muted">in</span>':'N/A'}</p>
+        <div class="mt-3 space-y-1.5">${topSites.map(x=>`<div class="flex items-center gap-2 text-xs"><span class="w-20 shrink-0 truncate text-muted">${x.name}</span><div class="h-1.5 flex-1 rounded-full bg-accent-soft"><div class="h-full rounded-full bg-accent" style="width:${x.lost/topMax*100}%"></div></div><span class="w-9 text-right font-medium text-ink">${x.lost.toFixed(1)}</span></div>`).join('')}</div>
+        <p class="mt-2 text-xs text-muted">${SITES.length?`Top sites · ${SITES.length} measured`:'Add measurements to a daily log to track inches.'}</p>
+      </div>
+    </div>
+    ${SITES.length?`<div class="rounded-xl border border-line bg-surface p-6 shadow-panel">
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-2">
+        <h2 class="font-serif text-lg text-ink">Body measurements</h2>
+        <div class="flex items-center gap-4 text-xs text-muted">
+          <span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-primary/25"></span>Start</span>
+          <span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-primary"></span>Current</span>
+        </div>
+      </div>
+      <div class="space-y-4">${SITES.map(x=>`
+        <div class="grid grid-cols-[88px_1fr_auto] items-center gap-3 sm:grid-cols-[110px_1fr_150px]">
+          <span class="text-sm font-medium text-ink">${x.name}</span>
+          <div class="relative h-3 rounded-full bg-canvas">
+            <div class="absolute inset-y-0 left-0 rounded-full bg-primary/25" style="width:${x.start/maxStart*100}%"></div>
+            <div class="absolute inset-y-0 left-0 rounded-full bg-primary" style="width:${x.current/maxStart*100}%"></div>
+          </div>
+          <span class="text-right text-xs text-muted">${x.lost==null?`<span class="font-medium text-muted">${x.current.toFixed(1)} in · 1 reading</span>`:`<span class="hidden sm:inline">${x.start.toFixed(1)} → ${x.current.toFixed(1)} in · </span><span class="font-semibold text-success">−${x.lost.toFixed(1)} in</span>`}</span>
+        </div>`).join('')}
+      </div>
+    </div>`:''}`;
+
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    document.getElementById('ring').style.strokeDashoffset = circ*(1-pct/100);
+    document.getElementById('track').style.width = pct+'%';
+    document.getElementById('thumb').style.left = pct+'%';
+  }));
+})();
+
+document.getElementById('entryCount').textContent = `${ENTRIES.length} entries`;
+
+function chartSVG(entries, goal) {
+  const sorted = [...entries].reverse();
+  const w = 900, h = 240, padL = 40, padR = 20, padT = 16, padB = 28;
+  const weights = sorted.map(e => e.weight);
+  const yMin = Math.floor(Math.min(goal, ...weights) - 4);
+  const yMax = Math.ceil(Math.max(...weights) + 4);
+  const x = i => padL + (i / (sorted.length - 1 || 1)) * (w - padL - padR);
+  const y = v => padT + (1 - (v - yMin) / (yMax - yMin)) * (h - padT - padB);
+  const points = sorted.map((e,i) => `${x(i)},${y(e.weight)}`).join(' ');
+  const gridLines = [0,1,2,3,4].map(i => {
+    const val = yMin + (i/4) * (yMax - yMin);
+    const yy = y(val);
+    return `<line x1="${padL}" y1="${yy}" x2="${w-padR}" y2="${yy}" stroke="#E4E2DC" stroke-width="1"/><text x="4" y="${yy+4}" font-size="11" fill="#6B7280">${Math.round(val)}</text>`;
+  }).join('');
+  const dots = sorted.map((e,i) => `<circle cx="${x(i)}" cy="${y(e.weight)}" r="4" fill="#0B5D52"/>`).join('');
+  const labels = sorted.map((e,i) => `<text x="${x(i)}" y="${h-8}" font-size="10" fill="#6B7280" text-anchor="middle">${e.date.slice(0,5)}</text>`).join('');
+  const goalY = y(goal);
+  return `<svg viewBox="0 0 ${w} ${h}" class="w-full h-60">
+    ${gridLines}
+    <line x1="${padL}" y1="${goalY}" x2="${w-padR}" y2="${goalY}" stroke="#C7522A" stroke-width="1.5" stroke-dasharray="5,4"/>
+    <polyline points="${points}" fill="none" stroke="#0B5D52" stroke-width="2.5"/>
+    ${dots}${labels}
+  </svg>`;
+}
+document.getElementById('chart').innerHTML = chartSVG(ENTRIES, GOAL);
+
+function row(label, value) {
+  return `<div class="flex items-center justify-between py-1.5 text-sm"><span class="text-muted">${label}</span><span class="font-medium text-ink">${value}</span></div>`;
+}
+
+function renderEntries() {
+  document.getElementById('entries').innerHTML = ENTRIES.map((e, idx) => `
+    <div class="entry rounded-xl border border-line bg-surface shadow-panel ${idx === 0 ? 'expanded' : ''}">
+      <div class="entry-toggle flex w-full cursor-pointer items-center justify-between gap-4 px-5 py-4 text-left">
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white">${e.date}</span>
+          <span class="text-xs text-muted">Day ${e.day}</span>
+          <span class="rounded-full bg-success-soft px-2.5 py-1 text-xs font-semibold text-success">Adherence ${e.adherence}/10</span>
+          ${e.note ? `<span class="flex items-center gap-1 rounded-full bg-accent-soft px-2.5 py-1 text-xs font-semibold text-accent">${icon('flag','h-3 w-3')}Flagged</span>` : ""}
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="hidden text-sm text-ink/70 sm:block mr-2">${e.weight.toFixed(1)} lbs</span>
+          <div class="relative">
+            <button type="button" class="row-menu-toggle rounded-lg p-1.5 text-muted hover:bg-canvas hover:text-ink" title="Edit or delete this entry">${icon('more','h-4 w-4 rotate-90')}</button>
+            <div class="row-menu-dropdown hidden absolute right-0 top-full z-10 mt-1 w-32 overflow-hidden rounded-lg border border-line bg-surface shadow-panel">
+              <button type="button" class="block w-full px-3 py-2 text-left text-sm text-ink hover:bg-canvas">Edit</button>
+              <button type="button" class="block w-full px-3 py-2 text-left text-sm text-accent hover:bg-accent-soft">Delete</button>
+            </div>
+          </div>
+          ${icon('chevronDown', 'chevron h-4 w-4 text-muted')}
+        </div>
+      </div>
+      <div class="entry-body border-t border-line px-5 py-5">
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+          <div>
+            <p class="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted">Details</p>
+            ${row("Today's Weight", e.weight.toFixed(2) + " lbs")}
+            ${row("Weight Loss To Date", e.loss.toFixed(2) + " lbs")}
+            ${row("Water Intake", e.water.toFixed(2) + " oz")}
+            ${row("Sleep Hours", e.sleep + " hrs")}
+          </div>
+          <div>
+            <p class="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted">Food</p>
+            ${row("Lunch", e.lunch)}
+            ${row("Dinner", e.dinner)}
+            ${row("Other", e.other)}
+          </div>
+          <div>
+            <p class="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted">Flags &amp; Notes</p>
+            <div class="rounded-lg ${e.note ? 'bg-accent-soft text-accent' : 'bg-canvas text-muted'} px-3 py-2 text-sm">${e.note || "No flags logged for this day."}</div>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+
+  document.querySelectorAll('.entry-toggle').forEach(btn => btn.addEventListener('click', () => btn.closest('.entry').classList.toggle('expanded')));
+
+  document.querySelectorAll('.row-menu-toggle').forEach(btn => {
+    btn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      const dropdown = btn.nextElementSibling;
+      document.querySelectorAll('.row-menu-dropdown').forEach(d => { if (d !== dropdown) d.classList.add('hidden'); });
+      dropdown.classList.toggle('hidden');
+    });
+  });
+  document.querySelectorAll('.row-menu-dropdown').forEach(d => d.addEventListener('click', ev => ev.stopPropagation()));
+  document.addEventListener('click', () => document.querySelectorAll('.row-menu-dropdown').forEach(d => d.classList.add('hidden')));
+}
+renderEntries();
+
+// ---- Sync all logs from the start, with progress ----
+// Replace fetchLogsPage with your real call; it should load one page/batch of logs and resolve with the running count.
+const SYNC_TOTAL = ENTRIES.length * 6;           // demo total
+const fetchLogsPage = (done) => new Promise(r => setTimeout(() => r(Math.min(SYNC_TOTAL, done + 4)), 90));
+const syncBtn=document.getElementById('refreshBtn'), syncFill=document.getElementById('syncFill'), syncBarFill=document.getElementById('syncBarFill'), syncLabel=document.getElementById('syncLabel'), syncIcon=document.getElementById('syncIcon');
+const setSync=(svgName,spin)=>{ syncIcon.innerHTML=icon(svgName,'h-4 w-4'+(spin?' animate-spin':'')); };
+setSync('refresh');
+async function syncLogs(){
+  if(syncBtn.disabled) return;
+  syncBtn.disabled=true; setSync('refresh',true);
+  let done=0;
+  while(done<SYNC_TOTAL){
+    done=await fetchLogsPage(done);
+    const pct=Math.round(done/SYNC_TOTAL*100);
+    syncFill.style.width=syncBarFill.style.width=pct+'%';
+    syncLabel.textContent=`Syncing ${done} / ${SYNC_TOTAL} · ${pct}%`;
+  }
+  setSync('check'); syncLabel.textContent='Logs up to date';
+  setTimeout(()=>{ syncFill.style.width=syncBarFill.style.width='0'; setSync('refresh'); syncLabel.textContent='Sync logs'; syncBtn.disabled=false; },1800);
+}
+syncBtn.addEventListener('click',syncLogs);
+</script>
+</body>
+</html>

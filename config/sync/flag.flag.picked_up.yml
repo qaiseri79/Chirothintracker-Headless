@@ -1,0 +1,29 @@
+uuid: 88d5fc9e-ed39-4bd6-bc7d-357241dc7639
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_order
+id: picked_up
+label: 'Flat Rate (Ship)'
+bundles:
+  - shop
+entity_type: commerce_order
+global: true
+flag_short: Shipped
+flag_long: ''
+flag_message: ''
+unflag_short: 'Flat Rate'
+unflag_long: ''
+unflag_message: ''
+unflag_denied_text: ''
+weight: 0
+flag_type: 'entity:commerce_order'
+link_type: ajax_link
+flagTypeConfig:
+  show_in_links: {  }
+  show_as_field: true
+  show_on_form: false
+  show_contextual_link: false
+  extra_permissions: {  }
+linkTypeConfig: {  }

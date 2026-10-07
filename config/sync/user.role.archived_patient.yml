@@ -1,0 +1,32 @@
+uuid: 68a1910c-1d96-4cea-b334-ada1e3fc0e45
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.filtered_html
+  module:
+    - contact
+    - field_permissions
+    - file
+    - filter
+    - headless_messages
+    - headless_progress
+    - node_view_permissions
+    - system
+id: archived_patient
+label: 'Archived Patient'
+weight: 15
+is_admin: null
+permissions:
+  - 'access content'
+  - 'access headless messages'
+  - 'access headless progress'
+  - 'access site-wide contact form'
+  - 'delete own files'
+  - 'use text format filtered_html'
+  - 'view any page content'
+  - 'view any recipe content'
+  - 'view own field_gross_weight_loss'
+  - 'view own field_net_inches_lost'
+  - 'view own field_net_weight_loss'
+  - 'view own field_overall_start_weight'

@@ -1,0 +1,9 @@
+name: chirothintrackerreact
+recipe: drupal10
+config:
+  php: "8.2"
+  drush: ^11
+  composer_version: 2-latest
+  webroot: web
+  # Move the database type here inside config
+  database: mysql:8.0

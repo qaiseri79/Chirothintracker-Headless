@@ -1,0 +1,24 @@
+uuid: f37130ad-df19-4055-9c75-052163bdc1ce
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_overall_start_weight
+  module:
+    - user
+id: user.user.field_overall_start_weight
+field_name: field_overall_start_weight
+entity_type: user
+bundle: user
+label: 'Overall Start Weight'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: lbs
+field_type: float

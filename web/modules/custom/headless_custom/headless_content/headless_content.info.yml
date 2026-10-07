@@ -1,0 +1,28 @@
+name: 'Headless Content'
+type: module
+description: 'JSON endpoints for the doctor-and-patient content library: recipes, training and chirothin_resource. Read-only apart from a per-caller favourite and a chiropractor-added recipe. Visibility comes from field_published_to (an ECK clinic reference) plus the clinic''s field_hide_shared_resources toggle, mirroring the legacy recipes, training and resources Views.'
+package: 'ChiroThin'
+core_version_requirement: ^10
+dependencies:
+  # node: the content library is nodes. Without this the entity query in
+  # ContentService resolves nothing and every route 500s.
+  - drupal:node
+  # user: the tenant boundary is user.field_clinic, read in ContentScope.
+  - drupal:user
+  # eck: field_published_to references the ECK clinic entity, and the
+  # field_hide_shared_resources toggle lives on it. Loading either without eck
+  # present is not possible, and ContentScope would return FALSE for every clinic.
+  - eck:eck
+  # file: training videos and resource downloads.
+  - drupal:file
+  # taxonomy: recipe categories, recipe types and resource categories are term
+  # references, resolved to labels.
+  - drupal:taxonomy
+  # flag: the per-user favourite. ContentFavorites type-hints FlagServiceInterface
+  # and FlagInterface, and headless_content.favorites injects the 'flag' service, so
+  # without this the container has no service to inject and every list route fails to
+  # build. The flag config itself (bundles, the bundle/entity type it covers) is read
+  # from the site at runtime, not declared here, so re-exporting the flag is enough to
+  # change which bundles can be favourited.
+  - flag:flag
+  - headless_custom:headless_access

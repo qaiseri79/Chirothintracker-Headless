@@ -1,0 +1,14 @@
+uuid: 3340071b-c797-4ac7-80f1-a0bd4019ee4d
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.patient_white_label
+  module:
+    - user
+id: user_add_role_action.patient_white_label
+label: 'Add the Patient - White Label role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: patient_white_label

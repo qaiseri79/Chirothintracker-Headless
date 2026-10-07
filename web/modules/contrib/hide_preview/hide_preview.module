@@ -1,0 +1,58 @@
+<?php
+
+/**
+ * @file
+ * Module entry point.
+ *
+ * This file calls the hook_form_alter
+ * to manipulate the form preview button.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Alters the forms to hide the preview button if needed.
+ *
+ * @inheritdoc
+ */
+function hide_preview_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  $config = Drupal::config('hide_preview.settings');
+  $formNames = $config->get('hide_preview.form_names') ?: [];
+
+  // Check if it is a regexp or a simple string.
+  foreach ($formNames as $name) {
+    if (@preg_match($name, $form_id, $matches) !== FALSE) {
+      if (count($matches)) {
+        _hide_preview_remove_button($form);
+      }
+    }
+    elseif (strpos($form_id, $name) !== FALSE) {
+      _hide_preview_remove_button($form);
+    }
+  }
+}
+
+/**
+ * Helper function to remove preview button from all possible locations.
+ */
+function _hide_preview_remove_button(array &$form): void {
+  // Handle standard preview button.
+  if (isset($form['actions']['preview'])) {
+    unset($form['actions']['preview']);
+  }
+
+  // Handle Gin theme's preview button.
+  if (isset($form['meta']['preview'])) {
+    unset($form['meta']['preview']);
+  }
+
+  // Handle any nested preview buttons.
+  if (isset($form['actions']['preview_draft'])) {
+    unset($form['actions']['preview_draft']);
+  }
+
+  // Handle additional Gin theme variations.
+  if (isset($form['top']['meta']['preview'])) {
+    unset($form['top']['meta']['preview']);
+  }
+}

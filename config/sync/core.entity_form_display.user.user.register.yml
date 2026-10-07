@@ -1,0 +1,269 @@
+uuid: bbe8c853-d669-4b8e-ad65-22dead20c011
+langcode: en
+status: false
+dependencies:
+  config:
+    - core.entity_form_mode.user.register
+    - field.field.user.user.commerce_remote_id
+    - field.field.user.user.field_chiropractor
+    - field.field.user.user.field_chiropractor_subscribers
+    - field.field.user.user.field_chirothin_profile
+    - field.field.user.user.field_clinic
+    - field.field.user.user.field_clinic_location
+    - field.field.user.user.field_current_program_day
+    - field.field.user.user.field_email_optout
+    - field.field.user.user.field_full_name
+    - field.field.user.user.field_goal_achieved
+    - field.field.user.user.field_goal_weight
+    - field.field.user.user.field_gross_weight_loss
+    - field.field.user.user.field_intake_form
+    - field.field.user.user.field_laser_patient_status
+    - field.field.user.user.field_last_seen
+    - field.field.user.user.field_late
+    - field.field.user.user.field_locked
+    - field.field.user.user.field_net_inches_lost
+    - field.field.user.user.field_net_weight_loss
+    - field.field.user.user.field_overall_start_weight
+    - field.field.user.user.field_payment_machine_name
+    - field.field.user.user.field_phone_number
+    - field.field.user.user.field_products_pulled
+    - field.field.user.user.field_program_day
+    - field.field.user.user.field_program_day_term
+    - field.field.user.user.field_program_start_date
+    - field.field.user.user.field_program_start_inches
+    - field.field.user.user.field_program_start_weight
+    - field.field.user.user.field_shipping_methods
+    - field.field.user.user.field_std_dm_ntfd_pd
+    - field.field.user.user.field_timezone
+    - field.field.user.user.field_user_current_program_day_c
+    - field.field.user.user.field_weight_loss_phase
+    - field.field.user.user.user_picture
+    - image.style.thumbnail
+  module:
+    - datetime
+    - image
+    - path
+    - telephone
+    - user
+_core:
+  default_config_hash: FaQ9Ptcpxpg30AtiqRDtl_8zbJArHP1LPfug_s59TOA
+id: user.user.register
+targetEntityType: user
+bundle: user
+mode: register
+content:
+  account:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  contact:
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_chiropractor:
+    type: entity_reference_autocomplete
+    weight: 27
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_chirothin_profile:
+    type: options_select
+    weight: 28
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_clinic:
+    type: options_select
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_clinic_location:
+    type: options_select
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_current_program_day:
+    type: string_textfield
+    weight: 12
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_email_optout:
+    type: boolean_checkbox
+    weight: 3
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_full_name:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_goal_achieved:
+    type: number
+    weight: 19
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_goal_weight:
+    type: number
+    weight: 11
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_gross_weight_loss:
+    type: number
+    weight: 18
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_laser_patient_status:
+    type: options_buttons
+    weight: 21
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_last_seen:
+    type: datetime_default
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_late:
+    type: options_select
+    weight: 22
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_locked:
+    type: boolean_checkbox
+    weight: 25
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_net_inches_lost:
+    type: number
+    weight: 29
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_net_weight_loss:
+    type: number
+    weight: 17
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_overall_start_weight:
+    type: number
+    weight: 14
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_phone_number:
+    type: telephone_default
+    weight: 4
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_program_day_term:
+    type: options_select
+    weight: 20
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_program_start_date:
+    type: datetime_default
+    weight: 8
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_program_start_inches:
+    type: number
+    weight: 15
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_program_start_weight:
+    type: number
+    weight: 13
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_timezone:
+    type: string_textfield
+    weight: 23
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_weight_loss_phase:
+    type: options_select
+    weight: 16
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  language:
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 24
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  private_messages:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  timezone:
+    weight: 9
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  user_picture:
+    type: image_image
+    weight: 26
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+hidden:
+  commerce_remote_id: true
+  customer_profiles: true
+  field_chiropractor_subscribers: true
+  field_intake_form: true
+  field_payment_machine_name: true
+  field_products_pulled: true
+  field_program_day: true
+  field_shipping_methods: true
+  field_std_dm_ntfd_pd: true
+  field_user_current_program_day_c: true

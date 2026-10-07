@@ -1,0 +1,25 @@
+uuid: ec727351-f880-4f57-af27-2ada0a28bfc0
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - chirothintracker_subtheme
+_core:
+  default_config_hash: 9o0NWRIYwfPZS3Bopw4zVf_H5_PKYHLBmdWfJq4ly14
+id: chirothintracker_subtheme_branding
+theme: chirothintracker_subtheme
+region: nav_branding
+weight: -11
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding'
+  label_display: '0'
+  provider: system
+  use_site_logo: true
+  use_site_name: false
+  use_site_slogan: true
+visibility: {  }

@@ -1,0 +1,26 @@
+uuid: c93c438f-6d9c-4f12-a781-5a743e0f5561
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_clinic_location
+  module:
+    - user
+id: user.user.field_clinic_location
+field_name: field_clinic_location
+entity_type: user
+bundle: user
+label: 'Clinic Location'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: clinic_locations
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

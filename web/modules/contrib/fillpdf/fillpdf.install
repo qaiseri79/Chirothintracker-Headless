@@ -1,0 +1,437 @@
+<?php
+
+/**
+ * @file
+ * Install functions for FillPDF.
+ */
+
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Link;
+use Drupal\Core\StreamWrapper\StreamWrapperInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Url;
+use Drupal\fillpdf\Entity\FillPdfForm;
+use Drupal\fillpdf\Plugin\PdfBackend\PdftkPdfBackend;
+use Drupal\fillpdf\Service\FillPdfAdminFormHelper;
+
+/**
+ * Implements hook_update_N().
+ */
+
+/**
+ * Add scheme field to FillPdfForm.
+ */
+function fillpdf_update_8101() {
+  $edum = \Drupal::entityDefinitionUpdateManager();
+  $scheme_field = BaseFieldDefinition::create('string')
+    ->setLabel('Storage system for generated PDFs')
+    ->setDescription(t('This setting is used as the storage/download method for generated PDFs. The use of public files is more efficient, but does not provide any access control. Changing this setting will require you to migrate associated files and data yourself and is not recommended after you have uploaded a template.'))
+    ->setDisplayOptions('form', [
+      'type' => 'radios',
+      'options' => \Drupal::service('fillpdf.admin_form_helper')->schemeOptions(),
+    ]);
+  $edum->installFieldStorageDefinition('scheme', 'fillpdf_form', 'fillpdf_form', $scheme_field);
+}
+
+/**
+ * Install FillPdfFileContext storage.
+ */
+function fillpdf_update_8102() {
+  $edum = \Drupal::entityDefinitionUpdateManager();
+  $entity_manager = \Drupal::entityTypeManager();
+  $fillpdf_file_context = $entity_manager->getDefinition('fillpdf_file_context');
+  $edum->installEntityType($fillpdf_file_context);
+}
+
+/**
+ * Use file fields instead of entity_reference fields for referring to files.
+ */
+function fillpdf_update_8103() {
+  $edum = \Drupal::entityDefinitionUpdateManager();
+  $em = \Drupal::entityTypeManager();
+  $db = \Drupal::database();
+
+  $form_file_def = BaseFieldDefinition::create('file')
+    ->setLabel(t('The associated managed file.'))
+    ->setDescription(t('The associated managed file.'))
+    ->setName('file')
+    ->setProvider('fillpdf_form')
+    ->setTargetBundle(NULL)
+    ->setTargetEntityTypeId('fillpdf_form');
+
+  $fc_file_def = BaseFieldDefinition::create('file')
+    ->setLabel(t('The associated managed file.'))
+    ->setDescription(t('The associated managed file.'))
+    ->setName('file')
+    ->setProvider('fillpdf_file_context')
+    ->setTargetBundle(NULL)
+    ->setTargetEntityTypeId('fillpdf_file_context');
+
+  // Save existing data.
+  $form_files = $db->select('fillpdf_forms', 'ff')
+    ->fields('ff', ['fid', 'file'])
+    ->execute()
+    ->fetchAllKeyed();
+
+  $fc_files = $db->select('fillpdf_file_context', 'fc')
+    ->fields('fc', ['id', 'file'])
+    ->execute()
+    ->fetchAllKeyed();
+
+  // Remove data from the storage.
+  $db->update('fillpdf_forms')
+    ->fields(['file' => NULL])
+    ->execute();
+
+  $db->update('fillpdf_file_context')
+    ->fields(['file' => NULL])
+    ->execute();
+
+  // Now install the new field definitions.
+  $edum->updateFieldStorageDefinition($form_file_def);
+  $edum->updateFieldStorageDefinition($fc_file_def);
+
+  foreach ($form_files as $entity_id => $fillpdf_form_file) {
+    /** @var ContentEntityInterface $entity */
+    $entity = $em->getStorage('fillpdf_form')->load($entity_id);
+    $entity->file->target_id = $fillpdf_form_file;
+    $entity->save();
+  }
+
+  foreach ($fc_files as $entity_id => $ffcf) {
+    /** @var ContentEntityInterface $entity */
+    $entity = $em->getStorage('fillpdf_file_context')->load($entity_id);
+    $entity->file->target_id = $ffcf;
+    $entity->save();
+  }
+}
+
+/**
+ * Add replacements fields.
+ */
+function fillpdf_update_8104() {
+  $edum = \Drupal::entityDefinitionUpdateManager();
+  $replacements = BaseFieldDefinition::create('string_long')
+    ->setLabel(t('Replace word(s) with correct output values'))
+    ->setDescription(FillPdfAdminFormHelper::getReplacementsDescription());
+  $edum->installFieldStorageDefinition('replacements', 'fillpdf_form', 'fillpdf_form', $replacements);
+}
+
+/**
+ * Enable Serialization module.
+ */
+function fillpdf_update_8105() {
+  \Drupal::getContainer()->get('module_installer')->install(['serialization']);
+}
+
+/**
+ * Update default FillPDF Service endpoint (if it's currently the default).
+ */
+function fillpdf_update_8106() {
+  $config = \Drupal::getContainer()->get('config.factory');
+  $settings = $config->getEditable('fillpdf.settings');
+  if ($settings->get('remote_endpoint') === 'fillpdf-service.com/xmlrpc.php') {
+    $settings->set('remote_endpoint', 'fillpdf.io/xmlrpc.php');
+    $settings->save();
+  }
+
+  return t('Default FillPDF Service endpoint updated to fillpdf.io/xmlrpc.php.');
+}
+
+/**
+ * Update storage scheme configuration.
+ */
+function fillpdf_update_8107() {
+  $config = \Drupal::configFactory()->getEditable('fillpdf.settings');
+
+  // Rename the 'scheme' key to 'template_scheme'.
+  if ($config->get('template_scheme') === NULL) {
+    $config->set('template_scheme', $config->get('scheme'));
+  }
+  $config->clear('scheme');
+
+  // Initialize the new 'allowed_schemes' key with all currently available
+  // storage schemes.
+  if ($config->get('allowed_schemes') === NULL) {
+    $available_schemes = array_keys(\Drupal::service('stream_wrapper_manager')->getWrappers(StreamWrapperInterface::WRITE_VISIBLE));
+    $config->set('allowed_schemes', $available_schemes)->save();
+  }
+  $config->save();
+
+  return new FormattableMarkup('All currently available file storage schemes were added to FillPDF configuration. Please review at <a href=":url">FillPDF settings</a>.', [
+    ':url' => Url::fromRoute('fillpdf.settings')->setOption('base_url', \Drupal::request()->getBasePath())->toString(),
+  ]);
+}
+
+/**
+ * Update stored FillPDF forms to the changed storage logic.
+ */
+function fillpdf_update_8108() {
+  $fillpdf_forms = FillPdfForm::loadMultiple();
+
+  // Previously, populated PDF files were stored in the filesystem, if a
+  // 'destination_path' is set. Now it is stored, if 'scheme' is set, which
+  // previously was always the case. So for preexisting FillPdfForms without
+  // a 'destination_path', we need to unset 'scheme' to ensure nothing changes.
+  $updated_ids = [];
+  foreach ($fillpdf_forms as $id => $form) {
+    if (empty($form->getStoragePath())) {
+      $status = $form->set('scheme', NULL)->save();
+      if ($status === SAVED_UPDATED) {
+        $base_path = ['base_url' => \Drupal::request()->getBasePath()];
+        $updated_ids[] = Link::createFromRoute($id, 'entity.fillpdf_form.edit_form', ['fillpdf_form' => $id], $base_path)->toString();
+      }
+    }
+  }
+
+  return new FormattableMarkup('The following FillPDF forms were updated to the changed storage logic: %list.', [
+    '%list' => new FormattableMarkup(implode(', ', $updated_ids), []),
+  ]);
+}
+
+/**
+ * Adds the 'shell_locale' config setting.
+ */
+function fillpdf_update_8109() {
+  $settings = \Drupal::configFactory()->getEditable('fillpdf.settings');
+  if ($settings->get('shell_locale') === NULL) {
+    $settings->set('shell_locale', 'en_US.utf8')->save();
+  }
+}
+
+/**
+ * Install 'fillpdf_legacy' sub-module, uninstall 'fillpdf_next' sub-module.
+ */
+function fillpdf_update_8110() {
+  /** @var \Drupal\Core\Extension\ModuleInstaller $module_installer */
+  $module_installer = \Drupal::service('module_installer');
+
+  if (\Drupal::moduleHandler()->moduleExists('fillpdf_next')) {
+    $module_installer->uninstall(['fillpdf_next']);
+  }
+
+  if (!\Drupal::moduleHandler()->moduleExists('fillpdf_legacy')) {
+    $module_installer->install(['fillpdf_legacy']);
+
+    $base_url = \Drupal::request()->getBasePath();
+    return new FormattableMarkup("Installed the <a href=':list'>FillPDF legacy backend support</a> sub-module.<br />If you're not using any legacy backends, you may safely <a href=':uninstall'>uninstall it again.</a>.", [
+      ':list' => Url::fromRoute('system.modules_list', [], ['fragment' => 'module-fillpdf'])->setOption('base_url', $base_url)->toString(),
+      ':uninstall' => Url::fromRoute('system.modules_uninstall')->setOption('base_url', $base_url)->toString(),
+    ]);
+  }
+}
+
+/**
+ * Add fields for PDFtk Security.
+ */
+function fillpdf_update_8111() {
+  $pdftk_encryption = BaseFieldDefinition::create('list_string')
+    ->setLabel('PDFtk encryption strength')
+    ->setDescription("Select the type of PDFtk encryption you'd like to use. You should choose 128-bit unless you know otherwise.")
+    ->setCardinality(1)
+    ->setSettings([
+      'allowed_values_function' => [
+        PdftkPdfBackend::class,
+        'getEncryptionOptions',
+      ],
+    ])
+    ->setDisplayOptions('form', [
+      'type' => 'options_select',
+      'weight' => 50,
+    ]);
+
+  $permissions = BaseFieldDefinition::create('list_string')
+    ->setLabel('User permissions')
+    ->setCardinality(-1)
+    ->setDescription('Choose the permissions the user should have for the encrypted PDF. If they enter the Owner Password, they will be able to unlock it. <strong>If you do not specify any permissions, then none of these operations will be allowed.</strong>')
+    ->setSettings([
+      'allowed_values_function' => [
+        PdftkPdfBackend::class,
+        'getUserPermissionList',
+      ],
+    ])
+    ->setDisplayOptions('form', [
+      'type' => 'options_select',
+      'weight' => 60,
+    ]);
+
+  $owner_password = BaseFieldDefinition::create('string')
+    ->setLabel(t('Owner password'))
+    ->setDescription(new TranslatableMarkup('Required for encryption. Enter the decryption password for the PDF. This password allows PDF security settings to be changed. If you configure encryption and permissions but leave this blank, then anyone will be able to change the security settings.'))
+    ->setDisplayOptions('form', [
+      'type' => 'string',
+      'weight' => 70,
+    ]);
+
+  $user_password = BaseFieldDefinition::create('string')
+    ->setLabel(t('Filename pattern'))
+    ->setDescription(new TranslatableMarkup('Optional. If you want to restrict the opening of this PDF to those with a password, enter one here.'))
+    ->setDisplayOptions('form', [
+      'type' => 'string',
+      'weight' => 80,
+    ]);
+
+  $edum = Drupal::entityDefinitionUpdateManager();
+  $edum->installFieldStorageDefinition('pdftk_encryption', 'fillpdf_form', 'fillpdf_form', $pdftk_encryption);
+  $edum->installFieldStorageDefinition('permissions', 'fillpdf_form', 'fillpdf_form', $permissions);
+  $edum->installFieldStorageDefinition('owner_password', 'fillpdf_form', 'fillpdf_form', $owner_password);
+  $edum->installFieldStorageDefinition('user_password', 'fillpdf_form', 'fillpdf_form', $user_password);
+}
+
+/**
+ * Increase maximum length for pdf_key.
+ */
+function fillpdf_update_9501() {
+  // The code of this hook_update_N() implementation is removed in favor of
+  // fillpdf_update_9503() as it does not cover the case that pdf_key has
+  // values.
+  // @see https://www.drupal.org/project/fillpdf/issues/3276361
+}
+
+/**
+ * Convert default_entity_id to string.
+ */
+function fillpdf_update_9502() {
+  // @see https://www.drupal.org/docs/drupal-apis/update-api/updating-entities-and-fields-in-drupal-8#s-updating-a-base-field-type
+  $database = \Drupal::database();
+  $transaction = $database->startTransaction();
+
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $bundle_of = 'fillpdf_form';
+  $field_name = 'default_entity_id';
+
+  $storage = $entity_type_manager->getStorage($bundle_of);
+  $bundle_definition = $entity_type_manager->getDefinition($bundle_of);
+  // Sometimes the primary key isn't 'id'. e.g. 'eid' or 'item_id'.
+  $id_key = $bundle_definition->getKey('id');
+  // If there is no data table defined then use the base table.
+  $table_name = $storage->getDataTable() ?: $storage->getBaseTable();
+  $definition_manager = \Drupal::entityDefinitionUpdateManager();
+
+  // Store the existing values.
+  $migrated_values = $database->select($table_name)
+    ->fields($table_name, [$id_key, $field_name])
+    ->execute()
+    ->fetchAllKeyed();
+
+  // Clear out the values.
+  $database->update($table_name)
+    ->fields([$field_name => NULL])
+    ->execute();
+
+  // Uninstall the field.
+  $field_storage_definition = $definition_manager->getFieldStorageDefinition($field_name, $bundle_of);
+  $definition_manager->uninstallFieldStorageDefinition($field_storage_definition);
+
+  // Create a new field definition.
+  $new_field = BaseFieldDefinition::create('string')
+    ->setName($field_name)
+    ->setProvider($bundle_of)
+    ->setTargetBundle(NULL)
+    ->setTargetEntityTypeId($bundle_of);
+
+  // Install the new definition.
+  $definition_manager->installFieldStorageDefinition($field_name, $bundle_of, $bundle_of, $new_field);
+
+  // Restore the values.
+  foreach ($migrated_values as $id => $value) {
+    $database->update($table_name)
+      ->fields([$field_name => (string) $value])
+      ->condition($id_key, $id)
+      ->execute();
+  }
+
+  // Commit transaction.
+  unset($transaction);
+}
+
+/**
+ * Increase maximum length for pdf_key.
+ */
+function fillpdf_update_9503() {
+  $field_name = 'pdf_key';
+  $entity_type = 'fillpdf_form_field';
+  $new_field_type = 'string_long';
+
+  $database = \Drupal::database();
+  $transaction = $database->startTransaction();
+
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $storage = $entity_type_manager->getStorage($entity_type);
+  $entity_definition = $entity_type_manager->getDefinition($entity_type);
+  $id_key = $entity_definition->getKey('id');
+  $table_name = $storage->getBaseTable();
+  $definition_manager = \Drupal::entityDefinitionUpdateManager();
+
+  $field_storage_definition = $definition_manager->getFieldStorageDefinition($field_name, $entity_type);
+  // If the field type is string_long already, do nothing.
+  if ($field_storage_definition->getType() === $new_field_type) {
+    return;
+  }
+
+  // Store the existing values.
+  $migrated_values = $database->select($table_name)
+    ->fields($table_name, [$id_key, $field_name])
+    ->execute()
+    ->fetchAllKeyed();
+
+  // Clear out the values.
+  $database->update($table_name)
+    ->fields([$field_name => NULL])
+    ->execute();
+
+  // Uninstall the field.
+  $definition_manager->uninstallFieldStorageDefinition($field_storage_definition);
+
+  // Create the new field definition.
+  $new_field = BaseFieldDefinition::create($new_field_type)
+    ->setLabel(t('PDF Key'))
+    ->setDescription(t('The name of the field in the PDF form.'));
+  // Install the new definition.
+  $definition_manager->installFieldStorageDefinition($field_name, $entity_type, $entity_type, $new_field);
+
+  // Restore the values.
+  foreach ($migrated_values as $id => $value) {
+    $database->update($table_name)
+      ->fields([$field_name => $value])
+      ->condition($id_key, $id)
+      ->execute();
+  }
+
+  // Commit transaction.
+  unset($transaction);
+}
+
+/**
+ * Rename 'local_service' plugin to 'local_server'.
+ */
+function fillpdf_update_9504() {
+  $settings = \Drupal::configFactory()->getEditable('fillpdf.settings');
+  if ($settings->get('backend') == 'local_service') {
+    $settings->set('backend', 'local_server')->save();
+  }
+}
+
+/**
+ * Revert config for views redirection.
+ */
+function fillpdf_update_10501() {
+  // Load the config factory.
+  $config_factory = \Drupal::configFactory();
+
+  // Load the view.
+  $view = $config_factory->getEditable('views.view.fillpdf_form_fields');
+
+  // Get the display options.
+  $display = $view->get('display');
+
+  // Set the destination back to TRUE.
+  $display['default']['display_options']['fields']['dropbutton']['destination'] = TRUE;
+
+  // Set the display options on the view.
+  $view->set('display', $display);
+
+  // Save the view.
+  $view->save();
+}

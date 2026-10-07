@@ -1,0 +1,23 @@
+uuid: e0f65651-b42d-4083-bf09-26eb6e934eb9
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_product
+    - file
+id: commerce_product.field_description_file
+field_name: field_description_file
+entity_type: commerce_product
+type: file
+settings:
+  target_type: file
+  display_field: false
+  display_default: false
+  uri_scheme: public
+module: file
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

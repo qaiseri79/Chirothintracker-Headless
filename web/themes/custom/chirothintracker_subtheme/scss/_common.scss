@@ -1,0 +1,195 @@
+@import "menu";
+@import "footer";
+@import "login_form";
+@import "pricing";
+@import "dashboard";
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #063150 #f1f1f1;
+  -ms-overflow-style: scrollbar;
+}
+
+.bg-dark {
+  @include background($white !important);
+}
+
+.fs-12 {
+  font-size: 12px !important;
+}
+.fs-14 {
+  font-size: 14px !important;
+}
+// Patient summary label colors
+.weight-flag-3 {
+  color: #fff !important;
+  border: 0.2em solid #b77a22;
+  background-color: #b77a22;
+}
+.weight-flag-4 {
+  color: #fff !important;
+  border: 0.2em solid #9a3347;
+  background-color: #9a3347;
+}
+.weight-flag-5 {
+  color: #fff !important;
+  border: 0.2em solid #c9688c;
+  background-color: #c9688c;
+}
+.weight-flag-84 {
+  color: #fff !important;
+  border: 0.2em solid #5f8dcc;
+  background-color: #5f8dcc;
+}
+.weight-flag-7 {
+  border: 0.2em solid #fbd005;
+  background-color: #fbd005;
+}
+.weight-flag-8 {
+  color: #fff !important;
+  border: 0.2em solid #4b8060;
+  background-color: #4b8060;
+}
+.weight-flag-9 {
+  color: #fff !important;
+  border: 0.2em solid #715090;
+  background-color: #715090;
+}
+.weight-flag-10 {
+  color: #fff !important;
+  border: 0.2em solid #2298a9;
+  background-color: #2298a9;
+}
+.weight-flag-11 {
+  color: #fff !important;
+  border: 0.2em solid #a03884;
+  background-color: #a03884;
+}
+.weight-flag-15 {
+  border: 0.2em solid #000;
+}
+.weight-flag-18 {
+  border: 0.2em solid #ef2125;
+}
+
+// Popup-modal style
+.ui-dialog.ui-corner-all {
+  top: 100px !important;
+  max-height: 520px;
+  overflow-y: auto;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  & div#drupal-modal {
+    overflow-y: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  & .ui-dialog-titlebar {
+    background: #e46238;
+    color: #fff;
+    padding: 20px 20px;
+  }
+  & .ui-dialog-content {
+    max-height: 450px !important;
+    padding-bottom: 75px;
+  }
+  & .webform-submission-add-form {
+    margin: 10px auto;
+    padding: 20px 20px;
+    margin-bottom: 40px;
+    & .js-filter-wrapper {
+      & .form-wrapper {
+        margin: 0px 0;
+        padding: 0px 0px;
+        border-top: 0px solid #044d7d;
+        border-bottom: 0px solid #044d7d;
+      }
+    }
+    @include responsive(mobile) {
+      padding: 10px 10px;
+    }
+  }
+  & form.contact-message-patient-message-form {
+    margin-bottom: 0;
+  }
+  & .ui-dialog-buttonpane {
+    background: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 999999;
+  }
+  & .webform-element-description {
+    text-transform: uppercase;
+    background: #e46238;
+    padding: 10px 10px;
+    color: #fff;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+  & button.ui-dialog-titlebar-close {
+    right: 1rem !important;
+    color: #fff !important;
+    background-color: #fff !important;
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 50px !important;
+    opacity: 1 !important;
+  }
+  & .ui-dialog-buttonpane {
+    background: #ffff;
+    & .webform-button--submit {
+      height: 40px;
+      width: auto;
+      background: $navy-normal-blue;
+      border-radius: 50px;
+      padding: 4px 40px;
+      font-weight: 500;
+      color: $white;
+      border: 1px solid $white;
+      transition: all 0.3s ease-in;
+      &:hover {
+        background: transparent;
+        border: 1px solid $navy-normal-blue;
+        color: $navy-normal-blue;
+      }
+    }
+  }
+  & .ck-reset.ck-editor {
+    margin-top: 12px;
+  }
+  & .form-actions {
+    & .form-submit {
+      height: 40px;
+      width: auto;
+      background: $navy-normal-blue;
+      border-radius: 50px;
+      padding: 4px 40px;
+      font-weight: 500;
+      color: $white;
+      border: 1px solid $white;
+      transition: all 0.3s ease-in;
+      &:hover {
+        background: transparent;
+        border: 1px solid $navy-normal-blue;
+        color: $navy-normal-blue;
+      }
+    }
+  }
+}
+
+// Select all/Deselect All button.
+.shield-toggle-all {
+  min-width: 115px;
+}

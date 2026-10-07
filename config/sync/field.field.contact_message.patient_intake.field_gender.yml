@@ -1,0 +1,21 @@
+uuid: 4bc8fccb-3be3-45f3-95c2-ee7ebc00268c
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_gender
+  module:
+    - options
+id: contact_message.patient_intake.field_gender
+field_name: field_gender
+entity_type: contact_message
+bundle: patient_intake
+label: Gender
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -1,0 +1,14 @@
+uuid: 93c459f4-8dff-4119-9d28-0ec6bade0c79
+langcode: en
+status: true
+dependencies: {  }
+id: cn_b12
+label: CN-B12
+dimensions:
+  length: '8'
+  width: '5'
+  height: '9'
+  unit: m
+weight:
+  number: '16'
+  unit: oz

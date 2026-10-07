@@ -1,0 +1,25 @@
+uuid: b89b8fc1-ac46-47fd-8c2f-219d9b82bd09
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_published_to
+    - node.type.training
+id: node.training.field_published_to
+field_name: field_published_to
+entity_type: node
+bundle: training
+label: 'Published To'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: my_clinic
+      display_name: entity_reference_2
+      arguments: {  }
+field_type: entity_reference

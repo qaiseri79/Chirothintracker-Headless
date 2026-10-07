@@ -1,0 +1,23 @@
+uuid: 837c80f5-f914-4dd6-9ba2-9bcec4b32fc9
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.clinic.clinic
+    - field.storage.clinic.field_hide_shared_resources
+id: clinic.clinic.field_hide_shared_resources
+field_name: field_hide_shared_resources
+entity_type: clinic
+bundle: clinic
+label: 'Hide Shared Resources'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: '1'
+  off_label: '0'
+field_type: boolean

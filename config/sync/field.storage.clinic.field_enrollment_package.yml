@@ -1,0 +1,23 @@
+uuid: 4e358348-7a2c-40ee-a2b1-e865673c7046
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: custom
+id: clinic.field_enrollment_package
+field_name: field_enrollment_package
+entity_type: clinic
+type: entity_reference
+settings:
+  target_type: enrollment_package
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

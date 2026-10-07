@@ -1,0 +1,13 @@
+_core:
+  default_config_hash: 5TDl2QyTY-mHHJ0_VrmcxVDwhp4oqkLTzDI03yXvhAI
+menu_link_icons:
+  'views_view:views_resources_test_page_1':
+    icon: 'fa-solid fa-screwdriver-wrench'
+    prefix: fa
+    tag: i
+    appearance: before
+  'views_view:views_resources_test_page_2':
+    icon: 'fa-solid fa-chalkboard-user'
+    prefix: fa
+    tag: i
+    appearance: before

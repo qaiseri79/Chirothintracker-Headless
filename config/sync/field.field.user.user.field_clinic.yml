@@ -1,0 +1,31 @@
+uuid: 52884f21-1c2d-4bed-92a5-6f70a9c24ba0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_clinic
+  module:
+    - disable_field
+    - user
+third_party_settings:
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: user.user.field_clinic
+field_name: field_clinic
+entity_type: user
+bundle: user
+label: Clinic
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: my_clinic
+      display_name: entity_reference_2
+      arguments: {  }
+field_type: entity_reference

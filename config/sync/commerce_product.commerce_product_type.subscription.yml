@@ -1,0 +1,13 @@
+uuid: b28d4c8c-0c65-4c02-b2f8-b2725f2a2912
+langcode: en
+status: true
+dependencies: {  }
+id: subscription
+label: Subscription
+traits: {  }
+locked: false
+description: ''
+variationTypes:
+  - subscription
+multipleVariations: true
+injectVariationFields: true

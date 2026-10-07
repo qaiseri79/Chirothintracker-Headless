@@ -1,0 +1,14 @@
+uuid: 65fd1492-16de-4578-b603-cf571dcddceb
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.chiropractor_laser
+  module:
+    - user
+id: user_remove_role_action.chiropractor_laser
+label: 'Remove the Chiropractor - Laser role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: chiropractor_laser

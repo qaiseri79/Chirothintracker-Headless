@@ -1,0 +1,19 @@
+uuid: 10ccbcdf-8954-4a8d-ab54-740e79b08e10
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.training
+    - field.storage.contact_message.field_title
+id: contact_message.training.field_title
+field_name: field_title
+entity_type: contact_message
+bundle: training
+label: Title
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

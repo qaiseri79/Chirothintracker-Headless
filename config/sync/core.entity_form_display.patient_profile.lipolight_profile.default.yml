@@ -1,0 +1,193 @@
+uuid: 0a5af54c-d3a3-48ee-9fdc-e5662673c52e
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.lipolight_profile
+    - field.field.patient_profile.lipolight_profile.field_abdomen_loss
+    - field.field.patient_profile.lipolight_profile.field_above_umbilicus_loss
+    - field.field.patient_profile.lipolight_profile.field_arm_left_bicep_loss
+    - field.field.patient_profile.lipolight_profile.field_arm_right_bicep_loss
+    - field.field.patient_profile.lipolight_profile.field_back_bra_line_loss
+    - field.field.patient_profile.lipolight_profile.field_below_umbilicus_loss
+    - field.field.patient_profile.lipolight_profile.field_calf_left_loss
+    - field.field.patient_profile.lipolight_profile.field_calf_right_loss
+    - field.field.patient_profile.lipolight_profile.field_chest_loss
+    - field.field.patient_profile.lipolight_profile.field_hips_loss
+    - field.field.patient_profile.lipolight_profile.field_neck_loss
+    - field.field.patient_profile.lipolight_profile.field_patient
+    - field.field.patient_profile.lipolight_profile.field_program_start_date
+    - field.field.patient_profile.lipolight_profile.field_sessions_available
+    - field.field.patient_profile.lipolight_profile.field_shoulders_loss
+    - field.field.patient_profile.lipolight_profile.field_thigh_left_loss
+    - field.field.patient_profile.lipolight_profile.field_thigh_right_loss
+  module:
+    - datetime
+    - field_group
+    - field_hidden
+third_party_settings:
+  field_group:
+    group_hidden:
+      children:
+        - field_neck_loss
+        - field_shoulders_loss
+        - field_arm_left_bicep_loss
+        - field_arm_right_bicep_loss
+        - field_chest_loss
+        - field_back_bra_line_loss
+        - field_above_umbilicus_loss
+        - field_below_umbilicus_loss
+        - field_abdomen_loss
+        - field_hips_loss
+        - field_thigh_left_loss
+        - field_thigh_right_loss
+        - field_calf_left_loss
+        - field_calf_right_loss
+        - field_sessions_available
+      label: ''
+      region: content
+      parent_name: ''
+      weight: 2
+      format_type: html_element
+      format_settings:
+        classes: 'group-hidden field-group-div'
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: true
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: true
+        formatter: open
+        description: ''
+id: patient_profile.lipolight_profile.default
+targetEntityType: patient_profile
+bundle: lipolight_profile
+mode: default
+content:
+  field_abdomen_loss:
+    type: field_hidden_number
+    weight: 9
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_above_umbilicus_loss:
+    type: field_hidden_number
+    weight: 7
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_arm_left_bicep_loss:
+    type: field_hidden_number
+    weight: 3
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_arm_right_bicep_loss:
+    type: field_hidden_number
+    weight: 4
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_back_bra_line_loss:
+    type: field_hidden_number
+    weight: 6
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_below_umbilicus_loss:
+    type: field_hidden_number
+    weight: 8
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_calf_left_loss:
+    type: field_hidden_number
+    weight: 13
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_calf_right_loss:
+    type: field_hidden_number
+    weight: 14
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_chest_loss:
+    type: field_hidden_number
+    weight: 5
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_hips_loss:
+    type: field_hidden_number
+    weight: 10
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_neck_loss:
+    type: field_hidden_number
+    weight: 1
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_patient:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_program_start_date:
+    type: datetime_default
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_sessions_available:
+    type: number
+    weight: 15
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_shoulders_loss:
+    type: field_hidden_number
+    weight: 2
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_thigh_left_loss:
+    type: field_hidden_number
+    weight: 11
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_thigh_right_loss:
+    type: field_hidden_number
+    weight: 12
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true

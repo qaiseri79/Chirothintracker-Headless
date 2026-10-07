@@ -1,0 +1,24 @@
+uuid: 75c6b3f0-a9d1-4eef-9b24-7d55259cdc0c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_gross_weight_loss
+  module:
+    - user
+id: user.user.field_gross_weight_loss
+field_name: field_gross_weight_loss
+entity_type: user
+bundle: user
+label: 'Gross Weight Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: lbs
+field_type: float

@@ -1,0 +1,15 @@
+_core:
+  default_config_hash: F--1EKAki5zF_jdKTc4ZLmgN89WJ2SDrMOkwbqj06-Y
+allowed_entity_types:
+  commerce_license: {  }
+  commerce_order: {  }
+  commerce_product: {  }
+  commerce_subscription: {  }
+  commerce_store: {  }
+  user:
+    - user
+site_uuid_check: true
+import_directory_schema: temporary
+export_directory_schema: temporary
+embedded_entities_export_mode: stub
+menu_link_export_mode: stub

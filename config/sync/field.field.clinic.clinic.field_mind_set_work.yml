@@ -1,0 +1,23 @@
+uuid: c85b0ab1-556b-41b5-91f8-149afcd83635
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.clinic.clinic
+    - field.storage.clinic.field_mind_set_work
+id: clinic.clinic.field_mind_set_work
+field_name: field_mind_set_work
+entity_type: clinic
+bundle: clinic
+label: 'Mind Set Work'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

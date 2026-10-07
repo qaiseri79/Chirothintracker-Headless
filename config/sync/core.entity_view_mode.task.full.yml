@@ -1,0 +1,11 @@
+uuid: f144230c-4e7b-44b4-9dea-a1a1ba741100
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+id: task.full
+label: Full
+description: ''
+targetEntityType: task
+cache: true

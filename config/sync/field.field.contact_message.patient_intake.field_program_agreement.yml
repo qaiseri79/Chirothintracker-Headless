@@ -1,0 +1,25 @@
+uuid: d6e58df6-e1c9-4ef2-b3f8-c6a63df682fd
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_program_agreement
+  module:
+    - epp
+third_party_settings:
+  epp:
+    value: "[site:name] Program Agreement \r\n\r\nI understand due to the nature of this weight loss program, although it is doctor supervised, it is up to me to follow the instructions as outlined in the training videos on [site:url] application and in my program booklets, handouts and doctor modifications as communicated to me through the [site:url] app. I understand that no results are guaranteed and that results vary from patient to patient. I understand that I may contact my doctor(s) with my questions and that they are available through the  patient portal and email or video conference for supervision and support, but they are not ultimately responsible for my actual weight or inch loss. I understand that I must follow the instructions outlined in the instruction manual, on the instructional videos and as modified by my doctor(s) and/or their team for optimal results. I understand that straying from the program in any way will negatively affect my weight loss results. I understand that there are no refunds for opened products, missed or unused appointments that are built into the programs. I agree to not sell, gift or share my product formula with another individual. I agree that if I spill or lose my product formula within the first 4 weeks of my program I may purchase one accidental replacement bottle of drops for $500.\r\n\r\nFinance and Payment Agreement\r\n\r\nI hereby authorize [site:name] to charge my credit card for the Amount Due at Signing for the products and/or programs I have selected from the online store and said amount is to be charged on the date this agreement is signed. If a financed option was chosen, I further authorize [site:name] to charge my credit card for monthly payment amounts, as outlined in the program financing options until the balance is zero. I understand and agree to the payment schedule described herein and further, I understand that the monthly amount described in the finance options will be processed automatically by our merchant processor."
+    on_update: 0
+id: contact_message.patient_intake.field_program_agreement
+field_name: field_program_agreement
+entity_type: contact_message
+bundle: patient_intake
+label: 'Program Agreement'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

@@ -1,0 +1,24 @@
+uuid: 7dd7a764-5fda-4771-a31f-3482ecfabcb4
+langcode: en
+status: true
+dependencies:
+  module:
+    - contact_storage
+    - contact_storage_dm
+third_party_settings:
+  contact_storage:
+    submit_text: Submit
+    show_preview: true
+    disabled_form_message: 'This contact form has been disabled.'
+    maximum_submissions_user: 0
+    page_autoreply_format: plain_text
+  contact_storage_dm:
+    disabled: true
+id: patient_photos
+label: 'Patient Photos'
+recipients:
+  - webmaster@example.com
+reply: ''
+weight: 0
+message: 'The content has been created successfully.'
+redirect: /summary

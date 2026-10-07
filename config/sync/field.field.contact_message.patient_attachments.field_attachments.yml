@@ -1,0 +1,27 @@
+uuid: 38ef46a7-a128-4fa8-9388-5a4803a62e8c
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_attachments
+    - field.storage.contact_message.field_attachments
+  module:
+    - file
+id: contact_message.patient_attachments.field_attachments
+field_name: field_attachments
+entity_type: contact_message
+bundle: patient_attachments
+label: Attachments
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: ''
+  file_extensions: 'pdf docx jpg png xlsx doc xls'
+  max_filesize: '20 MB'
+  description_field: true
+field_type: file

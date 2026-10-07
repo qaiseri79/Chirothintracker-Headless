@@ -1,0 +1,44 @@
+field.storage_settings.field_signature:
+  type: mapping
+  label: 'Field signature settings'
+  mapping:
+    value:
+      type: text
+      label: 'The signature'
+
+field.value.field_signature:
+  type: mapping
+  label: 'Default value'
+  mapping:
+    value:
+      type: text
+      label: 'Value'
+
+field.widget.settings.field_signature_field_widget:
+  type: mapping
+  label: 'Settings for default signature field widget'
+  mapping:
+    show_data_box:
+      type: boolean
+      label: 'The data box'
+    show_thumb:
+      type: boolean
+      label: 'Show thumb'
+    canvas_width:
+      type: integer
+      label: 'Canvas width'
+    canvas_height:
+      type: integer
+      label: 'Canvas height'
+    min_line_width:
+      type: integer
+      label: 'Min line width'
+    max_line_width:
+      type: integer
+      label: 'Max line width'
+    pen_color:
+      type: string
+      label: 'Pencil color'
+    background_color:
+      type: string
+      label: 'Canvas background color'

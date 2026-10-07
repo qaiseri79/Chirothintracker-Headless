@@ -1,0 +1,21 @@
+uuid: 9a548bdf-72f9-4dec-a9ed-c5b4c019cf6e
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.clinic.clinic
+    - field.storage.clinic.field_brand
+id: clinic.clinic.field_brand
+field_name: field_brand
+entity_type: clinic
+bundle: clinic
+label: Brand
+description: 'If this clinic provides custom branded products other than ChiroThin, supply the brand name here.'
+required: true
+translatable: false
+default_value:
+  -
+    value: ChiroThin
+default_value_callback: ''
+settings: {  }
+field_type: string

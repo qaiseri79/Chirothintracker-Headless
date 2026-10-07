@@ -1,0 +1,21 @@
+uuid: 502f41c4-c0a1-47e8-87ad-efddea5cf293
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_media_release_agreement
+id: contact_message.patient_intake.field_media_release_agreement
+field_name: field_media_release_agreement
+entity_type: contact_message
+bundle: patient_intake
+label: 'Media Release'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: "For good and valuable consideration, the receipt of which is hereby acknowledged, I hereby consent to the photographing of myself and/or the recording of my voice and the use of these photographs and/or recordings singularly or in conjunction with other photographs and/or recordings for advertising, publicity, commercial or other business purposes. I understand that the term “photograph” as used herein encompasses both still photographs and motion picture footage.\r\n\r\nI further consent to the reproduction and/or authorization by ChiroThin and ChiroNutraceutical to reproduce and use said photographs and recordings of my voice, for use in all domestic and foreign markets. Further, I understand that others, with or without the consent of ChiroThin and ChiroNutraceutical, may use and/or reproduce such photographs and recordings.\r\n\r\nI hereby release my ChiroThin supervising chiropractor, ChiroThin, ChiroNutraceutical, and any of its associated or affiliated companies, their directors, officers, agents, employees and customers, and appointed advertising agencies, their directors, officers, agents and employees from all claims of every kind on account of such use."
+default_value_callback: ''
+settings: {  }
+field_type: string_long

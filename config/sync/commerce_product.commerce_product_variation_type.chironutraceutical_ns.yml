@@ -1,0 +1,35 @@
+uuid: 73dcc6b6-2de9-455e-8e7d-10cb13eb4adf
+langcode: en
+status: true
+dependencies:
+  module:
+    - entity_redirect
+third_party_settings:
+  entity_redirect:
+    redirect:
+      add:
+        active: 1
+        destination: previous_page
+        url: ''
+        external: ''
+      edit:
+        active: 1
+        destination: previous_page
+        url: ''
+        external: ''
+      delete:
+        active: 1
+        destination: previous_page
+        url: ''
+        external: ''
+      anonymous:
+        active: 0
+        destination: default
+        url: ''
+        external: ''
+id: chironutraceutical_ns
+label: 'Chironutraceutical (Not Shippable)'
+traits: {  }
+locked: false
+orderItemType: shop
+generateTitle: true

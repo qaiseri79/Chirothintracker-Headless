@@ -1,0 +1,19 @@
+uuid: 75dd499a-1318-46a3-b530-f8966a02085b
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_diabetes_medications
+id: contact_message.patient_intake.field_diabetes_medications
+field_name: field_diabetes_medications
+entity_type: contact_message
+bundle: patient_intake
+label: 'Diabetes Medications'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

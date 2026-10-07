@@ -1,0 +1,15 @@
+help.page:
+  path: '/admin/help/{name}'
+  defaults:
+    _controller: '\Drupal\readmehelp\Controller\ReadmeHelpController::helpPage'
+    _title: 'README Help'
+  requirements:
+    _permission: 'access administration pages'
+
+readmehelp.settings:
+  path: '/admin/config/system/readmehelp-settings'
+  defaults:
+    _title: 'README Help settings'
+    _form: 'Drupal\readmehelp\Form\ReadmeHelpSettingsForm'
+  requirements:
+    _permission: 'administer site configuration'

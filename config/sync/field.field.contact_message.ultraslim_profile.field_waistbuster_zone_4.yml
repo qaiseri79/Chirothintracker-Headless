@@ -1,0 +1,23 @@
+uuid: 25526c59-06cc-4308-86da-4e3b31b5269c
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_waistbuster_zone_4
+id: contact_message.ultraslim_profile.field_waistbuster_zone_4
+field_name: field_waistbuster_zone_4
+entity_type: contact_message
+bundle: ultraslim_profile
+label: 'Waist Buster Zone 4'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

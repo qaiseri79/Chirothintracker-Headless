@@ -1,0 +1,23 @@
+uuid: 8fc49f28-3711-4ff7-8a53-4726fe75b915
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.zerona_profile
+    - field.storage.contact_message.field_below_umbilicus
+id: contact_message.zerona_profile.field_below_umbilicus
+field_name: field_below_umbilicus
+entity_type: contact_message
+bundle: zerona_profile
+label: 'Below Umbilicus'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

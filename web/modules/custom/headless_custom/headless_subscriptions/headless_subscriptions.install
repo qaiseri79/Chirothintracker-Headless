@@ -1,0 +1,134 @@
+<?php
+
+/** Implements hook_schema(). */
+function headless_subscriptions_schema(): array {
+  $integer = ['type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0];
+  $string = static fn(int $length = 64) => ['type' => 'varchar', 'length' => $length, 'not null' => TRUE, 'default' => ''];
+  $nullable = ['type' => 'varchar', 'length' => 64, 'not null' => FALSE];
+  return [
+    'headless_subscription_account' => [
+      'description' => 'Only accounts explicitly created for the new subscription system.',
+      'fields' => ['uid' => $integer, 'clinic_id' => $integer, 'ever_paid' => $integer, 'created' => $integer],
+      'primary key' => ['uid'], 'unique keys' => ['clinic' => ['clinic_id']],
+    ],
+    'headless_subscription_member' => [
+      'description' => 'Explicit sponsored doctor access; not a billing account or purchase.',
+      'fields' => ['uid' => $integer, 'primary_uid' => $integer, 'clinic_id' => $integer, 'state' => $string(16), 'created' => $integer, 'changed' => $integer, 'actor_uid' => $integer],
+      'primary key' => ['uid'], 'indexes' => ['funding_owner' => ['primary_uid', 'uid'], 'clinic' => ['clinic_id']],
+    ],
+    'headless_subscription_purchase' => [
+      'fields' => [
+        'id' => $string(32), 'uid' => $integer, 'attempt' => $string(64), 'cart_hash' => $string(64), 'reference' => $string(20),
+        'review_reason' => $string(64),
+        'pending_change' => ['type' => 'text', 'size' => 'big', 'not null' => FALSE],
+        'initial_plan' => ['type' => 'text', 'size' => 'big', 'not null' => FALSE],
+        'schedule_start' => $integer,
+        'plan' => ['type' => 'text', 'size' => 'big', 'not null' => TRUE], 'state' => $string(32), 'context' => $string(64),
+        'transaction_id' => $nullable, 'subscription_id' => $nullable, 'profile_id' => $nullable, 'payment_profile_id' => $nullable,
+        'paid_interval' => $integer, 'paid_from' => $integer, 'anchor' => $integer, 'paid_until' => $integer, 'renewal_number' => $integer,
+        'cancel_requested' => $integer, 'created' => $integer, 'next_sync' => $integer,
+      ],
+      'primary key' => ['id'],
+      'unique keys' => ['attempt' => ['uid', 'attempt'], 'reference' => ['reference'], 'transaction' => ['transaction_id'], 'subscription' => ['subscription_id']],
+      'indexes' => ['owner' => ['uid', 'created'], 'sync' => ['state', 'next_sync']],
+    ],
+    'headless_subscription_payment' => [
+      'description' => 'Verified portal payment history, containing no card or token data.',
+      'fields' => ['context' => $string(64), 'transaction_id' => $string(64), 'purchase_id' => $string(32), 'uid' => $integer, 'amount_minor' => $integer, 'currency' => $string(3), 'plan_name' => $string(128), 'status' => $string(32), 'paid_at' => $integer, 'renewal_number' => $integer, 'kind' => $string(16)],
+      'primary key' => ['context', 'transaction_id'], 'indexes' => ['owner_date' => ['uid', 'paid_at']],
+    ],
+    'headless_subscription_change' => [
+      'description' => 'Server-priced plan-change quotes and durable payment attempts.',
+      'fields' => ['id' => $string(32), 'uid' => $integer, 'purchase_id' => $string(32),
+        'reference' => $string(20), 'state' => $string(32),
+        'transaction_id' => $nullable, 'created' => $integer,
+        'payload' => ['type' => 'text', 'size' => 'big', 'not null' => TRUE]],
+      'primary key' => ['id'], 'unique keys' => ['reference' => ['reference'], 'transaction' => ['transaction_id']],
+      'indexes' => ['owner' => ['uid', 'created']],
+    ],
+    'headless_subscription_event' => [
+      'fields' => ['id' => $string(64), 'payload' => ['type' => 'text', 'size' => 'big', 'not null' => TRUE], 'status' => $string(16), 'created' => $integer],
+      'primary key' => ['id'], 'indexes' => ['pending' => ['status', 'created']],
+    ],
+  ];
+}
+
+/** Installs a NEW platform catalog. Never loads legacy subscription customers. */
+function headless_subscriptions_install(): void {
+  $entities = \Drupal::entityTypeManager();
+  foreach ([\Drupal\headless_access\PortalRoles::CHIROPRACTOR_ACTIVE, \Drupal\headless_access\PortalRoles::CHIROPRACTOR_INACTIVE] as $role) {
+    if (!$entities->getStorage('user_role')->load($role)) throw new \RuntimeException('Required portal role is missing: ' . $role);
+  }
+  \Drupal\commerce_product\Entity\ProductVariationType::create(['id' => 'portal_membership', 'label' => 'Portal membership', 'orderItemType' => 'default', 'generateTitle' => FALSE])->save();
+  \Drupal\commerce_product\Entity\ProductType::create(['id' => 'portal_membership', 'label' => 'Portal membership', 'variationType' => 'portal_membership', 'multipleVariations' => TRUE, 'injectVariationFields' => FALSE])->save();
+  $fields = [
+    'field_portal_plan_id' => ['integer', 'Plan ID'],
+    'field_portal_interval' => ['integer', 'Billing interval (months)'],
+    'field_portal_patient_limit' => ['integer', 'Enrolled patient cap (0 means unlimited)'],
+    'field_portal_ecommerce' => ['boolean', 'Includes store access'],
+    'field_portal_laser' => ['boolean', 'Includes laser tracking'],
+    'field_portal_trial' => ['string', 'Trial policy'],
+  ];
+  foreach ($fields as $name => [$type, $label]) {
+    if (!\Drupal\field\Entity\FieldStorageConfig::loadByName('commerce_product_variation', $name)) \Drupal\field\Entity\FieldStorageConfig::create(['field_name' => $name, 'entity_type' => 'commerce_product_variation', 'type' => $type])->save();
+    \Drupal\field\Entity\FieldConfig::create(['field_name' => $name, 'entity_type' => 'commerce_product_variation', 'bundle' => 'portal_membership', 'label' => $label])->save();
+  }
+  $store = $entities->getStorage('commerce_store')->create(['type' => 'online', 'name' => 'ChiroThin portal subscriptions', 'mail' => 'billing@example.invalid', 'default_currency' => 'USD', 'address' => ['country_code' => 'US'], 'uid' => 1]);
+  $store->save();
+  $variations = [];
+  foreach ([
+    [1, 'Newbie', '99.00', 1, 4, FALSE, FALSE, 'none'],
+    [2, 'Rookie', '199.00', 1, 10, TRUE, FALSE, 'none'],
+    [3, 'Veteran', '289.00', 1, 0, TRUE, FALSE, 'request_only'],
+    [4, 'All Pro', '338.00', 1, 0, TRUE, TRUE, 'request_only'],
+    [72, 'Veteran Annual', '2000.00', 12, 0, TRUE, FALSE, 'addon_request'],
+  ] as [$id, $name, $amount, $interval, $limit, $storeAccess, $laser, $trial]) {
+    $variation = $entities->getStorage('commerce_product_variation')->create(['type' => 'portal_membership', 'sku' => 'PORTAL-MEMBERSHIP-' . $id, 'title' => $name, 'status' => 1, 'price' => ['number' => $amount, 'currency_code' => 'USD'], 'field_portal_plan_id' => $id, 'field_portal_interval' => $interval, 'field_portal_patient_limit' => $limit, 'field_portal_ecommerce' => $storeAccess, 'field_portal_laser' => $laser, 'field_portal_trial' => $trial]);
+    $variation->save(); $variations[] = $variation;
+  }
+  $product = $entities->getStorage('commerce_product')->create(['type' => 'portal_membership', 'title' => 'ChiroThin portal membership', 'status' => 1, 'stores' => [$store], 'variations' => $variations]);
+  $product->save();
+}
+
+/** Adds an explicit review marker for refund notifications. */
+function headless_subscriptions_update_10001(): void {
+  $schema = \Drupal::database()->schema();
+  if (!$schema->fieldExists('headless_subscription_purchase', 'review_reason')) {
+    $schema->addField('headless_subscription_purchase', 'review_reason', ['type' => 'varchar', 'length' => 64, 'not null' => TRUE, 'default' => '']);
+  }
+}
+
+/** Distinguish the annual plan's requested laser add-on from a free trial. */
+function headless_subscriptions_update_10002(): void {
+  $storage = \Drupal::entityTypeManager()->getStorage('commerce_product_variation');
+  $ids = $storage->getQuery()->accessCheck(FALSE)->condition('type', 'portal_membership')->condition('field_portal_plan_id', 72)->execute();
+  foreach ($storage->loadMultiple($ids) as $variation) {
+    $variation->set('field_portal_trial', 'addon_request'); $variation->save();
+  }
+}
+
+/** Add plan-transition checkpoints and the verified payment ledger. */
+function headless_subscriptions_update_10003(): void {
+  $schema = \Drupal::database()->schema();
+  $definitions = headless_subscriptions_schema();
+  foreach (['pending_change', 'initial_plan', 'schedule_start'] as $field) {
+    if (!$schema->fieldExists('headless_subscription_purchase', $field)) $schema->addField('headless_subscription_purchase', $field, $definitions['headless_subscription_purchase']['fields'][$field]);
+  }
+  if (!$schema->tableExists('headless_subscription_payment')) $schema->createTable('headless_subscription_payment', $definitions['headless_subscription_payment']);
+}
+
+/** Add explicit sponsored-doctor records without adopting any legacy accounts. */
+function headless_subscriptions_update_10004(): void {
+  $schema = \Drupal::database()->schema();
+  if (!$schema->tableExists('headless_subscription_member')) $schema->createTable('headless_subscription_member', headless_subscriptions_schema()['headless_subscription_member']);
+}
+
+/** Add recoverable plan-change attempts and the actual paid period start. */
+function headless_subscriptions_update_10005(): void {
+  $schema = \Drupal::database()->schema();
+  $definitions = headless_subscriptions_schema();
+  if (!$schema->fieldExists('headless_subscription_purchase', 'paid_interval')) $schema->addField('headless_subscription_purchase', 'paid_interval', $definitions['headless_subscription_purchase']['fields']['paid_interval']);
+  if (!$schema->fieldExists('headless_subscription_purchase', 'paid_from')) $schema->addField('headless_subscription_purchase', 'paid_from', $definitions['headless_subscription_purchase']['fields']['paid_from']);
+  if (!$schema->fieldExists('headless_subscription_payment', 'kind')) $schema->addField('headless_subscription_payment', 'kind', $definitions['headless_subscription_payment']['fields']['kind']);
+  if (!$schema->tableExists('headless_subscription_change')) $schema->createTable('headless_subscription_change', $definitions['headless_subscription_change']);
+}

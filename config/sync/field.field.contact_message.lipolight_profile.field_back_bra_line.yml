@@ -1,0 +1,23 @@
+uuid: 6ae2860f-dc46-4464-9c9f-895150aed043
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.lipolight_profile
+    - field.storage.contact_message.field_back_bra_line
+id: contact_message.lipolight_profile.field_back_bra_line
+field_name: field_back_bra_line
+entity_type: contact_message
+bundle: lipolight_profile
+label: 'Back / Bra-Line'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

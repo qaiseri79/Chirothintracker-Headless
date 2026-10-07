@@ -1,0 +1,37 @@
+uuid: 7d360ed5-cc88-404f-bd5e-f279d7f99de9
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.menu-header-right
+  module:
+    - system
+    - user
+  theme:
+    - olivero
+id: headerright
+theme: olivero
+region: primary_menu
+weight: -16
+provider: null
+plugin: 'system_menu_block:menu-header-right'
+settings:
+  id: 'system_menu_block:menu-header-right'
+  label: 'Header Right'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      chiropractor_active_: chiropractor_active_
+      chiropractor_inactive_: chiropractor_inactive_
+      impersonator: impersonator
+      enrolled_patient: enrolled_patient
+      archived_patient: archived_patient

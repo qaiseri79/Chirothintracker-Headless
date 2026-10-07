@@ -1,0 +1,144 @@
+# Headless Messages routes.
+#
+# ## Access
+#
+# Every route is gated by `PortalMemberAccess` from the headless_access module
+# rather than by a permission declared here.
+#
+# This module previously declared `access headless messages` and granted it to
+# four roles from its own `hook_install()`. That is the arrangement headless_access
+# exists to replace: the role list was a third copy of the portal's roles, and it
+# had already drifted once — headless_progress granted its own permission to the
+# patient roles while headless_patients deliberately did not, with nothing in code
+# holding the two apart. The gate is now stated once, in
+# {@see \Drupal\headless_access\PortalRoles::PORTAL_MEMBERS}.
+#
+# This gate admits; it does not widen. Holding a portal role gets a caller as far
+# as the controller. What the response contains is decided by the query that owns
+# it: `MessagesService::getConversations()` returns one counterpart to a patient
+# and one row per patient to a chiropractor, and `getThread()` is scoped to the
+# caller as a party to that conversation. Those queries, not this route, are what
+# stops a patient seeing another patient's mail.
+#
+# ## Requirements, not defaults
+#
+# `_custom_access` sits in `requirements` because that is the only block Drupal
+# evaluates for access. `_auth` is an option, read by AuthenticationManager, so it
+# belongs in `options` rather than `requirements` as it did before.
+#
+# No `_access: 'TRUE'` is written anywhere. AccessAwareRouter adds that
+# requirement itself to every route; hand-writing it only obscures whether a gate
+# is actually present.
+#
+# ## One route per path, dispatching on method
+#
+# Drupal matches one route per path, so the old pair of `conversations` and
+# `sendMessage` routes — same path, different methods — could not coexist:
+# `conversations` won for every method and a POST returned the list. `messages`
+# branches on `$request->getMethod()` instead.
+#
+# ## No CSRF token on the POST routes
+#
+# The session cookie is forwarded from the Next.js server and is HttpOnly, so a
+# cross-site form post cannot carry it, and no browser JS in this system holds a
+# cookie. Do not add a token check without first giving the client a way to obtain
+# a valid one, or every write fails with a 403 that looks like a permissions
+# problem.
+
+headless_messages.messages:
+  path: '/api/headless/messages'
+  defaults:
+    _controller: '\Drupal\headless_messages\Controller\MessagesController::messages'
+    _title: 'Messages'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\PortalMemberAccess::access'
+    _method: 'GET|POST'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+
+# Bulk send: one message to many patients.
+#
+# Declared before `headless_messages.thread` so the literal segment always wins
+# over the `{target_uid}` placeholder. It could not clash anyway, since
+# target_uid is constrained to \d+, but ordering it first keeps the intent
+# obvious to the next reader.
+headless_messages.mass_send:
+  path: '/api/headless/messages/mass'
+  defaults:
+    _controller: '\Drupal\headless_messages\Controller\MessagesController::massSend'
+    _title: 'Bulk message'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\PortalMemberAccess::access'
+    _method: 'POST'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+
+# Single thread (messages between current user and a specific other user)
+headless_messages.thread:
+  path: '/api/headless/messages/{target_uid}'
+  defaults:
+    _controller: '\Drupal\headless_messages\Controller\MessagesController::thread'
+    _title: 'Conversation thread'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\PortalMemberAccess::access'
+    target_uid: \d+
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+
+# Mark thread as read
+headless_messages.mark_read:
+  path: '/api/headless/messages/{target_uid}/read'
+  defaults:
+    _controller: '\Drupal\headless_messages\Controller\MessagesController::markRead'
+    _title: 'Mark conversation as read'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\PortalMemberAccess::access'
+    target_uid: \d+
+    _method: 'POST'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+
+# Mark single message as read
+headless_messages.mark_message_read:
+  path: '/api/headless/messages/message/{message_id}/read'
+  defaults:
+    _controller: '\Drupal\headless_messages\Controller\MessagesController::markMessageRead'
+    _title: 'Mark message as read'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\PortalMemberAccess::access'
+    message_id: \d+
+    _method: 'POST'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+
+# Upload an attachment (returns fid)
+headless_messages.upload_attachment:
+  path: '/api/headless/messages/attachment'
+  defaults:
+    _controller: '\Drupal\headless_messages\Controller\MessagesController::uploadAttachment'
+    _title: 'Upload attachment'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\PortalMemberAccess::access'
+    _method: 'POST'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+
+# Download an attachment (streams file)
+headless_messages.download_attachment:
+  path: '/api/headless/messages/attachment/{fid}'
+  defaults:
+    _controller: '\Drupal\headless_messages\Controller\MessagesController::downloadAttachment'
+    _title: 'Download attachment'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\PortalMemberAccess::access'
+    fid: \d+
+    _method: 'GET'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE

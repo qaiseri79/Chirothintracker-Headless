@@ -1,0 +1,58 @@
+uuid: 29fe0fde-1bd9-4016-9f8b-84fa0ce3a7fc
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_photos
+    - field.field.contact_message.patient_photos.field_author
+    - field.field.contact_message.patient_photos.field_before_and_after_photos
+    - field.field.contact_message.patient_photos.field_patient
+    - field.field.contact_message.patient_photos.field_profile_photo
+id: contact_message.patient_photos.default
+targetEntityType: contact_message
+bundle: patient_photos
+mode: default
+content:
+  field_author:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  mail:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: -2
+    region: content
+  message:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -3
+    region: content
+  subject:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -1
+    region: content
+hidden:
+  field_before_and_after_photos: true
+  field_patient: true
+  field_profile_photo: true

@@ -1,0 +1,15 @@
+uuid: 9d55913b-9e1d-479a-a5f4-048bc26fef49
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.task_completion
+  module:
+    - flag
+id: flag_action.task_completion_unflag
+label: 'Unflag this item'
+type: task
+plugin: 'flag_action:task_completion_unflag'
+configuration:
+  flag_id: task_completion
+  flag_action: unflag

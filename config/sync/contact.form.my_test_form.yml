@@ -1,0 +1,11 @@
+uuid: 6df72a09-cb95-41bf-89af-4bf9e7d834c1
+langcode: en
+status: true
+dependencies: {  }
+id: my_test_form
+label: 'My Test Form'
+recipients: {  }
+reply: ''
+weight: 0
+message: null
+redirect: null

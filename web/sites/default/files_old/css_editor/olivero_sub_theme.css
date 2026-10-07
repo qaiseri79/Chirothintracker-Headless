@@ -1,0 +1,492 @@
+.enrolled_patient #block-olivero-primary-local-tasks{
+display:none;
+}
+.flag-favorites.action-flag{
+ display: inline-block;
+}
+.flag-favorites.action-flag a { 
+background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/star.svg);
+  -webkit-background-size: 100% 100%;
+  height: 3vh;
+  display: flex;
+  background-repeat: no-repeat;
+  width: 20px;
+}
+.flag-favorites.action-unflag{
+ display: inline-block;
+}
+.flag-favorites.action-unflag a { 
+background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/star-fill.svg);
+  -webkit-background-size: 100% 100%;
+  height: 3vh;
+  display: flex;
+  background-repeat: no-repeat;
+  width: 20px;
+}
+.webform-submission-tracking-weight-form .form-item-field-weight-loss-to-date{
+display:none;
+}
+.webform-submission-tracking-weight-form .form-item-field-program-day{
+display:none;
+}
+.webform-submission-tracking-weight-form .form-item-field-total-measurements{
+display:none;
+}
+.webform-submission-tracking-weight-form .form-item-field-archive{
+display:none;
+}
+.webform-submission-tracking-weight-form .form-item-field-program-day-computed{
+display:none;
+}
+.webform-submission-tracking-weight-form .form-item-field-weight-loss-computed{
+display:none;
+}
+.view-id-patient_details table{
+caption-side: initial !important;
+}
+.view-id-patient_details table caption{
+   text-align: center !important;
+}
+.custom-flag-fill{
+    background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/flag-fill.svg);
+    -webkit-background-size: 100% 100%;
+    height: 8vh;
+    display: flex;
+    background-repeat: no-repeat;
+    width: 20px;
+    float:left;
+    display:block;
+}
+.custom-eye-fill{
+    background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/eye-fill.svg);
+    -webkit-background-size: 100% 100%;
+    height: 8vh;
+    display: flex;
+    background-repeat: no-repeat;
+    width: 20px;
+    float:left;
+}
+.custom-cutlery{
+    background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/cutlery.svg);
+    -webkit-background-size: 100% 100%;
+    height: 8vh;
+    display: flex;
+    background-repeat: no-repeat;
+    width: 20px;
+    float:left;
+}
+.custom-resize-horizontal{
+    background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/resize-horizontal.svg);
+    -webkit-background-size: 100% 100%;
+    height: 8vh;
+    display: flex;
+    background-repeat: no-repeat;
+    width: 20px;
+    float:left;
+}
+.phase-0 { color: black; background-color: #fbd005 !important }
+.phase-1 { background-color: #4b8060 !important }
+.phase-2 { background-color: #cb5c35;
+    color: #fff; }
+.phase-3 { background-color: #2298a9 !important }
+.phase-4 { background-color: #5f8dcc !important }
+.phase-laser { background-color: #9a3347 !important }
+.custom-pencil{
+    background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/pencil.svg);
+    -webkit-background-size: 100% 100%;
+    height: 3vh;
+    display: flex;
+    background-repeat: no-repeat;
+    width: 20px;
+    float: left;
+}
+.notes-count{
+  font-size:15px;
+}
+.custom-eye-open{
+    background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/eye.svg);
+    -webkit-background-size: 100% 100%;
+    height: 3vh;
+    display: flex;
+    background-repeat: no-repeat;
+    width: 20px;
+}
+.custom-card-list{
+   background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/card-list.svg);
+    -webkit-background-size: 100% 100%;
+    height: 5vh;
+    display: flex;
+    background-repeat: no-repeat;
+  width: 20px;
+}
+.custom-dropdown{
+  margin-bottom:5px;
+}
+.custom-user-fill{
+ background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/person-fill.svg);
+    -webkit-background-size: 100% 100%;
+    height: 25vh;
+    display: flex;
+    background-repeat: no-repeat;
+  width: 50px;
+}
+.custom-calendar{
+ background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/calendar-check-fill.svg);
+    -webkit-background-size: 100% 100%;
+    height: 4vh;
+    display: flex;
+    background-repeat: no-repeat;
+   width: 20px;
+}
+.last-seen-link{
+  float:left;
+}
+.custom-bell{
+ background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/bell.svg);
+    -webkit-background-size: 100% 100%;
+    height: 3vh;
+    display: flex;
+    background-repeat: no-repeat;
+   width: 20px;
+}
+.review-bill:after{
+display:none;
+}
+.custom-envelope{
+background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/envelope.svg);
+    -webkit-background-size: 100% 100%;
+    height: 3vh;
+    display: flex;
+    background-repeat: no-repeat;
+   width: 20px;
+   float:left;
+}
+.custom-list{
+background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/list.svg);
+    -webkit-background-size: 100% 100%;
+    height: 4vh;
+    display: flex;
+    background-repeat: no-repeat;
+   width: 25px;
+}
+.custom-lighting{
+background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/lightning.svg);
+    -webkit-background-size: 100% 100%;
+    height: 4vh;
+    display: flex;
+    background-repeat: no-repeat;
+   width: 25px;
+}
+.view-id-laser_profiles_summary.view-display-id-embed_1 .view-content div{
+   margin-bottom:10px;
+}
+.btn-default {
+    background-color: #cb5c35;
+    color: #fff;
+    border: none;
+}
+.flag-message-status-clinic{
+  display:inline;
+}
+.btn-success {
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+[data-after-text],
+[data-before-text] {
+	--badge-offset-x: calc(0px - var(--badge-size) / 3);
+	--badge-offset-y: calc(0px - var(--badge-size) / 3);
+	--badge-size: 1.5rem;
+	--circle-size: 2rem;
+	--dot-offset: 0.5rem;
+	--dot-size: 0.5rem;
+		
+	--b: initial;
+	/*--bgc: hsl(195, 100%, 30%);*/
+	--bdrs: 0;
+	--c: hsl(195, 100%, 99%);
+	--d: inline-flex;
+	--fz: 1.0rem;
+	--fw: 700;
+	--h: auto;
+	--l: initial;
+	--m: 0.4rem;
+	--p: 0;
+	--pos: static;
+	--r: initial;
+	--t: initial;
+	--tt: uppercase;
+	--w: initial;
+	
+	position: relative;
+}
+
+[data-after-text]:not([data-after-text=""])::after {
+	content: attr(data-after-text);
+}
+
+
+[data-before-text]:not([data-before-text=""])::before {
+	content: attr(data-before-text);
+}
+
+
+[data-after-text]:not([data-after-text=""])::after,
+[data-before-text]:not([data-before-text=""])::before {
+	align-items: center;
+	background: var(--bgc);
+	border-radius: var(--bdrs);
+	bottom: var(--b);
+	box-shadow: var(--bxsh);
+	box-sizing: border-box;
+	color: var(--c);
+	display: var(--d);
+	font-size: var(--fz);
+	font-weight: var(--fw);
+	height: var(--h);
+	justify-content: center;
+	left: var(--l);
+	padding: var(--p);
+	position: var(--pos);
+	right: var(--r);
+	text-decoration: none;
+	text-transform: var(--tt);
+	top: var(--t);
+	width: var(--w);
+}
+
+
+/* MODIFIERS */
+[data-after-type*="badge"]::after,
+[data-before-type*="badge"]::before {
+	--bdrs: var(--badge-size);
+	--bxsh: 0 0 0 2px rgba(255, 255, 255, 0.5);
+	--h: var(--badge-size);
+	--p: 0;
+	--pos: absolute;
+	--w: var(--badge-size);
+}
+[data-after-type*="circle"],
+[data-before-type*="circle"]{
+	align-items: center;
+	display: flex;
+}
+[data-after-type*="circle"]::after,
+[data-before-type*="circle"]::before {
+	--bdrs: 50%;
+	--fw: 400;
+	--h: var(--circle-size);
+	// --pos: relative;
+	// --t: -0.75em;
+	--tt: initial;
+	--w: var(--circle-size);
+}
+[data-after-type*="circle"]::after,
+[data-after-type*="pill"]::after {
+	margin-inline-start: 1ch;
+}
+[data-before-type*="circle"]::before,
+[data-before-type*="dot"]::before,
+[data-before-type*="pill"]::before {
+	margin-inline-end: 1ch;
+}
+[data-after-type*="dot"]::after,
+[data-before-type*="dot"]::before {
+	--bdrs: 50%;
+	--d: inline-block;
+	--fz: 50%;
+	--h: var(--dot-size);
+	--p: 0;
+	--pos: relative;
+	--t: -1px;
+	--w: var(--dot-size);
+}
+[data-after-type*="dot"]::after,
+[data-before-type*="dot"]::before {
+	content: "" !important;
+}
+[data-after-type*="pill"]::after,
+[data-before-type*="pil"]::before {
+	--bdrs: 1rem;
+	--p: 0.25rem 0.75rem;
+	--pos: relative;
+	--t: -1px;
+}
+
+/* COLORS */
+/*[data-after-type*="blue"]::after,
+[data-before-type*="blue"]::before {
+	--bgc: #007acc;
+}
+[data-after-type*="darkgray"]::after,
+[data-before-type*="darkgray"]::before {
+	--bgc: #706e6b;
+	--c: #fff;
+}
+[data-after-type*="green"]::after,
+[data-before-type*="green"]::before {
+	--bgc: #04844b;
+}
+[data-after-type*="lightgray"]::after,
+[data-before-type*="lightgray"]::before {
+	--bgc: #ecebea;
+	--c: #080707;
+}
+[data-after-type*="orange"]::after,
+[data-before-type*="orange"]::before {
+	--bgc: #ffb75d;
+	--c: #080707;
+}*/
+
+[data-after-type*="red"]::after,
+[data-before-type*="red"]::before {
+	--bgc: #c23934;
+}
+
+
+
+/* POSITION */
+[data-after-type*="top"]::after,
+[data-before-type*="top"]::before {
+	--b: auto;
+	--pos: absolute;
+	--t: var(--dot-offset);
+}
+[data-after-type*="right"]::after,
+[data-before-type*="right"]::before {
+	--l: auto;
+	--pos: absolute;
+	--r: var(--dot-offset);
+}
+[data-after-type*="bottom"]::after,
+[data-before-type*="bottom"]::before {
+	--b: var(--dot-offset);
+	--pos: absolute;
+	--t: auto;
+}
+[data-after-type*="left"]::after,
+[data-before-type*="left"]::before {
+	--pos: absolute;
+	--r: auto;
+	--l: var(--dot-offset);
+}
+[data-after-type*="badge"][data-after-type*="top"]::after,
+[data-before-type*="badge"][data-before-type*="top"]::before {
+	--m: 0;
+	--t: var(--badge-offset-y);
+}
+[data-after-type*="badge"][data-after-type*="right"]::after,
+[data-before-type*="badge"][data-before-type*="right"]::before {
+	--m: 0;
+	--r: var(--badge-offset-x);
+}
+[data-after-type*="badge"][data-after-type*="bottom"]::after,
+[data-before-type*="badge"][data-before-type*="bottom"]::before {
+	--b: var(--badge-offset-y);
+	--m: 0;
+}
+[data-after-type*="badge"][data-after-type*="left"]::after,
+[data-before-type*="badge"][data-before-type*="left"]::before {
+	--l: var(--badge-offset-x);
+	--m: 0;
+}
+
+#webform-submission-patient-intake-add-form .form-item-clinic{
+  display: none;
+}
+.custom-loader{
+    display: none;
+    position: fixed;
+    left: 0px;
+    top: 50%;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+}
+.path-summary .webform-submission-information, .path-summary .webform-submission-pager {
+  display: none;
+}
+.custom-asterisk{
+    background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/asterisk.svg);
+    -webkit-background-size: 100% 100%;
+    height: 3vh;
+    display: flex;
+    background-repeat: no-repeat;
+   width: 20px;
+}
+.flag-message-status {
+    display: inline;
+}
+.custom-pin{
+    background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/pin-angle.svg);
+    -webkit-background-size: 100% 100%;
+    height: 15vh;
+    display: flex;
+    background-repeat: no-repeat;
+    width: 40px;
+}
+.flag-pin.action-unflag{
+    display: inline-block;
+    height: var(--sp3);
+    margin-block: var(--sp1);
+    margin-inline-start: 0;
+    margin-inline-end: var(--sp1);
+    padding-block: calc((var(--sp3) - var(--line-height-s)) / 2);
+    padding-inline: var(--sp1-5);
+    cursor: pointer;
+    text-align: center;
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    color: var(--color-text-primary-medium);
+    border: solid 2px currentColor;
+    border-radius: var(--border-radius);
+    background-color: var(--color--white);
+    font-family: var(--font-sans);
+    font-size: var(--font-size-l);
+    font-weight: 700;
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-font-smoothing: antialiased;
+    //////
+    display: inline-flex;
+    align-items: center;
+    padding-inline: var(--sp1-5);
+    line-height: var(--line-height-s);
+}
+.flag-pin.action-unflag a{
+   text-decoration: none;
+}
+.flag a:focus{
+   outline:none;
+   outline-offset:none;
+}
+#block-olivero-welcomecustomblock h3{
+margin-bottom: 0px;
+}
+.flag-intake-processed{
+  display:inline;
+}
+.webform-submission-information, .webform-submission-navigation{
+  display:none;
+}
+#meeting-uid{
+  display: none;
+}
+.custom-print{
+    background-image: url(https://dev-chirothin9.pantheonsite.io/modules/custom/custom_module/assets/images/printer-fill.svg);
+    -webkit-background-size: 100% 100%;
+    height: 3vh;
+    display: flex;
+    background-repeat: no-repeat;
+    width: 20px;
+}
+.print-recipe{
+ display: inline-block;
+}
+.view-training.view-id-training .panel-body iframe{
+   width:100%;
+}
+#block-chirothin-sass-user-login #edit-name, #block-chirothin-sass-user-login #edit-pass{
+ width:100%;
+}

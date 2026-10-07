@@ -1,0 +1,19 @@
+uuid: f9c8024b-955f-43bb-8372-6efa67aff322
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_blood_pressure_medications
+id: contact_message.patient_intake.field_blood_pressure_medications
+field_name: field_blood_pressure_medications
+entity_type: contact_message
+bundle: patient_intake
+label: 'Blood Pressure Medications'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

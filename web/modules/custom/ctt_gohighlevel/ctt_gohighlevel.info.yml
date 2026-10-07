@@ -1,0 +1,11 @@
+name: 'CTT GoHighLevel'
+type: module
+description: 'Integrates Drupal user registration with GoHighLevel CRM'
+core_version_requirement: ^10 || ^11
+package: Custom
+dependencies:
+  - drupal:user
+
+version: 1.0.0
+
+configure: ctt_gohighlevel.settings

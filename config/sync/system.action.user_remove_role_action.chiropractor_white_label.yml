@@ -1,0 +1,14 @@
+uuid: b7b0652c-c486-48bd-bf3c-1156651b6d69
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.chiropractor_white_label
+  module:
+    - user
+id: user_remove_role_action.chiropractor_white_label
+label: 'Remove the Chiropractor - White Label role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: chiropractor_white_label

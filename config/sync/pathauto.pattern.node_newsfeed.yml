@@ -1,0 +1,21 @@
+uuid: c3a708b1-55e0-4e5e-b296-02ed96555665
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node_newsfeed
+label: 'Content - Newsfeed'
+type: 'canonical_entities:node'
+pattern: 'news/[node:title]'
+selection_criteria:
+  -
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: node
+    bundles:
+      newsfeed: newsfeed
+selection_logic: and
+weight: 0
+relationships: {  }

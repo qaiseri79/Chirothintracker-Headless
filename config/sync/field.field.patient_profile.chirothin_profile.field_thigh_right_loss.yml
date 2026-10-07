@@ -1,0 +1,23 @@
+uuid: 3e4d9da2-af73-47bc-8688-a56bb6e60a85
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.chirothin_profile
+    - field.storage.patient_profile.field_thigh_right_loss
+id: patient_profile.chirothin_profile.field_thigh_right_loss
+field_name: field_thigh_right_loss
+entity_type: patient_profile
+bundle: chirothin_profile
+label: 'Thigh - Right Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

@@ -1,0 +1,14 @@
+uuid: ec4e06ae-02a8-49bc-a42a-4c4cad844ffc
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.patient_mind_set
+  module:
+    - user
+id: user_add_role_action.patient_mind_set
+label: 'Add the Patient - Mind Set role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: patient_mind_set

@@ -1,0 +1,29 @@
+uuid: bf63e3df-80e2-4727-adee-248dc220483f
+langcode: en
+status: true
+dependencies:
+  module:
+    - contact
+id: intake_processed_cs
+label: 'Intake Processed (Contact Storage)'
+bundles:
+  - patient_intake
+entity_type: contact_message
+global: true
+flag_short: '<span class="btn btn-default btn-sm intake-new">New</span>'
+flag_long: ''
+flag_message: ''
+unflag_short: '<i class="fa-solid fa-circle-check"></i>'
+unflag_long: ''
+unflag_message: ''
+unflag_denied_text: ''
+weight: 0
+flag_type: 'entity:contact_message'
+link_type: ajax_link
+flagTypeConfig:
+  show_in_links: {  }
+  show_as_field: true
+  show_on_form: false
+  show_contextual_link: false
+  extra_permissions: {  }
+linkTypeConfig: {  }

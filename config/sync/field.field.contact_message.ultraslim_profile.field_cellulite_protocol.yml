@@ -1,0 +1,21 @@
+uuid: fe35b7b3-a5b5-411d-8532-0c0402c43666
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_cellulite_protocol
+id: contact_message.ultraslim_profile.field_cellulite_protocol
+field_name: field_cellulite_protocol
+entity_type: contact_message
+bundle: ultraslim_profile
+label: 'Cellulite Protocol'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: "Treat at 2 inches for 8 minutes, then 6 inches for 12 minutes for a total of 20 minutes per area.\r\n\r\nYou may do this once from the front and once from the back for a total of 40 minutes if needed."
+default_value_callback: ''
+settings: {  }
+field_type: string_long

@@ -1,0 +1,89 @@
+<?php
+
+/**
+ * @file
+ * Trim module.
+ */
+
+use Drupal\Core\Entity\ContentEntityType;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function trim_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.trim':
+      $output = '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Trim module automatically strips leading and trailing whitespace from all text fields in all content form submissions. By doing so, it ensures that your website content is clean and free from any unwanted spaces.') . '</p>';
+      $output .= '<p>' . t('One of the key benefits of the Trim module is that it trims fields prior to validation. This means that even if a user accidentally adds a space after a number in an integer field, the module will automatically correct the input and prevent an error message. As a result, the user can successfully save their submission without any interruption.') . '</p>';
+      $output .= '<p>' . t('Note that Drupal <a href="https://www.drupal.org/node/1921576">already trims whitespace from passwords without warning</a>.  Drupal\'s "Autocomplete (Tags style)" form field widget also trims all surrounding spaces from terms.  Trim extends this behavior to all text fields on all content entities.  (In the Drupal context, users and taxonomy terms are \'content\'.)') . '</p>';
+
+      $output .= '<p>' . t('Trimming all form entries everywhere was deemed too aggressive (for instance, if you have an options selection where you have made a key a single \' \' for some reason, or want to allow leading or trailing spaces on a field), so we do not trim input on configuration forms.') . '</p>';
+
+      $output .= '<p>' . t('Trim module is based on <a href="https://www.drupal.org/u/exratione">exratione</a>\'s blog post, <a href="https://www.exratione.com/2012/06/drupal-trim-all-form-fields-everywhere/">Drupal: Trim All Form Fields Everywhere</a>.  Exratione deserves all credit if this module saves your sanity by sanitizing all stray spaces in your users\' input.  If it blows up your site, though, <a href="https://www.drupal.org/project/issues/trim?categories=All">file a ticket here</a>.') . '</p>';
+
+      $output .= '<p>' . t('Note again that it trims values prior to saving, so it is in fact changing what people enter.  This seems a reasonable exception to Drupal\'s rule of not messing with user input and doing all adjustments on output.  If you think there should be an option to warn people when their input is trimmed, please contribute to <a href="https://www.drupal.org/project/trim/issues/3388667">#3388667: Alert people when their text is trimmed</a>.') . '</p>';
+
+      $output .= '<h3>' . t('Caveats') . '</h3>';
+      $output .= '<ul>';
+      $output .= '<li>' . t('Trim uses Drupal\'s Form API, and will not affect anything that bypasses the Form API, such as using the REST API.  See <a href="https://www.drupal.org/project/trim/issues/3190001">#3190001: Trim on presave (rather than validate) so input is treated consistently whether through a form or API (such as feeds)</a>.') . '</li>';
+      $output .= '<li>' . t('HTML input element validation will run before this module can act.  Special HTML input field types like <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/number#validation">number</a> or <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#validation">email</a> will block form submission if there is invalid input, which includes extra spaces in these cases.  This is known to be an issue with the e-mail address field on Drupal users.  See <a href="https://www.drupal.org/project/trim/issues/3156546">#3156546</a>.') . '</li>';
+      $output .= '</ul>';
+
+    return $output;
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function trim_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Do trimming only for content entity types.
+  $form_object = $form_state->getformObject();
+  if (!method_exists($form_object, 'getEntity')) {
+    return;
+  }
+  if (!$form_object->getEntity()->getEntityType() instanceof ContentEntityType) {
+    return;
+  }
+
+  // Ensure that there is an array here.
+  if (!isset($form['#validate'])) {
+    $form['#validate'] = [];
+  }
+  // And if someone has set it as a string, fix that issue. You'd be surprised.
+  elseif (!is_array($form['#validate'])) {
+    $form['#validate'][] = $form['#validate'];
+  }
+  // Now add a new function to the list, but ensure that it is called first.
+  array_unshift($form['#validate'], 'trim_form_values');
+}
+
+/**
+ * Validation callback function. Trim the values of the form.
+ */
+function trim_form_values(&$form, FormStateInterface $form_state) {
+  foreach ($form_state->getValues() as $key => $value) {
+    trim_value($value);
+    $form_state->setValue($key, $value);
+  }
+}
+
+/**
+ * Trim string values and recursively trim array values.
+ *
+ * @param mixed &$value
+ *   A string, integer, array, or object of the value.
+ */
+function trim_value(&$value) {
+  if (is_array($value)) {
+    foreach ($value as &$value2) {
+      trim_value($value2);
+    }
+  }
+  elseif (is_string($value)) {
+    $value = trim($value);
+  }
+}

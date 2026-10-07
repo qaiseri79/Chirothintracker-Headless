@@ -1,0 +1,23 @@
+uuid: 6d333fd0-63aa-4866-bb1d-87aed91497da
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.lipolight_profile
+    - field.storage.contact_message.field_hips
+id: contact_message.lipolight_profile.field_hips
+field_name: field_hips
+entity_type: contact_message
+bundle: lipolight_profile
+label: Hips
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

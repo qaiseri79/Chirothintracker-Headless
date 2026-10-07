@@ -1,0 +1,23 @@
+uuid: 8c5f397d-6b99-498d-8e8d-9d6ca7e27c7c
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.zerona_profile
+    - field.storage.patient_profile.field_arm_left_bicep_loss
+id: patient_profile.zerona_profile.field_arm_left_bicep_loss
+field_name: field_arm_left_bicep_loss
+entity_type: patient_profile
+bundle: zerona_profile
+label: 'Arm Left Bicep Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

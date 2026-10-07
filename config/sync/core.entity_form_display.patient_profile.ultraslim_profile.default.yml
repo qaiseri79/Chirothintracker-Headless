@@ -1,0 +1,130 @@
+uuid: c598dccb-14ba-41cf-a996-f0a580854313
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.ultraslim_profile
+    - field.field.patient_profile.ultraslim_profile.field_abdomen_loss
+    - field.field.patient_profile.ultraslim_profile.field_arm_left_bicep_loss
+    - field.field.patient_profile.ultraslim_profile.field_arm_right_bicep_loss
+    - field.field.patient_profile.ultraslim_profile.field_back_bra_line_loss
+    - field.field.patient_profile.ultraslim_profile.field_buttocks_loss
+    - field.field.patient_profile.ultraslim_profile.field_hips_loss
+    - field.field.patient_profile.ultraslim_profile.field_neck_loss
+    - field.field.patient_profile.ultraslim_profile.field_patient
+    - field.field.patient_profile.ultraslim_profile.field_program_start_date
+    - field.field.patient_profile.ultraslim_profile.field_sessions_available
+    - field.field.patient_profile.ultraslim_profile.field_thigh_left_loss
+    - field.field.patient_profile.ultraslim_profile.field_thigh_right_loss
+    - field.field.patient_profile.ultraslim_profile.field_visceral_fat_zone_1_loss
+    - field.field.patient_profile.ultraslim_profile.field_visceral_fat_zone_2_loss
+    - field.field.patient_profile.ultraslim_profile.field_visceral_fat_zone_3_loss
+    - field.field.patient_profile.ultraslim_profile.field_visceral_fat_zone_4_loss
+    - field.field.patient_profile.ultraslim_profile.field_visceral_fat_zone_5_loss
+    - field.field.patient_profile.ultraslim_profile.field_visceral_fat_zone_6_loss
+    - field.field.patient_profile.ultraslim_profile.field_waistbuster_zone_1_loss
+    - field.field.patient_profile.ultraslim_profile.field_waistbuster_zone_2_loss
+    - field.field.patient_profile.ultraslim_profile.field_waistbuster_zone_3_loss
+    - field.field.patient_profile.ultraslim_profile.field_waistbuster_zone_4_loss
+    - field.field.patient_profile.ultraslim_profile.field_waistbuster_zone_5_loss
+    - field.field.patient_profile.ultraslim_profile.field_waistbuster_zone_6_loss
+    - field.field.patient_profile.ultraslim_profile.field_wastbuster_zone_6l_loss
+  module:
+    - datetime
+    - field_group
+third_party_settings:
+  field_group:
+    group_hidden:
+      children:
+        - field_buttocks_loss
+        - field_arm_left_bicep_loss
+        - field_arm_right_bicep_loss
+        - field_abdomen_loss
+        - field_thigh_left_loss
+        - field_thigh_right_loss
+        - field_back_bra_line_loss
+        - field_neck_loss
+        - field_hips_loss
+        - field_visceral_fat_zone_1_loss
+        - field_visceral_fat_zone_2_loss
+        - field_visceral_fat_zone_3_loss
+        - field_visceral_fat_zone_4_loss
+        - field_visceral_fat_zone_5_loss
+        - field_visceral_fat_zone_6_loss
+        - field_waistbuster_zone_1_loss
+        - field_waistbuster_zone_2_loss
+        - field_waistbuster_zone_3_loss
+        - field_waistbuster_zone_4_loss
+        - field_waistbuster_zone_5_loss
+        - field_waistbuster_zone_6_loss
+        - field_wastbuster_zone_6l_loss
+      label: ''
+      region: content
+      parent_name: ''
+      weight: 3
+      format_type: html_element
+      format_settings:
+        classes: group-hidden
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: div
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+        required_fields: false
+id: patient_profile.ultraslim_profile.default
+targetEntityType: patient_profile
+bundle: ultraslim_profile
+mode: default
+content:
+  field_patient:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_program_start_date:
+    type: datetime_default
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_sessions_available:
+    type: number
+    weight: 2
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_abdomen_loss: true
+  field_arm_left_bicep_loss: true
+  field_arm_right_bicep_loss: true
+  field_back_bra_line_loss: true
+  field_buttocks_loss: true
+  field_hips_loss: true
+  field_neck_loss: true
+  field_thigh_left_loss: true
+  field_thigh_right_loss: true
+  field_visceral_fat_zone_1_loss: true
+  field_visceral_fat_zone_2_loss: true
+  field_visceral_fat_zone_3_loss: true
+  field_visceral_fat_zone_4_loss: true
+  field_visceral_fat_zone_5_loss: true
+  field_visceral_fat_zone_6_loss: true
+  field_waistbuster_zone_1_loss: true
+  field_waistbuster_zone_2_loss: true
+  field_waistbuster_zone_3_loss: true
+  field_waistbuster_zone_4_loss: true
+  field_waistbuster_zone_5_loss: true
+  field_waistbuster_zone_6_loss: true
+  field_wastbuster_zone_6l_loss: true

@@ -1,0 +1,23 @@
+uuid: 51468afd-d561-4bf8-821b-d4642576e91c
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.chirothin_profile
+    - field.storage.patient_profile.field_program_start_weight
+id: patient_profile.chirothin_profile.field_program_start_weight
+field_name: field_program_start_weight
+entity_type: patient_profile
+bundle: chirothin_profile
+label: 'Program Start Weight'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: float

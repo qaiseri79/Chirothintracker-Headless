@@ -1,0 +1,29 @@
+uuid: 0cfca976-51d8-4c11-b425-79c21fac2514
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.recipes
+  module:
+    - system
+    - views
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_views_block__recipes_block_2
+theme: chirothintracker_subtheme
+region: content
+weight: -9
+provider: null
+plugin: 'views_block:recipes-block_2'
+settings:
+  id: 'views_block:recipes-block_2'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /recipes

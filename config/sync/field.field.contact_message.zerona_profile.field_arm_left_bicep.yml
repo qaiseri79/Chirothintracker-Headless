@@ -1,0 +1,23 @@
+uuid: 8a227f2a-c679-479c-95fd-82b360cc33e7
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.zerona_profile
+    - field.storage.contact_message.field_arm_left_bicep
+id: contact_message.zerona_profile.field_arm_left_bicep
+field_name: field_arm_left_bicep
+entity_type: contact_message
+bundle: zerona_profile
+label: 'Arm - Left Bicep'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

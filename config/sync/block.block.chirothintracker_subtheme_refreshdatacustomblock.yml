@@ -1,0 +1,25 @@
+uuid: 1eb2f007-c2bc-48b4-9b03-0d7f8b56c2d6
+langcode: en
+status: true
+dependencies:
+  module:
+    - custom_module
+    - system
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_refreshdatacustomblock
+theme: chirothintracker_subtheme
+region: content
+weight: -12
+provider: null
+plugin: refresh_data_block
+settings:
+  id: refresh_data_block
+  label: 'Refresh Data (Custom Block)'
+  label_display: '0'
+  provider: custom_module
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /history

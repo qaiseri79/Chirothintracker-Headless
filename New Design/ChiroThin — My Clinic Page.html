@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>ChiroThin — My Clinic Page</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { canvas:"#F3F4F1", surface:"#FFFFFF", ink:"#101827", muted:"#6B7280", line:"#E4E2DC",
+      primary:{DEFAULT:"#0B5D52",soft:"#E4EEEC",dark:"#08423A"}, accent:{DEFAULT:"#C7522A",soft:"#F6E4DC"} },
+    fontFamily:{ serif:["Newsreader","Georgia","serif"], sans:["Inter","system-ui","sans-serif"] },
+    boxShadow:{ panel:"0 1px 2px rgba(16,24,39,0.04), 0 8px 24px -12px rgba(16,24,39,0.08)" },
+  } } };
+</script>
+<style>
+  :root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  html, body { height: 100%; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; } ::-webkit-scrollbar-thumb { background: #E4E2DC; border-radius: 8px; }
+  .field { width:100%; border:1px solid #E4E2DC; background:#fff; border-radius:.75rem; padding:.7rem .9rem; font-size:.875rem; transition:border-color .15s, box-shadow .15s; }
+  .field:focus { outline:none; border-color:#0B5D52; box-shadow:0 0 0 4px #E4EEEC; }
+  .field.bad { border-color:#C7522A; box-shadow:0 0 0 4px #F6E4DC; }
+  .lbl { display:block; margin-bottom:.4rem; font-size:.75rem; font-weight:600; }
+  .err { display:none; margin-top:.3rem; font-size:.7rem; color:#C7522A; } .bad ~ .err { display:block; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border-radius:.75rem; padding:.6rem 1rem; font-size:.875rem; font-weight:600; transition:.15s; }
+  tbody tr { transition: background .15s; }
+</style>
+</head>
+<body class="bg-canvas font-sans text-ink antialiased h-full">
+<div class="flex h-full">
+  <aside class="group/sidebar hidden md:flex w-[72px] shrink-0 flex-col overflow-hidden border-r border-line bg-surface transition-[width] duration-200 hover:w-64">
+    <div class="flex h-16 shrink-0 items-center gap-3 border-b border-line px-5">
+      <svg class="h-6 w-6 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <div class="whitespace-nowrap opacity-0 transition-opacity group-hover/sidebar:opacity-100"><p class="font-serif text-base leading-none">ChiroThin</p><p class="text-[10px] tracking-wide text-muted">Provider Portal</p></div>
+    </div>
+    <nav id="nav" class="flex-1 space-y-0.5 overflow-y-auto px-3 py-4"></nav>
+  </aside>
+
+  <div class="flex min-w-0 flex-1 flex-col">
+    <header class="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-4 border-b border-line bg-surface/90 px-4 backdrop-blur sm:px-6">
+      <h1 class="font-serif text-lg">My Clinic Page</h1><div class="flex-1"></div>
+      <div class="hidden items-center gap-2 rounded-full border border-accent/40 px-3 py-1 text-[11px] sm:flex"><span class="text-muted">Subscription</span><b>Unlimited</b><span class="text-line">|</span><span class="text-muted">Enrolled</span><b>12</b></div>
+      <div class="flex items-center gap-2 border-l border-line pl-4"><div class="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-primary-soft text-[11px] font-semibold text-primary">JS</div><span class="hidden text-sm font-medium xl:block">Dr. John Schellenberg</span></div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto"><div class="mx-auto max-w-5xl px-4 py-6 sm:px-6">
+      <div class="mb-5 flex flex-wrap items-end justify-between gap-4">
+        <div><h2 class="font-serif text-2xl" id="pgT"></h2><p class="mt-1 text-sm text-muted" id="pgS"></p></div>
+        <button id="addBtn" class="btn bg-primary text-white shadow-sm hover:bg-primary-dark"></button>
+      </div>
+      <div class="mb-5 inline-flex rounded-xl border border-line bg-surface p-1 shadow-panel" id="tabs"></div>
+      <div id="stats" class="mb-5 grid grid-cols-3 gap-3"></div>
+      <div id="body"></div>
+    </div></main>
+  </div>
+</div>
+
+<!-- drawer -->
+<div id="ov" class="fixed inset-0 z-40 hidden bg-ink/40 backdrop-blur-[2px]"></div>
+<aside id="dr" class="fixed inset-y-0 right-0 z-50 flex w-full max-w-md translate-x-full flex-col bg-surface shadow-2xl transition-transform duration-200">
+  <div class="flex items-center justify-between border-b border-line px-6 py-4"><h3 class="font-serif text-xl" id="drT"></h3><button id="drX" aria-label="Close" class="rounded-lg p-1.5 text-muted hover:bg-canvas">✕</button></div>
+  <form id="drF" novalidate class="flex flex-1 flex-col"><div id="drB" class="flex-1 space-y-5 overflow-y-auto px-6 py-6"></div>
+    <div class="flex gap-3 border-t border-line px-6 py-4"><button type="button" id="drC" class="btn flex-1 border border-line hover:bg-canvas">Cancel</button><button class="btn flex-1 bg-primary text-white hover:bg-primary-dark" id="drS">Save</button></div></form>
+</aside>
+<!-- confirm -->
+<div id="cf" class="fixed inset-0 z-[60] hidden items-center justify-center bg-ink/40 p-4"><div class="w-full max-w-sm rounded-2xl bg-surface p-6 shadow-2xl">
+  <div class="flex h-11 w-11 items-center justify-center rounded-full bg-accent-soft text-accent" id="cfI"></div>
+  <h3 class="mt-4 font-serif text-xl" id="cfT"></h3><p class="mt-1 text-sm text-muted" id="cfP"></p>
+  <div class="mt-6 flex gap-3"><button id="cfN" class="btn flex-1 border border-line hover:bg-canvas">Cancel</button><button id="cfY" class="btn flex-1 bg-accent text-white hover:opacity-90"></button></div></div></div>
+<div id="toast" class="pointer-events-none fixed bottom-6 left-1/2 z-[70] -translate-x-1/2 translate-y-4 rounded-xl bg-ink px-4 py-2.5 text-sm font-medium text-white opacity-0 shadow-lg transition"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const P={life:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="m4.9 4.9 4.3 4.3M14.8 14.8l4.3 4.3M14.8 9.2l4.3-4.3M4.9 19.1l4.3-4.3"/>',food:'<path d="M3 2v7a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V2M7 2v20M17 2v20M17 2c-2.5 0-4 3-4 6.5S14.5 15 17 15"/>',tool:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z"/>',grad:'<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/>',link:'<path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>',card:'<rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M15 9h3M15 13h3M6 17c.5-2 5.5-2 6 0"/>',msg:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',clinic:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 11v6M9 14h6"/>',more:'<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',plus:'<path d="M12 5v14M5 12h14"/>',pin:'<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>',edit:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',ban:'<circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/>',ok:'<circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/>'};
+const ic=(n,c='h-[18px] w-[18px]')=>`<svg class="${c} shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${P[n]}</svg>`;
+const NAV=[['Support Center','life'],['Recipes','food'],['Resources','tool'],['Training','grad'],['Intake Links','link'],['Patient Summary','card'],['Messages','msg',3],['Patients','users',6],['My Clinic Page','clinic',1,1],['Extras','more']];
+$('nav').innerHTML=NAV.map(([l,i,b,a])=>`<a href="#" class="flex items-center gap-3 rounded-lg px-2.5 py-2.5 text-sm font-medium ${a?'bg-primary text-white':'text-ink/70 hover:bg-primary-soft hover:text-primary'}">${ic(i)}<span class="flex flex-1 items-center justify-between whitespace-nowrap opacity-0 transition-opacity group-hover/sidebar:opacity-100">${l}${b?`<span class="rounded-full bg-accent px-1.5 text-[10px] font-semibold text-white">${b}</span>`:''}</span></a>`).join('');
+
+/* ---- data (mirrors the Drupal screens) ---- */
+const CLINICS=['ChiroThinTracker.com Training Site'];
+const S={tab:'doc',q:'',f:'all',
+ locs:[{id:1,t:'Satellite Clinic',c:CLINICS[0],d:'03/18/2025'},{id:2,t:'Site 2',c:CLINICS[0],d:'03/18/2025'},{id:3,t:'Nutrition Tracking',c:CLINICS[0],d:'07/08/2026'}],
+ docs:[{id:1,n:'Amber Von Haden',u:'amberyaw@yahoo.com',e:'amberyaw@yahoo.com',l:'Satellite Clinic',b:0},{id:2,n:'Annie Oakley',u:'annie.oakley',e:'annie.oakley@fakeemail.com',l:'',b:0},{id:3,n:'Annie Are You Okay?',u:'annie@yopmail.com',e:'annie@yopmail.com',l:'',b:0},{id:4,n:'Annie Smith',u:'annie@fakeemail.com',e:'annie@fakeemail.com',l:'',b:1}],nid:10};
+const ini=n=>n.split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase()||'?';
+const today=()=>{const d=new Date();return String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0')+'/'+d.getFullYear();};
+let tt;const toast=m=>{const t=$('toast');t.textContent=m;t.classList.remove('opacity-0','translate-y-4');clearTimeout(tt);tt=setTimeout(()=>t.classList.add('opacity-0','translate-y-4'),2400);};
+
+/* ---- render ---- */
+function render(){
+ const doc=S.tab==='doc';
+ $('pgT').textContent=doc?'My Chiropractors':'Clinic Locations';
+ $('pgS').textContent=doc?'Chiropractors and health coaches who can access your clinic.':'The locations your team works from. Assign chiropractors to each one.';
+ $('addBtn').innerHTML=ic('plus')+(doc?'Add Chiropractor / Health Coach':'Add Clinic Location');
+ $('tabs').innerHTML=[['doc','My Chiropractors','users'],['loc','Clinic Locations','pin']].map(([k,l,i])=>`<button data-tab="${k}" class="btn ${S.tab===k?'bg-primary text-white':'text-ink/70 hover:bg-primary-soft hover:text-primary'} !py-2">${ic(i,'h-4 w-4')}${l}</button>`).join('');
+ const act=S.docs.filter(d=>!d.b).length;
+ const st=doc?[['Total',S.docs.length],['Active',act],['Blocked',S.docs.length-act]]:[['Locations',S.locs.length],['Clinics',CLINICS.length],['Unassigned chiropractors',S.docs.filter(d=>!d.l).length]];
+ $('stats').innerHTML=st.map(([l,v])=>`<div class="rounded-2xl border border-line bg-surface px-4 py-3 shadow-panel"><p class="font-serif text-2xl leading-none">${v}</p><p class="mt-1.5 text-[11px] font-medium uppercase tracking-wide text-muted">${l}</p></div>`).join('');
+ $('body').innerHTML=doc?docsView():locsView();
+}
+function docsView(){
+ const q=S.q.toLowerCase();
+ const rows=S.docs.filter(d=>(S.f==='all'||(S.f==='none'?!d.l:d.l===S.f))&&(!q||(d.n+d.u+d.e).toLowerCase().includes(q)));
+ const bar=`<div class="flex flex-col gap-3 border-b border-line p-4 sm:flex-row"><div class="relative flex-1"><span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted">${ic('search','h-4 w-4')}</span><input id="q" value="${esc(S.q)}" placeholder="Search name, username or email" class="field !pl-9"></div>
+  <select id="fl" class="field sm:w-56"><option value="all">All locations</option>${S.locs.map(l=>`<option ${S.f===l.t?'selected':''}>${esc(l.t)}</option>`).join('')}<option value="none" ${S.f==='none'?'selected':''}>Unassigned</option></select></div>`;
+ const body=rows.length?`<table class="w-full text-left text-sm"><thead class="bg-canvas/70 text-[11px] uppercase tracking-wide text-muted"><tr><th class="px-5 py-3 font-semibold">Chiropractor</th><th class="hidden px-3 py-3 font-semibold md:table-cell">User name</th><th class="hidden px-3 py-3 font-semibold sm:table-cell">Clinic location</th><th class="px-3 py-3 font-semibold">Status</th><th class="px-5 py-3"></th></tr></thead><tbody class="divide-y divide-line">${rows.map(d=>`<tr class="hover:bg-canvas/50 ${d.b?'opacity-70':''}">
+  <td class="px-5 py-3.5"><div class="flex items-center gap-3"><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${d.b?'bg-line text-muted':'bg-primary-soft text-primary'} text-xs font-semibold">${esc(ini(d.n))}</span><div class="min-w-0"><p class="truncate font-medium">${esc(d.n)}</p><p class="truncate text-xs text-muted">${esc(d.e)}</p></div></div></td>
+  <td class="hidden px-3 py-3.5 text-ink/70 md:table-cell">${esc(d.u)}</td>
+  <td class="hidden px-3 py-3.5 sm:table-cell">${d.l?`<span class="inline-flex items-center gap-1.5 text-ink/80">${ic('pin','h-3.5 w-3.5 text-primary')}${esc(d.l)}</span>`:'<span class="rounded-full bg-canvas px-2.5 py-1 text-xs text-muted">Unassigned</span>'}</td>
+  <td class="px-3 py-3.5"><span class="rounded-full px-2.5 py-1 text-xs font-semibold ${d.b?'bg-accent-soft text-accent':'bg-primary-soft text-primary'}">${d.b?'Blocked':'Active'}</span></td>
+  <td class="px-5 py-3.5 text-right"><button data-blk="${d.id}" class="btn !px-3 !py-1.5 border ${d.b?'border-primary/30 text-primary hover:bg-primary-soft':'border-accent/30 text-accent hover:bg-accent-soft'}">${d.b?'Unblock':'Block'}</button></td></tr>`).join('')}</tbody></table>`
+  :`<div class="px-6 py-14 text-center"><span class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary-soft text-primary">${ic('users','h-6 w-6')}</span><p class="mt-3 font-serif text-lg">No chiropractors found</p><p class="text-sm text-muted">Try a different search or location filter.</p></div>`;
+ return `<div class="overflow-hidden rounded-2xl border border-line bg-surface shadow-panel">${bar}<div class="overflow-x-auto">${body}</div></div>`;
+}
+function locsView(){
+ const body=S.locs.length?`<table class="w-full text-left text-sm"><thead class="bg-canvas/70 text-[11px] uppercase tracking-wide text-muted"><tr><th class="px-5 py-3 font-semibold">Clinic location</th><th class="hidden px-3 py-3 font-semibold md:table-cell">Clinic</th><th class="px-3 py-3 font-semibold">Chiropractors</th><th class="hidden px-3 py-3 font-semibold sm:table-cell">Authored on</th><th class="px-5 py-3"></th></tr></thead><tbody class="divide-y divide-line">${S.locs.map(l=>{const n=S.docs.filter(d=>d.l===l.t).length;return `<tr class="hover:bg-canvas/50">
+  <td class="px-5 py-3.5"><div class="flex items-center gap-3"><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary">${ic('pin','h-4 w-4')}</span><p class="font-medium">${esc(l.t)}</p></div></td>
+  <td class="hidden px-3 py-3.5 text-ink/70 md:table-cell">${esc(l.c)}</td>
+  <td class="px-3 py-3.5"><span class="rounded-full bg-canvas px-2.5 py-1 text-xs font-medium">${n} ${n===1?'chiropractor':'chiropractors'}</span></td>
+  <td class="hidden px-3 py-3.5 text-ink/70 sm:table-cell">${l.d}</td>
+  <td class="px-5 py-3.5 text-right"><button data-edit="${l.id}" class="btn !px-3 !py-1.5 border border-line hover:bg-primary-soft hover:text-primary">${ic('edit','h-3.5 w-3.5')}Edit</button></td></tr>`}).join('')}</tbody></table>`
+  :`<div class="px-6 py-14 text-center"><p class="font-serif text-lg">No locations yet</p><p class="text-sm text-muted">Add your first clinic location to get started.</p></div>`;
+ return `<div class="overflow-hidden rounded-2xl border border-line bg-surface shadow-panel"><div class="overflow-x-auto">${body}</div></div>`;
+}
+
+/* ---- drawer ---- */
+let edit=null;
+function fld(id,label,inner,err,hint=''){return `<div><label class="lbl" for="${id}">${label} <span class="text-accent">*</span></label>${inner}<p class="err">${err}</p>${hint?`<p class="mt-1.5 text-xs text-muted">${hint}</p>`:''}</div>`;}
+function openDrawer(kind,item){
+ edit=item||null;S.drawer=kind;
+ const doc=kind==='doc';
+ $('drT').textContent=doc?'Add chiropractor / health coach':(item?'Edit clinic location':'Add clinic location');
+ $('drS').textContent=doc?'Send invitation':'Save';
+ $('drB').innerHTML=doc?
+  fld('fl1','Clinic location',`<select id="fl1" class="field"><option value="">- Select -</option>${S.locs.map(l=>`<option>${esc(l.t)}</option>`).join('')}</select>`,'Choose a clinic location.')+
+  fld('fn','Chiropractor full name',`<input id="fn" class="field" autocomplete="off">`,'Enter their full name.')+
+  fld('fe','Chiropractor email',`<input id="fe" type="email" class="field" autocomplete="off">`,'Enter a valid email address.','They\'ll receive an email invitation to set up their login.')
+  :fld('ft','Title',`<input id="ft" class="field" value="${esc(item?item.t:'')}" autocomplete="off">`,'Enter a title.','The name of this location, e.g. “Downtown Clinic”.')+
+   fld('fc','Clinic',`<select id="fc" class="field">${CLINICS.map(c=>`<option ${item&&item.c===c?'selected':''}>${esc(c)}</option>`).join('')}</select>`,'Choose a clinic.');
+ $('ov').classList.remove('hidden');$('dr').classList.remove('translate-x-full');
+ setTimeout(()=>($('drB').querySelector('input,select')||{focus(){}}).focus(),200);
+}
+function closeDrawer(){$('dr').classList.add('translate-x-full');$('ov').classList.add('hidden');}
+['ov','drX','drC'].forEach(i=>$(i).onclick=closeDrawer);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();$('cf').classList.add('hidden');$('cf').classList.remove('flex');}});
+$('drB').addEventListener('input',e=>e.target.classList.remove('bad'));
+$('drF').addEventListener('submit',e=>{
+ e.preventDefault();const rule={fl1:v=>v,fn:v=>v.trim().length>1,fe:v=>/^\S+@\S+\.\S+$/.test(v),ft:v=>v.trim(),fc:v=>v};let ok=true;
+ $('drB').querySelectorAll('input,select').forEach(el=>{const bad=!rule[el.id](el.value);el.classList.toggle('bad',bad);if(bad&&ok){ok=false;el.focus();}});
+ if(!ok)return;
+ if(S.drawer==='doc'){const n=$('fn').value.trim(),em=$('fe').value.trim();S.docs.unshift({id:S.nid++,n,u:em.split('@')[0],e:em,l:$('fl1').value,b:0});toast('Invitation sent to '+em);}
+ else if(edit){edit.t=$('ft').value.trim();edit.c=$('fc').value;toast('Location updated');}
+ else{S.locs.push({id:S.nid++,t:$('ft').value.trim(),c:$('fc').value,d:today()});toast('Location added');}
+ closeDrawer();render();
+});
+
+/* ---- confirm block ---- */
+let pend=null;
+const cf=(on)=>{$('cf').classList.toggle('hidden',!on);$('cf').classList.toggle('flex',on);};
+$('cfN').onclick=()=>cf(false);
+$('cfY').onclick=()=>{if(pend){pend.b=pend.b?0:1;toast(pend.n+(pend.b?' blocked':' unblocked'));pend=null;}cf(false);render();};
+
+/* ---- events ---- */
+$('addBtn').onclick=()=>openDrawer(S.tab);
+document.addEventListener('click',e=>{
+ const t=e.target.closest('[data-tab]');if(t){S.tab=t.dataset.tab;render();return;}
+ const b=e.target.closest('[data-blk]');if(b){pend=S.docs.find(d=>d.id==b.dataset.blk);const blk=!pend.b;
+  $('cfI').innerHTML=ic(blk?'ban':'ok','h-5 w-5');$('cfT').textContent=(blk?'Block ':'Unblock ')+pend.n+'?';
+  $('cfP').textContent=blk?'They will lose access to the portal right away. You can unblock them at any time.':'They will regain access to the portal.';
+  $('cfY').textContent=blk?'Block chiropractor':'Unblock';$('cf').classList.toggle('hidden',false);cf(true);return;}
+ const ed=e.target.closest('[data-edit]');if(ed)openDrawer('loc',S.locs.find(l=>l.id==ed.dataset.edit));
+});
+document.addEventListener('input',e=>{if(e.target.id==='q'){S.q=e.target.value;const p=e.target.selectionStart;render();const i=$('q');i.focus();i.setSelectionRange(p,p);}});
+document.addEventListener('change',e=>{if(e.target.id==='fl'){S.f=e.target.value;render();}});
+render();
+</script>
+</body>
+</html>

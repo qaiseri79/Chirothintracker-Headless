@@ -1,0 +1,13 @@
+uuid: 2ac3d301-ed94-447d-89c6-19ccac68a833
+langcode: en
+status: true
+dependencies:
+  module:
+    - entity_bulk_clone
+_core:
+  default_config_hash: FYT1tnyrSOvGa3W5PRwupuGK5laSfCmYQGHhFW7ID6g
+id: bulk_clone_node_action
+label: 'Bulk Clone'
+type: node
+plugin: bulk_clone_node_action
+configuration: {  }

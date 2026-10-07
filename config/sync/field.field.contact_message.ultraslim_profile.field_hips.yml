@@ -1,0 +1,23 @@
+uuid: 45b6fa1c-7663-43bf-9dff-c497912340bb
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_hips
+id: contact_message.ultraslim_profile.field_hips
+field_name: field_hips
+entity_type: contact_message
+bundle: ultraslim_profile
+label: Hips
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

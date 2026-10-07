@@ -1,0 +1,15 @@
+{
+  "name": "drupal/eca_webform",
+  "license": "GPL-2.0-or-later",
+  "type": "drupal-module",
+  "description": "Integrate ECA with the Webform module and its plugins.",
+  "support": {
+    "issues": "https://drupal.org/project/issues/eca_webform",
+    "source": "https://drupal.org/project/eca_webform"
+  },
+  "require": {
+    "php": ">=7.4",
+    "drupal/eca": "^1.0",
+    "drupal/webform": "^6.2"
+  }
+}

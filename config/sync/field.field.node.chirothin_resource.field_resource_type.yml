@@ -1,0 +1,29 @@
+uuid: e352240d-31b2-4731-8921-c5bfc730de81
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_resource_type
+    - node.type.chirothin_resource
+    - taxonomy.vocabulary.resource_category
+id: node.chirothin_resource.field_resource_type
+field_name: field_resource_type
+entity_type: node
+bundle: chirothin_resource
+label: 'Resource Category'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      resource_category: resource_category
+    sort:
+      field: _none
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

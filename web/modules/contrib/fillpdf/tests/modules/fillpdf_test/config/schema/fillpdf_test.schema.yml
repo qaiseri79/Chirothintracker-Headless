@@ -1,0 +1,7 @@
+fillpdf_test.settings:
+  type: config_object
+  label: 'FillPDF Testing Settings'
+  mapping:
+    example_setting:
+      type: string
+      label: 'Example Setting'

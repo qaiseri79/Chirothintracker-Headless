@@ -1,0 +1,23 @@
+uuid: 4910af21-bcd2-4653-94f5-4ca11cd11b40
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_weight
+id: contact_message.ultraslim_profile.field_weight
+field_name: field_weight
+entity_type: contact_message
+bundle: ultraslim_profile
+label: Weight
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

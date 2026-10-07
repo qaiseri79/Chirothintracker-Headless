@@ -1,0 +1,23 @@
+uuid: e700138e-2408-47f5-b043-0350ef55c876
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.lipolight_profile
+    - field.storage.patient_profile.field_thigh_left_loss
+id: patient_profile.lipolight_profile.field_thigh_left_loss
+field_name: field_thigh_left_loss
+entity_type: patient_profile
+bundle: lipolight_profile
+label: 'Thigh - Left Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

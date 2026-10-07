@@ -1,0 +1,28 @@
+uuid: cb154933-ab40-49ea-bb3f-2c241a4fed42
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.chironutraceutical
+    - field.storage.commerce_product.field_short_detail
+    - filter.format.basic_html
+    - filter.format.filtered_html
+    - filter.format.full_html
+  module:
+    - text
+id: commerce_product.chironutraceutical.field_short_detail
+field_name: field_short_detail
+entity_type: commerce_product
+bundle: chironutraceutical
+label: 'Short Detail'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - basic_html
+    - filtered_html
+    - full_html
+field_type: text_long

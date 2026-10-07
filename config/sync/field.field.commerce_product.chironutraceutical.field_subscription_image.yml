@@ -1,0 +1,29 @@
+uuid: 4fbd5105-4952-4cd9-a8fe-bd725d3a194c
+langcode: en
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.chironutraceutical
+    - field.storage.commerce_product.field_subscription_image
+    - media.type.image
+id: commerce_product.chironutraceutical.field_subscription_image
+field_name: field_subscription_image
+entity_type: commerce_product
+bundle: chironutraceutical
+label: Image
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

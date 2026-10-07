@@ -1,0 +1,23 @@
+uuid: 4c93cc87-04a9-47dd-96ec-dd1ae12e992a
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.zerona_profile
+    - field.storage.patient_profile.field_neck_loss
+id: patient_profile.zerona_profile.field_neck_loss
+field_name: field_neck_loss
+entity_type: patient_profile
+bundle: zerona_profile
+label: 'Neck Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

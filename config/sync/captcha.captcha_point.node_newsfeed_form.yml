@@ -1,0 +1,7 @@
+uuid: fd374d55-5338-442a-a060-9f21a43e95b4
+langcode: en
+status: false
+dependencies: {  }
+formId: node_newsfeed_form
+captchaType: default
+label: node_newsfeed_form

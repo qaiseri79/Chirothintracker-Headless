@@ -1,0 +1,17 @@
+uuid: ac0af567-9d7a-466f-a005-3a785bd0912b
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.mailings.teaser
+    - eck.eck_type.mailings.scheduled_mail
+    - field.field.mailings.scheduled_mail.field_message_plain
+    - field.field.mailings.scheduled_mail.field_scheduled_date
+id: mailings.scheduled_mail.teaser
+targetEntityType: mailings
+bundle: scheduled_mail
+mode: teaser
+content: {  }
+hidden:
+  field_message_plain: true
+  field_scheduled_date: true

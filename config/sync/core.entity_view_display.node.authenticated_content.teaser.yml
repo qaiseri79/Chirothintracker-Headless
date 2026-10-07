@@ -1,0 +1,33 @@
+uuid: 0aefcd1e-c9d5-4aac-ab91-8300ab698faa
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.authenticated_content.body
+    - field.field.node.authenticated_content.field_display_location
+    - node.type.authenticated_content
+  module:
+    - text
+    - user
+id: node.authenticated_content.teaser
+targetEntityType: node
+bundle: authenticated_content
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_display_location: true
+  private_message_link: true

@@ -1,0 +1,9 @@
+uuid: 130bf9f7-d30e-462c-a1e2-094f63a97e87
+langcode: en
+status: true
+dependencies: {  }
+name: Glyphicons
+vid: glyphicons
+description: null
+weight: 0
+new_revision: false

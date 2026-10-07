@@ -1,0 +1,9 @@
+uuid: 1c066c22-ec4f-400d-8692-7e5702359aca
+langcode: en
+status: true
+dependencies: {  }
+name: 'Laser Treatment Area'
+vid: laser_treatment_area
+description: null
+weight: 0
+new_revision: false

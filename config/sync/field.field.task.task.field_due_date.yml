@@ -1,0 +1,21 @@
+uuid: e97a162e-4758-461f-85bc-1fd3d0516480
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.task.task
+    - field.storage.task.field_due_date
+  module:
+    - datetime
+id: task.task.field_due_date
+field_name: field_due_date
+entity_type: task
+bundle: task
+label: 'Due Date'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

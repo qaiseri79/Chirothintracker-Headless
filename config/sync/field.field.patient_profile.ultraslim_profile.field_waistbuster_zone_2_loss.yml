@@ -1,0 +1,23 @@
+uuid: bad169ee-fb5e-4a16-bbcb-f1e5c8ca2805
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.ultraslim_profile
+    - field.storage.patient_profile.field_waistbuster_zone_2_loss
+id: patient_profile.ultraslim_profile.field_waistbuster_zone_2_loss
+field_name: field_waistbuster_zone_2_loss
+entity_type: patient_profile
+bundle: ultraslim_profile
+label: 'WaistBuster Zone 2 Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

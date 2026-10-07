@@ -1,0 +1,9 @@
+uuid: 3d7cca58-0a1a-49f3-b8fa-5948687249a0
+langcode: en
+status: true
+dependencies: {  }
+name: 'Dominant Hand'
+vid: dominant_hand
+description: null
+weight: 0
+new_revision: false

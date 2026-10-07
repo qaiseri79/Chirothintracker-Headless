@@ -1,0 +1,24 @@
+uuid: 62482ee8-23ae-4c2c-84da-95db1d4d304b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_locked
+  module:
+    - user
+id: user.user.field_locked
+field_name: field_locked
+entity_type: user
+bundle: user
+label: 'Account Transfer Unlocked'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: ''
+  off_label: ''
+field_type: boolean

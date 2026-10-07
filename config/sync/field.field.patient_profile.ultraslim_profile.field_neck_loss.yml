@@ -1,0 +1,23 @@
+uuid: bed33167-916a-4acd-8e00-399f7890ba64
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.ultraslim_profile
+    - field.storage.patient_profile.field_neck_loss
+id: patient_profile.ultraslim_profile.field_neck_loss
+field_name: field_neck_loss
+entity_type: patient_profile
+bundle: ultraslim_profile
+label: 'Neck Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

@@ -1,0 +1,23 @@
+uuid: d186a7da-8626-4f50-aa28-eba1d098efa2
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.log_patient_progress
+    - field.storage.contact_message.field_blood_sugar
+id: contact_message.log_patient_progress.field_blood_sugar
+field_name: field_blood_sugar
+entity_type: contact_message
+bundle: log_patient_progress
+label: 'Morning Blood Sugar'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

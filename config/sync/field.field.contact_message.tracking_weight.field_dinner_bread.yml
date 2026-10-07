@@ -1,0 +1,26 @@
+uuid: eb9877b7-2279-4d8e-8dbe-1f0f4d145c85
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_dinner_bread
+    - taxonomy.vocabulary.bread
+id: contact_message.tracking_weight.field_dinner_bread
+field_name: field_dinner_bread
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Dinner Bread'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      bread: bread
+    sort:
+      field: _none
+field_type: entity_reference

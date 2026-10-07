@@ -1,0 +1,18 @@
+uuid: 56d72a31-1f6f-47e1-8b68-abaec7b1717a
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - file
+id: system_manager
+label: 'System Manager'
+weight: 3
+is_admin: null
+permissions:
+  - 'create field_assigned_clinic'
+  - 'delete own files'
+  - 'edit field_assigned_clinic'
+  - 'edit own field_assigned_clinic'
+  - 'view field_assigned_clinic'
+  - 'view own field_assigned_clinic'

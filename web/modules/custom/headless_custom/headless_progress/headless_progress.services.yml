@@ -1,0 +1,35 @@
+services:
+  headless_progress.progress_service:
+    class: Drupal\headless_progress\ProgressService
+    arguments:
+      - '@entity_type.manager'
+      - '@current_user'
+
+  headless_progress.tracking_calculator:
+    class: Drupal\headless_progress\TrackingCalculator
+    arguments:
+      - '@entity_type.manager'
+      - '@headless_progress.patient_message_service'
+
+  headless_progress.patient_message_service:
+    class: Drupal\headless_progress\PatientMessageService
+    arguments:
+      - '@entity_type.manager'
+      - '@headless_progress.flag_service'
+
+  headless_progress.flag_service:
+    class: Drupal\headless_progress\FlagService
+    arguments:
+      - '@entity_type.manager'
+      - '@flag'
+  logger.channel.headless_progress:
+    parent: logger.channel_base
+    arguments: ['headless_progress']
+
+  headless_progress.log_writer:
+    class: Drupal\headless_progress\ProgressLogWriter
+    arguments: ['@entity_type.manager', '@headless_progress.tracking_calculator', '@database', '@logger.channel.headless_progress', '@lock']
+
+  headless_progress.log_sync:
+    class: Drupal\headless_progress\ProgressLogSync
+    arguments: ['@entity_type.manager', '@headless_progress.tracking_calculator', '@keyvalue.expirable', '@lock', '@database']

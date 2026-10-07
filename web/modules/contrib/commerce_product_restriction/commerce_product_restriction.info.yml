@@ -1,0 +1,13 @@
+name: Commerce Product Restrictions
+type: module
+description: Provides plugin-based restrictions on buying products or product variations, with optional error message explaining the restriction. Out of the box allows restricting products to a date range, user roles, or to specific users.
+core_version_requirement: ^8 || ^9 || ^10
+package: Commerce (contrib)
+dependencies:
+  - commerce
+  - commerce:commerce_cart
+
+# Information added by Drupal.org packaging script on 2023-11-06
+version: '1.1.0'
+project: 'commerce_product_restriction'
+datestamp: 1699279017

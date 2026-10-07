@@ -1,0 +1,9 @@
+uuid: c9b72f8c-dfbd-4681-9f6c-b2220028f986
+langcode: en
+status: true
+dependencies: {  }
+name: 'Chiropractor Flags'
+vid: chiropractor_flags
+description: null
+weight: 0
+new_revision: false

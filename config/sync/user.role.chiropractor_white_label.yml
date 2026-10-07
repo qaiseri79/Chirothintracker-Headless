@@ -1,0 +1,27 @@
+uuid: 53e66bd5-31e6-4d3f-beee-99c54c7d308b
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.daily_message
+    - node.type.patient_survey
+  module:
+    - file
+    - node
+    - system
+id: chiropractor_white_label
+label: 'Chiropractor - White Label'
+weight: 6
+is_admin: null
+permissions:
+  - 'access content'
+  - 'create daily_message content'
+  - 'create patient_survey content'
+  - 'delete any daily_message content'
+  - 'delete own daily_message content'
+  - 'delete own files'
+  - 'delete own patient_survey content'
+  - 'edit any daily_message content'
+  - 'edit own daily_message content'
+  - 'edit own patient_survey content'
+  - 'view own unpublished content'

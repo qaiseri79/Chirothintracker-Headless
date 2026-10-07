@@ -1,0 +1,6 @@
+ctt_shop.ns_variations_batch:
+  title: 'Create Not Shippable Variations'
+  description: 'Create Chironutraceutical (Not Shippable) variations from Chironutraceutical (Shippable) variations for all administrator-created Chironutraceutical products.'
+  parent: entity.commerce_product.collection
+  route_name: ctt_shop.ns_variations_batch
+  weight: 20

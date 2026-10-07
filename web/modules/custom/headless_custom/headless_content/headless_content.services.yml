@@ -1,0 +1,55 @@
+services:
+  # Declared explicitly, not assumed. Drupal does not auto-create a
+  # logger.channel.<module> service; core defines a fixed set in
+  # core.services.yml and each module wanting its own declares it. Since
+  # ContentService type-hints LoggerChannelInterface, the missing service is a
+  # container-compilation error, not a runtime one.
+  logger.channel.headless_content:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: logger.factory:get
+    arguments: ['headless_content']
+
+  headless_content.scope:
+    class: Drupal\headless_content\ContentScope
+    arguments:
+      - '@entity_type.manager'
+
+  headless_content.capabilities:
+    class: Drupal\headless_content\ContentCapabilities
+
+  # The `favorites` flag, read and written. Bundles covered and the caller's
+  # permission both come from the flag entity itself rather than from a list in
+  # code, so a change to flag.flag.favorites.yml or to a role's flag permissions
+  # takes effect without an edit here. See ContentFavorites::appliesTo() and
+  # ContentFavorites::canFlag().
+  headless_content.favorites:
+    class: Drupal\headless_content\ContentFavorites
+    arguments:
+      - '@flag'
+      # The flag module's actionAccess() checks permissions against this account,
+      # and the flaggings written are this account's own, so it must be the real
+      # current user rather than the one passed in per call. A different account
+      # would let a caller write flaggings attributed to someone else.
+      - '@current_user'
+
+  headless_content.content:
+    class: Drupal\headless_content\ContentService
+    arguments:
+      - '@entity_type.manager'
+      - '@headless_content.scope'
+      - '@headless_content.capabilities'
+      # Injected rather than reached for through \Drupal::service(). A static
+      # container call inside a service is a hidden dependency that a unit test
+      # cannot substitute, and the file URL is the one field that cannot be built
+      # from the entity alone.
+      - '@headless_content.favorites'
+      - '@file_url_generator'
+      # Renders recipe and training bodies through the site's own filter pipeline,
+      # which is what the legacy Views did.
+      - '@renderer'
+      - '@logger.channel.headless_content'
+      # Write new resource files through the repository (stores under public://)
+      # and name them with the filesystem's basename(), like the messages
+      # attachment upload does.
+      - '@file.repository'
+      - '@file_system'

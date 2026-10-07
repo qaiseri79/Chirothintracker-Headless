@@ -1,0 +1,23 @@
+uuid: 2ba7ba84-6885-48c9-bd7b-cbb10f93ab7c
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_thigh_left
+id: contact_message.tracking_weight.field_thigh_left
+field_name: field_thigh_left
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Thigh - Left'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

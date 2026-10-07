@@ -1,0 +1,11 @@
+uuid: 68bfcb5e-2909-4ddc-a7c4-884e057a1e22
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+id: menu_item.full
+label: Full
+description: ''
+targetEntityType: menu_item
+cache: true

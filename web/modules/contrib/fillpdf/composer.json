@@ -1,0 +1,20 @@
+{
+    "name": "drupal/fillpdf",
+    "description": "Allows users to populate PDF forms from website data.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Kevin Kaland",
+            "email": "kevin@wizonesolutions.com"
+        }
+    ],
+    "require": {
+        "drupal/core": "^10.3 || ^11.0",
+        "drupal/token": "^1.0"
+    },
+    "require-dev": {
+        "drupal/webform": "^6",
+        "drupal/xmlrpc": "^1"
+    }
+}

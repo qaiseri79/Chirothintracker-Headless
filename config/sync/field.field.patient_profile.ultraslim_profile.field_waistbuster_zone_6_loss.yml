@@ -1,0 +1,23 @@
+uuid: b7d670b1-9cca-484c-bbfd-d53e8d931312
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.ultraslim_profile
+    - field.storage.patient_profile.field_waistbuster_zone_6_loss
+id: patient_profile.ultraslim_profile.field_waistbuster_zone_6_loss
+field_name: field_waistbuster_zone_6_loss
+entity_type: patient_profile
+bundle: ultraslim_profile
+label: 'WaistBuster Zone 6 Right Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

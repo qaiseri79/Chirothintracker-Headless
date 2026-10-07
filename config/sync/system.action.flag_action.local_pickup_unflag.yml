@@ -1,0 +1,15 @@
+uuid: ea9557a3-6b12-43ca-b7f4-b44514b51ff4
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.local_pickup
+  module:
+    - flag
+id: flag_action.local_pickup_unflag
+label: 'Picked Up'
+type: commerce_order
+plugin: 'flag_action:local_pickup_unflag'
+configuration:
+  flag_id: local_pickup
+  flag_action: unflag

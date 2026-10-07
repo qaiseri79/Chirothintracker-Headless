@@ -1,0 +1,45 @@
+_core:
+  default_config_hash: CXhei_vpaZk-3f_Mj2cH0YmpK-ZpKHoSzVA3yZrDq0g
+definitions:
+  contact__site_page:
+    menu_name: footer
+    parent: ''
+    weight: 0
+    expanded: false
+    enabled: true
+  user__page:
+    weight: -50
+    parent: 'menu_link_content:348a2981-6483-4569-aedb-cc982ac75c93'
+    menu_name: account
+    expanded: true
+    enabled: true
+  user__logout:
+    weight: -47
+    menu_name: account
+    parent: 'menu_link_content:348a2981-6483-4569-aedb-cc982ac75c93'
+    enabled: true
+    expanded: false
+  node__add_page:
+    enabled: true
+    menu_name: tools
+    parent: ''
+    expanded: false
+    weight: 0
+  search__view:
+    enabled: true
+    menu_name: tools
+    parent: ''
+    expanded: false
+    weight: 0
+  standard__front_page:
+    enabled: false
+    menu_name: main
+    parent: ''
+    expanded: false
+    weight: -50
+  masquerade__unmasquerade:
+    weight: -49
+    parent: 'menu_link_content:348a2981-6483-4569-aedb-cc982ac75c93'
+    menu_name: account
+    expanded: false
+    enabled: true

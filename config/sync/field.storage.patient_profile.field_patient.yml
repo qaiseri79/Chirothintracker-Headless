@@ -1,0 +1,20 @@
+uuid: a36f54ef-55be-4e04-b6f2-ec3ae71880fa
+langcode: und
+status: true
+dependencies:
+  module:
+    - eck
+    - user
+id: patient_profile.field_patient
+field_name: field_patient
+entity_type: patient_profile
+type: entity_reference
+settings:
+  target_type: user
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

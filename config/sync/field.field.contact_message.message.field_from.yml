@@ -1,0 +1,30 @@
+uuid: 8b959e5b-e961-4b50-a38d-1ee5ae68b191
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.message
+    - field.storage.contact_message.field_from
+id: contact_message.message.field_from
+field_name: field_from
+entity_type: contact_message
+bundle: message
+label: From
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    behaviors:
+      field_default_token:
+        status: true
+      views-select-list:
+        status: 0
+field_type: entity_reference

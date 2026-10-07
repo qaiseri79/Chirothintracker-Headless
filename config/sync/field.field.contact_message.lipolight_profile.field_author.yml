@@ -1,0 +1,39 @@
+uuid: abaa8724-368b-47b5-b123-5821cd14c257
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.lipolight_profile
+    - field.storage.contact_message.field_author
+  module:
+    - disable_field
+    - epp
+third_party_settings:
+  epp:
+    value: '[current-user:uid]'
+    on_update: 1
+  disable_field:
+    add_disable: none
+    edit_disable: none
+id: contact_message.lipolight_profile.field_author
+field_name: field_author
+entity_type: contact_message
+bundle: lipolight_profile
+label: Author
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    filter:
+      type: _none
+    include_anonymous: true
+field_type: entity_reference

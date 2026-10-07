@@ -1,0 +1,36 @@
+custom_js:
+  version: 1.x
+  css:
+      layout:
+        assets/css/custom.css: {}
+  js:
+      assets/js/custom.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupal.dialog.ajax 
+    - core/drupalSettings
+    
+payment_method_preselect:
+  version: 1.x
+  js:
+    assets/js/payment-method-preselect.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupal.dialog.ajax 
+    - core/drupalSettings
+
+add_payment_method_preselect:
+  version: 1.x
+  js:
+    assets/js/add-payment-method-preselect.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupal.dialog.ajax 
+    - core/drupalSettings
+

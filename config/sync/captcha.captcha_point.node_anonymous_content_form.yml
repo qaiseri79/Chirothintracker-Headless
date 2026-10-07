@@ -1,0 +1,7 @@
+uuid: 931b7072-eb22-4160-9b52-63350064f745
+langcode: en
+status: false
+dependencies: {  }
+formId: node_anonymous_content_form
+captchaType: default
+label: node_anonymous_content_form

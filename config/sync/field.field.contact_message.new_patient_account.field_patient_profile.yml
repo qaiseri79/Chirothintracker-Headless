@@ -1,0 +1,34 @@
+uuid: 927e29f9-fda7-4512-b19e-5f635bb765a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.new_patient_account
+    - field.storage.contact_message.field_patient_profile
+id: contact_message.new_patient_account.field_patient_profile
+field_name: field_patient_profile
+entity_type: contact_message
+bundle: new_patient_account
+label: 'Patient Profile'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:patient_profile'
+  handler_settings:
+    target_bundles: {  }
+    sort:
+      field: _none
+      direction: ASC
+    view:
+      view_name: my_patient_profiles
+      display_name: entityreference_1
+      args: {  }
+    behaviors:
+      views-select-list:
+        status: 0
+      field_default_token:
+        status: true
+field_type: entity_reference

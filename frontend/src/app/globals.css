@@ -1,0 +1,279 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Palette is taken verbatim from
+ * "ChiroThin - Patient Intake (Redesign).html" (repo root).
+ * shadcn's semantic slots are mapped onto the design so every shadcn
+ * component inherits the approved colours; tokens the design needs but
+ * shadcn has no slot for are added as extras at the bottom.
+ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* System canvas pair, used by shadcn's <option>/<optgroup> styling. */
+  --color-canvas: var(--canvas);
+  --color-canvas-text: var(--canvas-text);
+
+  /* Design tokens with no shadcn equivalent. */
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-dark: var(--brand-dark);
+  --color-primary-soft: var(--brand-soft);
+  --color-flame: var(--flame);
+  --color-flame-soft: var(--flame-soft);
+  --color-positive: var(--positive);
+  --color-positive-soft: var(--positive-soft);
+
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-newsreader);
+  --font-mono: var(--font-mono-stack);
+  --font-heading: var(--font-newsreader);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  --shadow-panel:
+    0 1px 2px rgba(16, 24, 39, 0.04), 0 8px 24px -12px rgba(16, 24, 39, 0.08);
+}
+
+:root {
+  /* design: canvas / surface / ink / muted / line */
+  --canvas: #f3f4f1;
+  --background: #f3f4f1;
+  --surface: #ffffff;
+  --card: #ffffff;
+  --card-foreground: #101827;
+  --canvas-text: #101827;
+  --foreground: #101827;
+  --popover: #ffffff;
+  --popover-foreground: #101827;
+
+  --primary: #0b5d52;
+  --primary-foreground: #ffffff;
+  --brand: #0b5d52;
+  --brand-soft: #e4eeec;
+  --brand-dark: #08423a;
+
+  --secondary: #e4eeec;
+  --secondary-foreground: #08423a;
+
+  --muted: #f3f4f1;
+  --muted-foreground: #6b7280;
+
+  /* shadcn's `accent` is a hover fill; the design hovers to canvas. */
+  --accent: #f3f4f1;
+  --accent-foreground: #101827;
+
+  --destructive: #c7522a;
+  --line: #e4e2dc;
+  --border: #e4e2dc;
+  --input: #e4e2dc;
+  --ring: #0b5d52;
+
+  --flame: #c7522a;
+  --flame-soft: #f6e4dc;
+  --positive: #3d8361;
+  --positive-soft: #e4f0e9;
+
+  --chart-1: #0b5d52;
+  --chart-2: #3d8361;
+  --chart-3: #c7522a;
+  --chart-4: #6b7280;
+  --chart-5: #e4e2dc;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: #101827;
+  --sidebar-primary: #0b5d52;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f3f4f1;
+  --sidebar-accent-foreground: #101827;
+  --sidebar-border: #e4e2dc;
+  --sidebar-ring: #0b5d52;
+
+  --radius: 0.625rem;
+  --font-mono-stack: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    monospace;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    scroll-padding-top: env(safe-area-inset-top, 0px);
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 8px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--brand-dark);
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--canvas);
+  }
+  input[type="radio"],
+  input[type="checkbox"] {
+    accent-color: var(--brand);
+  }
+
+  /*
+   * next-nprogress-bar drives nprogress-v2, which mounts its bar as
+   * <div class="nprogress"> — no id. The CSS the library injects itself still
+   * targets the id selector "#nprogress" from the original nprogress package,
+   * so it never matches and the bar renders unstyled/invisible. These rules
+   * replace it (the component sets disableStyle) and must use the class.
+   */
+  .nprogress {
+    pointer-events: none;
+  }
+  .nprogress .bar {
+    background: var(--brand);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    /* above sticky headers, dialogs and overlays */
+    z-index: 99999;
+  }
+  .nprogress .peg {
+    box-shadow: 0 0 10px var(--brand), 0 0 5px var(--brand);
+  }
+}
+
+@layer components {
+  /*
+   * Drupal "Body" rich-text output, per "ChiroThin - Training.html".
+   *
+   * This class was applied on the training page with no rule behind it, so the
+   * body was falling back to `prose` from @tailwindcss/typography — a second,
+   * unrelated set of margins and colours fighting the design. Defined properly
+   * here instead, which also means the training page no longer needs `prose`.
+   */
+  .body-html > :first-child {
+    margin-top: 0;
+  }
+  .body-html p {
+    margin: 0 0 0.6rem;
+  }
+  .body-html p:last-child {
+    margin-bottom: 0;
+  }
+  .body-html a {
+    color: var(--flame);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .body-html strong {
+    color: var(--foreground);
+    font-weight: 600;
+  }
+  .body-html h3 {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+  }
+  .body-html ul {
+    margin: 0 0 0.6rem;
+    padding-left: 1.2rem;
+    list-style: disc;
+  }
+  .body-html ol {
+    margin: 0 0 0.6rem;
+    padding-left: 1.2rem;
+    list-style: decimal;
+  }
+  .body-html li {
+    margin: 0 0 0.2rem;
+  }
+  .body-html blockquote {
+    margin: 0 0 0.6rem;
+    padding-left: 0.8rem;
+    border-left: 2px solid var(--line);
+    color: var(--muted-foreground);
+  }
+
+  /*
+   * Embedded players.
+   *
+   * The training video *is* the iframe in the body: 44 of 51 training nodes
+   * store one there and only one unpublished node has an uploaded file. Drupal's
+   * media embed writes its size as `<iframe width="1268px" height="713px">`,
+   * and width/height attributes are only presentational hints, so the player used
+   * to render at its literal pixel size and push straight out through the side of
+   * the card. Author CSS outranks the attribute, so every embedded frame now
+   * fits its column at 16:9 — the same aspect the design uses for the play panel
+   * and the modal.
+   */
+  .body-html iframe,
+  .body-html video,
+  .body-html embed,
+  .body-html object {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border: 0;
+  }
+  .body-html .media_embed {
+    max-width: 100%;
+    margin: 0 0 0.75rem;
+  }
+  .body-html .media_embed:last-child {
+    margin-bottom: 0;
+  }
+}

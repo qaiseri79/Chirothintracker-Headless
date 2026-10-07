@@ -1,0 +1,23 @@
+uuid: 883f779a-9e5b-46f4-8f85-a5c16866b9fd
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_number_of_children
+id: contact_message.patient_intake.field_number_of_children
+field_name: field_number_of_children
+entity_type: contact_message
+bundle: patient_intake
+label: 'Number of Children'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 0
+  max: null
+  prefix: ''
+  suffix: 'child| children'
+field_type: integer

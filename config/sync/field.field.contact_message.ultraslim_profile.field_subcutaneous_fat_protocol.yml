@@ -1,0 +1,21 @@
+uuid: c4264564-1572-4e4e-8dea-b768e447e99b
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_subcutaneous_fat_protocol
+id: contact_message.ultraslim_profile.field_subcutaneous_fat_protocol
+field_name: field_subcutaneous_fat_protocol
+entity_type: contact_message
+bundle: ultraslim_profile
+label: 'Subcutaneous Fat Protocol'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: "Distance: 6 inches\r\nTime: 8 minutes per area\r\n\r\nYou may use 4 treatments at 8 minutes each for a total of 32 minutes over multiple areas."
+default_value_callback: ''
+settings: {  }
+field_type: string_long

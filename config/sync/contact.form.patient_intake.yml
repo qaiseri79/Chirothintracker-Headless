@@ -1,0 +1,47 @@
+uuid: 317ba22b-5a19-4616-a961-1c46f985cce4
+langcode: en
+status: true
+dependencies:
+  module:
+    - contact_storage
+    - contact_storage_dm
+    - entity_redirect
+third_party_settings:
+  contact_storage:
+    submit_text: Submit
+    show_preview: true
+    disabled_form_message: 'This contact form has been disabled.'
+    maximum_submissions_user: 0
+    page_autoreply_format: plain_text
+  contact_storage_dm:
+    disabled: false
+  entity_redirect:
+    redirect:
+      anonymous:
+        active: false
+        destination: default
+        url: ''
+        external: ''
+      add:
+        active: true
+        destination: url
+        url: /user/login
+        external: ''
+      edit:
+        active: true
+        destination: previous_page
+        url: ''
+        external: ''
+      delete:
+        active: true
+        destination: previous_page
+        url: ''
+        external: ''
+id: patient_intake
+label: 'Patient Intake'
+recipients:
+  - webmaster@example.com
+reply: ''
+weight: 0
+message: 'Thank you for submitting the Form.'
+redirect: /

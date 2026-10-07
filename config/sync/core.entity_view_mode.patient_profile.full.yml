@@ -1,0 +1,11 @@
+uuid: 73b897e4-ad51-48c9-b84f-d2811c0c8563
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+id: patient_profile.full
+label: Full
+description: ''
+targetEntityType: patient_profile
+cache: true

@@ -1,0 +1,15 @@
+uuid: e3c4cdd0-5db0-450f-91bb-fa06c7e6066b
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.order_status
+  module:
+    - flag
+id: flag_action.order_status_flag
+label: New
+type: commerce_order
+plugin: 'flag_action:order_status_flag'
+configuration:
+  flag_id: order_status
+  flag_action: flag

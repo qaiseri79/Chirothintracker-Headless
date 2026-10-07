@@ -1,0 +1,12 @@
+uuid: b3075c22-9aa8-475f-b915-9bd095c777f9
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+id: video_message_manager
+label: 'Video Message Manager'
+weight: 12
+is_admin: null
+permissions:
+  - 'delete own files'

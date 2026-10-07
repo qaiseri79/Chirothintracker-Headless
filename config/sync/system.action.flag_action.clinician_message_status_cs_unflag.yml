@@ -1,0 +1,15 @@
+uuid: 25b6aa84-efc9-4914-af64-18ee037f0afc
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.clinician_message_status_cs
+  module:
+    - flag
+id: flag_action.clinician_message_status_cs_unflag
+label: '<span class="button btn-success">Mark as Read</span>'
+type: contact_message
+plugin: 'flag_action:clinician_message_status_cs_unflag'
+configuration:
+  flag_id: clinician_message_status_cs
+  flag_action: unflag

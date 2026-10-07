@@ -1,0 +1,11 @@
+name: 'Time Field Test'
+type: module
+description: 'Support module for Time Field tests'
+package: Testing
+dependencies:
+  - time_field:time_field
+
+# Information added by Drupal.org packaging script on 2026-02-26
+version: '2.2.1'
+project: 'time_field'
+datestamp: 1772091290

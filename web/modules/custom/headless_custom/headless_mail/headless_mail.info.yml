@@ -1,0 +1,5 @@
+name: 'Headless Mail'
+type: module
+description: 'One reusable place to send mail, so callers do not each reach for the plugin manager.'
+package: ChiroThin
+core_version_requirement: ^10 || ^11

@@ -1,0 +1,23 @@
+uuid: dcdfff55-7db9-4f9b-8cba-3a040afc36db
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_thigh_right
+id: contact_message.ultraslim_profile.field_thigh_right
+field_name: field_thigh_right
+entity_type: contact_message
+bundle: ultraslim_profile
+label: 'Thigh - Right'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

@@ -1,0 +1,15 @@
+uuid: 06458ca4-e16f-4408-a3fb-6ce2e4476e12
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.task_completion
+  module:
+    - flag
+id: flag_action.task_completion_flag
+label: '<span class="glyphicon glyphicon-unchecked"></span>'
+type: task
+plugin: 'flag_action:task_completion_flag'
+configuration:
+  flag_id: task_completion
+  flag_action: flag

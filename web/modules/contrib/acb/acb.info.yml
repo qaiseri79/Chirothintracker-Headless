@@ -1,0 +1,10 @@
+name: 'Access Control Bridge'
+description: 'Bridge module linking Access Control modules so their access permissions work happily together.'
+core_version_requirement: ^9.5 || ^10 || ^11
+package: 'Access control'
+type: module
+
+# Information added by Drupal.org packaging script on 2026-02-25
+version: '2.0.2'
+project: 'acb'
+datestamp: 1772016734

@@ -1,0 +1,5 @@
+hide_preview.settings:
+  route_name: hide_preview.settings
+  title: 'Hide form preview button'
+  description: 'Configure which forms hide the preview button'
+  parent: system.admin_config_ui

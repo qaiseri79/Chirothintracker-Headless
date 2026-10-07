@@ -1,0 +1,13 @@
+type: module
+name: 'Filter Permissions'
+description: 'Provides role and module filters to simplify the user permissions page.'
+package: 'Administration'
+core_version_requirement: ^10.3 || ^11 || ^12
+
+dependencies:
+  - drupal:user
+
+# Information added by Drupal.org packaging script on 2025-04-30
+version: '2.0.2'
+project: 'filter_perms'
+datestamp: 1745993061

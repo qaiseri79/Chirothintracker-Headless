@@ -1,0 +1,15 @@
+{
+    "name": "drupal/fillpdf_webform_test",
+    "description": "Fixtures/support for FillPDF webform tests.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Kevin Kaland",
+            "email": "kevin@wizonesolutions.com"
+        }
+    ],
+    "require": {
+        "drupal/webform": "^6"
+    }
+}

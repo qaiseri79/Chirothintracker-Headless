@@ -1,0 +1,23 @@
+uuid: 8d3a0e44-8f87-4cc8-a0ff-0e797c4ce1a8
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.chirothin_profile
+    - field.storage.patient_profile.field_buttocks_loss
+id: patient_profile.chirothin_profile.field_buttocks_loss
+field_name: field_buttocks_loss
+entity_type: patient_profile
+bundle: chirothin_profile
+label: 'Buttocks Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

@@ -1,0 +1,39 @@
+uuid: 4949809c-eedc-4960-8fab-7308dee6fad1
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.laser_links
+  module:
+    - system
+    - user
+    - views
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_views_block__laser_links_block_1
+theme: chirothintracker_subtheme
+region: content
+weight: -17
+provider: null
+plugin: 'views_block:laser_links-block_1'
+settings:
+  id: 'views_block:laser_links-block_1'
+  label: ''
+  label_display: visible
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/messages/*\r\n/messages-test/*\r\n/notes/*\r\n/details/*"
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      chiropractor_active_: chiropractor_active_
+      chiropractor_inactive_: chiropractor_inactive_

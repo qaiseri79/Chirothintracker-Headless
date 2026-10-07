@@ -1,0 +1,11 @@
+name: Headless subscriptions
+type: module
+description: Doctor subscription checkout, Authorize.Net billing and portal entitlements.
+core_version_requirement: ^10 || ^11
+package: Headless API
+dependencies:
+  - commerce:commerce_product
+  - commerce:commerce_store
+  - headless_access:headless_access
+  - headless_auth:headless_auth
+  - eck:eck

@@ -1,0 +1,29 @@
+uuid: a25329fb-5ad0-434b-a34f-335bfa7ccec0
+langcode: en
+status: true
+dependencies:
+  module:
+    - custom_module
+    - user
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_intakeformlinkcustomblock
+theme: chirothintracker_subtheme
+region: content
+weight: -24
+provider: null
+plugin: intake_form_link_block
+settings:
+  id: intake_form_link_block
+  label: 'Intake Form Link (Custom Block))'
+  label_display: '0'
+  provider: custom_module
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      chiropractor_active_: chiropractor_active_
+      chiropractor_inactive_: chiropractor_inactive_

@@ -1,0 +1,37 @@
+uuid: 4258f80b-a8c4-497b-8fad-1dd38c1b0ff7
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+    - options
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: contact_message.field_diabetes
+field_name: field_diabetes
+entity_type: contact_message
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '0'
+      label: 'No'
+    -
+      value: '1'
+      label: 'Type I'
+    -
+      value: '2'
+      label: 'Type II'
+    -
+      value: '3'
+      label: Other
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

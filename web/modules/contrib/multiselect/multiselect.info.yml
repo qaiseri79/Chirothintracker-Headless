@@ -1,0 +1,13 @@
+name: Multiselect
+description: 'Defines a multiple selection field widget, to allow easier multi-selection for users.'
+package: Field types
+type: module
+core_version_requirement: ^9 || ^10 || ^11
+dependencies:
+  - drupal:options
+configure: multiselect.admin_settings
+
+# Information added by Drupal.org packaging script on 2024-03-26
+version: '2.0.0-beta4'
+project: 'multiselect'
+datestamp: 1711477685

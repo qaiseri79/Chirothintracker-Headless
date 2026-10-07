@@ -1,0 +1,18 @@
+uuid: 43b13fde-8f4b-49be-bcc0-3e4d19636d94
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_order
+id: commerce_order.commerce_recurring_queued
+field_name: commerce_recurring_queued
+entity_type: commerce_order
+type: boolean
+settings: {  }
+module: core
+locked: true
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

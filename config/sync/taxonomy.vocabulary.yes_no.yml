@@ -1,0 +1,9 @@
+uuid: 58a9b867-0741-4004-9512-189af28cd899
+langcode: en
+status: true
+dependencies: {  }
+name: 'Yes No'
+vid: yes_no
+description: null
+weight: 0
+new_revision: false

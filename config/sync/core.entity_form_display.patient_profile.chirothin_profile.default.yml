@@ -1,0 +1,158 @@
+uuid: 8d8c8f8d-4878-4fc4-869d-2eac753db452
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.chirothin_profile
+    - field.field.patient_profile.chirothin_profile.field_abdomen_loss
+    - field.field.patient_profile.chirothin_profile.field_arm_left_bicep_loss
+    - field.field.patient_profile.chirothin_profile.field_arm_right_bicep_loss
+    - field.field.patient_profile.chirothin_profile.field_back_bra_line_loss
+    - field.field.patient_profile.chirothin_profile.field_buttocks_loss
+    - field.field.patient_profile.chirothin_profile.field_calf_left_loss
+    - field.field.patient_profile.chirothin_profile.field_calf_right_loss
+    - field.field.patient_profile.chirothin_profile.field_chest_loss
+    - field.field.patient_profile.chirothin_profile.field_hips_loss
+    - field.field.patient_profile.chirothin_profile.field_neck_loss
+    - field.field.patient_profile.chirothin_profile.field_patient
+    - field.field.patient_profile.chirothin_profile.field_profile_inches_lost
+    - field.field.patient_profile.chirothin_profile.field_program_start_date
+    - field.field.patient_profile.chirothin_profile.field_program_start_weight
+    - field.field.patient_profile.chirothin_profile.field_shoulders_loss
+    - field.field.patient_profile.chirothin_profile.field_thigh_left_loss
+    - field.field.patient_profile.chirothin_profile.field_thigh_right_loss
+  module:
+    - datetime
+id: patient_profile.chirothin_profile.default
+targetEntityType: patient_profile
+bundle: chirothin_profile
+mode: default
+content:
+  created:
+    type: datetime_timestamp
+    weight: 9
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_abdomen_loss:
+    type: number
+    weight: 3
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_arm_left_bicep_loss:
+    type: number
+    weight: 4
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_arm_right_bicep_loss:
+    type: number
+    weight: 5
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_back_bra_line_loss:
+    type: number
+    weight: 6
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_buttocks_loss:
+    type: number
+    weight: 7
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_calf_left_loss:
+    type: number
+    weight: 8
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_calf_right_loss:
+    type: number
+    weight: 10
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_chest_loss:
+    type: number
+    weight: 13
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_hips_loss:
+    type: number
+    weight: 11
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_neck_loss:
+    type: number
+    weight: 12
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_patient:
+    type: entity_reference_autocomplete
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_profile_inches_lost:
+    type: number
+    weight: 17
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_program_start_date:
+    type: datetime_default
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_program_start_weight:
+    type: number
+    weight: 2
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_shoulders_loss:
+    type: number
+    weight: 14
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_thigh_left_loss:
+    type: number
+    weight: 15
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_thigh_right_loss:
+    type: number
+    weight: 16
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }

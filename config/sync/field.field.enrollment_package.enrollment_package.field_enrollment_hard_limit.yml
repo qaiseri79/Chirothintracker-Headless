@@ -1,0 +1,25 @@
+uuid: 8d1b78f5-36be-431a-b36e-aca52cba23e5
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.enrollment_package.enrollment_package
+    - field.storage.enrollment_package.field_enrollment_hard_limit
+id: enrollment_package.enrollment_package.field_enrollment_hard_limit
+field_name: field_enrollment_hard_limit
+entity_type: enrollment_package
+bundle: enrollment_package
+label: 'Enrollment Hard Limit'
+description: '0 = Unlimited'
+required: true
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

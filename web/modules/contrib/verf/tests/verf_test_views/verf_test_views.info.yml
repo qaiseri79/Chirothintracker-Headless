@@ -1,0 +1,14 @@
+name: 'Views Entity Reference Filter Views Test'
+type: module
+description: 'Support module for Views Entity Reference Filter Views tests'
+package: Testing
+dependencies:
+  - drupal:node
+  - drupal:views
+  - verf:verf
+hidden: true
+core_version_requirement: ^10 || ^11
+# Information added by Drupal.org packaging script on 2025-01-31
+version: '2.1.0'
+project: 'verf'
+datestamp: 1738325529

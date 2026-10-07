@@ -1,0 +1,25 @@
+uuid: 5953f490-a353-4c47-931a-416e70f0d85e
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_agreement
+  module:
+    - epp
+third_party_settings:
+  epp:
+    value: "I understand that my use and consumption of any [current-page:query:clinicbrand] product or engaging in any weight loss program including the type that is to be used in conjunction with [current-page:query:clinicbrand], have inherent risks to my health and well-being, including but not limited to headaches, nausea, dizziness, vomiting, fatigue, pain, loss of consciousness, shortness of breath and other ailments.\r\n\r\nI understand as well that rapid weight loss of over 1-2 lbs. per week is considered by most in the weight loss medical community to be excessive and may lead to ailments similar and in addition to those mentioned above. Therefore, I understand that my failure to follow the weight loss program exactly as described to me by my physician or chiropractor can result in severe temporary and/or permanent medical conditions in addition to those mentioned above.\r\n\r\nI understand that I am not use or consume any of the [current-page:query:clinicbrand] products if I am pregnant or think I might be pregnant.\r\n\r\nI understand that, as a dietary supplement, [current-page:query:clinicbrand] has not been approved by the FDA or any Federal or State authority.\r\n\r\nI additionally understand that the [current-page:query:clinicbrand] Weight Loss Program is not meant to diagnose, treat or cure any disease or medical condition and that I am to undergo participation in the [current-page:query:clinicbrand] Weight Loss Program only under doctor supervision.\r\n\r\nI also understand that I should consult with my doctor prior to starting ANY exercise or nutritional supplement program.\r\n\r\nI understand that, if I experience any ailment, including but not limited to headaches, nausea, dizziness, vomiting, fatigue, pain, loss of consciousness, shortness of breath and other ailments, I should immediately stop using or consuming the [current-page:query:clinicbrand] product and, if my symptoms do not resolve immediately, I should consult my physician or go to the hospital emergency room.\r\n\r\nI hereby consent to, and assume the risks associated with, the use and consumption of [current-page:query:clinicbrand] product and agree to follow the recommendations and instructions of my physician. I further agree not to use or consume any [current-page:query:clinicbrand] product without the advice, counsel, and recommendations of my physician.\r\n\r\nI understand that Neuroemotional Technique (NET) is one of the techniques that may be used during my care. NET does not make claims as to what may have happened in the past. All memory events are considered “emotional reality” because events may or may not correspond with actual or historical reality.\r\n\r\nI hereby release, discharge and agree to indemnify my physician(s) at [site:name], NET, ChiroNutraceutical, their agents, servants employees and affiliates from any and all liability, claims, causes of action and demands for personal or bodily injury or death that I or my personal representatives might have or might hereafter acquire through my use or consumption of ChiroThin products."
+    on_update: 0
+id: contact_message.patient_intake.field_agreement
+field_name: field_agreement
+entity_type: contact_message
+bundle: patient_intake
+label: 'Informed Consent and Release of Liability'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

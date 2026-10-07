@@ -1,0 +1,5 @@
+headless_auth.settings:
+  title: 'Portal password reset'
+  description: 'Configure the frontend URL used in password reset emails.'
+  route_name: headless_auth.settings
+  parent: system.admin_config_people

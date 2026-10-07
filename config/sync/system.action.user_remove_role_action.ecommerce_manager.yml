@@ -1,0 +1,14 @@
+uuid: 70218ad4-4a5c-4b7b-9e5f-d27d8030519e
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.ecommerce_manager
+  module:
+    - user
+id: user_remove_role_action.ecommerce_manager
+label: 'Remove the eCommerce Manager role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: ecommerce_manager

@@ -1,0 +1,10 @@
+name: 'CTT Patient Intake'
+type: module
+description: 'Handles patient_intake contact form submission email with configurable subject/body and clinic user lookup.'
+core_version_requirement: ^10 || ^11
+package: Custom
+dependencies:
+  - drupal:contact
+  - drupal:user
+
+configure: ctt_patient_intake.settings

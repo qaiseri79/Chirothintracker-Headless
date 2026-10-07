@@ -1,0 +1,11 @@
+name: Ajax Loader
+type: module
+description: 'Provides alternative ajax loaders/throbbers.'
+core_version_requirement: ^8 || ^9 || ^10 || ^11
+package: 'User Interface'
+configure: ajax_loader.settings
+
+# Information added by Drupal.org packaging script on 2024-10-19
+version: '2.1.4'
+project: 'ajax_loader'
+datestamp: 1729370077

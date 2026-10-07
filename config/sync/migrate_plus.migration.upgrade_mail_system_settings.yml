@@ -1,0 +1,45 @@
+uuid: c7d30bb7-187f-4446-9878-0c9d47655e12
+langcode: en
+status: true
+dependencies: {  }
+id: upgrade_mail_system_settings
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Configuration
+migration_group: migrate_drupal_7
+label: 'Mail system configuration'
+source:
+  plugin: variable
+  variables:
+    - mailsystem_theme
+    - mail_system
+  source_module: mailsystem
+process:
+  theme:
+    -
+      plugin: get
+      source: mailsystem_theme
+  defaults/sender:
+    -
+      plugin: static_map
+      source: mail_system/default-system
+      map:
+        TestingMailSystem: test_mail_collector
+      default_value: php_mail
+  defaults/formatter:
+    -
+      plugin: get
+      source: '@defaults/sender'
+  modules:
+    -
+      plugin: mailsystem_modules
+      source: mail_system
+destination:
+  plugin: config
+  config_name: mailsystem.settings
+migration_dependencies:
+  required: {  }
+  optional: {  }

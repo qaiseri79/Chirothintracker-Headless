@@ -1,0 +1,22 @@
+uuid: a37d52c4-602a-4a52-8470-fc73dfed73ea
+langcode: und
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - user
+third_party_settings:
+  field_permissions:
+    permission_type: custom
+id: user.field_net_inches_lost
+field_name: field_net_inches_lost
+entity_type: user
+type: float
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

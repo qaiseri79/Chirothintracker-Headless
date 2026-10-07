@@ -1,0 +1,25 @@
+headless_auth.password_request:
+  path: '/api/headless/auth/password/request'
+  defaults:
+    _controller: '\Drupal\headless_auth\Controller\PasswordResetController::requestReset'
+  requirements:
+    _access: 'TRUE'
+  methods: [POST]
+  options:
+    no_cache: TRUE
+headless_auth.password_reset:
+  path: '/api/headless/auth/password/reset'
+  defaults:
+    _controller: '\Drupal\headless_auth\Controller\PasswordResetController::reset'
+  requirements:
+    _access: 'TRUE'
+  methods: [POST]
+  options:
+    no_cache: TRUE
+headless_auth.settings:
+  path: '/admin/config/people/headless-password-reset'
+  defaults:
+    _form: '\Drupal\headless_auth\Form\PasswordResetSettingsForm'
+    _title: 'Portal password reset'
+  requirements:
+    _permission: 'administer account settings'

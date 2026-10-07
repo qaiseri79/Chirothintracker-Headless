@@ -1,0 +1,7 @@
+clipboard:
+  version: 1.x
+  js:
+    js/clipboard.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

@@ -1,0 +1,21 @@
+uuid: 94c0da80-270f-4ecc-89b8-bd8e7763e7df
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_account
+    - field.storage.contact_message.field_full_name
+id: contact_message.patient_account.field_full_name
+field_name: field_full_name
+entity_type: contact_message
+bundle: patient_account
+label: 'Patient Full Name'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: '[current-page:query:n]'
+default_value_callback: ''
+settings: {  }
+field_type: string

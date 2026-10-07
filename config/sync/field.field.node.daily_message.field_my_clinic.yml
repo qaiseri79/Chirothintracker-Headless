@@ -1,0 +1,25 @@
+uuid: aac6e6db-934a-416e-85e9-552cbfe247e9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_my_clinic
+    - node.type.daily_message
+id: node.daily_message.field_my_clinic
+field_name: field_my_clinic
+entity_type: node
+bundle: daily_message
+label: 'My Clinic'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: my_clinic
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

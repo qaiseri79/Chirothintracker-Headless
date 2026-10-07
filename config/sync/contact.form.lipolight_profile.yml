@@ -1,0 +1,47 @@
+uuid: f6a4ea12-f84d-47d5-a2eb-1bb12f6a6bf9
+langcode: en
+status: true
+dependencies:
+  module:
+    - contact_storage
+    - contact_storage_dm
+    - entity_redirect
+third_party_settings:
+  contact_storage:
+    submit_text: Submit
+    show_preview: false
+    disabled_form_message: 'This contact form has been disabled.'
+    maximum_submissions_user: 0
+    page_autoreply_format: plain_text
+  contact_storage_dm:
+    disabled: true
+  entity_redirect:
+    redirect:
+      anonymous:
+        active: false
+        destination: default
+        url: ''
+        external: ''
+      add:
+        active: true
+        destination: previous_page
+        url: ''
+        external: ''
+      edit:
+        active: true
+        destination: previous_page
+        url: ''
+        external: ''
+      delete:
+        active: false
+        destination: default
+        url: ''
+        external: ''
+id: lipolight_profile
+label: 'LipoLight Session'
+recipients:
+  - webmaster@example.com
+reply: ''
+weight: 0
+message: 'The content has been created successfully.'
+redirect: /summary

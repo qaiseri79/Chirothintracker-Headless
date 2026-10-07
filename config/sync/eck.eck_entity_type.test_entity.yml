@@ -1,0 +1,11 @@
+uuid: d3b3f8de-8625-4d0f-af93-cf1d318bbe9c
+langcode: en
+status: false
+dependencies: {  }
+id: test_entity
+label: 'Test Entity'
+uid: false
+created: true
+changed: true
+title: false
+standalone_url: true

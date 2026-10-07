@@ -1,0 +1,23 @@
+uuid: 4d36027d-cdde-424f-9043-b39106ceeddb
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_waist_buster_zone_6l
+id: contact_message.ultraslim_profile.field_waist_buster_zone_6l
+field_name: field_waist_buster_zone_6l
+entity_type: contact_message
+bundle: ultraslim_profile
+label: 'Waist Buster Zone 6 (Female, Left Thigh)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

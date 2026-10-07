@@ -1,0 +1,11 @@
+uuid: 0edd5c8d-c674-48f4-bd9f-8ab58fca3933
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.gender
+id: taxonomy_term--gender
+disabled: false
+path: taxonomy_term--gender
+resourceType: taxonomy_term--gender
+resourceFields: {  }

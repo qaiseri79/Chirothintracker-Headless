@@ -1,0 +1,9 @@
+name: Entity Form Block
+type: module
+description: Provides blocks with forms for editing content entities.
+core_version_requirement: ^9 || ^10
+
+# Information added by Drupal.org packaging script on 2023-05-16
+version: '8.x-1.0-alpha4'
+project: 'entityform_block'
+datestamp: 1684235470

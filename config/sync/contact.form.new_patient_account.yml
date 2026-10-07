@@ -1,0 +1,11 @@
+uuid: 22cb1c81-c9b2-4535-a007-dc4f083a9b2a
+langcode: en
+status: true
+dependencies: {  }
+id: new_patient_account
+label: 'New Patient Account'
+recipients: {  }
+reply: ''
+weight: 0
+message: null
+redirect: null

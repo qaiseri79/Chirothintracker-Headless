@@ -1,0 +1,9 @@
+uuid: f9476afd-c1ed-4517-a334-fd73f5bcf8ec
+langcode: en
+status: true
+dependencies: {  }
+id: dsn
+label: DSN
+plugin: dsn
+configuration:
+  dsn: 'ses+https://AKIA5NW4DN2HZJZLWH6M:itTT4aDgodgTPJNYz0w7nREHEHoOqafN5edo0zuQ@default?region=us-east-1'

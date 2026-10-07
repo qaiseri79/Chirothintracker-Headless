@@ -1,0 +1,9 @@
+uuid: 55c04524-4a64-4b1c-b4de-e8db2c48dea1
+langcode: en
+status: true
+dependencies: {  }
+name: 'Skin Tightening'
+vid: skin_tightening
+description: null
+weight: 0
+new_revision: false

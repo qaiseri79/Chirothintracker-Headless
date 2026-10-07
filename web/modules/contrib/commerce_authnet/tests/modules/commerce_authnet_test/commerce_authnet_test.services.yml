@@ -1,0 +1,5 @@
+services:
+  commerce_authnet_test.authnet_event_subscriber:
+    class: Drupal\commerce_authnet_test\EventSubscriber\AuthorizeNetEventSubscriber
+    tags:
+      - { name: event_subscriber }

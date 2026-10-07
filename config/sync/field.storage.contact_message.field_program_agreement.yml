@@ -1,0 +1,19 @@
+uuid: 9fa68d9b-8c25-4c48-a08f-88cd8bef1236
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+id: contact_message.field_program_agreement
+field_name: field_program_agreement
+entity_type: contact_message
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

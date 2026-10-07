@@ -1,0 +1,12 @@
+uuid: aed4dc49-aaf4-4f4f-9ffd-4c58edbdeea2
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+id: ecommerce
+label: eCommerce
+weight: 10
+is_admin: null
+permissions:
+  - 'delete own files'

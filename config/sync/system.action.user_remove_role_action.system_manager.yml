@@ -1,0 +1,14 @@
+uuid: 0e764860-2ae2-48c0-870f-e2eb3390506f
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.system_manager
+  module:
+    - user
+id: user_remove_role_action.system_manager
+label: 'Remove the System Manager role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: system_manager

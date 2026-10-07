@@ -1,0 +1,24 @@
+uuid: f5d280be-c573-479e-9d51-1e2f1f393531
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: contact_message.field_thigh_left
+field_name: field_thigh_left
+entity_type: contact_message
+type: decimal
+settings:
+  precision: 10
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

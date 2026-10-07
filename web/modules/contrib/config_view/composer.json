@@ -1,0 +1,28 @@
+{
+    "name": "drupal/config_view",
+    "description": "Exposing Configuration Entities to Views.",
+    "keywords": [
+        "Drupal",
+        "Views",
+        "Configuration Entities"
+    ],
+    "homepage": "",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "George Anderson (geoanders)",
+            "homepage": "https://www.drupal.org/u/geoanders",
+            "role": "Maintainer"
+        },
+        {
+            "name": "I. Peric",
+            "email": "ip@pericxc.com",
+            "homepage": "http://pericxc.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "drupal/core": "^8.8 || ^9 || ^10"
+    }
+}
+

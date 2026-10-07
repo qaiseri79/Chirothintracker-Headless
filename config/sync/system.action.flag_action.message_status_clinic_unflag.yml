@@ -1,0 +1,15 @@
+uuid: f1d4418b-fe27-4a63-959c-fc6fa26b9ca1
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.message_status_clinic
+  module:
+    - flag
+id: flag_action.message_status_clinic_unflag
+label: '<span class="btn btn-success">Mark as Read</span>'
+type: webform_submission
+plugin: 'flag_action:message_status_clinic_unflag'
+configuration:
+  flag_id: message_status_clinic
+  flag_action: unflag

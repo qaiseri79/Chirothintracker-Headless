@@ -1,0 +1,15 @@
+name: 'Headless Patients'
+type: module
+description: 'JSON endpoints for the chiropractor Patients roster: clinic-scoped patient list, archived patients, patient creation, archiving/re-enrolment, and intake-form submissions with review state.'
+package: 'ChiroThin'
+core_version_requirement: ^10
+dependencies:
+  - drupal:user
+  - drupal:contact
+  # Review state is the site's `intake_processed_cs` flag, so flag is a hard
+  # dependency rather than an assumed-one-enabled. headless_progress injects
+  # FlagServiceInterface too without declaring this.
+  - flag:flag
+  - headless_custom:headless_intake
+  - headless_custom:headless_access
+  - headless_custom:headless_progress

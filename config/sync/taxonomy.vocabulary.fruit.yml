@@ -1,0 +1,9 @@
+uuid: 3861b99d-f49f-4e1c-9167-dc864372bf7d
+langcode: en
+status: true
+dependencies: {  }
+name: Fruit
+vid: fruit
+description: null
+weight: 0
+new_revision: false

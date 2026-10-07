@@ -1,0 +1,24 @@
+uuid: bea3e1d8-52c2-42ff-9c79-ed9467b97ca8
+langcode: und
+status: true
+dependencies:
+  module:
+    - contact
+    - eck
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: custom
+id: contact_message.field_clinic_location
+field_name: field_clinic_location
+entity_type: contact_message
+type: entity_reference
+settings:
+  target_type: clinic
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

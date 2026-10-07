@@ -1,0 +1,63 @@
+commerce_payment.commerce_payment_gateway.plugin.authorizenet_acceptjs:
+  type: commerce_payment_gateway_configuration
+  mapping:
+    api_login:
+      type: string
+      label: 'Login ID'
+    transaction_key:
+      type: string
+      label: 'Transaction key'
+    client_key:
+      type: string
+      label: 'Client key'
+    enable_credit_card_icons:
+      type: boolean
+      label: 'Enable credit card icons'
+
+commerce_payment.commerce_payment_gateway.plugin.authorizenet_echeck:
+  type: commerce_payment_gateway_configuration
+  mapping:
+    api_login:
+      type: string
+      label: 'Login ID'
+    transaction_key:
+      type: string
+      label: 'Transaction key'
+    client_key:
+      type: string
+      label: 'Client key'
+
+commerce_payment.commerce_payment_gateway.plugin.authorizenet_visa_checkout:
+  type: commerce_payment_gateway_configuration
+  mapping:
+    api_login:
+      type: string
+      label: 'Login ID'
+    transaction_key:
+      type: string
+      label: 'Transaction key'
+    client_key:
+      type: string
+      label: 'Client key'
+    visa_checkout_api_key:
+      type: string
+      label: 'VISA Checkout API key'
+
+commerce_payment.commerce_payment_gateway.plugin.authorizenet_accept_hosted:
+  type: commerce_payment_gateway_configuration
+  mapping:
+    api_login:
+      type: string
+      label: 'Login ID'
+    transaction_key:
+      type: string
+      label: 'Transaction key'
+    client_key:
+      type: string
+      label: 'Client key'
+    captcha_security:
+      type: boolean
+      label: 'Enable CAPTCHA security'
+    card_code_required:
+      type: boolean
+      label: 'Card code required'

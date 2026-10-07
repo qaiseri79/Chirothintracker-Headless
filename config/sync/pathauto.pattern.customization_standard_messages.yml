@@ -1,0 +1,21 @@
+uuid: de2261a7-ee21-4671-899d-caa5fc79df95
+langcode: en
+status: true
+dependencies:
+  module:
+    - eck
+id: customization_standard_messages
+label: 'Customization - Standard Messages'
+type: 'canonical_entities:customization'
+pattern: 'messages-standard/[customization:id]'
+selection_criteria:
+  -
+    id: 'entity_bundle:customization'
+    negate: false
+    context_mapping:
+      customization: customization
+    bundles:
+      standard_messages: standard_messages
+selection_logic: and
+weight: 0
+relationships: {  }

@@ -1,0 +1,53 @@
+uuid: e6f6449e-ba51-4f5f-9441-7f86fbff2e04
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_order
+    - entity_redirect
+third_party_settings:
+  entity_redirect:
+    redirect:
+      add:
+        active: 0
+        destination: default
+        url: ''
+        external: ''
+      edit:
+        active: 0
+        destination: default
+        url: ''
+        external: ''
+      delete:
+        active: 0
+        destination: default
+        url: ''
+        external: ''
+      anonymous:
+        active: 0
+        destination: default
+        url: ''
+        external: ''
+id: order_status
+label: 'New Order'
+bundles:
+  - shop
+entity_type: commerce_order
+global: true
+flag_short: '<span class="flag-status-badge flag-status-badge--pending"><i class="fa-solid fa-hourglass-half"></i> New Order</span>'
+flag_long: ''
+flag_message: ''
+unflag_short: '<span class="flag-status-badge flag-status-badge--done"><i class="fa-solid fa-circle-check"></i> Processed</span>'
+unflag_long: ''
+unflag_message: ''
+unflag_denied_text: ''
+weight: 0
+flag_type: 'entity:commerce_order'
+link_type: ajax_link
+flagTypeConfig:
+  show_in_links: {  }
+  show_as_field: true
+  show_on_form: false
+  show_contextual_link: false
+  extra_permissions: {  }
+linkTypeConfig: {  }

@@ -1,0 +1,24 @@
+uuid: addc81bc-f93d-4a69-82b0-27e704d76c57
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.zerona_profile
+    - field.storage.patient_profile.field_program_start_date
+  module:
+    - datetime
+id: patient_profile.zerona_profile.field_program_start_date
+field_name: field_program_start_date
+entity_type: patient_profile
+bundle: zerona_profile
+label: 'Program Start Date'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    default_date_type: now
+    default_date: now
+default_value_callback: ''
+settings: {  }
+field_type: datetime

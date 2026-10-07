@@ -1,0 +1,13 @@
+name: 'Headless Progress'
+type: module
+description: 'Headless API endpoint for the patient progress dashboard.'
+package: 'ChiroThin'
+core_version_requirement: ^10
+dependencies:
+  - drupal:contact
+  - drupal:user
+  - drupal:taxonomy
+  - headless_custom:headless_session
+  # Routes are gated by PortalMemberAccess; the role list lives here, not in this
+  # module. See the access notes in headless_progress.routing.yml.
+  - headless_custom:headless_access

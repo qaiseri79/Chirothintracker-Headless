@@ -1,0 +1,45 @@
+uuid: 9bd02ef5-a91e-460e-976a-323e7afd804a
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_message
+    - field.field.contact_message.patient_message.field_attachments
+    - field.field.contact_message.patient_message.field_chiropractor
+    - field.field.contact_message.patient_message.field_message
+  module:
+    - file
+    - text
+id: contact_message.patient_message.default
+targetEntityType: contact_message
+bundle: patient_message
+mode: default
+content:
+  field_attachments:
+    type: file_generic
+    weight: 11
+    region: content
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
+  field_chiropractor:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_message:
+    type: text_textarea
+    weight: 10
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  copy: true
+  mail: true
+  message: true
+  name: true
+  preview: true
+  subject: true

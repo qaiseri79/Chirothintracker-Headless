@@ -1,0 +1,23 @@
+uuid: f017117c-1606-458e-bbb0-97d4ae14fe52
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.activity_log.activity_log
+    - field.storage.activity_log.field_reference_id
+id: activity_log.activity_log.field_reference_id
+field_name: field_reference_id
+entity_type: activity_log
+bundle: activity_log
+label: 'Reference ID'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

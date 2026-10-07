@@ -1,0 +1,65 @@
+## Public, token-addressed API consumed by the Next.js intake app.
+##
+## These two paths are a contract with frontend/src/lib/intake/invite.ts. They
+## must keep working from Drupal under exactly these paths even though the code
+## lives in a different module now, so do not rename them casually.
+headless_intake.invite:
+  path: '/api/intake/invite/{token}'
+  defaults:
+    _controller: '\Drupal\headless_intake\Controller\IntakeApiController::invite'
+    _title: 'Intake invite'
+  requirements:
+    _access: 'TRUE'
+  options:
+    no_cache: TRUE
+
+headless_intake.submit:
+  path: '/api/intake/submit'
+  defaults:
+    _controller: '\Drupal\headless_intake\Controller\IntakeApiController::submit'
+    _title: 'Intake submit'
+  requirements:
+    _access: 'TRUE'
+    _method: 'POST'
+  options:
+    no_cache: TRUE
+
+## Invitation link settings. Reachable by URL; deliberately not added to a menu.
+headless_intake.settings:
+  path: '/admin/config/headless-intake/invite-settings'
+  defaults:
+    _form: '\Drupal\headless_intake\Form\InviteSettingsForm'
+    _title: 'Intake Invite Settings'
+  requirements:
+    _permission: 'administer site configuration'
+
+## Clinician-facing link manager. Also intentionally absent from any menu.
+##
+## Superseded by the three /api/intake-link endpoints in
+## headless_patients.routing.yml, which are the only way a link is created now.
+## Kept reachable so an in-flight link is not orphaned and so the legacy tokens can
+## still be revoked while they exist. It must not issue a new invite: the
+## Generate/Revoke form is being withdrawn from the doctor-facing UI, and the only
+## remaining job here is retiring tokens that already exist.
+headless_intake.intake_links:
+  path: '/manage/intake-links'
+  defaults:
+    _form: '\Drupal\headless_intake\Form\IntakeLinksForm'
+    _title: 'Intake Links'
+  requirements:
+    _permission: 'manage intake invite links'
+
+headless_intake.intake_link_revoke:
+  path: '/manage/intake-links/revoke/{token}'
+  defaults:
+    _form: '\Drupal\headless_intake\Form\IntakeLinkRevokeForm'
+    _title: 'Revoke intake link'
+  requirements:
+    _permission: 'manage intake invite links'
+
+## The clinic's one permanent intake link: /api/intake-link and
+## /api/intake-link/regenerate. Those three routes live in
+## headless_patients.routing.yml, not here, because they need ClinicScope and
+## headless_patients already depends on this module. Declaring the reverse
+## dependency here as well would make the two modules depend on each other, which
+## Drupal reports as a circular dependency and refuses to install.

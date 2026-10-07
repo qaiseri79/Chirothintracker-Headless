@@ -1,0 +1,29 @@
+uuid: 636f413a-2f12-4852-a623-b9562e063bfa
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.clinic.clinic_location
+    - field.field.clinic.clinic_location.field_clinic
+id: clinic.clinic_location.default
+targetEntityType: clinic
+bundle: clinic_location
+mode: default
+content:
+  field_clinic:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  uid: true

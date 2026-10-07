@@ -1,0 +1,117 @@
+$line-height: 1.5;
+
+$white-space: 2rem;
+$footer-height: 240px;
+$header-height: 80px;
+$max-width: 1900px;
+
+// The color
+$colorBase: #C60C46;
+$colorBaseDarken: rgb(121,20,51);
+$colorAccent: rgba(19,164,221,1);
+$colorAlternate: rgb(198, 12, 70);
+$colorBlack: #333;
+
+$menu-color: #111;
+$menu-color-active: #000;
+$submenu-white: #303030;
+
+
+// Website colors
+$light-grey: #e6e6e5;
+$white: #fff;
+$black: #000;
+$dark: #111111;
+$line-light: #ddd;
+
+$dark-blue: #063150;
+$dark-shade-blue: #0e3b5e;
+$navy-normal-blue: #044d7d;
+$normal-blue: #252e6b;
+$navy-blue: #0d73b1;
+
+$home-page-menu: #565656;
+$home-page-menu-active: #202020;
+$home-normal-blue: #252F6B;
+$home-normal-blue-hover: #E0E8FF;
+
+$normal-orange: #e46238;
+$dark-orange: #e73f4c;
+$normal-meroon: #b91e61;
+
+
+
+
+$siteWidth: 1180px;
+$gutter: 20px;
+$gridGutter: 20px; // can be a %, but nested grids will have smaller margins because of it
+$radius: 4px;
+
+$baseFontSize: 16px;
+
+$viewportIncrement: 1px;
+
+$small: 480px;
+$medium: 768px;
+$large: 769px;
+
+$postSmall: $small + $viewportIncrement;
+$preMedium: $medium - $viewportIncrement;
+$preLarge: $large - $viewportIncrement;
+
+$breakpoints: (
+  'small' '(max-width: #{$small})',
+  'medium' '(min-width: #{$postSmall}) and (max-width: #{$medium})',
+  'medium-down' '(max-width: #{$medium})',
+  'large' '(min-width: #{$large})'
+);
+$breakpoint-has-widths: ('small', 'medium', 'medium-down', 'large');
+$breakpoint-has-push:  ('medium', 'medium-down', 'large');
+$breakpoint-has-pull:  ('medium', 'medium-down', 'large');
+
+
+
+@function em($target, $context: $baseFontSize) {
+  @if $target == 0 {
+    @return 0;
+  }
+
+  @return ($target/$context) + 0em;
+}
+
+@function rem($target, $context: $baseFontSize) {
+  @if $target == 0 {
+    @return 0;
+  }
+  @return ($target / $context) + 0rem;
+}
+
+@mixin clearfix() {
+  &:after {
+    content: '';
+    display: table;
+    clear: both; 
+  }
+  *zoom: 1;
+}
+$min: min-width;
+$max: max-width;
+@mixin at-query ($constraint_, $viewport1_, $viewport2_:null) {
+ $constraint: $constraint_; $viewport1: $viewport1_; $viewport2: $viewport2_;
+  @if type-of($constraint_) == number {
+    $viewport1 : $constraint_; $viewport2 : $viewport1_; $constraint : null;
+  }
+  @if $constraint == $min {
+    @media screen and ($min: $viewport1) {
+      @content;
+    }
+  } @else if $constraint == $max {
+    @media screen and ($max: $viewport1) {
+      @content;
+    }
+  } @else {
+    @media screen and ($min: $viewport1) and ($max: $viewport2) {
+      @content;
+    }
+  }
+}

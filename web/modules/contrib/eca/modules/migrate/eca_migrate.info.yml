@@ -1,0 +1,13 @@
+name: 'ECA Migrate'
+type: module
+description: 'Migrate events.'
+core_version_requirement: ^9 || ^10
+package: ECA
+dependencies:
+  - drupal:migrate
+  - eca:eca
+
+# Information added by Drupal.org packaging script on 2025-06-02
+version: '1.1.13'
+project: 'eca'
+datestamp: 1748859341

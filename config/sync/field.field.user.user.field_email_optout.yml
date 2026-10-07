@@ -1,0 +1,24 @@
+uuid: 9874461a-0e46-4098-9a21-e84572928fd5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_email_optout
+  module:
+    - user
+id: user.user.field_email_optout
+field_name: field_email_optout
+entity_type: user
+bundle: user
+label: 'Disable Daily Email Notifications'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Disable Daily Email Notifications'
+  off_label: 'Enable Daily Email Notifications'
+field_type: boolean

@@ -1,0 +1,23 @@
+uuid: dc751e33-2a30-417b-96d9-e6a9975b2bce
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_thyroid_diagnosis_year
+id: contact_message.patient_intake.field_thyroid_diagnosis_year
+field_name: field_thyroid_diagnosis_year
+entity_type: contact_message
+bundle: patient_intake
+label: 'Year Diagnosed'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 1900
+  max: 2100
+  prefix: ''
+  suffix: ''
+field_type: integer

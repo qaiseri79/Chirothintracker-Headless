@@ -1,0 +1,28 @@
+// Style the add and remove buttons / links.
+.media-library-item__edit,
+.media-library-item__remove {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  margin: 0.3125rem !important;
+  padding: 0 !important;
+  color: transparent !important;
+  background-size: 0.75rem !important;
+  text-shadow: none;
+  font-size: 0;
+  background-color: #fff !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 0.75rem !important;
+}
+input.media-library-item__edit:hover,
+input.media-library-item__remove:hover {
+  background-color: #fff !important;
+}
+
+.media-library-item__edit {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3e%3cg fill='%23545560'%3e%3cpath d='M14.545 3.042l-1.586-1.585a1.003 1.003 0 00-1.414 0L10.252 2.75l3 3 1.293-1.293a1.004 1.004 0 000-1.415zM5.25 13.751l-3-3 6.998-6.998 3 3zM.908 14.775c-.087.262.055.397.316.312l2.001-.667-1.65-1.646-.667 2.001z'/%3e%3c/g%3e%3c/svg%3e") !important;
+}
+
+.media-library-item__remove {
+  background-image: url("data:image/svg+xml,%3csvg width='16' height='16' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M2.344 2.343l11.313 11.313M2.344 13.657L13.657 2.343' stroke='%2355565B' stroke-width='3'/%3e%3c/svg%3e") !important;
+}

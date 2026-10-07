@@ -1,0 +1,9 @@
+uuid: c9d2818a-b9b3-4c94-a456-1827fc37c1b8
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_entity_type.video_message
+name: 'Video Message'
+type: video_message
+description: 'Video Message'

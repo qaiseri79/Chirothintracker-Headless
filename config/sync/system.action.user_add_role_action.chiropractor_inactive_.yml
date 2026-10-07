@@ -1,0 +1,14 @@
+uuid: bc89eee1-23ba-4a00-94a0-a554fe60a8ee
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.chiropractor_inactive_
+  module:
+    - user
+id: user_add_role_action.chiropractor_inactive_
+label: 'Add the Chiropractor (Inactive) role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: chiropractor_inactive_

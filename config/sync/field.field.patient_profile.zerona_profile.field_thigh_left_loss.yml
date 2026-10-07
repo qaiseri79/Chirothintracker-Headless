@@ -1,0 +1,23 @@
+uuid: 1a1e5a1c-4d79-4b9d-aea6-e8d25a4c175a
+langcode: en
+status: true
+dependencies:
+  config:
+    - eck.eck_type.patient_profile.zerona_profile
+    - field.storage.patient_profile.field_thigh_left_loss
+id: patient_profile.zerona_profile.field_thigh_left_loss
+field_name: field_thigh_left_loss
+entity_type: patient_profile
+bundle: zerona_profile
+label: 'Thigh - Left Loss'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

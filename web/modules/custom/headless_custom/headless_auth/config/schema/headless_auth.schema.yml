@@ -1,0 +1,7 @@
+headless_auth.settings:
+  type: config_object
+  label: 'Portal password reset settings'
+  mapping:
+    frontend_base_url:
+      type: string
+      label: 'Trusted frontend base URL'

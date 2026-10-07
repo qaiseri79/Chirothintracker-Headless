@@ -1,0 +1,15 @@
+uuid: 5f5a6165-fac1-4e2d-9b9c-dbc89641c4bb
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.clinician_message_status_cs
+  module:
+    - flag
+id: flag_action.clinician_message_status_cs_flag
+label: '<span class="button--primary button">Mark as New</span>'
+type: contact_message
+plugin: 'flag_action:clinician_message_status_cs_flag'
+configuration:
+  flag_id: clinician_message_status_cs
+  flag_action: flag

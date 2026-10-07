@@ -1,0 +1,14 @@
+name: 'Commerce Extended Quantity'
+type: module
+description: "Allows to set quantity field's default_value, step, min, max, prefix and suffix on a form display widget."
+core_version_requirement: ^9.4 || ^10
+package: Commerce (contrib)
+dependencies:
+  - commerce:commerce_cart
+  - drupal:xnumber
+  - drupal:readmehelp
+
+# Information added by Drupal.org packaging script on 2023-09-15
+version: '2.0.0-beta1'
+project: 'commerce_xquantity'
+datestamp: 1694768564

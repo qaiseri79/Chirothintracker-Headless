@@ -1,0 +1,4 @@
+administer portal subscriptions:
+  title: 'Administer portal subscriptions'
+  description: 'View new portal billing records, reconcile provider status, and cancel renewals.'
+  restrict access: true

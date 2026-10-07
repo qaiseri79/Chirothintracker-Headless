@@ -1,0 +1,6 @@
+ctt_gohighlevel.settings:
+  title: 'CTT GoHighLevel'
+  description: 'Configure GoHighLevel API integration'
+  parent: system.admin_config_services
+  route_name: ctt_gohighlevel.settings
+  weight: 10

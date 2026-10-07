@@ -1,0 +1,12 @@
+uuid: 4e496868-e8dc-4102-a2ce-60f406049bd7
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+id: patient_laser
+label: 'Patient - Laser'
+weight: 17
+is_admin: null
+permissions:
+  - 'delete own files'

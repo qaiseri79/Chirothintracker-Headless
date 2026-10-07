@@ -1,0 +1,23 @@
+uuid: e77360f2-37b5-41f5-a1d6-f5d03c874be3
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_calf_right
+id: contact_message.tracking_weight.field_calf_right
+field_name: field_calf_right
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Calf - Right'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

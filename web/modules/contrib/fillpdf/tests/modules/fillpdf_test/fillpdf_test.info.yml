@@ -1,0 +1,12 @@
+name: FillPDF Testing
+type: module
+description: Fixtures/support for FillPDF tests.
+core_version_requirement: ^10.3 || ^11.0
+package: Testing
+dependencies:
+  - fillpdf:fillpdf
+
+# Information added by Drupal.org packaging script on 2025-11-10
+version: '5.2.1'
+project: 'fillpdf'
+datestamp: 1762786789

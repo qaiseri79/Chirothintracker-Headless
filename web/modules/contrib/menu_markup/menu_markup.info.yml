@@ -1,0 +1,10 @@
+name: Menu Markup
+type: module
+description: Allows markup to be used in menu link text.
+core_version_requirement: ^8.8 || ^9 || ^10 || ^11
+package: User Interface
+
+# Information added by Drupal.org packaging script on 2024-11-20
+version: '8.x-1.3'
+project: 'menu_markup'
+datestamp: 1732123302

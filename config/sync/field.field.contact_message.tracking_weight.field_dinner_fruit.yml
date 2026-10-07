@@ -1,0 +1,19 @@
+uuid: 8e01227b-6770-423d-a398-398c5d1f67f8
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.tracking_weight
+    - field.storage.contact_message.field_dinner_fruit
+id: contact_message.tracking_weight.field_dinner_fruit
+field_name: field_dinner_fruit
+entity_type: contact_message
+bundle: tracking_weight
+label: 'Other Dinner Fruit'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

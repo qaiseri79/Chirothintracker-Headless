@@ -1,0 +1,33 @@
+uuid: 488c1352-961a-4c47-b6bd-8965b66c2733
+langcode: en
+status: false
+dependencies:
+  config:
+    - system.menu.account
+  module:
+    - system
+    - user
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_usermenu
+theme: chirothintracker_subtheme
+region: header_top
+weight: -20
+provider: null
+plugin: 'system_menu_block:account'
+settings:
+  id: 'system_menu_block:account'
+  label: 'User menu'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      authenticated: authenticated

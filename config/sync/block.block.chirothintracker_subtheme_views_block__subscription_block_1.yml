@@ -1,0 +1,33 @@
+uuid: 95f15fe9-8cd3-4f4f-9ecc-499e41757067
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.subscription_product
+  module:
+    - block_class
+    - system
+    - views
+  theme:
+    - chirothintracker_subtheme
+third_party_settings:
+  block_class:
+    classes: choose-plain-subscription
+id: chirothintracker_subtheme_views_block__subscription_block_1
+theme: chirothintracker_subtheme
+region: content
+weight: -4
+provider: null
+plugin: 'views_block:subscription_product-block_1'
+settings:
+  id: 'views_block:subscription_product-block_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'

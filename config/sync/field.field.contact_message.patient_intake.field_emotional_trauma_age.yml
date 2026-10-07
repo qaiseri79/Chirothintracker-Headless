@@ -1,0 +1,23 @@
+uuid: 48b82282-bed7-4075-a61a-d7258d3a324a
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_emotional_trauma_age
+id: contact_message.patient_intake.field_emotional_trauma_age
+field_name: field_emotional_trauma_age
+entity_type: contact_message
+bundle: patient_intake
+label: Age
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

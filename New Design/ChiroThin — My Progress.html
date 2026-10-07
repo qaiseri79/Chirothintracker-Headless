@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>ChiroThin — My Progress</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: {
+      canvas: "#F3F4F1", surface: "#FFFFFF", ink: "#101827", muted: "#6B7280", line: "#E4E2DC",
+      primary: { DEFAULT: "#0B5D52", soft: "#E4EEEC", dark: "#08423A" },
+      accent: { DEFAULT: "#C7522A", soft: "#F6E4DC" },
+      success: { DEFAULT: "#3D8361", soft: "#E4F0E9" },
+    },
+    fontFamily: { serif: ["Newsreader","Georgia","serif"], sans: ["Inter","system-ui","sans-serif"] },
+    boxShadow: { panel: "0 1px 2px rgba(16,24,39,0.04), 0 8px 24px -12px rgba(16,24,39,0.08)" },
+  } } };
+</script>
+<style>
+  :root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  html, body { height: 100%; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #E4E2DC; border-radius: 8px; }
+  .chevron { transition: transform 0.2s ease; }
+  .expanded .chevron { transform: rotate(180deg); }
+  .entry-body { display: none; }
+  .expanded .entry-body { display: block; }
+</style>
+</head>
+<body class="bg-canvas font-sans text-ink antialiased h-full">
+<div class="flex h-full">
+  <aside class="group/sidebar hidden md:flex w-[72px] shrink-0 flex-col overflow-hidden border-r border-line bg-surface transition-[width] duration-200 hover:w-64">
+    <div class="flex h-16 shrink-0 items-center gap-3 border-b border-line px-5">
+      <svg class="h-6 w-6 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <div class="whitespace-nowrap opacity-0 transition-opacity duration-150 group-hover/sidebar:opacity-100"><p class="font-serif text-base leading-none text-ink">ChiroThin</p><p class="text-[10px] tracking-wide text-muted">My Account</p></div>
+    </div>
+    <nav id="nav" class="flex-1 space-y-0.5 px-3 py-4"></nav>
+  </aside>
+  <div class="flex min-w-0 flex-1 flex-col">
+    <header class="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-line bg-surface/90 px-6 backdrop-blur">
+      <button class="md:hidden rounded-lg p-2 text-muted hover:bg-canvas"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-2 border-l border-line pl-4"><div class="h-8 w-8 overflow-hidden rounded-full border border-line bg-accent-soft"><img src="https://i.pravatar.cc/64?u=erik" class="h-full w-full object-cover" /></div><span class="hidden text-sm font-medium text-ink xl:block">Erik Madsen</span></div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto px-6 py-6 lg:px-8 lg:py-8">
+      <div class="mx-auto max-w-[1200px] space-y-8">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div><h1 class="font-serif text-2xl text-ink">Welcome back, Erik 👋</h1><p class="mt-1 text-sm text-muted">Day 14 of your program · 80% of the way to goal.</p></div>
+          <button id="refreshBtn" class="flex items-center gap-2 rounded-lg border border-line bg-surface px-4 py-2.5 text-sm font-medium text-ink/70 shadow-panel transition-colors hover:bg-canvas">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+            Refresh Data
+          </button>
+        </div>
+
+        <div class="flex flex-col divide-y divide-line rounded-xl border border-line bg-surface shadow-panel sm:flex-row sm:divide-x sm:divide-y-0">
+          <div class="flex-1 px-6 py-5"><p class="text-[11px] font-medium uppercase tracking-wide text-muted">Goal Weight</p><p class="mt-1.5 font-serif text-3xl text-ink">215.0<span class="text-lg text-muted">lbs</span></p></div>
+          <div class="flex-1 px-6 py-5"><p class="text-[11px] font-medium uppercase tracking-wide text-muted">Net Weight Loss</p><p class="mt-1.5 font-serif text-3xl text-success">15.6<span class="text-lg text-muted">lbs</span></p></div>
+          <div class="flex-1 px-6 py-5"><p class="text-[11px] font-medium uppercase tracking-wide text-muted">Net Inches Lost</p><p class="mt-1.5 font-serif text-3xl text-ink">N/A</p></div>
+          <div class="flex-1 px-6 py-5"><p class="text-[11px] font-medium uppercase tracking-wide text-muted">Goal Achieved</p><p class="mt-1.5 font-serif text-3xl text-accent">80<span class="text-lg text-muted">%</span></p></div>
+          <div class="flex-1 px-6 py-5"><p class="text-[11px] font-medium uppercase tracking-wide text-muted">Overall Weight Loss</p><p class="mt-1.5 font-serif text-3xl text-success">15.6<span class="text-lg text-muted">lbs</span></p></div>
+        </div>
+
+        <div class="rounded-xl border border-line bg-surface p-6 shadow-panel">
+          <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+            <h2 class="font-serif text-lg text-ink">Weight vs. goal</h2>
+            <div class="flex items-center gap-4 text-xs text-muted">
+              <span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-primary"></span>Today's Weight</span>
+              <span class="flex items-center gap-1.5"><span class="h-0.5 w-3 bg-accent"></span>Goal Weight</span>
+            </div>
+          </div>
+          <div id="chart"></div>
+        </div>
+
+        <div>
+          <div class="mb-4 flex items-center justify-between">
+            <h2 class="font-serif text-lg text-ink">Log history</h2>
+            <span class="rounded-full bg-primary-soft px-2.5 py-1 text-xs font-semibold text-primary" id="entryCount"></span>
+          </div>
+          <div id="entries" class="space-y-3"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+const ICONS = {
+  home:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  utensils:'<path d="M3 2v7c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2V2M7 2v20M17 2v20M17 2c-2.5 0-4 3-4 6.5S14.5 15 17 15"/>',
+  wrench:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/>',
+  grad:'<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/>',
+  scale:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v4l2.5 2.5"/>',
+  trending:'<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
+  message:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  cart:'<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 2-1.58l1.65-8.42H5.12"/>',
+  more:'<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',
+  chevronDown:'<path d="m6 9 6 6 6-6"/>', flag:'<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>',
+};
+function icon(n,c){return `<svg class="${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]}</svg>`;}
+const NAV = [
+  {label:"Home",icon:"home"},{label:"Recipes",icon:"utensils"},{label:"Resources",icon:"wrench"},{label:"Training",icon:"grad"},
+  {label:"Log My Weight",icon:"scale"},{label:"My Progress",icon:"trending",active:true},{label:"Messages",icon:"message"},{label:"Shop",icon:"cart"},{label:"Extras",icon:"more"},
+];
+document.getElementById('nav').innerHTML = NAV.map(i=>`
+  <a href="#" class="relative flex items-center gap-3 rounded-lg px-2.5 py-2.5 text-sm font-medium transition-colors ${i.active?'bg-primary text-white':'text-ink/70 hover:bg-primary-soft hover:text-primary'}">
+    ${icon(i.icon,'h-[18px] w-[18px] shrink-0')}<span class="flex-1 whitespace-nowrap opacity-0 transition-opacity duration-150 group-hover/sidebar:opacity-100">${i.label}</span>
+  </a>`).join('');
+
+const GOAL = 215;
+const ENTRIES = [
+  { date:"09/25/2026", day:14, adherence:10, weight:219.0, loss:15.60, water:112, sleep:8, note:null,
+    lunch:"Beef, Beef (4 additional oz.)", dinner:"Chicken, Broccoli, Kale, Orange (all varieties), Cabbage", other:"AGGR with Lunch, AGGR with Dinner" },
+  { date:"09/24/2026", day:13, adherence:10, weight:222.5, loss:12.10, water:120, sleep:8, note:null,
+    lunch:"Pork, Broccoli, Strawberry", dinner:"Chicken, Broccoli, Kale (all varieties), Cabbage", other:"AGGR with Lunch, AGGR with Dinner" },
+  { date:"09/23/2026", day:12, adherence:10, weight:223.5, loss:11.60, water:96, sleep:8, note:null,
+    lunch:"Chicken, Broccoli", dinner:"Pork, Broccoli, Strawberry, Kale, Cabbage", other:"—" },
+  { date:"09/22/2026", day:11, adherence:8, weight:223.8, loss:10.80, water:96, sleep:8, note:null,
+    lunch:"Pork, Broccoli, Strawberry", dinner:"Beef, Broccoli, Carrots (3 oz), Apple", other:"—" },
+  { date:"09/21/2026", day:10, adherence:5, weight:223.0, loss:11.60, water:96, sleep:6, note:"Cheated on Program. Had 3 birthday cookies at Joseph's farewell.",
+    lunch:"Pork, Broccoli, Carrots (3 oz), Blueberry, Watermelon, Strawberry", dinner:"Pork, Broccoli, Strawberry", other:"—" },
+  { date:"09/20/2026", day:9, adherence:5, weight:225.0, loss:9.60, water:96, sleep:7, note:"Constipation. Increased activity — wired Chandler's house and walked 18 holes of golf. Increased lean protein by 6 oz to offset calorie burn.",
+    lunch:"Chicken, Carrots (3 oz), Strawberry", dinner:"Beef (Ground 93/7), Carrots (3 oz), Strawberry, additional lean protein (beef, 6 oz)", other:"—" },
+  { date:"09/19/2026", day:8, adherence:8, weight:223.8, loss:10.80, water:64, sleep:8, note:null,
+    lunch:"Chicken, Broccolini, Strawberry, Lettuce (Romaine)", dinner:"Beef, Broccolini, Blueberry, Onion (Red)", other:"—" },
+  { date:"09/18/2026", day:7, adherence:8, weight:224.4, loss:10.20, water:64, sleep:7, note:null,
+    lunch:"Chicken, Carrots (3 oz), Blueberry", dinner:"Chicken, Carrots (3 oz), Apple", other:"—" },
+  { date:"09/17/2026", day:6, adherence:10, weight:225.0, loss:8.60, water:96, sleep:7.5, note:null,
+    lunch:"Chicken, Carrots (3 oz), Apple, Celery", dinner:"Chicken, Broccoli, Blueberry, Lettuce (Romaine)", other:"—" },
+  { date:"09/16/2026", day:5, adherence:10, weight:227.0, loss:7.00, water:120, sleep:7, note:"Constipation",
+    lunch:"Chicken, Carrots (3 oz), Apple", dinner:"Beef (Ground 93/7), Carrots (3 oz), Strawberry, Lettuce (Romaine)", other:"—" },
+];
+document.getElementById('entryCount').textContent = `${ENTRIES.length} entries`;
+
+function chartSVG(entries, goal) {
+  const sorted = [...entries].reverse();
+  const w = 900, h = 240, padL = 40, padR = 20, padT = 16, padB = 28;
+  const weights = sorted.map(e => e.weight);
+  const yMin = Math.floor(Math.min(goal, ...weights) - 4);
+  const yMax = Math.ceil(Math.max(...weights) + 4);
+  const x = i => padL + (i / (sorted.length - 1 || 1)) * (w - padL - padR);
+  const y = v => padT + (1 - (v - yMin) / (yMax - yMin)) * (h - padT - padB);
+  const points = sorted.map((e,i) => `${x(i)},${y(e.weight)}`).join(' ');
+  const gridLines = [0,1,2,3,4].map(i => {
+    const val = yMin + (i/4) * (yMax - yMin);
+    const yy = y(val);
+    return `<line x1="${padL}" y1="${yy}" x2="${w-padR}" y2="${yy}" stroke="#E4E2DC" stroke-width="1"/><text x="4" y="${yy+4}" font-size="11" fill="#6B7280">${Math.round(val)}</text>`;
+  }).join('');
+  const dots = sorted.map((e,i) => `<circle cx="${x(i)}" cy="${y(e.weight)}" r="4" fill="#0B5D52"/>`).join('');
+  const labels = sorted.map((e,i) => `<text x="${x(i)}" y="${h-8}" font-size="10" fill="#6B7280" text-anchor="middle">${e.date.slice(0,5)}</text>`).join('');
+  const goalY = y(goal);
+  return `<svg viewBox="0 0 ${w} ${h}" class="w-full h-60">
+    ${gridLines}
+    <line x1="${padL}" y1="${goalY}" x2="${w-padR}" y2="${goalY}" stroke="#C7522A" stroke-width="1.5" stroke-dasharray="5,4"/>
+    <polyline points="${points}" fill="none" stroke="#0B5D52" stroke-width="2.5"/>
+    ${dots}${labels}
+  </svg>`;
+}
+document.getElementById('chart').innerHTML = chartSVG(ENTRIES, GOAL);
+
+function row(label, value) {
+  return `<div class="flex items-center justify-between py-1.5 text-sm"><span class="text-muted">${label}</span><span class="font-medium text-ink">${value}</span></div>`;
+}
+
+function renderEntries() {
+  document.getElementById('entries').innerHTML = ENTRIES.map((e, idx) => `
+    <div class="entry rounded-xl border border-line bg-surface shadow-panel ${idx === 0 ? 'expanded' : ''}">
+      <div class="entry-toggle flex w-full cursor-pointer items-center justify-between gap-4 px-5 py-4 text-left">
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white">${e.date}</span>
+          <span class="text-xs text-muted">Day ${e.day}</span>
+          <span class="rounded-full bg-success-soft px-2.5 py-1 text-xs font-semibold text-success">Adherence ${e.adherence}/10</span>
+          ${e.note ? `<span class="flex items-center gap-1 rounded-full bg-accent-soft px-2.5 py-1 text-xs font-semibold text-accent">${icon('flag','h-3 w-3')}Flagged</span>` : ""}
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="hidden text-sm text-ink/70 sm:block mr-2">${e.weight.toFixed(1)} lbs</span>
+          <div class="relative">
+            <button type="button" class="row-menu-toggle rounded-lg p-1.5 text-muted hover:bg-canvas hover:text-ink" title="Edit or delete this entry">${icon('more','h-4 w-4 rotate-90')}</button>
+            <div class="row-menu-dropdown hidden absolute right-0 top-full z-10 mt-1 w-32 overflow-hidden rounded-lg border border-line bg-surface shadow-panel">
+              <button type="button" class="block w-full px-3 py-2 text-left text-sm text-ink hover:bg-canvas">Edit</button>
+              <button type="button" class="block w-full px-3 py-2 text-left text-sm text-accent hover:bg-accent-soft">Delete</button>
+            </div>
+          </div>
+          ${icon('chevronDown', 'chevron h-4 w-4 text-muted')}
+        </div>
+      </div>
+      <div class="entry-body border-t border-line px-5 py-5">
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+          <div>
+            <p class="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted">Details</p>
+            ${row("Today's Weight", e.weight.toFixed(2) + " lbs")}
+            ${row("Weight Loss To Date", e.loss.toFixed(2) + " lbs")}
+            ${row("Water Intake", e.water.toFixed(2) + " oz")}
+            ${row("Sleep Hours", e.sleep + " hrs")}
+          </div>
+          <div>
+            <p class="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted">Food</p>
+            ${row("Lunch", e.lunch)}
+            ${row("Dinner", e.dinner)}
+            ${row("Other", e.other)}
+          </div>
+          <div>
+            <p class="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted">Flags &amp; Notes</p>
+            <div class="rounded-lg ${e.note ? 'bg-accent-soft text-accent' : 'bg-canvas text-muted'} px-3 py-2 text-sm">${e.note || "No flags logged for this day."}</div>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+
+  document.querySelectorAll('.entry-toggle').forEach(btn => btn.addEventListener('click', () => btn.closest('.entry').classList.toggle('expanded')));
+
+  document.querySelectorAll('.row-menu-toggle').forEach(btn => {
+    btn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      const dropdown = btn.nextElementSibling;
+      document.querySelectorAll('.row-menu-dropdown').forEach(d => { if (d !== dropdown) d.classList.add('hidden'); });
+      dropdown.classList.toggle('hidden');
+    });
+  });
+  document.querySelectorAll('.row-menu-dropdown').forEach(d => d.addEventListener('click', ev => ev.stopPropagation()));
+  document.addEventListener('click', () => document.querySelectorAll('.row-menu-dropdown').forEach(d => d.classList.add('hidden')));
+}
+renderEntries();
+
+document.getElementById('refreshBtn').addEventListener('click', function() {
+  const icon = this.querySelector('svg');
+  icon.classList.add('animate-spin');
+  setTimeout(() => icon.classList.remove('animate-spin'), 700);
+});
+</script>
+</body>
+</html>

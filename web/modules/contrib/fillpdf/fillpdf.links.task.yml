@@ -1,0 +1,29 @@
+fillpdf.forms_admin:
+  title: 'FillPDF forms'
+  route_name: fillpdf.forms_admin
+  base_route: fillpdf.forms_admin
+  weight: -10
+
+fillpdf.settings:
+  title: 'Settings'
+  route_name: fillpdf.settings
+  base_route: fillpdf.forms_admin
+  weight: 30
+
+entity.fillpdf_form.canonical:
+  title: 'Edit'
+  route_name: entity.fillpdf_form.canonical
+  base_route: entity.fillpdf_form.canonical
+  weight: -10
+
+entity.fillpdf_form.export_form:
+  title: 'Export'
+  route_name: entity.fillpdf_form.export_form
+  base_route: entity.fillpdf_form.canonical
+  weight: 10
+
+entity.fillpdf_form.import_form:
+  title: 'Import'
+  route_name: entity.fillpdf_form.import_form
+  base_route: entity.fillpdf_form.canonical
+  weight: 15

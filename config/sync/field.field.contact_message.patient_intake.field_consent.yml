@@ -1,0 +1,19 @@
+uuid: 47a555d7-1607-46d8-af88-a3c993cd1874
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.patient_intake
+    - field.storage.contact_message.field_consent
+id: contact_message.patient_intake.field_consent
+field_name: field_consent
+entity_type: contact_message
+bundle: patient_intake
+label: 'To sign your consent to the agreement above, type your full, legal name in the box below.'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

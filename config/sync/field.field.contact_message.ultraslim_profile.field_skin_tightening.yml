@@ -1,0 +1,26 @@
+uuid: 9129178d-e5ee-4e9b-a1c4-36df349f8703
+langcode: en
+status: true
+dependencies:
+  config:
+    - contact.form.ultraslim_profile
+    - field.storage.contact_message.field_skin_tightening
+    - taxonomy.vocabulary.skin_tightening
+id: contact_message.ultraslim_profile.field_skin_tightening
+field_name: field_skin_tightening
+entity_type: contact_message
+bundle: ultraslim_profile
+label: 'Skin Tightening'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      skin_tightening: skin_tightening
+    sort:
+      field: _none
+field_type: entity_reference

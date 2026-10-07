@@ -1,0 +1,170 @@
+uuid: 50b2ea4b-0686-45c2-8eb9-fc61bdcbfb83
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.basic_html
+    - filter.format.filtered_html
+    - filter.format.full_html
+    - filter.format.html
+    - filter.format.restricted_html
+    - media.type.image
+    - node.type.chirothin_resource
+    - node.type.daily_message
+    - node.type.product
+    - node.type.recipe
+    - node.type.review_messages
+    - node.type.training
+  module:
+    - actions_permissions
+    - commerce
+    - commerce_order
+    - commerce_payment
+    - commerce_product
+    - commerce_recurring
+    - commerce_shipping
+    - commerce_store
+    - contact
+    - eck
+    - field_permissions
+    - file
+    - filter
+    - flag
+    - headless_intake
+    - headless_messages
+    - headless_progress
+    - media
+    - node
+    - node_view_permissions
+    - pfdp
+    - system
+id: chiropractor_active_
+label: 'Chiropractor (Active)'
+weight: 4
+is_admin: null
+permissions:
+  - 'access commerce administration pages'
+  - 'access content'
+  - 'access headless messages'
+  - 'access headless progress'
+  - 'access site-wide contact form'
+  - 'access user profiles'
+  - 'administer commerce_order'
+  - 'administer commerce_payment'
+  - 'administer commerce_shipment'
+  - 'bypass pfdp'
+  - 'cancel own commerce_subscription'
+  - 'create chironutraceutical commerce_product'
+  - 'create chirothin_resource content'
+  - 'create clinic entities'
+  - 'create commerce_product_attribute'
+  - 'create commerce_shipping_method'
+  - 'create daily_message content'
+  - 'create field_chiropractor_flags'
+  - 'create field_clinic_location'
+  - 'create field_last_seen'
+  - 'create image media'
+  - 'create menu_item entities'
+  - 'create patient_profile entities'
+  - 'create recipe content'
+  - 'create review_messages content'
+  - 'create task entities'
+  - 'create training content'
+  - 'delete commerce_product_attribute'
+  - 'delete own chironutraceutical commerce_product'
+  - 'delete own chirothin_resource content'
+  - 'delete own daily_message content'
+  - 'delete own files'
+  - 'delete own image media'
+  - 'delete own menu_item entities'
+  - 'delete own product content'
+  - 'delete own recipe content'
+  - 'delete own review_messages content'
+  - 'delete own training content'
+  - 'edit any patient_profile entities'
+  - 'edit any task entities'
+  - 'edit field_chiropractor_flags'
+  - 'edit field_clinic_location'
+  - 'edit field_last_seen'
+  - 'edit field_weight_loss_phase'
+  - 'edit own chirothin_resource content'
+  - 'edit own clinic entities'
+  - 'edit own daily_message content'
+  - 'edit own field_chiropractor_flags'
+  - 'edit own field_clinic_location'
+  - 'edit own image media'
+  - 'edit own menu_item entities'
+  - 'edit own product content'
+  - 'edit own recipe content'
+  - 'edit own review_messages content'
+  - 'edit own training content'
+  - 'execute custom_module_disenroll_user user'
+  - 'execute custom_module_mass_message_action user'
+  - 'execute intake_processed_cs_flag contact_message'
+  - 'execute intake_processed_cs_unflag contact_message'
+  - 'flag clinician_message_status_cs'
+  - 'flag intake_processed_cs'
+  - 'flag local_pickup'
+  - 'flag message_status_clinic'
+  - 'flag new_order_personal'
+  - 'flag order_status'
+  - 'flag pin'
+  - 'flag pin_cs'
+  - 'flag reviewed_patients'
+  - 'flag task_completion'
+  - 'manage chironutraceutical_ns commerce_product_variation'
+  - 'manage chironutraceutical_variations commerce_product_variation'
+  - 'manage intake invite links'
+  - 'unflag clinician_message_status_cs'
+  - 'unflag intake_processed_cs'
+  - 'unflag local_pickup'
+  - 'unflag message_status_clinic'
+  - 'unflag new_order_personal'
+  - 'unflag order_status'
+  - 'unflag pin'
+  - 'unflag pin_cs'
+  - 'unflag reviewed_patients'
+  - 'unflag task_completion'
+  - 'update commerce_product_attribute'
+  - 'update commerce_shipping_method'
+  - 'update own chironutraceutical commerce_product'
+  - 'use text format basic_html'
+  - 'use text format filtered_html'
+  - 'use text format full_html'
+  - 'use text format html'
+  - 'use text format restricted_html'
+  - 'view any chirothin_resource content'
+  - 'view any clinic entities'
+  - 'view any page content'
+  - 'view any patient_profile entities'
+  - 'view any recipe content'
+  - 'view any training content'
+  - 'view any user_guide content'
+  - 'view chironutraceutical commerce_product'
+  - 'view commerce_product_attribute'
+  - 'view commerce_shipping_method'
+  - 'view field_chiropractor_flags'
+  - 'view field_clinic'
+  - 'view field_clinic_location'
+  - 'view field_gross_weight_loss'
+  - 'view field_last_seen'
+  - 'view field_net_inches_lost'
+  - 'view field_net_weight_loss'
+  - 'view field_overall_start_weight'
+  - 'view field_program_start_inches'
+  - 'view field_program_start_weight'
+  - 'view field_weight_loss_phase'
+  - 'view online commerce_store'
+  - 'view own chirothin_resource content'
+  - 'view own commerce_subscription'
+  - 'view own daily_message content'
+  - 'view own field_chiropractor_flags'
+  - 'view own field_clinic_location'
+  - 'view own menu_item entities'
+  - 'view own newsfeed content'
+  - 'view own patient_survey content'
+  - 'view own recipe content'
+  - 'view own review_messages content'
+  - 'view own training content'
+  - 'view own unpublished content'
+  - 'view user email addresses'

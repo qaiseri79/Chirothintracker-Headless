@@ -1,0 +1,34 @@
+uuid: 237caee6-1486-4d76-bc03-d6556578e9c3
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.block_footer
+  module:
+    - block_class
+    - user
+    - views
+  theme:
+    - chirothintracker_subtheme
+id: chirothintracker_subtheme_views_block__block_footer_block_2
+theme: chirothintracker_subtheme
+region: header_top
+weight: -23
+provider: null
+plugin: 'views_block:block_footer-block_2'
+settings:
+  id: 'views_block:block_footer-block_2'
+  label: 'Clinic logo for Doctor'
+  label_display: '0'
+  provider: views
+  views_label: 'Clinic logo for Doctor'
+  items_per_page: none
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      chiropractor_active_: chiropractor_active_
+      chiropractor_inactive_: chiropractor_inactive_
