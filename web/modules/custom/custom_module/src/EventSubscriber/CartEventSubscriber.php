@@ -11,13 +11,12 @@ use Drupal\Core\Messenger\MessengerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Cart Event Subscriber.
+ * Validates and limits what can be added to the cart.
  */
-class CartEventSubscriber implements EventSubscriberInterface
-{
+class CartEventSubscriber implements EventSubscriberInterface {
 
   /**
-   * The messenger.
+   * The messenger service.
    *
    * @var \Drupal\Core\Messenger\MessengerInterface
    */
@@ -31,15 +30,14 @@ class CartEventSubscriber implements EventSubscriberInterface
   protected $cartManager;
 
   /**
-   * Constructs event subscriber.
+   * Constructs a new CartEventSubscriber object.
    *
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
+   *   The messenger service.
    * @param \Drupal\commerce_cart\CartManagerInterface $cart_manager
    *   The cart manager.
    */
-  public function __construct(MessengerInterface $messenger, CartManagerInterface $cart_manager)
-  {
+  public function __construct(MessengerInterface $messenger, CartManagerInterface $cart_manager) {
     $this->messenger = $messenger;
     $this->cartManager = $cart_manager;
   }
@@ -47,8 +45,7 @@ class CartEventSubscriber implements EventSubscriberInterface
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents()
-  {
+  public static function getSubscribedEvents() {
     return [
       CartEvents::CART_ENTITY_ADD => [['onProductAdded', 100]],
     ];
@@ -64,8 +61,7 @@ class CartEventSubscriber implements EventSubscriberInterface
    * @param \Drupal\commerce_cart\Event\CartEntityAddEvent $event
    *   The cart event.
    */
-  public function onProductAdded(CartEntityAddEvent $event)
-  {
+  public function onProductAdded(CartEntityAddEvent $event) {
     $order_item = $event->getOrderItem();
     $cart = $event->getCart();
     $added_type = $this->getProductType($order_item);
@@ -100,8 +96,7 @@ class CartEventSubscriber implements EventSubscriberInterface
    * @return string|null
    *   The product bundle machine name, or NULL if it cannot be determined.
    */
-  protected function getProductType(OrderItemInterface $order_item): ?string
-  {
+  protected function getProductType(OrderItemInterface $order_item): ?string {
     $purchased_entity = $order_item->getPurchasedEntity();
 
     if (!$purchased_entity instanceof ProductVariation) {
@@ -111,5 +106,4 @@ class CartEventSubscriber implements EventSubscriberInterface
     $product = $purchased_entity->getProduct();
     return $product ? $product->bundle() : NULL;
   }
-
 }
