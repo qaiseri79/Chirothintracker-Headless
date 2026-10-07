@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
-import { Calendar, ChevronRight, MessageSquare, Plus, StickyNote, Zap } from "lucide-react";
+import { Calendar, ChevronRight, MessageSquare, Plus, Send, StickyNote, Zap } from "lucide-react";
 import { formatSummaryNumber, type PatientSummaryRow } from "@/lib/patients/summary";
 import { SummarySectionStatus, useSummaryData } from "./summary-data-provider";
 import { LogProgressDialog } from "./log-progress-dialog";
 import { DailyLogs } from "@/components/patients/daily-logs";
+import { SendNotificationDialog } from "./send-notification-dialog";
 
 /**
  * The expanded row's detail body: the sessions grid, then the stat tiles, from
@@ -33,10 +34,12 @@ export function PatientExpandedDetails({
   patient,
   onUpdateLastSeen,
   onOpenWorkspace,
+  showToast,
 }: {
   patient: PatientSummaryRow;
   onUpdateLastSeen: (id: number, lastSeen: string) => Promise<void>;
   onOpenWorkspace: (tab: string) => void;
+  showToast?: (message: string) => void;
 }) {
   const { readOnly, pending, sections, load } = useSummaryData();
   const logsState = sections[`${patient.id}:logs`];
@@ -45,6 +48,7 @@ export function PatientExpandedDetails({
   const router = useRouter();
   const [readFull, setReadFull] = useState<{ kind: "message" | "note"; time: string; text: string } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
   /** The date input's value, held in `YYYY-MM-DD` as the input requires. */
   const [draftDate, setDraftDate] = useState("");
   const latestNote = [...patient.notesList].sort((a, b) => b.date.localeCompare(a.date))[0];
@@ -63,9 +67,24 @@ export function PatientExpandedDetails({
   return (
     <>
       <div className="mb-4 rounded-xl border border-line bg-white px-4 py-3">
-        <p className="text-[12px] font-semibold tracking-[0.05em] uppercase text-[#6B7280]">
-          Messages &amp; notes
-        </p>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-[12px] font-semibold tracking-[0.05em] uppercase text-[#6B7280]">
+            Messages &amp; notes
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              if (readOnly) {
+                showToast?.("This account has read-only access.");
+                return;
+              }
+              setNotificationOpen(true);
+            }}
+            className="inline-flex items-center gap-2 rounded-lg bg-[#A8421F] px-3.5 py-1.5 text-sm font-semibold text-white hover:opacity-90"
+          >
+            <Send className="size-3.5" /> Send notification
+          </button>
+        </div>
         <div className="mt-1 divide-y divide-line">
           <CommRow
             icon={<MessageSquare className="size-4" />}
@@ -247,6 +266,13 @@ export function PatientExpandedDetails({
         onRetry={() => void load(patient.id, "logs", Boolean(logsState?.loaded && logsState.hasMore))}
       />
       <LogProgressDialog patientId={patient.id} open={logDialogOpen} onClose={() => setLogDialogOpen(false)} />
+      {notificationOpen ? (
+        <SendNotificationDialog
+          patient={patient}
+          onClose={() => setNotificationOpen(false)}
+          showToast={showToast}
+        />
+      ) : null}
     </>
   );
 }

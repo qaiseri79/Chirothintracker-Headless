@@ -142,3 +142,72 @@ headless_messages.download_attachment:
   options:
     _auth: ['cookie']
     no_cache: TRUE
+
+# Doctor notifications: the popup's template bank on GET, the send on POST.
+#
+# Like `headless_messages.messages`, this is one route dispatching on method
+# rather than a GET/POST pair. The GET side resolves each template body for the
+# caller's own clinic (the `constipation` message is brand-aware), so the body
+# the popup previews and the one a send delivers are byte-identical. POST runs
+# the legacy side-effects with the send: review-flag clear, the 15/18
+# submission tag for Protein/Apple Day, and the enrolment transition for
+# Graduated. Declared before `thread` so the literal segment always wins, the
+# same ordering rule `mass` already follows.
+headless_messages.notifications:
+  path: '/api/headless/messages/notifications'
+  defaults:
+    _controller: '\Drupal\headless_messages\Controller\MessagesController::notifications'
+    _title: 'Doctor notifications'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\PortalMemberAccess::access'
+    _method: 'GET|POST'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+
+# Save a doctor's custom notification (a review_messages node for their clinic)
+headless_messages.notification_save:
+  path: '/api/headless/messages/notifications/custom'
+  defaults:
+    _controller: '\Drupal\headless_messages\Controller\MessagesController::saveCustom'
+    _title: 'Save custom notification'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\PortalMemberAccess::access'
+    _method: 'POST'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+
+# Update one of the doctor's saved notifications (review_messages node).
+#
+# This lives on its own `/edit` path rather than sharing `/custom/{nid}` with
+# the delete route: Drupal resolves one route per path, and `_method` is a
+# requirement, not a dispatcher — so a second route on the same pattern would
+# make the matcher pick one and reject the other with 405. The same reasoning
+# is why `notifications` splits GET/POST in the controller instead.
+headless_messages.notification_update:
+  path: '/api/headless/messages/notifications/custom/{nid}/edit'
+  defaults:
+    _controller: '\Drupal\headless_messages\Controller\MessagesController::updateCustom'
+    _title: 'Update custom notification'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\PortalMemberAccess::access'
+    nid: \d+
+    _method: 'POST'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE
+
+# Delete one of the doctor's saved notifications
+headless_messages.notification_delete:
+  path: '/api/headless/messages/notifications/custom/{nid}'
+  defaults:
+    _controller: '\Drupal\headless_messages\Controller\MessagesController::deleteCustom'
+    _title: 'Delete custom notification'
+  requirements:
+    _custom_access: '\Drupal\headless_access\Access\PortalMemberAccess::access'
+    nid: \d+
+    _method: 'POST'
+  options:
+    _auth: ['cookie']
+    no_cache: TRUE

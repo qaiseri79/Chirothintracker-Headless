@@ -1,0 +1,199 @@
+[
+  {
+    "id": "default_review",
+    "label": "Default Review",
+    "sections": {
+      "*": [
+        "<p>Your submission has been reviewed. Make it a great day!</p>"
+      ]
+    }
+  },
+  {
+    "id": "constipation",
+    "label": "Constipation",
+    "sections": {
+      "*": [
+        "<p>Constipation can be a real challenge with weight loss, and yet, regular bowel movements are essential to losing weight. Since you have indicated constipation as a flag, here is a list of things you can try.</p>",
+        "<ul><li>Start your day with a warm beverage</li><li>Drink plenty of water throughout the day</li><li>Get adequate sleep</li><li>Drink a flushing tea before bed, like Yogi Smooth Move - ChiroKlenz - Senna – if you don’t have a bowel movement in the morning, drink another cup.</li><li>Eat cherries, berries, pears, plums, apples or kiwi as your fruit component</li><li>Eat broccoli, brussels sprouts, kale and spinach</li><li>Move your body – gentle exercise</li><li>Elevate your feet on a step stool (or squat) while sitting on the toilet</li><li>Take a good digestive enzyme at the beginning of each meal</li><li>Take a sugar free psyllium husk supplement, or a flushing type of supplement</li></ul>",
+        "<p>&nbsp;Below are some things that you should try to avoid:</p>",
+        "<ul><li>Sitting for long periods</li><li>Skipping meals or any portion of your meal</li><li>Stress</li><li>Drinking too much caffeine</li></ul>"
+      ],
+      "ChiroThin": [
+        "<p>For help choosing the right supplement to help with constipation, please message us in the portal. The same company that supplies the ChiroThin drops have three great products to help with this issue: Nature Ease, CN Digestion and CN Flush, but there are plenty of other helpful products out there as well.</p>"
+      ],
+      "other": [
+        "<p>For help choosing the right supplement to help with constipation, please message us in the portal.</p>"
+      ]
+    }
+  },
+  {
+    "id": "please_log_food",
+    "label": "Please Log Food",
+    "sections": {
+      "*": [
+        "<p>Good Morning!</p>",
+        "<p>We have noticed that you have not logged your meal(s).&nbsp;Letting us know what you eat at every meal is very important to obtaining the best results on the program because the better the information you give us, the better supervision we can provide. &nbsp;It only takes a minute - You can do this!</p>"
+      ]
+    }
+  },
+  {
+    "id": "skipped_meal",
+    "label": "Skipped Meal",
+    "sections": {
+      "*": [
+        "<p>We’ve noticed that you have skipped portions of your meals. Please understand that consuming all three components of your meal plan is essential for your body to get what is necessary to prevent “Starvation Mode.”</p>",
+        "<p>Starvation mode is a slowing of the metabolism in response to calorie restriction. The concept of starvation mode is a normal physiological process referred to as, “adaptive thermogenesis.” Fortunately, the program has been specifically designed to prevent adaptive thermogenesis, therefore producing superior results as compared to other weight loss programs.</p>",
+        "<p>The nutrients from all components of your meal plan is essential to overcoming the resistance created by “Starvation Mode.” Please do your best to consume all the allowable fruit, vegetable and protein with each meal. Your weight loss success depends on it!</p>"
+      ]
+    }
+  },
+  {
+    "id": "vary_food_choices",
+    "label": "Vary Food Choices",
+    "sections": {
+      "*": [
+        "<p>Your submission has been reviewed. We have noticed that your weight isn’t dropping as consistently as we expected. Sometimes when this occurs, changing up your meal choices consistently {especially the protein component)&nbsp;can be the difference between steady weight loss or stalling out. We want to see variability in your fruit and vegetable choices from day to day and from meal to meal, but a little more strict with your protein choices. We recommend that you change up your protein at each meal and don’t eat the same protein choice for at least 3 days. For example, if you eat chicken breast for lunch, have 93% lean ground beef for dinner. The next day, have nitrate free deli turkey meat for lunch and cod for dinner. The next day have lean pork loin for lunch and filet mignon for dinner. Then, you can go back to chicken breast on the 4<sup>th</sup> day. This will help your body get a wide variety of proteins and the amino acids it needs. If you have any questions, please don’t hesitate to send us a message. Get creative – and make it a terrific day!</p>"
+      ]
+    }
+  },
+  {
+    "id": "inadequate_sleep",
+    "label": "Inadequate Sleep",
+    "sections": {
+      "*": [
+        "<p><strong>A good night’s sleep supports immune system, neurological and hormonal function.</strong> It helps balance the microbial diversity in the gastrointestinal tract. Sleep is one of our most critical (and natural) forms of detoxification. Sleep is one of the biggest factors that we’ve found to be clinically relevant in weight loss resistance. If you’re not getting adequate sleep, chances are you’ll experience a few of these symptoms:</p>",
+        "<ul><li>detoxification challenges</li><li>constipation</li><li>impaired immune function</li><li>hunger</li><li>moodiness</li><li>fatigue</li><li>and more</li></ul>",
+        "<p><strong>Sleep issues can even induce addictive behaviors</strong> because, without proper rest, you’re more likely to look for substances to keep energized - like the wrong types of food.</p>",
+        "<p>Please do your best to get 8 hours sleep each night because your health and weight loss depend on it. If you must use an alarm to wake up, this is an indicator that you need more sleep. If, no matter how hard you try, you’re unable to get ample sleep, reach out to us for assistance, but please understand the importance of adequate sleep for your weight loss and overall health goals.</p>"
+      ]
+    }
+  },
+  {
+    "id": "no_changes_review",
+    "label": "No Changes Review",
+    "sections": {
+      "*": [
+        "<p>Your submission has been reviewed. There are no special changes to your program today. Continue (or go back to) the standard 4oz portion - two meal plan as prescribed. Make it wonderful day!</p>"
+      ]
+    }
+  },
+  {
+    "id": "protein_day_today",
+    "label": "Protein Day Today",
+    "flag": 15,
+    "sections": {
+      "*": [
+        "<p><strong>Protein Day Instructions:</strong></p>",
+        "<ul><li>At Lunch Eat 6oz of protein&nbsp;<u>ONLY</u>. (measure raw).</li><li>At Dinner, Eat 6oz of&nbsp;a <u>DIFFERENT </u>protein (measure raw).</li><li>Try to include red meat for one of the meals.</li><li>Do not consume any vegetables, fruits or the bread component. Some feel the need to consume a small amount of free vegetables along with the 6oz of protein, however we have found better results in those who just have the protein.&nbsp;</li></ul>",
+        "<p>Remember water is a key component to consistent weight loss, so make sure that you are consuming between 100 oz and 120 oz of pure water every day, but today I would like you to increase your water intake to between 120 - 140oz.</p>",
+        "<p>If you don’t drop tomorrow, I will send you further instructions. Make it a great day and remember adequate water intake is KEY!</p>"
+      ]
+    }
+  },
+  {
+    "id": "protein_day_tomorrow",
+    "label": "Protein Day Tomorrow",
+    "flag": 15,
+    "sections": {
+      "*": [
+        "<p>Upon reviewing your weight submissions for the previous 5 days, I am going to recommend that if <strong><u>tomorrow morning your weight does not drop below today’s weight</u></strong> that you do a protein day. A protein day will help your body go into a more aggressive fat burning process.&nbsp;</p>",
+        "<p><strong>Protein Day Instructions:</strong></p>",
+        "<ul><li>At Lunch Eat 6oz of protein&nbsp;<u>ONLY</u>. (measure raw).</li><li>At Dinner, Eat 6oz of&nbsp;a <u>DIFFERENT</u> protein (measure raw).</li><li>Try to include red meat for one of the meals.</li><li>Do not consume any vegetables, fruits or the bread component. Some feel the need to consume a small amount of free vegetables along with the 6oz of protein, however we have found better results in those who just have the protein.&nbsp;</li><li>Remember water is a key component to consistent weight loss, so make sure that you are consuming between 100 oz and 120 oz of pure water every day, but today I would like you to increase your water intake to between 120 - 140oz.</li></ul>",
+        "<p>&nbsp;Get excited as we should expect to see some great numbers the following day!</p>"
+      ]
+    }
+  },
+  {
+    "id": "apply_day_today",
+    "label": "Apple Day Today",
+    "flag": 18,
+    "sections": {
+      "*": [
+        "<p>Good Morning! Upon reviewing your weight submissions for the previous 5 days, I am going to recommend that you do an apple day, <u>TODAY</u>. An apple day will help your body kick start the fat burning process.&nbsp;</p>",
+        "<p><strong>Instructions:</strong></p>",
+        "<ul><li>You will need to have 7 apples on hand.</li><li>Starting at 12pm, eat one apple every hour, on the hour until 6pm.</li><li>Do not eat anything else to day.</li><li>You do not need to worry about the variety or the size of the apple and you do not need to weigh them.</li><li>Remember water is a key component to consistent weight loss, so make sure that you are consuming between 100 and 120 oz of pure water every day, but today I would like you to increase your water intake to between 120 - 140oz.</li></ul>",
+        "<p>Get excited as we should expect to see some great numbers following your apple day!</p>"
+      ]
+    }
+  },
+  {
+    "id": "apply_day_tomorrow",
+    "label": "Apple Day Tomorrow",
+    "flag": 18,
+    "sections": {
+      "*": [
+        "<p>Good Morning! Upon reviewing your weight submissions for the previous 5 days, I am going to recommend that if <u>tomorrow morning your weight does not drop below today’s weight</u> you do an apple day. An apple day will help your body kick start the fat burning process.&nbsp;</p>",
+        "<p><strong>Instructions:</strong></p>",
+        "<ul><li>You will need to have 7 apples on hand.</li><li>Starting at 12pm, eat one apple every hour, on the hour until 6pm.</li><li>Do not eat anything else to day.</li><li>You do not need to worry about the variety or the size of the apple and you do not need to weigh them.</li><li>Remember water is a key component to consistent weight loss, so make sure that you are consuming between 100 and 120 oz of pure water every day, but today I would like you to increase your water intake to between 120 - 140oz.</li></ul>",
+        "<p>Get excited as we should expect to see some great numbers following your apple day!</p>",
+        "<p>Happy crunching!</p>"
+      ]
+    }
+  },
+  {
+    "id": "having_problems",
+    "label": "Having Problems?",
+    "sections": {
+      "*": [
+        "I noticed you have hit a rough patch. Please read through these questions and respond to see if we can find out what is going on:\n* Are you drinking enough water? 80oz minimum but we recommend between 100 and 120 oz per day.\n* Are you dehydrated?\n* Have you tried adding electrolytes?\n* Are you eating enough food - all of your allowed food of each component?\n* Are you eating a variety of non free veggies and varying your proteins?\n* Have you missed your drops?\n* Are you constipated?\n* Are you eating free veggies?\n* Are you eating your meals within the 8 hour time frame?"
+      ]
+    }
+  },
+  {
+    "id": "low_adherence",
+    "label": "Low Adherence",
+    "sections": {
+      "*": [
+        "<p>Your submission has been reviewed by your ChiroThin Team. We noticed a low adherence number. We want you to know that we understand it is sometimes difficult to resist “cheating.” Weight loss, however, is a game of momentum and each little cheat slows down your momentum and can cause it to come to a screeching halt! Remember to use the CRuSH Technique to help with Cravings, Stalls and Hunger. You can watch the video here: <a href=\"https://www.youtube.com/watch?v=r__2y99rJ0c\">https://www.youtube.com/watch?v=r__2y99rJ0c</a>.&nbsp; Let’s re-commit and get back on track today day!</p>"
+      ]
+    }
+  },
+  {
+    "id": "water_intake",
+    "label": "Water Intake",
+    "sections": {
+      "*": [
+        "<p>Your submission has been reviewed. We have noticed your water intake is a little off. Just a reminder to keep your water intake between 100oz and 120oz each day. Your body needs water to flush out the toxins released from your fat cells. Keep up the good work and make it a great day!</p>"
+      ]
+    }
+  },
+  {
+    "id": "proud_of_you",
+    "label": "Proud of You",
+    "sections": {
+      "*": [
+        "<p>Your submission has been reviewed. We want you to know how proud we are of you and acknowledge you for how hard you are working toward reaching your goal. Hooray!</p>"
+      ]
+    }
+  },
+  {
+    "id": "ask_for_referral",
+    "label": "Ask for Referral",
+    "sections": {
+      "*": [
+        "Your submission has been reviewed by your ChiroThin Team. You are doing so well and we are so encouraged by your results and your determination. When someone asks you how you are losing all that weight, please send them our way so we can help them, too! Keep up the great work and make it an amazing day!"
+      ]
+    }
+  },
+  {
+    "id": "graduated",
+    "label": "Graduated",
+    "roles": {
+      "enrolled_patient": "archived_patient"
+    },
+    "sections": {
+      "*": [
+        "Congratulations! You have successfully completed the ChiroThin Weight Loss Program. We are now placing your account into archived status. We are always here for you and your health care needs."
+      ]
+    }
+  },
+  {
+    "id": "we_miss_you",
+    "label": "We Miss You",
+    "sections": {
+      "*": [
+        "<p>Hello, we noticed you have not logged in the tracker recently, we are hoping everything is alright. We understand sometimes life gets a little crazy, however, logging in daily is an essential piece of the program to keep you on track and help you reach your goals. Please let us know if you need anything, as we are here to help!</p>"
+      ]
+    }
+  }
+]

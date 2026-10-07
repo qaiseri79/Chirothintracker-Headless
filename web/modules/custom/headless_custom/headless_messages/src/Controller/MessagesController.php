@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Drupal\headless_messages\Service\MessagesService;
+use Drupal\headless_messages\Service\NotificationService;
 
 /**
  * Controller for the headless messages endpoints.
@@ -27,13 +28,23 @@ class MessagesController extends ControllerBase {
   protected $messagesService;
 
   /**
+   * The notification service.
+   *
+   * @var \Drupal\headless_messages\Service\NotificationService
+   */
+  protected $notificationService;
+
+  /**
    * Constructs a MessagesController object.
    *
    * @param \Drupal\headless_messages\Service\MessagesService $messages_service
    *   The messages service.
+   * @param \Drupal\headless_messages\Service\NotificationService $notification_service
+   *   The notification service.
    */
-  public function __construct(MessagesService $messages_service) {
+  public function __construct(MessagesService $messages_service, NotificationService $notification_service) {
     $this->messagesService = $messages_service;
+    $this->notificationService = $notification_service;
   }
 
   /**
@@ -41,7 +52,8 @@ class MessagesController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('headless_messages.messages_service')
+      $container->get('headless_messages.messages_service'),
+      $container->get('headless_messages.notification_service')
     );
   }
 
@@ -293,6 +305,104 @@ class MessagesController extends ControllerBase {
   public function markMessageRead(int $message_id): JsonResponse {
     $result = $this->messagesService->markMessageRead($message_id);
     return new JsonResponse(['success' => $result, 'marked_read' => $result ? 1 : 0], $result ? JsonResponse::HTTP_OK : JsonResponse::HTTP_FORBIDDEN);
+  }
+
+  /**
+   * Lists the doctor's notification templates on GET and sends one on POST.
+   *
+   * One route, two methods, mirroring how `messages` branches: the GET side is
+   * what the popup renders (predefined templates with clinic-resolved bodies
+   * plus the doctor's saved review_messages nodes), and the POST side is the
+   * actual send, which runs the template rendering, review-flag, submission-tag
+   * and role side-effects together.
+   */
+  public function notifications(Request $request): JsonResponse {
+    if ($request->getMethod() === 'POST') {
+      return $this->sendNotification($request);
+    }
+    return new JsonResponse([
+      'templates' => $this->notificationService->templates(),
+      'custom' => $this->notificationService->customList(),
+    ]);
+  }
+
+  /**
+   * Sends a predefined or saved notification to a patient.
+   */
+  public function sendNotification(Request $request): JsonResponse {
+    $data = json_decode($request->getContent() ?: '{}', TRUE);
+    if (!is_array($data) || empty($data['operation']) || empty($data['target_uid'])) {
+      return new JsonResponse(
+        ['error' => 'bad_request', 'message' => 'operation and target_uid are required.'],
+        JsonResponse::HTTP_BAD_REQUEST
+      );
+    }
+
+    $result = $this->notificationService->send((string) $data['operation'], (int) $data['target_uid']);
+    if ($result['success']) {
+      return new JsonResponse($result, JsonResponse::HTTP_CREATED);
+    }
+
+    $reason = (string) ($result['message'] ?? '');
+    $status = match (TRUE) {
+      str_contains($reason, 'not found') => JsonResponse::HTTP_NOT_FOUND,
+      str_contains($reason, 'chiropractor'), str_contains($reason, 'cannot send') => JsonResponse::HTTP_FORBIDDEN,
+      default => JsonResponse::HTTP_BAD_REQUEST,
+    };
+
+    return new JsonResponse(
+      $result + ['error' => 'notification_failed', 'message_text' => $reason],
+      $status
+    );
+  }
+
+  /**
+   * Saves a doctor's custom notification as a review_messages node.
+   */
+  public function saveCustom(Request $request): JsonResponse {
+    $data = json_decode($request->getContent() ?: '{}', TRUE);
+    $title = is_array($data) ? trim((string) ($data['title'] ?? '')) : '';
+    $message = is_array($data) ? trim((string) ($data['message'] ?? '')) : '';
+
+    $result = $this->notificationService->saveCustom($title, $message);
+    if ($result['success']) {
+      return new JsonResponse($result, JsonResponse::HTTP_CREATED);
+    }
+
+    return new JsonResponse(
+      $result + ['error' => 'save_failed', 'message_text' => (string) ($result['message'] ?? '')],
+      JsonResponse::HTTP_BAD_REQUEST
+    );
+  }
+
+  /**
+   * Updates a doctor's saved notification.
+   */
+  public function updateCustom(Request $request, int $nid): JsonResponse {
+    $data = json_decode($request->getContent() ?: '{}', TRUE);
+    $title = is_array($data) ? trim((string) ($data['title'] ?? '')) : '';
+    $message = is_array($data) ? trim((string) ($data['message'] ?? '')) : '';
+
+    $result = $this->notificationService->updateCustom($nid, $title, $message);
+    if ($result['success']) {
+      return new JsonResponse($result, JsonResponse::HTTP_OK);
+    }
+
+    $reason = (string) ($result['message'] ?? '');
+    return new JsonResponse(
+      $result + ['error' => 'update_failed', 'message_text' => $reason],
+      str_contains($reason, 'not found') ? JsonResponse::HTTP_NOT_FOUND : JsonResponse::HTTP_BAD_REQUEST
+    );
+  }
+
+  /**
+   * Deletes a doctor's saved notification.
+   */
+  public function deleteCustom(int $nid): JsonResponse {
+    if (!$this->notificationService->deleteCustom($nid)) {
+      return new JsonResponse(['error' => 'not_found', 'message' => 'Notification not found'], JsonResponse::HTTP_NOT_FOUND);
+    }
+    return new JsonResponse(['success' => TRUE]);
   }
 
 }

@@ -658,6 +658,44 @@ class MessagesService {
   }
 
   /**
+   * Sends a preformatted notification from a chiropractor to a patient.
+   *
+   * Deliberately distinct from sendMessage(): a notification body is authored
+   * server-side (predefined templates or the doctor's saved review_messages
+   * nodes) and is already trusted markup, so it is stored verbatim under
+   * `basic_html` instead of being flattened to plain text by sanitizeText().
+   * The notification lands in the same conversation shape the chat uses, so it
+   * appears in the patient's thread like any other provider message.
+   *
+   * @param int $target_uid
+   *   The recipient patient's user ID.
+   * @param string $markup
+   *   The notification body, stored and rendered as basic_html.
+   *
+   * @return array
+   *   ['success' => bool, 'message' => mixed, 'id' => int|null]
+   */
+  public function sendNotification(int $target_uid, string $markup): array {
+    $account = $this->current_user;
+    if (!$account->isAuthenticated()) {
+      return ['success' => FALSE, 'message' => 'Unauthenticated'];
+    }
+    if (!$this->isChiropractor()) {
+      return ['success' => FALSE, 'message' => 'Only a chiropractor can send a notification.'];
+    }
+    if (!$this->canSend()) {
+      return [
+        'success' => FALSE,
+        'message' => 'Your account cannot send messages. Contact your clinic to re-enable messaging.',
+      ];
+    }
+    if ($markup === '') {
+      return ['success' => FALSE, 'message' => 'Message cannot be empty'];
+    }
+    return $this->deliverMessage($target_uid, $markup);
+  }
+
+  /**
    * Sends one message to many patients on the chiropractor's behalf.
    *
    * Each recipient gets an independent Message entity, so one bad target does

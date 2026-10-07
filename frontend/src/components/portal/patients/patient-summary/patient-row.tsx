@@ -297,6 +297,7 @@ export function PatientRow({
               patient={patient}
               onUpdateLastSeen={onUpdateLastSeen}
               onOpenWorkspace={onOpenWorkspace}
+              showToast={showToast}
             />
           </td>
         </tr>

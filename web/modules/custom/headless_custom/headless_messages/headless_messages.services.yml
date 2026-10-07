@@ -14,3 +14,13 @@ services:
       - '@renderer'
       - '@file_system'
       - '@file.repository'
+
+  headless_messages.notification_service:
+    class: Drupal\headless_messages\Service\NotificationService
+    arguments:
+      - '@entity_type.manager'
+      - '@current_user'
+      - '@flag'
+      - '@logger.channel.headless_messages'
+      - '@headless_messages.messages_service'
+      - '@extension.list.module'
