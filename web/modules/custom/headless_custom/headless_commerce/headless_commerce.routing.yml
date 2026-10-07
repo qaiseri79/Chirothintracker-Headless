@@ -54,7 +54,7 @@ headless_commerce.custom_products_read:
     no_cache: TRUE
 
 headless_commerce.custom_products_create:
-  path: '/api/headless/commerce/custom-products'
+  path: '/api/headless/commerce/custom-products/create'
   defaults:
     _controller: '\Drupal\headless_commerce\Controller\CommerceController::handle'
     action: custom_products_create
