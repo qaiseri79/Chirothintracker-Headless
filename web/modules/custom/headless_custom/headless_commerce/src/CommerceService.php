@@ -52,19 +52,25 @@ class CommerceService {
       throw new ClinicException('API Login ID and Transaction Key are required.', 422);
     }
 
-    // Validate Authorize.net credentials before saving.
-    $authRequest = new \net\authorize\api\contract\v1\MerchantAuthenticationType();
-    $authRequest->setName($login_id);
-    $authRequest->setTransactionKey($transaction_key);
+    // Validate Authorize.net credentials using commerceguys/authnet SDK.
+    try {
+      $config = new \CommerceGuys\AuthNet\Configuration([
+        'api_login' => $login_id,
+        'transaction_key' => $transaction_key,
+        'sandbox' => TRUE,
+      ]);
+      $client = \Drupal::httpClient();
 
-    $request = new \net\authorize\api\contract\v1\AuthenticateTestRequest();
-    $request->setMerchantAuthentication($authRequest);
+      // We manually construct the authenticateTestRequest JSON payload
+      // since the commerceguys/authnet package provides a generic JsonRequest wrapper.
+      $request = new \CommerceGuys\AuthNet\Request\JsonRequest($config, $client, 'authenticateTestRequest');
+      $response = $request->send();
 
-    $controller = new \net\authorize\api\controller\AuthenticateTestController($request);
-    $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
-
-    if ($response == null || $response->getMessages()->getResultCode() != "Ok") {
-        throw new ClinicException('Invalid Authorize.net credentials.', 422);
+      if ($response->getMessages()[0]->getResultCode() !== 'Ok') {
+          throw new ClinicException('Invalid Authorize.net credentials.', 422);
+      }
+    } catch (\Exception $e) {
+      throw new ClinicException('Invalid Authorize.net credentials: ' . $e->getMessage(), 422);
     }
 
     // Save keys using the Key module with the 'file' provider.
