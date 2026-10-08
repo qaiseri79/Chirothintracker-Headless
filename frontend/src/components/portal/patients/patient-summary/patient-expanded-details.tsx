@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { Calendar, ChevronRight, MessageSquare, Plus, Send, StickyNote, Zap } from "lucide-react";
+import { Calendar, ChevronRight, Eye, MessageSquare, Plus, Send, StickyNote, Zap } from "lucide-react";
 import { formatSummaryNumber, type PatientSummaryRow } from "@/lib/patients/summary";
 import { SummarySectionStatus, useSummaryData } from "./summary-data-provider";
+import { fetchThread } from "@/lib/messages/client";
+import type { Conversation } from "@/lib/messages/types";
 import { LogProgressDialog } from "./log-progress-dialog";
 import { DailyLogs } from "@/components/patients/daily-logs";
 import { SendNotificationDialog } from "./send-notification-dialog";
@@ -51,6 +53,39 @@ export function PatientExpandedDetails({
   const [draftDate, setDraftDate] = useState("");
   const latestNote = [...patient.notesList].sort((a, b) => b.date.localeCompare(a.date))[0];
 
+  /**
+   * The messages tile reads the patient's live thread (`/api/messages/{uid}`)
+   * rather than a summary field, exactly like the Messages tab, so its count,
+   * preview and unread badge are real data instead of a placeholder. A missing
+   * thread (404, or a failed read) leaves `conversation` null and the tile
+   * falls back to the empty state.
+   */
+  const [conversation, setConversation] = useState<Conversation | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    fetchThread(patient.id)
+      .then((thread) => {
+        if (!cancelled) setConversation(thread);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [patient.id]);
+  const messageCount = conversation?.messages.length ?? 0;
+  const unreadCount = conversation?.unread_count ?? 0;
+
+  /**
+   * `notesList` is a lazily fetched section (it is not part of the roster
+   * payload), so pull it when the row opens; `load` no-ops when the section is
+   * already loaded or being fetched, and the workspace tab used to be the only
+   * trigger for it. Without this, the Notes tile stays empty until the Notes
+   * tab is opened.
+   */
+  useEffect(() => {
+    void load(patient.id, "notes");
+  }, [patient.id, load]);
+
   function openModal() {
     setDraftDate(toIso(patient.lastSeen));
     setIsModalOpen(true);
@@ -64,54 +99,49 @@ export function PatientExpandedDetails({
 
   return (
     <>
-      <div className="mb-4 rounded-xl border border-line bg-white px-4 py-3">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-[12px] font-semibold tracking-[0.05em] uppercase text-[#6B7280]">
-            Messages &amp; notes
-          </p>
-          <button
-            type="button"
-            onClick={() => {
-              if (readOnly) {
-                showToast?.("This account has read-only access.");
-                return;
-              }
-              setNotificationOpen(true);
-            }}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#A8421F] px-3.5 py-1.5 text-sm font-semibold text-white hover:opacity-90"
-          >
-            <Send className="size-3.5" /> Send notification
-          </button>
-        </div>
-        <div className="mt-1 divide-y divide-line">
-          <CommRow
-            icon={<MessageSquare className="size-4" />}
-            name="Message"
-            count={PLACEHOLDER_MESSAGES.count}
-            last={PLACEHOLDER_MESSAGES.last}
-            time={PLACEHOLDER_MESSAGES.time}
-            onReadFull={() =>
-              setReadFull({
-                kind: "message",
-                time: PLACEHOLDER_MESSAGES.time,
-                text: PLACEHOLDER_MESSAGES.last,
-              })
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        <CommTile
+          kind="message"
+          count={unreadCount}
+          hasContent={messageCount > 0}
+          last={conversation?.last_message_preview ?? ""}
+          time={conversation?.last_message_time_formatted ?? ""}
+          badgeRed={unreadCount > 0}
+          onReadFull={() => {
+            if (!messageCount) return;
+            setReadFull({
+              kind: "message",
+              time: conversation?.last_message_time_formatted ?? "",
+              text: conversation?.last_message_preview ?? "",
+            });
+          }}
+          onViewAll={() => onOpenWorkspace("messages")}
+        />
+        <CommTile
+          kind="note"
+          count={patient.notesList.length}
+          hasContent={patient.notesList.length > 0}
+          last={latestNote?.text ?? ""}
+          time={latestNote?.date ?? ""}
+          onReadFull={() => {
+            if (!latestNote) return;
+            setReadFull({ kind: "note", time: latestNote.date, text: latestNote.text });
+          }}
+          onViewAll={() => onOpenWorkspace("notes")}
+        />
+        <button
+          type="button"
+          onClick={() => {
+            if (readOnly) {
+              showToast?.("This account has read-only access.");
+              return;
             }
-            onViewAll={() => onOpenWorkspace("messages")}
-          />
-          <CommRow
-            icon={<StickyNote className="size-4" />}
-            name="Note"
-            count={patient.notesList.length}
-            last={latestNote?.text ?? ""}
-            time={latestNote?.date ?? ""}
-            onReadFull={() => {
-              if (!latestNote) return;
-              setReadFull({ kind: "note", time: latestNote.date, text: latestNote.text });
-            }}
-            onViewAll={() => onOpenWorkspace("notes")}
-          />
-        </div>
+            setNotificationOpen(true);
+          }}
+          className="inline-flex items-center gap-2 rounded-lg bg-[#A8421F] px-3.5 py-2 text-sm font-semibold text-white hover:opacity-90"
+        >
+          <Send className="size-3.5" /> Send notification
+        </button>
       </div>
 
       <div className="mb-4 rounded-xl border border-line bg-white px-4 py-3">
@@ -306,67 +336,105 @@ function toDisplay(iso: string): string {
 }
 
 /**
- * One "Messages & notes" row: count + kind, the latest item truncated, "Read
- * full", and "View all" — the design's `comm()`.
+ * One compact "Messages" / "Notes" tile, the design's `ctile()`: icon, label,
+ * count badge, short date and truncated latest item, with a "read latest" eye
+ * and a click that opens the workspace tab.
+ *
+ * The badge shows what matters for its kind: the Messages tile displays the
+ * thread's unread count, tinted red only when there are unread messages (and
+ * `0` in the neutral grey otherwise); the Notes tile displays the note count,
+ * always neutral. `hasContent` — whether the thread/notes exist at all — drives
+ * the icon's accent, the preview line and the eye button.
  */
-function CommRow({
-  icon,
-  name,
+function CommTile({
+  kind,
   count,
+  hasContent,
   last,
   time,
+  badgeRed = false,
   onReadFull,
   onViewAll,
 }: {
-  icon: React.ReactNode;
-  name: string;
+  kind: "message" | "note";
   count: number;
+  hasContent: boolean;
   last: string;
   time: string;
+  badgeRed?: boolean;
   onReadFull: () => void;
   onViewAll: () => void;
 }) {
+  const isMessage = kind === "message";
   return (
-    <div className="flex items-center gap-3 py-2">
-      <span className="flex w-28 shrink-0 items-center gap-1.5 text-sm font-semibold text-[#0B5D52]">
-        {icon}
-        {count} {count === 1 ? name : `${name}s`}
-      </span>
-      {count > 0 ? (
-        <>
-          <p className="min-w-0 flex-1 truncate text-sm text-[#101827]/80">
-            {time ? <span className="text-[#6B7280]">{time} · </span> : null}
-            {last}
-          </p>
-          <button
-            type="button"
-            onClick={onReadFull}
-            className="shrink-0 rounded-md border border-line px-2.5 py-1 text-xs font-medium hover:border-[#0B5D52] hover:text-[#0B5D52]"
-          >
-            Read full
-          </button>
-          <button
-            type="button"
-            onClick={onViewAll}
-            className="hidden shrink-0 text-xs font-medium text-[#0B5D52] hover:underline sm:block"
-          >
-            View all
-          </button>
-        </>
-      ) : (
-        <p className="flex-1 text-sm text-[#6B7280]">Nothing yet.</p>
-      )}
+    <div className="flex min-w-0 flex-1 basis-64 items-center gap-1 rounded-xl border border-line bg-white pr-1.5 transition hover:border-primary">
+      <button
+        type="button"
+        onClick={onViewAll}
+        title={`View all ${isMessage ? "messages" : "notes"}`}
+        className="flex min-w-0 flex-1 items-center gap-3 rounded-xl px-3 py-2 text-left"
+      >
+        <span
+          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
+            isMessage && hasContent ? "bg-[#F6E4DC] text-[#A8421F]" : "bg-primary-soft text-primary"
+          }`}
+        >
+          {isMessage ? (
+            <MessageSquare className="size-[18px]" />
+          ) : (
+            <StickyNote className="size-[18px]" />
+          )}
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="flex items-center gap-2">
+            <span className="text-sm font-semibold">{isMessage ? "Messages" : "Notes"}</span>
+            <span
+              className={`rounded-full px-1.5 text-[11px] font-bold ${
+                badgeRed ? "bg-[#A8421F] text-white" : "bg-[#F3F4F1] text-[#6B7280]"
+              }`}
+            >
+              {count}
+            </span>
+            {hasContent && time ? <span className="ml-auto text-[11px] text-[#6B7280]">{shortDate(time)}</span> : null}
+          </span>
+          <span className={`block truncate text-xs ${hasContent ? "text-[#101827]/70" : "text-[#6B7280]"}`}>
+            {hasContent ? last : isMessage ? "No messages yet" : "No notes yet"}
+          </span>
+        </span>
+      </button>
+      {hasContent ? (
+        <button
+          type="button"
+          onClick={onReadFull}
+          title={`Read latest ${isMessage ? "message" : "note"}`}
+          aria-label={`Read latest ${isMessage ? "message" : "note"}`}
+          className="shrink-0 rounded-lg p-2 text-[#6B7280] hover:bg-primary-soft hover:text-primary"
+        >
+          <Eye className="size-4" />
+        </button>
+      ) : null}
     </div>
   );
 }
 
+/** First three letters of each month, for parsing API date stamps. */
+const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+
 /**
- * Dummy messages row until the summary payload carries real conversation data:
- * the design demos count 1 + a welcome message, so the count is 1 until it is
- * confirmed against real conversations.
+ * The tile's short creation date, `MM/DD`, from whatever the backend formats:
+ * the design sample and sidebar give `MM/DD/YYYY · HH:MM`, the thread API gives
+ * `M d · H:i` (no slashes), and notes give `YYYY-MM-DD` for the date input.
+ * Empty when no date-shaped fragment is found.
  */
-const PLACEHOLDER_MESSAGES = {
-  count: 1,
-  last: "Welcome to ChiroThin Dr. I'm excited to begin my program and work with you toward my goals!",
-  time: "",
-} as const;
+function shortDate(value: string): string {
+  const slash = value.match(/\d{1,2}\/\d{1,2}/);
+  if (slash) return slash[0];
+  const dash = value.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (dash) return `${dash[2]}/${dash[3]}`;
+  const named = value.match(/[A-Za-z]{3}[a-z]*\s+(\d{1,2})/);
+  if (named) {
+    const month = MONTHS.indexOf(named[0].slice(0, 3).toLowerCase()) + 1;
+    if (month) return `${String(month).padStart(2, "0")}/${named[1].padStart(2, "0")}`;
+  }
+  return "";
+}

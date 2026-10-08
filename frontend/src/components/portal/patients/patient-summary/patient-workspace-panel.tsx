@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { Maximize, Minimize } from "lucide-react";
 import type { PatientSummaryRow } from "@/lib/patients/summary";
 import { SummarySectionStatus, useSummaryData } from "./summary-data-provider";
 import { SECTION_FIELDS, type SummarySection } from "@/lib/patients/summary";
@@ -41,6 +42,10 @@ import { IntakeTab } from "./intake-tab";
  * excluded from the section load below and renders outside the section
  * status/guard. Its count lands through `MessagesTab`'s callback once the
  * thread has been read, like the other late counts.
+ *
+ * The header's Full screen toggle, from the design's `drawWS()`, widens the
+ * panel to the viewport and centres its content on a `max-w-6xl` column; the
+ * `fullScreen` flag drives both the aside's width and the body's wrapper class.
  */
 export function PatientWorkspacePanel({
   patient,
@@ -65,6 +70,8 @@ export function PatientWorkspacePanel({
    */
   const [messagesCount, setMessagesCount] = useState<{ patientId: number; count: number } | null>(null);
   const reportMessageCount = useCallback((count: number) => setMessagesCount({ patientId: patientId ?? 0, count }), [patientId]);
+  /** Whether the panel spans the full viewport instead of its default width. */
+  const [fullScreen, setFullScreen] = useState(false);
 
   if (!patient) return null;
 
@@ -78,6 +85,7 @@ export function PatientWorkspacePanel({
   function handleClose() {
     setActiveSessionForm(null);
     setMessagesCount(null);
+    setFullScreen(false);
     onClose();
   }
 
@@ -100,7 +108,7 @@ export function PatientWorkspacePanel({
       <aside
         role="dialog"
         aria-modal="true"
-        className="flex h-full w-full max-w-4xl flex-col bg-[#F3F4F1] shadow-2xl"
+        className={`flex h-full flex-col bg-[#F3F4F1] shadow-2xl ${fullScreen ? "w-full" : "w-full max-w-4xl"}`}
         onClick={(e) => e.stopPropagation()}
       >
         <header className="border-b border-line bg-white px-5 pt-4 sm:px-8">
@@ -122,6 +130,16 @@ export function PatientWorkspacePanel({
                 {patient.program}
               </span>
             </div>
+            <button
+              type="button"
+              onClick={() => setFullScreen((current) => !current)}
+              aria-label={fullScreen ? "Exit full screen" : "Full screen"}
+              title={fullScreen ? "Exit full screen" : "Full screen"}
+              className="hidden items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-sm font-semibold hover:border-[#0B5D52] md:inline-flex"
+            >
+              {fullScreen ? <Minimize className="size-4" /> : <Maximize className="size-4" />}
+              <span className="hidden lg:inline">{fullScreen ? "Exit full screen" : "Full screen"}</span>
+            </button>
             <button
               type="button"
               onClick={handleClose}
@@ -155,6 +173,7 @@ export function PatientWorkspacePanel({
           </nav>
         </header>
         <div className="flex-1 overflow-y-auto px-5 py-6 sm:px-8">
+          <div className={fullScreen ? "mx-auto max-w-6xl" : undefined}>
           {tab === "messages" ? (
             <MessagesTab
               key={patient.id}
@@ -213,6 +232,7 @@ export function PatientWorkspacePanel({
               )}
             </>
           )}
+          </div>
         </div>
       </aside>
     </div>,
