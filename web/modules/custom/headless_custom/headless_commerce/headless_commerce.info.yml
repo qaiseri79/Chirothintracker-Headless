@@ -1,0 +1,10 @@
+name: 'Headless Commerce'
+type: module
+description: 'Headless multi-merchant catalog, checkout, and payment routing.'
+package: Headless Custom
+core_version_requirement: ^9 || ^10
+dependencies:
+  - commerce:commerce_store
+  - commerce:commerce_product
+  - commerce:commerce_payment
+  - headless_custom:headless_clinic

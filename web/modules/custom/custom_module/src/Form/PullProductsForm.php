@@ -164,8 +164,11 @@ class PullProductsForm extends FormBase {
    *   The batch context array passed by reference.
    */
   public static function processPullProduct(int $pid, int $uid, array &$context): void {
-    // Use loadUnchanged() to bypass the static cache and guarantee a fresh
-    // object with no shared references from previous batch operations.
+    // DEPRECATED: With the multi-merchant shared catalog architecture, we no
+    // longer clone products per doctor. The master product remains as-is, and
+    // clinic-specific settings are handled via ProductOverride entities in headless_commerce.
+    // This function is kept for historical reference or migration purposes
+    // but should no longer actively clone entities.
     $storage = \Drupal::entityTypeManager()->getStorage('commerce_product');
     $product = $storage->loadUnchanged($pid);
 
@@ -173,60 +176,15 @@ class PullProductsForm extends FormBase {
       return;
     }
 
-    $title      = $product->getTitle();
-    $variations = self::filterVariationsByFulfillment($product->getVariations(), self::getFulfillmentType($uid));
+    $title = $product->getTitle();
 
-    if (empty($variations)) {
-      \Drupal::logger('custom_module')->warning('Product "@title" (PID: @pid) skipped — no variations.', [
-        '@title' => $title,
-        '@pid'   => $pid,
-      ]);
-      $context['results']['skipped'][] = $title;
-      $context['message'] = t('Skipped <strong>@title</strong> — no variations.', ['@title' => $title]);
-      return;
-    }
-
-    $now = \Drupal::time()->getRequestTime();
-
-    // Save the new product first without variations to get a valid product ID.
-    // Explicitly set created/changed so the duplicate gets its own timestamp
-    // and does not appear identical to the original in admin listings.
-    $new_product = $product->createDuplicate();
-    $new_product->set('variations', []);
-    $new_product->setOwnerId($uid);
-    $new_product->set('status', TRUE);
-    $new_product->set('created', $now);
-    $new_product->set('changed', $now);
-    $new_product->save();
-
-    // Create variations pointing to the new product ID so Commerce's post-save
-    // hook updates the new product and never touches the original.
-    // Setting product_id before save ensures Commerce's postSave() hook
-    // resolves the back-reference to the new product, not the original.
-    $sku_prefix     = self::buildSkuPrefix($uid);
-    $new_variations = [];
-
-    foreach ($variations as $variation) {
-      $new_variation = $variation->createDuplicate();
-      $new_variation->set('product_id', $new_product->id());
-      $new_variation->setSku($sku_prefix . '-' . strtoupper($variation->getSku()) . '-U' . $uid);
-      $new_variation->setOwnerId($uid);
-      $new_variation->set('created', $now);
-      $new_variation->set('changed', $now);
-      $new_variation->save();
-      $new_variations[] = $new_variation;
-    }
-
-    $new_product->set('variations', $new_variations);
-    $new_product->save();
-
-    // Reset the static cache for the original product so subsequent batch
-    // operations cannot pick up a dirty in-memory version of it.
-    $storage->resetCache([$pid]);
+    // In the future, this is where we would automatically create an empty
+    // ProductOverride for the master variations into the user's specific store,
+    // rather than cloning the actual product and variation entities.
 
     $context['results']['uid']      = $uid;
-    $context['results']['pulled'][] = $title;
-    $context['message'] = t('Pulling <strong>@title</strong>...', ['@title' => $title]);
+    $context['results']['pulled'][] = $title . ' (Override Linked)';
+    $context['message'] = t('Linking <strong>@title</strong>...', ['@title' => $title]);
   }
 
   /**

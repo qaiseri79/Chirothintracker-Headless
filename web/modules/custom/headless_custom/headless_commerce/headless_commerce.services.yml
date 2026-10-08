@@ -1,0 +1,13 @@
+services:
+  headless_commerce.payment_gateway_filter_subscriber:
+    class: Drupal\headless_commerce\EventSubscriber\PaymentGatewayFilterSubscriber
+    tags:
+      - { name: event_subscriber }
+  headless_commerce.product_override_price_resolver:
+    class: Drupal\headless_commerce\Plugin\Commerce\PriceResolver\ProductOverridePriceResolver
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: commerce_price.price_resolver, priority: 600 }
+  headless_commerce.commerce_service:
+    class: Drupal\headless_commerce\CommerceService
+    arguments: ['@entity_type.manager', '@headless_clinic.clinic', '@commerce_cart.cart_manager']

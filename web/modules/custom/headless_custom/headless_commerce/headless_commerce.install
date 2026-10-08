@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function headless_commerce_install() {
+  $manager = \Drupal::entityDefinitionUpdateManager();
+  if (!$manager->getEntityType('product_override')) {
+    $manager->installEntityType(\Drupal::entityTypeManager()->getDefinition('product_override'));
+  }
+}
+
+/**
+ * Update hook to install product_override entity.
+ */
+function headless_commerce_update_10001() {
+  $manager = \Drupal::entityDefinitionUpdateManager();
+  if (!$manager->getEntityType('product_override')) {
+    $manager->installEntityType(\Drupal::entityTypeManager()->getDefinition('product_override'));
+  }
+}
