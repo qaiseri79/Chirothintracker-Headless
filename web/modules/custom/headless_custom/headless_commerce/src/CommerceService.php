@@ -52,25 +52,58 @@ class CommerceService {
       throw new ClinicException('API Login ID and Transaction Key are required.', 422);
     }
 
-    // Validate Authorize.net credentials using commerceguys/authnet SDK.
+    // Validate Authorize.net credentials using a raw Guzzle HTTP request
+    // to bypass any vendor SDK version mismatches or missing methods.
     try {
-      $config = new \CommerceGuys\AuthNet\Configuration([
-        'api_login' => $login_id,
-        'transaction_key' => $transaction_key,
-        'sandbox' => TRUE,
-      ]);
       $client = \Drupal::httpClient();
+      $payload = [
+        'authenticateTestRequest' => [
+          'merchantAuthentication' => [
+            'name' => $login_id,
+            'transactionKey' => $transaction_key,
+          ],
+        ],
+      ];
 
-      // We manually construct the authenticateTestRequest JSON payload
-      // since the commerceguys/authnet package provides a generic JsonRequest wrapper.
-      $request = new \CommerceGuys\AuthNet\Request\JsonRequest($config, $client, 'authenticateTestRequest');
-      $response = $request->send();
+      // Determine the environment endpoint. We default to live unless explicitly configured for testing.
+      // E.g., reading from settings.php: $settings['headless_commerce_sandbox'] = TRUE;
+      // Or looking at the incoming payload if the UI supports a toggle.
+      // For now, assume live unless the payload specifies test mode, or settings dictates it.
+      $is_sandbox = \Drupal\Core\Site\Settings::get('headless_commerce_sandbox', FALSE);
+      if (isset($body['mode']) && $body['mode'] === 'test') {
+         $is_sandbox = TRUE;
+      }
+      $endpoint = $is_sandbox ? 'https://apitest.authorize.net/xml/v1/request.api' : 'https://api2.authorize.net/xml/v1/request.api';
 
-      if ($response->getMessages()[0]->getResultCode() !== 'Ok') {
-          throw new ClinicException('Invalid Authorize.net credentials.', 422);
+      $response = $client->post($endpoint, [
+        'json' => $payload,
+        'headers' => ['Content-Type' => 'application/json'],
+        'http_errors' => false,
+      ]);
+
+      if ($response->getStatusCode() !== 200) {
+        throw new ClinicException('Unable to communicate with Authorize.net.', 502);
+      }
+
+      $raw_body = $response->getBody()->getContents();
+
+      // The API often returns a Byte Order Mark (BOM) before the JSON string
+      $cleaned_body = preg_replace('/^[\xef\xbb\xbf]+/', '', $raw_body);
+
+      $body = json_decode($cleaned_body, TRUE);
+
+      if (json_last_error() !== JSON_ERROR_NONE || !isset($body['messages'])) {
+          throw new ClinicException('Invalid response from Authorize.net: ' . json_last_error_msg(), 502);
+      }
+
+      if (($body['messages']['resultCode'] ?? '') !== 'Ok') {
+        // Extract exact API error text to help debugging
+        $error_text = $body['messages']['message'][0]['text'] ?? 'Invalid Authorize.net credentials.';
+        throw new ClinicException($error_text, 422);
       }
     } catch (\Exception $e) {
-      throw new ClinicException('Invalid Authorize.net credentials: ' . $e->getMessage(), 422);
+      if ($e instanceof ClinicException) throw $e;
+      throw new ClinicException('Invalid Authorize.net credentials. Connection failed.', 422);
     }
 
     // Save keys using the Key module with the 'file' provider.

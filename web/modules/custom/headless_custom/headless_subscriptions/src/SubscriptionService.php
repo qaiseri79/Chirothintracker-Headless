@@ -588,13 +588,19 @@ final class SubscriptionService {
     if (!$this->lock->acquire($lock, 180)) throw new SubscriptionException('busy', 'A subscription operation is already in progress.', 409);
 
     try {
-      // Un-cancel at the gateway if a subscription_id exists.
+      // To resume, we must re-establish an active ARB schedule with Authorize.Net.
+      // If the gateway ARB was literally cancelled (which it is immediately upon our cancel request),
+      // it cannot be "resumed" in the API. We must create a new one.
       if ($p['subscription_id']) {
-        // Authorize.Net doesn't strictly have a "resume" for cancelled ARB if it's terminated,
-        // but if we are just un-flagging a pending cancellation before it expired...
-        // For the sake of the headless logic, we revert the local flag.
-        // If the gateway ARB was literally cancelled, we'd have to recreate it.
-        // The prompt asked for "Resume Subscription" flow.
+          // Re-create the ARB subscription at the gateway starting at the paid_until date
+          $new_subscription_id = $this->gateway->createSubscription(
+              $p['profile_id'],
+              $p['payment_profile_id'],
+              $p['plan'],
+              $p['reference'],
+              $p['paid_until']
+          );
+          $p['subscription_id'] = $new_subscription_id;
       }
 
       $p['state'] = 'active';

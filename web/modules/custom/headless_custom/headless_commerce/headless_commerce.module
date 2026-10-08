@@ -67,6 +67,9 @@ function headless_commerce_entity_access(EntityInterface $entity, $operation, Ac
 
       // Check if the store's payment gateway is operational.
       // Do not loop over all gateways. Load the specific gateway deterministically in O(1) time.
+      if (!$clinic) {
+        return AccessResult::forbidden('Store owner has no clinic configuration.');
+      }
       $gateway_storage = \Drupal::entityTypeManager()->getStorage('commerce_payment_gateway');
       $gateway_id = 'clinic_' . $clinic->id() . '_authnet';
       $gateway = $gateway_storage->load($gateway_id);
