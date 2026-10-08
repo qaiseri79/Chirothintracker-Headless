@@ -1,6 +1,7 @@
 _core:
   default_config_hash: R4IF-ClDHXxblLcG0L7MgsLvfBIMAvi_skumNFQwkDc
 module:
+  key: 0
   action: 0
   actions_permissions: 0
   address: 0
@@ -68,6 +69,7 @@ module:
   ctt_patient_intake: 0
   ctt_shop: 0
   custom_module: 0
+  key: 0
   datetime: 0
   datetime_range: 0
   dblog: 0

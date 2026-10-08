@@ -74,3 +74,12 @@ headless_commerce.custom_products_delete:
     _custom_access: '\Drupal\headless_access\Access\WriteChiropractorAccess::access'
   options:
     no_cache: TRUE
+
+headless_commerce.add_to_cart:
+  path: '/api/headless/commerce/add-to-cart'
+  defaults:
+    _controller: '\Drupal\headless_commerce\Controller\CommerceController::handle'
+    action: 'add_to_cart'
+  methods: [POST]
+  requirements:
+    _user_is_logged_in: 'TRUE'

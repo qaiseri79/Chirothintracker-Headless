@@ -50,20 +50,6 @@ final class Registration {
       $clinic->setOwnerId((int) $user->id()); $clinic->save();
       $location = $this->entities->getStorage('clinic')->create(['type' => 'clinic_location', 'title' => $clinicName . ' (Location)', 'uid' => $user->id(), 'field_clinic' => $clinic->id()]);
       $location->save();
-
-      // Generate a commerce store for this new clinic owner.
-      $store = $this->entities->getStorage('commerce_store')->create([
-        'type' => 'online',
-        'name' => $clinicName . ' Store',
-        'uid' => $user->id(),
-        'default_currency' => 'USD',
-        'mail' => $email,
-        'address' => [
-          'country_code' => 'US',
-        ],
-      ]);
-      $store->save();
-
       $this->repository->addAccount((int) $user->id(), (int) $clinic->id(), $this->time->getCurrentTime());
       return ['id' => (int) $user->id(), 'clinicId' => (int) $clinic->id(), 'requiresLogin' => TRUE, 'subscriptionStatus' => 'none'];
     }

@@ -53,7 +53,6 @@ final class SubscriptionService {
       'cancel' => $p && !empty($p['subscription_id']) && !$p['cancel_requested'],
       'changePlan' => $p && $p['state'] === 'active' && !$p['cancel_requested'] && empty($p['pending_change']) && empty($p['review_reason']) && (int) $p['paid_until'] > $this->time->getCurrentTime() + 86400,
       'resubscribe' => (!$p || ((int) $p['paid_until'] <= $this->time->getCurrentTime() && (empty($p['subscription_id']) || $p['cancel_requested']))) && !($result['subscription']['needsReview'] ?? FALSE),
-      'resume' => $p && $p['cancel_requested'] && (int) $p['paid_until'] > $this->time->getCurrentTime() && !($result['subscription']['needsReview'] ?? FALSE),
     ];
     return $result;
   }
@@ -228,27 +227,6 @@ final class SubscriptionService {
   private function sameContext(array $purchase): void {
     if (!hash_equals($purchase['context'], $this->gateway->context())) throw new SubscriptionException('billing_account_changed', 'This purchase belongs to a different billing environment or account.', 409);
   }
-  public function resume(int $uid): array {
-    $this->requireAccount($uid);
-    $lock = 'headless_subscription.account.' . $uid;
-    if (!$this->lock->acquire($lock, 90)) throw new SubscriptionException('busy', 'A subscription operation is already in progress.', 409);
-    try {
-      $p = $this->repository->current($uid);
-      if (!$p) throw new SubscriptionException('subscription_missing', 'There is no subscription to resume.', 404);
-      $this->sameContext($p);
-      if (!$p['cancel_requested'] || (int) $p['paid_until'] <= $this->time->getCurrentTime()) throw new SubscriptionException('resume_unavailable', 'This subscription cannot be resumed.', 409);
-      if (!empty($p['pending_change'])) throw new SubscriptionException('schedule_confirmation_required', 'A pending plan change must be confirmed before resuming.', 409);
-
-      // Recreate the ARB schedule starting at the end of the paid period.
-      $p['subscription_id'] = $this->gateway->schedule($p);
-      $p['cancel_requested'] = 0;
-      $p['state'] = 'active';
-      $this->repository->save($p); $this->syncRoles($uid);
-      return $this->status($uid);
-    }
-    finally { $this->lock->release($lock); }
-  }
-
   public function cancel(int $uid): array {
     $this->requireAccount($uid);
     $lock = 'headless_subscription.account.' . $uid;
@@ -311,7 +289,41 @@ final class SubscriptionService {
       $user->save();
     }
     $clinic = $this->entities->getStorage('clinic')->load((int) $account['clinic_id']);
-    if ($clinic && $clinic->hasField('field_ecommerce_enabled') && (bool) $clinic->get('field_ecommerce_enabled')->value !== $caps['store']) { $clinic->set('field_ecommerce_enabled', $caps['store']); $clinic->save(); }
+    if ($clinic && $clinic->hasField('field_ecommerce_enabled') && (bool) $clinic->get('field_ecommerce_enabled')->value !== $caps['store']) {
+      $clinic->set('field_ecommerce_enabled', $caps['store']);
+      $clinic->save();
+
+      // Handle the store and gateway toggle.
+      $store_storage = $this->entities->getStorage('commerce_store');
+      $stores = $store_storage->loadByProperties(['uid' => $clinic->getOwnerId()]);
+      if (!empty($stores)) {
+        $store = reset($stores);
+
+        $store_changed = FALSE;
+        // Unpublish the store if commerce cap is revoked, publish if granted.
+        $store_status = $caps['store'] ? TRUE : FALSE;
+        if ((bool) $store->isPublished() !== $store_status) {
+          if ($store_status) {
+            $store->setPublished();
+          } else {
+            $store->setUnpublished();
+          }
+          $store->save();
+        }
+
+        // Also toggle the payment gateway.
+        $gateway_storage = $this->entities->getStorage('commerce_payment_gateway');
+        $gateway_id = 'clinic_' . $clinic->id() . '_authnet';
+        $gateway = $gateway_storage->load($gateway_id);
+        if ($gateway) {
+          $gateway_status = $caps['store'] ? TRUE : FALSE;
+          if ((bool) $gateway->status() !== $gateway_status) {
+            $gateway->setStatus($gateway_status);
+            $gateway->save();
+          }
+        }
+      }
+    }
   }
   public function managesClinic(int $clinicId): bool {
     return $this->repository->accountForClinic($clinicId) !== NULL;

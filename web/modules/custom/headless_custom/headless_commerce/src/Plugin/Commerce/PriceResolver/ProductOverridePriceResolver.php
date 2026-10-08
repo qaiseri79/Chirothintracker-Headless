@@ -23,16 +23,29 @@ class ProductOverridePriceResolver implements PriceResolverInterface {
       return NULL;
     }
 
+    // Prioritize the store from the context (which in checkout comes from the order).
     $store = $context->getStore();
     if (!$store) {
       return NULL;
     }
 
+    // Load overrides by store and product variation.
+    // In our implementation, product_id might be used instead of variation_id, or both.
+    // Ensure we handle whichever one was saved in CommerceService.
     $overrides = $this->entityTypeManager->getStorage('product_override')->loadByProperties([
       'store_id' => $store->id(),
       'variation_id' => $entity->id(),
       'status' => 1,
     ]);
+
+    // Fallback to checking by product_id if the override is applied at the product level.
+    if (empty($overrides)) {
+        $overrides = $this->entityTypeManager->getStorage('product_override')->loadByProperties([
+            'store_id' => $store->id(),
+            'product_id' => $entity->getProductId(),
+            'status' => 1,
+        ]);
+    }
 
     if (!empty($overrides)) {
       $override = reset($overrides);

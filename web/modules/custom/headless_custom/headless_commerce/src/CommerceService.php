@@ -52,9 +52,70 @@ class CommerceService {
       throw new ClinicException('API Login ID and Transaction Key are required.', 422);
     }
 
+    // Validate Authorize.net credentials before saving.
+    $authRequest = new \net\authorize\api\contract\v1\MerchantAuthenticationType();
+    $authRequest->setName($login_id);
+    $authRequest->setTransactionKey($transaction_key);
+
+    $request = new \net\authorize\api\contract\v1\AuthenticateTestRequest();
+    $request->setMerchantAuthentication($authRequest);
+
+    $controller = new \net\authorize\api\controller\AuthenticateTestController($request);
+    $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+
+    if ($response == null || $response->getMessages()->getResultCode() != "Ok") {
+        throw new ClinicException('Invalid Authorize.net credentials.', 422);
+    }
+
+    // Save keys using the Key module with the 'file' provider.
+    $key_storage = $this->entityTypeManager->getStorage('key');
+
+    // Helper function to create or update a key
+    $save_key = function($id, $label, $value) use ($key_storage) {
+      $key = $key_storage->load($id);
+      $filepath = 'private://keys/' . $id . '.key';
+
+      // Ensure private keys directory exists
+      $dir = 'private://keys';
+      \Drupal::service('file_system')->prepareDirectory($dir, \Drupal\Core\File\FileSystemInterface::CREATE_DIRECTORY | \Drupal\Core\File\FileSystemInterface::MODIFY_PERMISSIONS);
+
+      file_put_contents(\Drupal::service('file_system')->realpath($filepath), $value);
+
+      if (!$key) {
+        $key = $key_storage->create([
+          'id' => $id,
+          'label' => $label,
+          'key_provider' => 'file',
+          'key_provider_settings' => [
+            'file_location' => $filepath,
+            'base64_encoded' => FALSE,
+          ],
+          'key_type' => 'authentication',
+        ]);
+        $key->save();
+      }
+      return $key->id();
+    };
+
+    $login_key_id = $save_key('clinic_' . $clinic->id() . '_authnet_login', 'Clinic ' . $clinic->id() . ' AuthNet Login', $login_id);
+    $tran_key_id = $save_key('clinic_' . $clinic->id() . '_authnet_tran', 'Clinic ' . $clinic->id() . ' AuthNet Tran Key', $transaction_key);
+    $client_key_id = $save_key('clinic_' . $clinic->id() . '_authnet_client', 'Clinic ' . $clinic->id() . ' AuthNet Client Key', $public_client_key);
+
     $store = $this->getStoreForClinic($clinic);
+
+    // Opt-in: Create the store if it does not exist yet.
     if (!$store) {
-      throw new ClinicException('Commerce store not found for this clinic.', 404);
+      $store = $this->entityTypeManager->getStorage('commerce_store')->create([
+        'type' => 'online',
+        'name' => $clinic->label() . ' Store',
+        'uid' => $actor->id(),
+        'default_currency' => 'USD',
+        'mail' => $actor->getEmail(),
+        'address' => [
+          'country_code' => 'US',
+        ],
+      ]);
+      $store->save();
     }
 
     // Find or create the payment gateway for this store.
@@ -68,30 +129,42 @@ class CommerceService {
         'label' => 'Clinic ' . $clinic->id() . ' Authorize.net',
         'plugin' => 'authorizenet_acceptjs', // Standard authorize.net plugin ID
         'configuration' => [
-          'api_login_id' => $login_id,
-          'transaction_key' => $transaction_key,
-          'client_key' => $public_client_key,
+          'api_login' => $login_key_id,
+          'transaction_key' => $tran_key_id,
+          'client_key' => $client_key_id,
           'mode' => 'test',
           'payment_action' => 'authorize_and_capture',
           'collect_billing_information' => TRUE,
         ],
+        // Restrict this payment gateway exclusively to this store natively.
+        'conditions' => [
+          [
+            'plugin' => 'order_store',
+            'configuration' => [
+              'stores' => [$store->uuid() => $store->uuid()],
+            ],
+          ]
+        ],
+        'conditionOperator' => 'AND',
       ]);
     } else {
       $configuration = $gateway->getPluginConfiguration();
-      $configuration['api_login_id'] = $login_id;
-      $configuration['transaction_key'] = $transaction_key;
-      $configuration['client_key'] = $public_client_key;
+      $configuration['api_login'] = $login_key_id;
+      $configuration['transaction_key'] = $tran_key_id;
+      $configuration['client_key'] = $client_key_id;
       $gateway->setPluginConfiguration($configuration);
+
+      // Ensure condition remains enforced.
+      $gateway->set('conditions', [
+        [
+          'plugin' => 'order_store',
+          'configuration' => [
+            'stores' => [$store->uuid() => $store->uuid()],
+          ],
+        ]
+      ]);
     }
     $gateway->save();
-
-    // Link gateway to the store
-    if ($store->hasField('field_payment_gateway')) {
-      $store->set('field_payment_gateway', $gateway->id());
-      $store->save();
-    } else {
-      throw new ClinicException('The store is missing the field_payment_gateway configuration.', 500);
-    }
 
     return ['success' => TRUE];
   }
@@ -287,5 +360,67 @@ class CommerceService {
 
     $product->delete();
     return ['success' => TRUE];
+  }
+
+  public function addToCart(AccountInterface $actor, array $body): array {
+    $variation_id = (int) ($body['variation_id'] ?? 0);
+    $quantity = (int) ($body['quantity'] ?? 1);
+
+    if (!$variation_id || $quantity <= 0) {
+      throw new ClinicException('Invalid variation ID or quantity.', 422);
+    }
+
+    $variation = $this->entityTypeManager->getStorage('commerce_product_variation')->load($variation_id);
+    if (!$variation) {
+      throw new ClinicException('Product variation not found.', 404);
+    }
+
+    // Determine the doctor's store for the current patient/actor.
+    // In our architecture, the patient might be tied to a doctor via another module,
+    // or the doctor is the current user (if they are testing).
+    // The instructions say: "Build a custom add-to-cart endpoint that explicitly gets or creates the cart for the patient's doctor's store"
+    // So we use ClinicStoreResolver or logic to find the store.
+
+    $store_resolver = \Drupal::service('headless_commerce.clinic_store_resolver');
+    $store = $store_resolver->resolve();
+
+    if (!$store || !$store->isPublished()) {
+      throw new ClinicException('The clinic store is currently disabled.', 403);
+    }
+
+    // Validate that the doctor has an enabled ProductOverride for the product if it's a shared catalog product.
+    $product = $variation->getProduct();
+    // Assuming 'type' == 'default' is the shared master product type
+    if ($product->bundle() === 'default') {
+      $override_storage = $this->entityTypeManager->getStorage('product_override');
+      $overrides = $override_storage->loadByProperties([
+        'store_id' => $store->id(),
+        'product_id' => $product->id(),
+        'status' => 1,
+      ]);
+
+      if (empty($overrides)) {
+        throw new ClinicException('This product is not currently available from your clinic.', 403);
+      }
+    }
+
+    // Now explicitly get or create the cart in the doctor's store.
+    $cart_provider = \Drupal::service('commerce_cart.cart_provider');
+    $cart_manager = \Drupal::service('commerce_cart.cart_manager');
+
+    // Create or get the default order type cart.
+    $cart = $cart_provider->getCart('default', $store, $actor);
+    if (!$cart) {
+      $cart = $cart_provider->createCart('default', $store, $actor);
+    }
+
+    // Add entity to cart
+    $order_item = $cart_manager->addEntity($cart, $variation, $quantity);
+
+    return [
+      'message' => 'Item added to cart',
+      'cart_id' => $cart->id(),
+      'item_id' => $order_item->id(),
+    ];
   }
 }
