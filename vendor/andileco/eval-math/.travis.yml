@@ -1,0 +1,21 @@
+language: php
+
+before_script:
+  - composer self-update
+  - composer config platform.php $PHP_VERSION
+  - composer install --prefer-source --no-interaction --dev
+
+matrix:
+  fast_finish: true
+  include:
+    - php: '5.6'
+      env: PHP_VERSION=5.6
+    - php: '7.0'
+      env: PHP_VERSION=7.0
+    - php: '7.1'
+      env: PHP_VERSION=7.1
+    - php: '7.2'
+      env: PHP_VERSION=7.2
+
+after_success:
+  - php vendor/bin/php-coveralls -v

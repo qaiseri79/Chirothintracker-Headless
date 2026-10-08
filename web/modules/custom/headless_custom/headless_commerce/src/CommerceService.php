@@ -87,18 +87,24 @@ class CommerceService {
 
       $raw_body = $response->getBody()->getContents();
 
-      // The API often returns a Byte Order Mark (BOM) before the JSON string
-      $cleaned_body = preg_replace('/^[\xef\xbb\xbf]+/', '', $raw_body);
+      // The API often returns a Byte Order Mark (BOM) before the JSON string.
+      // To be completely robust, we locate the first '{' character and slice the string.
+      $start = strpos($raw_body, '{');
+      if ($start !== false) {
+          $cleaned_body = substr($raw_body, $start);
+      } else {
+          $cleaned_body = $raw_body; // Fallback
+      }
 
-      $body = json_decode($cleaned_body, TRUE);
+      $api_response = json_decode($cleaned_body, TRUE);
 
-      if (json_last_error() !== JSON_ERROR_NONE || !isset($body['messages'])) {
+      if (json_last_error() !== JSON_ERROR_NONE || !isset($api_response['messages'])) {
           throw new ClinicException('Invalid response from Authorize.net: ' . json_last_error_msg(), 502);
       }
 
-      if (($body['messages']['resultCode'] ?? '') !== 'Ok') {
+      if (($api_response['messages']['resultCode'] ?? '') !== 'Ok') {
         // Extract exact API error text to help debugging
-        $error_text = $body['messages']['message'][0]['text'] ?? 'Invalid Authorize.net credentials.';
+        $error_text = $api_response['messages']['message'][0]['text'] ?? 'Invalid Authorize.net credentials.';
         throw new ClinicException($error_text, 422);
       }
     } catch (\Exception $e) {
