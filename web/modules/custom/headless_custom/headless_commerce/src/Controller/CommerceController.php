@@ -35,6 +35,7 @@ class CommerceController extends ControllerBase {
         'custom_products_read' => $service->readCustomProducts($actor),
         'custom_products_create' => $service->createCustomProduct($actor, $body),
         'custom_products_delete' => $service->deleteCustomProduct($actor, (int) $id),
+        'add_to_cart' => $service->addToCart($actor, $body),
         default => throw new ClinicException('Unknown commerce operation.', 404),
       };
 

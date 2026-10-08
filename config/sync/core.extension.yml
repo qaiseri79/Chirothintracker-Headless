@@ -68,6 +68,7 @@ module:
   ctt_patient_intake: 0
   ctt_shop: 0
   custom_module: 0
+  key: 0
   datetime: 0
   datetime_range: 0
   dblog: 0

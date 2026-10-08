@@ -9,6 +9,7 @@ const ENDPOINTS: Record<string, { method: "GET" | "POST" | "PATCH" | "DELETE", k
   "catalog/override": { method: "POST", keys: ["variationId", "priceMinor", "status"] },
   "custom-products": { method: "GET" },
   "custom-products/create": { method: "POST", keys: ["title", "sku", "priceMinor"] },
+  "add-to-cart": { method: "POST", keys: ["variation_id", "quantity"] },
 };
 
 async function proxy(request: Request, path: string, payload?: unknown) {

@@ -8,3 +8,4 @@ dependencies:
   - commerce:commerce_product
   - commerce:commerce_payment
   - headless_custom:headless_clinic
+  - key:key

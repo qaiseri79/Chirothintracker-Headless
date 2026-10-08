@@ -1,0 +1,126 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Headless Commerce module.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\commerce_order\Entity\OrderInterface;
+
+/**
+ * Implements hook_entity_access().
+ *
+ * Enforce strict checkout and cart access for multi-merchant headless commerce.
+ */
+function headless_commerce_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  if ($entity->getEntityTypeId() === 'commerce_payment_gateway') {
+    // Explicitly block UI updates to programmatically managed clinic gateways.
+    // ConfigFactoryOverride injects plaintext keys at runtime. If an admin loads the edit form,
+    // the override might populate the plaintext keys into the form. Saving would leak them to the DB.
+    if ($operation === 'update' && strpos($entity->id(), 'clinic_') === 0) {
+      return AccessResult::forbidden('Clinic gateways are managed programmatically and cannot be edited via the UI.');
+    }
+  }
+
+  if ($entity->getEntityTypeId() === 'commerce_order') {
+    if (in_array($operation, ['view', 'update'])) {
+      $store = $entity->getStore();
+
+      // Allow administrators to bypass restrictions.
+      if ($account->hasPermission('administer commerce_order')) {
+         return AccessResult::neutral();
+      }
+
+      // Allow store owners (doctors) to view their old orders even if the store is disabled.
+      if ($operation === 'view' && $store && $store->getOwnerId() === $account->id()) {
+         return AccessResult::neutral();
+      }
+
+      // For patients (customers), explicitly refuse update/checkout actions if the store is disabled.
+      // Must be the owner to access the order.
+      if ($entity->getCustomerId() !== $account->id()) {
+        return AccessResult::forbidden('User does not own this order.');
+      }
+
+      // If the operation is just viewing an existing old order, allow the patient to view it.
+      if ($operation === 'view' && $entity->getState()->getId() === 'completed') {
+          return AccessResult::neutral();
+      }
+
+      // For active cart operations (update, checkout), explicitly refuse if disabled.
+      if (!$store) {
+        return AccessResult::forbidden('Order has no store.');
+      }
+
+      // Check if the store owner (the doctor) has a clinic with ecommerce enabled.
+      $owner_id = $store->getOwnerId();
+      $clinic_storage = \Drupal::entityTypeManager()->getStorage('clinic');
+      $clinics = $clinic_storage->loadByProperties(['uid' => $owner_id]);
+      $clinic = reset($clinics);
+
+      if ($clinic && $clinic->hasField('field_ecommerce_enabled') && !(bool) $clinic->get('field_ecommerce_enabled')->value) {
+        return AccessResult::forbidden('The clinic for this store does not have ecommerce enabled.');
+      }
+
+      // Check if the store's payment gateway is operational.
+      // Do not loop over all gateways. Load the specific gateway deterministically in O(1) time.
+      $gateway_storage = \Drupal::entityTypeManager()->getStorage('commerce_payment_gateway');
+      $gateway_id = 'clinic_' . $clinic->id() . '_authnet';
+      $gateway = $gateway_storage->load($gateway_id);
+
+      $has_gateway = FALSE;
+      if ($gateway && $gateway->status()) {
+        $conditions = $gateway->get('conditions');
+        if (!empty($conditions)) {
+          foreach ($conditions as $condition) {
+            if ($condition['plugin'] === 'order_store' && !empty($condition['configuration']['stores'][$store->uuid()])) {
+              $has_gateway = TRUE;
+              break;
+            }
+          }
+        }
+      }
+
+      if (!$has_gateway) {
+        return AccessResult::forbidden('The clinic for this store does not have an active payment gateway.');
+      }
+    }
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_entity_presave() for commerce_product.
+ *
+ * Ensure custom products are strictly locked to their owner's store to prevent
+ * unauthorized cross-doctor store attachments.
+ */
+function headless_commerce_commerce_product_presave(EntityInterface $entity) {
+  if ($entity->getEntityTypeId() === 'commerce_product') {
+    // Shared master products bypass this restriction.
+    if ($entity->bundle() === 'chironutraceutical') {
+      return;
+    }
+
+    $owner_id = $entity->getOwnerId();
+    if (!$owner_id) {
+      throw new \Drupal\Core\Entity\EntityStorageException('Custom products must have an owner.');
+    }
+
+    // Find the store owned by this user (doctor).
+    $store_storage = \Drupal::entityTypeManager()->getStorage('commerce_store');
+    $stores = $store_storage->loadByProperties(['uid' => $owner_id]);
+
+    if (empty($stores)) {
+      throw new \Drupal\Core\Entity\EntityStorageException('The doctor must configure a store before creating custom products.');
+    }
+
+    $store = reset($stores);
+    // Force the product's store array to strictly contain only the owner's store.
+    $entity->set('stores', [$store->id()]);
+  }
+}

@@ -1,21 +1,221 @@
 <?php
 
 /**
- * Implements hook_install().
+ * @file
+ * Install, update and uninstall functions for the Headless Commerce module.
  */
-function headless_commerce_install() {
-  $manager = \Drupal::entityDefinitionUpdateManager();
-  if (!$manager->getEntityType('product_override')) {
-    $manager->installEntityType(\Drupal::entityTypeManager()->getDefinition('product_override'));
+
+use Drupal\commerce_product\Entity\Product;
+use Drupal\commerce_product\Entity\ProductVariation;
+
+/**
+ * Migrate legacy cloned products to ProductOverride entities.
+ */
+function headless_commerce_update_8001(&$sandbox) {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $product_storage = $entity_type_manager->getStorage('commerce_product');
+  $override_storage = $entity_type_manager->getStorage('product_override');
+
+  if (!isset($sandbox['total'])) {
+    // Find all products that have a non-empty field_original_product
+    // This assumes the legacy cloned products have this field populated
+    $query = $product_storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'default')
+      ->exists('field_original_product');
+    $pids = $query->execute();
+
+    $sandbox['total'] = count($pids);
+    $sandbox['current'] = 0;
+    $sandbox['pids'] = array_values($pids);
+
+    if (empty($sandbox['total'])) {
+      $sandbox['#finished'] = 1;
+      return 'No cloned products to migrate.';
+    }
+  }
+
+  $batch_size = 50;
+  $pids_to_process = array_slice($sandbox['pids'], $sandbox['current'], $batch_size);
+
+  $products = $product_storage->loadMultiple($pids_to_process);
+
+  foreach ($products as $product) {
+    // Get the store this cloned product belongs to.
+    $stores = $product->getStoreIds();
+    if (empty($stores)) {
+      $sandbox['current']++;
+      continue;
+    }
+    $store_id = reset($stores);
+
+    // Get the original master product.
+    $original_product_id = $product->get('field_original_product')->target_id;
+    if (!$original_product_id) {
+       $sandbox['current']++;
+       continue;
+    }
+
+    // For each variation, create an override.
+    foreach ($product->getVariations() as $variation) {
+        // Attempt to find the matching master variation (by SKU or index, simplified by using SKU if they match, or just map first to first)
+        $master_product = $product_storage->load($original_product_id);
+        if (!$master_product) continue;
+
+        $master_variations = $master_product->getVariations();
+        if (empty($master_variations)) continue;
+
+        $master_variation = reset($master_variations); // Simplified mapping: assume single variation or match logic needed
+
+        // Make idempotent: check if override already exists.
+        $existing = $override_storage->loadByProperties([
+          'store_id' => $store_id,
+          'variation_id' => $master_variation->id(),
+        ]);
+
+        if (empty($existing)) {
+          $override = $override_storage->create([
+            'store_id' => $store_id,
+            'product_id' => $original_product_id,
+            'variation_id' => $master_variation->id(),
+            'price' => $variation->getPrice(),
+            'status' => $product->isPublished() ? 1 : 0,
+          ]);
+          $override->save();
+        }
+    }
+
+    // We intentionally DO NOT delete the legacy cloned product here
+    // to preserve historical commerce_order items that reference it.
+    // Instead, we just unpublish it so it no longer appears in catalogs.
+    $product->setUnpublished();
+    $product->save();
+
+    $sandbox['current']++;
+  }
+
+  $sandbox['#finished'] = empty($sandbox['total']) ? 1 : ($sandbox['current'] / $sandbox['total']);
+
+  if ($sandbox['#finished'] >= 1) {
+    return 'Migrated ' . $sandbox['total'] . ' legacy cloned products to the new ProductOverride architecture.';
   }
 }
 
 /**
- * Update hook to install product_override entity.
+ * Migrate legacy plain-text Authorize.Net credentials to the Key module.
  */
-function headless_commerce_update_10001() {
-  $manager = \Drupal::entityDefinitionUpdateManager();
-  if (!$manager->getEntityType('product_override')) {
-    $manager->installEntityType(\Drupal::entityTypeManager()->getDefinition('product_override'));
+function headless_commerce_update_8002(&$sandbox) {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $gateway_storage = $entity_type_manager->getStorage('commerce_payment_gateway');
+  $key_storage = $entity_type_manager->getStorage('key');
+  $file_system = \Drupal::service('file_system');
+
+  $gateways = $gateway_storage->loadMultiple();
+  $migrated = 0;
+
+  foreach ($gateways as $gateway) {
+    if (in_array($gateway->getPluginId(), ['authorizenet_acceptjs', 'authorizenet_echeck', 'authorizenet_visa_checkout'])) {
+      $config = $gateway->getPluginConfiguration();
+
+      $login = $config['api_login'] ?? ($config['api_login_id'] ?? '');
+      $tran = $config['transaction_key'] ?? '';
+      $client = $config['client_key'] ?? '';
+
+      // If the configuration is already migrated, it will start with 'clinic_'
+      if (!empty($login) && strpos($login, 'clinic_') !== 0) {
+        // Extract clinic ID from the gateway ID (e.g., clinic_123_authnet)
+        preg_match('/clinic_(\d+)/', $gateway->id(), $matches);
+        $clinic_id = $matches[1] ?? '0';
+
+        $save_key = function($id, $label, $value) use ($key_storage, $file_system) {
+          if (empty($value)) return '';
+          $key = $key_storage->load($id);
+          $filepath = 'private://keys/' . $id . '.key';
+          $dir = 'private://keys';
+          $file_system->prepareDirectory($dir, \Drupal\Core\File\FileSystemInterface::CREATE_DIRECTORY | \Drupal\Core\File\FileSystemInterface::MODIFY_PERMISSIONS);
+          file_put_contents($filepath, $value);
+
+          if (!$key) {
+            $key = $key_storage->create([
+              'id' => $id,
+              'label' => $label,
+              'key_provider' => 'file',
+              'key_provider_settings' => [
+                'file_location' => $filepath,
+                'base64_encoded' => FALSE,
+              ],
+              'key_type' => 'authentication',
+            ]);
+            $key->save();
+          }
+          return $key->id();
+        };
+
+        $login_key_id = $save_key('clinic_' . $clinic_id . '_authnet_login', 'Clinic ' . $clinic_id . ' AuthNet Login', $login);
+        $tran_key_id = $save_key('clinic_' . $clinic_id . '_authnet_tran', 'Clinic ' . $clinic_id . ' AuthNet Tran Key', $tran);
+        $client_key_id = $save_key('clinic_' . $clinic_id . '_authnet_client', 'Clinic ' . $clinic_id . ' AuthNet Client Key', $client);
+
+        if ($login_key_id) {
+            $config['api_login'] = $login_key_id;
+            // Also unset api_login_id if it exists to clean up
+            if (isset($config['api_login_id'])) unset($config['api_login_id']);
+        }
+        if ($tran_key_id) $config['transaction_key'] = $tran_key_id;
+        if ($client_key_id) $config['client_key'] = $client_key_id;
+
+        $gateway->setPluginConfiguration($config);
+
+        // Ensure the store exists and the gateway has the order_store condition.
+        $store_storage = $entity_type_manager->getStorage('commerce_store');
+        $stores = $store_storage->loadByProperties(['uid' => $clinic_id]); // Assume clinic_id is the user ID of the doctor for legacy
+
+        // In this system clinic_id in gateway name `clinic_123_authnet` means clinic entity ID.
+        $clinic_entity = $entity_type_manager->getStorage('clinic')->load($clinic_id);
+        $store = NULL;
+
+        if ($clinic_entity) {
+            $owner_id = $clinic_entity->getOwnerId();
+            $stores = $store_storage->loadByProperties(['uid' => $owner_id]);
+            if (!empty($stores)) {
+                $store = reset($stores);
+            } else {
+                $store = $store_storage->create([
+                  'type' => 'online',
+                  'name' => $clinic_entity->label() . ' Store',
+                  'uid' => $owner_id,
+                  'default_currency' => 'USD',
+                ]);
+                $store->save();
+            }
+        }
+
+        if ($store) {
+            // Check if condition exists
+            $conditions = $gateway->get('conditions') ?: [];
+            $has_condition = FALSE;
+            foreach ($conditions as $c) {
+                if ($c['plugin'] === 'order_store') {
+                    $has_condition = TRUE;
+                    break;
+                }
+            }
+            if (!$has_condition) {
+                $conditions[] = [
+                    'plugin' => 'order_store',
+                    'configuration' => [
+                        'stores' => [$store->uuid() => $store->uuid()],
+                    ],
+                ];
+                $gateway->set('conditions', $conditions);
+                $gateway->set('conditionOperator', 'AND');
+            }
+        }
+
+        $gateway->save();
+        $migrated++;
+      }
+    }
   }
+
+  return 'Migrated ' . $migrated . ' payment gateways to the Key module and ensured store conditions.';
 }

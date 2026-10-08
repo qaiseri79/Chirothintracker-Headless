@@ -5,3 +5,4 @@ ignored_config_entities:
   - 'commerce_payment.commerce_payment_gateway.*'
   - ctt_gohighlevel.settings
   - ctt_patient_intake.settings
+  - 'key.key.*'
