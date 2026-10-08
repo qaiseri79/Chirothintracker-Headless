@@ -16,6 +16,15 @@ use Drupal\commerce_order\Entity\OrderInterface;
  * Enforce strict checkout and cart access for multi-merchant headless commerce.
  */
 function headless_commerce_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  if ($entity->getEntityTypeId() === 'commerce_payment_gateway') {
+    // Explicitly block UI updates to programmatically managed clinic gateways.
+    // ConfigFactoryOverride injects plaintext keys at runtime. If an admin loads the edit form,
+    // the override might populate the plaintext keys into the form. Saving would leak them to the DB.
+    if ($operation === 'update' && strpos($entity->id(), 'clinic_') === 0) {
+      return AccessResult::forbidden('Clinic gateways are managed programmatically and cannot be edited via the UI.');
+    }
+  }
+
   if ($entity->getEntityTypeId() === 'commerce_order') {
     if (in_array($operation, ['view', 'update'])) {
       $store = $entity->getStore();
@@ -96,17 +105,19 @@ function headless_commerce_commerce_product_presave(EntityInterface $entity) {
 
     $owner_id = $entity->getOwnerId();
     if (!$owner_id) {
-      return;
+      throw new \Drupal\Core\Entity\EntityStorageException('Custom products must have an owner.');
     }
 
     // Find the store owned by this user (doctor).
     $store_storage = \Drupal::entityTypeManager()->getStorage('commerce_store');
     $stores = $store_storage->loadByProperties(['uid' => $owner_id]);
 
-    if (!empty($stores)) {
-      $store = reset($stores);
-      // Force the product's store array to strictly contain only the owner's store.
-      $entity->set('stores', [$store->id()]);
+    if (empty($stores)) {
+      throw new \Drupal\Core\Entity\EntityStorageException('The doctor must configure a store before creating custom products.');
     }
+
+    $store = reset($stores);
+    // Force the product's store array to strictly contain only the owner's store.
+    $entity->set('stores', [$store->id()]);
   }
 }
