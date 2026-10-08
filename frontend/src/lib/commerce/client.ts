@@ -33,4 +33,5 @@ export const commerceApi = {
   getCustomProducts: () => request<{ products: CustomProduct[] }>("custom-products"),
   createCustomProduct: (title: string, sku: string, priceMinor: number) => request<{ success: boolean; id: number }>("custom-products/create", { title, sku, priceMinor }),
   deleteCustomProduct: (id: number) => request<{ success: boolean }>("custom-products/" + id, undefined, { method: "DELETE" }),
+  addToCart: (variation_id: number, quantity: number) => request<{ message: string, cart_id: number, item_id: number }>("add-to-cart", { variation_id, quantity }),
 };

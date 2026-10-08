@@ -79,7 +79,7 @@ class CommerceService {
       $dir = 'private://keys';
       \Drupal::service('file_system')->prepareDirectory($dir, \Drupal\Core\File\FileSystemInterface::CREATE_DIRECTORY | \Drupal\Core\File\FileSystemInterface::MODIFY_PERMISSIONS);
 
-      file_put_contents(\Drupal::service('file_system')->realpath($filepath), $value);
+      file_put_contents($filepath, $value);
 
       if (!$key) {
         $key = $key_storage->create([
@@ -384,20 +384,46 @@ class CommerceService {
     $store_resolver = \Drupal::service('headless_commerce.clinic_store_resolver');
     $store = $store_resolver->resolve();
 
-    if (!$store || !$store->isPublished()) {
+    // In our architecture, clinic enablement is tracked via field_ecommerce_enabled
+    // on the clinic entity or via the roles, but since we resolve via store directly,
+    // just having the store and having an enabled payment gateway is what matters.
+    if (!$store) {
       throw new ClinicException('The clinic store is currently disabled.', 403);
     }
 
     // Validate that the doctor has an enabled ProductOverride for the product if it's a shared catalog product.
     $product = $variation->getProduct();
-    // Assuming 'type' == 'default' is the shared master product type
-    if ($product->bundle() === 'default') {
+    // 'chironutraceutical' is the shared master product bundle.
+    if ($product->bundle() === 'chironutraceutical') {
       $override_storage = $this->entityTypeManager->getStorage('product_override');
+
+      // Check for a specific variation override first.
       $overrides = $override_storage->loadByProperties([
         'store_id' => $store->id(),
-        'product_id' => $product->id(),
+        'variation_id' => $variation->id(),
         'status' => 1,
       ]);
+
+      // If no variation override exists, check for a product-level override fallback.
+      if (empty($overrides)) {
+          $query = $override_storage->getQuery();
+          $query->accessCheck(FALSE)
+              ->condition('store_id', $store->id())
+              ->condition('product_id', $product->id())
+              ->condition('status', 1);
+
+          // Ensure it's a true product-level override (no variation specified).
+          $orGroup = $query->orConditionGroup()
+              ->notExists('variation_id')
+              ->condition('variation_id', 0)
+              ->condition('variation_id', NULL, 'IS NULL');
+          $query->condition($orGroup);
+
+          $override_ids = $query->execute();
+          if (!empty($override_ids)) {
+              $overrides = $override_storage->loadMultiple($override_ids);
+          }
+      }
 
       if (empty($overrides)) {
         throw new ClinicException('This product is not currently available from your clinic.', 403);

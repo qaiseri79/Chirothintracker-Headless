@@ -1,0 +1,82 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Headless Commerce module.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_entity_load().
+ *
+ * Intercept commerce_payment_gateway entities and replace the configured Key IDs
+ * with the actual decrypted values from the Key module. This ensures the
+ * commerce_authnet module receives plaintext keys at runtime while the database
+ * and exported config only store Key IDs.
+ */
+function headless_commerce_entity_load(array $entities, $entity_type_id) {
+  if ($entity_type_id === 'commerce_payment_gateway') {
+    $key_repository = \Drupal::service('key.repository');
+
+    foreach ($entities as $gateway) {
+      if (in_array($gateway->getPluginId(), ['authorizenet_acceptjs', 'authorizenet_echeck', 'authorizenet_visa_checkout'])) {
+        $configuration = $gateway->getPluginConfiguration();
+        $modified = FALSE;
+
+        // Define the fields that might contain Key IDs
+        $key_fields = ['api_login', 'transaction_key', 'client_key'];
+
+        foreach ($key_fields as $field) {
+          if (!empty($configuration[$field]) && strpos($configuration[$field], 'clinic_') === 0) {
+            $key = $key_repository->getKey($configuration[$field]);
+            if ($key) {
+              $configuration[$field] = $key->getKeyValue();
+              $modified = TRUE;
+            }
+          }
+        }
+
+        // Temporarily set the configuration in memory. This won't save to the database.
+        // It injects the keys to commerce_authnet module at runtime.
+        if ($modified) {
+          $gateway->setPluginConfiguration($configuration);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_presave().
+ *
+ * Prevent any admin UI saves or programmatic saves that contain plaintext
+ * keys from overwriting the Key IDs in the configuration.
+ */
+function headless_commerce_entity_presave(EntityInterface $entity) {
+  if ($entity->getEntityTypeId() === 'commerce_payment_gateway') {
+    if (in_array($entity->getPluginId(), ['authorizenet_acceptjs', 'authorizenet_echeck', 'authorizenet_visa_checkout'])) {
+      $configuration = $entity->getPluginConfiguration();
+
+      // If the configuration has been loaded and injected via hook_entity_load,
+      // it might contain plaintext keys. We must revert them back to Key IDs before saving.
+      // E.g. clinic_123_authnet_login
+
+      $key_fields = ['api_login', 'transaction_key', 'client_key'];
+      foreach ($key_fields as $field) {
+        if (!empty($configuration[$field])) {
+            // Check if it's the actual plaintext key, not starting with clinic_
+            if (strpos($configuration[$field], 'clinic_') !== 0) {
+               preg_match('/clinic_(\d+)/', $entity->id(), $matches);
+               $clinic_id = $matches[1] ?? '0';
+
+               // Restore the expected Key ID format
+               $suffix = ($field === 'api_login') ? 'login' : (($field === 'transaction_key') ? 'tran' : 'client');
+               $configuration[$field] = 'clinic_' . $clinic_id . '_authnet_' . $suffix;
+            }
+        }
+      }
+      $entity->setPluginConfiguration($configuration);
+    }
+  }
+}

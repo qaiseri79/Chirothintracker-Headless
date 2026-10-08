@@ -299,17 +299,8 @@ final class SubscriptionService {
       if (!empty($stores)) {
         $store = reset($stores);
 
-        $store_changed = FALSE;
-        // Unpublish the store if commerce cap is revoked, publish if granted.
-        $store_status = $caps['store'] ? TRUE : FALSE;
-        if ((bool) $store->isPublished() !== $store_status) {
-          if ($store_status) {
-            $store->setPublished();
-          } else {
-            $store->setUnpublished();
-          }
-          $store->save();
-        }
+        // commerce_store entities do not have a published status interface natively in standard setups
+        // without custom code. Disabling the payment gateway and removing ecommerce roles is sufficient.
 
         // Also toggle the payment gateway.
         $gateway_storage = $this->entities->getStorage('commerce_payment_gateway');

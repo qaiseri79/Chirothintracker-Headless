@@ -67,14 +67,22 @@ function headless_commerce_update_8001(&$sandbox) {
 
         $master_variation = reset($master_variations); // Simplified mapping: assume single variation or match logic needed
 
-        $override = $override_storage->create([
+        // Make idempotent: check if override already exists.
+        $existing = $override_storage->loadByProperties([
           'store_id' => $store_id,
-          'product_id' => $original_product_id,
           'variation_id' => $master_variation->id(),
-          'price' => $variation->getPrice(),
-          'status' => $product->isPublished() ? 1 : 0,
         ]);
-        $override->save();
+
+        if (empty($existing)) {
+          $override = $override_storage->create([
+            'store_id' => $store_id,
+            'product_id' => $original_product_id,
+            'variation_id' => $master_variation->id(),
+            'price' => $variation->getPrice(),
+            'status' => $product->isPublished() ? 1 : 0,
+          ]);
+          $override->save();
+        }
     }
 
     // We intentionally DO NOT delete the legacy cloned product here
@@ -91,4 +99,76 @@ function headless_commerce_update_8001(&$sandbox) {
   if ($sandbox['#finished'] >= 1) {
     return 'Migrated ' . $sandbox['total'] . ' legacy cloned products to the new ProductOverride architecture.';
   }
+}
+
+/**
+ * Migrate legacy plain-text Authorize.Net credentials to the Key module.
+ */
+function headless_commerce_update_8002(&$sandbox) {
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $gateway_storage = $entity_type_manager->getStorage('commerce_payment_gateway');
+  $key_storage = $entity_type_manager->getStorage('key');
+  $file_system = \Drupal::service('file_system');
+
+  $gateways = $gateway_storage->loadMultiple();
+  $migrated = 0;
+
+  foreach ($gateways as $gateway) {
+    if (in_array($gateway->getPluginId(), ['authorizenet_acceptjs', 'authorizenet_echeck', 'authorizenet_visa_checkout'])) {
+      $config = $gateway->getPluginConfiguration();
+
+      $login = $config['api_login'] ?? ($config['api_login_id'] ?? '');
+      $tran = $config['transaction_key'] ?? '';
+      $client = $config['client_key'] ?? '';
+
+      // If the configuration is already migrated, it will start with 'clinic_'
+      if (!empty($login) && strpos($login, 'clinic_') !== 0) {
+        // Extract clinic ID from the gateway ID (e.g., clinic_123_authnet)
+        preg_match('/clinic_(\d+)/', $gateway->id(), $matches);
+        $clinic_id = $matches[1] ?? '0';
+
+        $save_key = function($id, $label, $value) use ($key_storage, $file_system) {
+          if (empty($value)) return '';
+          $key = $key_storage->load($id);
+          $filepath = 'private://keys/' . $id . '.key';
+          $dir = 'private://keys';
+          $file_system->prepareDirectory($dir, \Drupal\Core\File\FileSystemInterface::CREATE_DIRECTORY | \Drupal\Core\File\FileSystemInterface::MODIFY_PERMISSIONS);
+          file_put_contents($filepath, $value);
+
+          if (!$key) {
+            $key = $key_storage->create([
+              'id' => $id,
+              'label' => $label,
+              'key_provider' => 'file',
+              'key_provider_settings' => [
+                'file_location' => $filepath,
+                'base64_encoded' => FALSE,
+              ],
+              'key_type' => 'authentication',
+            ]);
+            $key->save();
+          }
+          return $key->id();
+        };
+
+        $login_key_id = $save_key('clinic_' . $clinic_id . '_authnet_login', 'Clinic ' . $clinic_id . ' AuthNet Login', $login);
+        $tran_key_id = $save_key('clinic_' . $clinic_id . '_authnet_tran', 'Clinic ' . $clinic_id . ' AuthNet Tran Key', $tran);
+        $client_key_id = $save_key('clinic_' . $clinic_id . '_authnet_client', 'Clinic ' . $clinic_id . ' AuthNet Client Key', $client);
+
+        if ($login_key_id) {
+            $config['api_login'] = $login_key_id;
+            // Also unset api_login_id if it exists to clean up
+            if (isset($config['api_login_id'])) unset($config['api_login_id']);
+        }
+        if ($tran_key_id) $config['transaction_key'] = $tran_key_id;
+        if ($client_key_id) $config['client_key'] = $client_key_id;
+
+        $gateway->setPluginConfiguration($config);
+        $gateway->save();
+        $migrated++;
+      }
+    }
+  }
+
+  return 'Migrated ' . $migrated . ' payment gateways to the Key module.';
 }

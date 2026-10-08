@@ -38,13 +38,29 @@ class ProductOverridePriceResolver implements PriceResolverInterface {
       'status' => 1,
     ]);
 
-    // Fallback to checking by product_id if the override is applied at the product level.
+    // Fallback to checking by product_id if the override is applied at the product level
+    // (i.e. if the override's variation_id is empty or null, meaning it applies to all variations).
     if (empty($overrides)) {
-        $overrides = $this->entityTypeManager->getStorage('product_override')->loadByProperties([
-            'store_id' => $store->id(),
-            'product_id' => $entity->getProductId(),
-            'status' => 1,
-        ]);
+        $query = $this->entityTypeManager->getStorage('product_override')->getQuery();
+        $query->accessCheck(FALSE)
+            ->condition('store_id', $store->id())
+            ->condition('product_id', $entity->getProductId())
+            ->condition('status', 1);
+
+        // The key part: only fallback if the override DOES NOT specify a variation.
+        // This enforces that a generic product-level price only applies if a variation-level price is not set,
+        // and doesn't accidentally trigger if another variation has an override but this one doesn't.
+        $orGroup = $query->orConditionGroup()
+            ->notExists('variation_id')
+            ->condition('variation_id', 0)
+            ->condition('variation_id', NULL, 'IS NULL');
+        $query->condition($orGroup);
+
+        $override_ids = $query->execute();
+
+        if (!empty($override_ids)) {
+            $overrides = $this->entityTypeManager->getStorage('product_override')->loadMultiple($override_ids);
+        }
     }
 
     if (!empty($overrides)) {

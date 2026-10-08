@@ -39,10 +39,15 @@ class ProductOverride extends ContentEntityBase {
       ->setSetting('target_type', 'commerce_store')
       ->setRequired(TRUE);
 
+    $fields['product_id'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Product'))
+      ->setSetting('target_type', 'commerce_product')
+      ->setRequired(FALSE);
+
     $fields['variation_id'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Product Variation'))
       ->setSetting('target_type', 'commerce_product_variation')
-      ->setRequired(TRUE);
+      ->setRequired(FALSE);
 
     $fields['price'] = BaseFieldDefinition::create('commerce_price')
       ->setLabel(t('Overridden Price'))
