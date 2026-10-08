@@ -456,7 +456,7 @@ class CommerceService {
     }
 
     $gateway_storage = $this->entityTypeManager->getStorage('commerce_payment_gateway');
-    $gateway_id = 'clinic_' . $doctor_clinic->id() . '_authnet';
+    $gateway_id = 'clinic_' . ($doctor_clinic ? $doctor_clinic->id() : '0') . '_authnet';
     $gateway = $gateway_storage->load($gateway_id);
 
     $has_gateway = FALSE;
