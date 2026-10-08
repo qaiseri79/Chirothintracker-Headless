@@ -53,6 +53,7 @@ final class SubscriptionService {
       'cancel' => $p && !empty($p['subscription_id']) && !$p['cancel_requested'],
       'changePlan' => $p && $p['state'] === 'active' && !$p['cancel_requested'] && empty($p['pending_change']) && empty($p['review_reason']) && (int) $p['paid_until'] > $this->time->getCurrentTime() + 86400,
       'resubscribe' => (!$p || ((int) $p['paid_until'] <= $this->time->getCurrentTime() && (empty($p['subscription_id']) || $p['cancel_requested']))) && !($result['subscription']['needsReview'] ?? FALSE),
+      'resume' => $p && ($p['state'] === 'cancelled' || !empty($p['cancel_requested'])) && (int) $p['paid_until'] > $this->time->getCurrentTime(),
     ];
     return $result;
   }
@@ -305,7 +306,7 @@ final class SubscriptionService {
         // Also toggle the payment gateway.
         $gateway_storage = $this->entities->getStorage('commerce_payment_gateway');
         $gateway_id = 'clinic_' . $clinic->id() . '_authnet';
-        $gateway = $gateway_storage->load($gateway_id);
+        $gateway = $gateway_storage->loadOverrideFree($gateway_id);
         if ($gateway) {
           $gateway_status = $caps['store'] ? TRUE : FALSE;
           if ((bool) $gateway->status() !== $gateway_status) {

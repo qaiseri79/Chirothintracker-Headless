@@ -122,7 +122,7 @@ class CommerceService {
     $gateway_storage = $this->entityTypeManager->getStorage('commerce_payment_gateway');
     $gateway_id = 'clinic_' . $clinic->id() . '_authnet';
 
-    $gateway = $gateway_storage->load($gateway_id);
+    $gateway = $gateway_storage->loadOverrideFree($gateway_id);
     if (!$gateway) {
       $gateway = $gateway_storage->create([
         'id' => $gateway_id,
@@ -411,15 +411,17 @@ class CommerceService {
     }
 
     $gateway_storage = $this->entityTypeManager->getStorage('commerce_payment_gateway');
-    $gateways = $gateway_storage->loadByProperties(['status' => TRUE]);
+    $gateway_id = 'clinic_' . $doctor_clinic->id() . '_authnet';
+    $gateway = $gateway_storage->load($gateway_id);
+
     $has_gateway = FALSE;
-    foreach ($gateways as $gateway) {
+    if ($gateway && $gateway->status()) {
       $conditions = $gateway->get('conditions');
       if (!empty($conditions)) {
         foreach ($conditions as $condition) {
           if ($condition['plugin'] === 'order_store' && !empty($condition['configuration']['stores'][$store->uuid()])) {
             $has_gateway = TRUE;
-            break 2;
+            break;
           }
         }
       }
