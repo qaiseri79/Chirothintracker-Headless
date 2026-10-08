@@ -284,7 +284,14 @@ class CommerceService {
     $result = [];
     foreach ($products as $product) {
       // Exclude shared catalog products which might be assigned to multiple stores
-      if ($product->bundle() === 'chironutraceutical') {
+      // Validation: Enforce cross-doctor security.
+    if ($product->bundle() !== 'chironutraceutical') {
+      // For custom products, require that the product's owner is the patient's doctor's store.
+      $store_ids = array_column($product->get('stores')->getValue(), 'target_id');
+      if (!in_array($store->id(), $store_ids)) {
+         throw new ClinicException('This product is not available from your clinic.', 403);
+      }
+    } else {
         continue;
       }
 
@@ -354,7 +361,14 @@ class CommerceService {
     if (!$store || !in_array($store->id(), $store_ids)) {
       throw new ClinicException('You do not have permission to delete this product.', 403);
     }
-    if ($product->bundle() === 'chironutraceutical') {
+    // Validation: Enforce cross-doctor security.
+    if ($product->bundle() !== 'chironutraceutical') {
+      // For custom products, require that the product's owner is the patient's doctor's store.
+      $store_ids = array_column($product->get('stores')->getValue(), 'target_id');
+      if (!in_array($store->id(), $store_ids)) {
+         throw new ClinicException('This product is not available from your clinic.', 403);
+      }
+    } else {
       throw new ClinicException('You cannot delete shared catalog products.', 403);
     }
 
@@ -384,17 +398,47 @@ class CommerceService {
     $store_resolver = \Drupal::service('headless_commerce.clinic_store_resolver');
     $store = $store_resolver->resolve();
 
-    // In our architecture, clinic enablement is tracked via field_ecommerce_enabled
-    // on the clinic entity or via the roles, but since we resolve via store directly,
-    // just having the store and having an enabled payment gateway is what matters.
     if (!$store) {
+      throw new ClinicException('The clinic store could not be resolved.', 403);
+    }
+
+    // Explicitly refuse if field_ecommerce_enabled is false or the gateway is disabled.
+    $clinic_storage = $this->entityTypeManager->getStorage('clinic');
+    $clinics = $clinic_storage->loadByProperties(['uid' => $store->getOwnerId()]);
+    $doctor_clinic = reset($clinics);
+    if ($doctor_clinic && $doctor_clinic->hasField('field_ecommerce_enabled') && !(bool) $doctor_clinic->get('field_ecommerce_enabled')->value) {
       throw new ClinicException('The clinic store is currently disabled.', 403);
+    }
+
+    $gateway_storage = $this->entityTypeManager->getStorage('commerce_payment_gateway');
+    $gateways = $gateway_storage->loadByProperties(['status' => TRUE]);
+    $has_gateway = FALSE;
+    foreach ($gateways as $gateway) {
+      $conditions = $gateway->get('conditions');
+      if (!empty($conditions)) {
+        foreach ($conditions as $condition) {
+          if ($condition['plugin'] === 'order_store' && !empty($condition['configuration']['stores'][$store->uuid()])) {
+            $has_gateway = TRUE;
+            break 2;
+          }
+        }
+      }
+    }
+    if (!$has_gateway) {
+      throw new ClinicException('The clinic store does not have an active payment gateway.', 403);
     }
 
     // Validate that the doctor has an enabled ProductOverride for the product if it's a shared catalog product.
     $product = $variation->getProduct();
     // 'chironutraceutical' is the shared master product bundle.
-    if ($product->bundle() === 'chironutraceutical') {
+    // Validation: Enforce cross-doctor security.
+    if ($product->bundle() !== 'chironutraceutical') {
+      // For custom products, require that the product's owner is the patient's doctor's store.
+      $store_ids = array_column($product->get('stores')->getValue(), 'target_id');
+      if (!in_array($store->id(), $store_ids)) {
+         throw new ClinicException('This product is not available from your clinic.', 403);
+      }
+    } else {
       $override_storage = $this->entityTypeManager->getStorage('product_override');
 
       // Check for a specific variation override first.

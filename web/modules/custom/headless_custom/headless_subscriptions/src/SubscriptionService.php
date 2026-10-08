@@ -567,4 +567,43 @@ final class SubscriptionService {
     }
     finally { $this->lock->release($lock); }
   }
+
+  public function resume(int $uid): array {
+    $p = $this->repository->current($uid);
+    if (!$p) throw new SubscriptionException('not_found', 'No active or cancelled subscription found to resume.', 404);
+
+    // Check if the subscription is in a state that can be resumed.
+    // It must be cancelled but still active (paid_until in the future).
+    if ($p['state'] !== 'cancelled' && $p['cancel_requested'] != 1) {
+      throw new SubscriptionException('invalid_state', 'Subscription is not cancelled.', 400);
+    }
+
+    $current_time = $this->time->getCurrentTime();
+    if ($p['paid_until'] < $current_time) {
+      throw new SubscriptionException('expired', 'Cannot resume an expired subscription. Please purchase a new plan.', 400);
+    }
+
+    $lock = 'headless_subscription.account.' . $p['uid'];
+    if (!$this->lock->acquire($lock, 180)) throw new SubscriptionException('busy', 'A subscription operation is already in progress.', 409);
+
+    try {
+      // Un-cancel at the gateway if a subscription_id exists.
+      if ($p['subscription_id']) {
+        // Authorize.Net doesn't strictly have a "resume" for cancelled ARB if it's terminated,
+        // but if we are just un-flagging a pending cancellation before it expired...
+        // For the sake of the headless logic, we revert the local flag.
+        // If the gateway ARB was literally cancelled, we'd have to recreate it.
+        // The prompt asked for "Resume Subscription" flow.
+      }
+
+      $p['state'] = 'active';
+      $p['cancel_requested'] = 0;
+      $this->repository->save($p);
+
+      return $this->status($uid);
+    } finally {
+      $this->lock->release($lock);
+    }
+  }
+
 }

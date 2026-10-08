@@ -164,11 +164,58 @@ function headless_commerce_update_8002(&$sandbox) {
         if ($client_key_id) $config['client_key'] = $client_key_id;
 
         $gateway->setPluginConfiguration($config);
+
+        // Ensure the store exists and the gateway has the order_store condition.
+        $store_storage = $entity_type_manager->getStorage('commerce_store');
+        $stores = $store_storage->loadByProperties(['uid' => $clinic_id]); // Assume clinic_id is the user ID of the doctor for legacy
+
+        // In this system clinic_id in gateway name `clinic_123_authnet` means clinic entity ID.
+        $clinic_entity = $entity_type_manager->getStorage('clinic')->load($clinic_id);
+        $store = NULL;
+
+        if ($clinic_entity) {
+            $owner_id = $clinic_entity->getOwnerId();
+            $stores = $store_storage->loadByProperties(['uid' => $owner_id]);
+            if (!empty($stores)) {
+                $store = reset($stores);
+            } else {
+                $store = $store_storage->create([
+                  'type' => 'online',
+                  'name' => $clinic_entity->label() . ' Store',
+                  'uid' => $owner_id,
+                  'default_currency' => 'USD',
+                ]);
+                $store->save();
+            }
+        }
+
+        if ($store) {
+            // Check if condition exists
+            $conditions = $gateway->get('conditions') ?: [];
+            $has_condition = FALSE;
+            foreach ($conditions as $c) {
+                if ($c['plugin'] === 'order_store') {
+                    $has_condition = TRUE;
+                    break;
+                }
+            }
+            if (!$has_condition) {
+                $conditions[] = [
+                    'plugin' => 'order_store',
+                    'configuration' => [
+                        'stores' => [$store->uuid() => $store->uuid()],
+                    ],
+                ];
+                $gateway->set('conditions', $conditions);
+                $gateway->set('conditionOperator', 'AND');
+            }
+        }
+
         $gateway->save();
         $migrated++;
       }
     }
   }
 
-  return 'Migrated ' . $migrated . ' payment gateways to the Key module.';
+  return 'Migrated ' . $migrated . ' payment gateways to the Key module and ensured store conditions.';
 }
