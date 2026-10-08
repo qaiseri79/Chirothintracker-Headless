@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import { useRouter } from "next/navigation";
 import { Calendar, ChevronRight, MessageSquare, Plus, Send, StickyNote, Zap } from "lucide-react";
 import { formatSummaryNumber, type PatientSummaryRow } from "@/lib/patients/summary";
 import { SummarySectionStatus, useSummaryData } from "./summary-data-provider";
@@ -45,7 +44,6 @@ export function PatientExpandedDetails({
   const logsState = sections[`${patient.id}:logs`];
   const [logDialogOpen, setLogDialogOpen] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const router = useRouter();
   const [readFull, setReadFull] = useState<{ kind: "message" | "note"; time: string; text: string } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
@@ -99,7 +97,7 @@ export function PatientExpandedDetails({
                 text: PLACEHOLDER_MESSAGES.last,
               })
             }
-            onViewAll={() => router.push("/chiropractor/messages")}
+            onViewAll={() => onOpenWorkspace("messages")}
           />
           <CommRow
             icon={<StickyNote className="size-4" />}
@@ -240,7 +238,7 @@ export function PatientExpandedDetails({
                         const kind = readFull.kind;
                         setReadFull(null);
                         if (kind === "note") onOpenWorkspace("notes");
-                        else router.push("/chiropractor/messages");
+                        else onOpenWorkspace("messages");
                       }}
                       className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white"
                     >

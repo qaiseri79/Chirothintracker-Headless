@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import type { PatientSummaryRow } from "@/lib/patients/summary";
 import { SummarySectionStatus, useSummaryData } from "./summary-data-provider";
-import type { SummarySection } from "@/lib/patients/summary";
+import { SECTION_FIELDS, type SummarySection } from "@/lib/patients/summary";
 import { SessionForm } from "./session-form";
 import { SessionList } from "./session-list";
 import { NotesTab } from "./notes-tab";
+import { MessagesTab } from "./messages-tab";
 import { AttachmentsTab } from "./attachments-tab";
 import { ProgressTab } from "./progress-tab";
 import { IntakeTab } from "./intake-tab";
@@ -34,6 +35,12 @@ import { IntakeTab } from "./intake-tab";
  * `patient` is null when nothing is open, and the component renders nothing
  * then — the container decides whether the panel exists, this only decides
  * what it shows.
+ *
+ * The Messages tab is the one tab with no summary section behind it: it reads
+ * the patient's conversation through the shared message endpoints, so it is
+ * excluded from the section load below and renders outside the section
+ * status/guard. Its count lands through `MessagesTab`'s callback once the
+ * thread has been read, like the other late counts.
  */
 export function PatientWorkspacePanel({
   patient,
@@ -50,8 +57,14 @@ export function PatientWorkspacePanel({
 }) {
   const { load, sections } = useSummaryData();
   const patientId = patient?.id;
-  useEffect(() => { if (patientId) void load(patientId, tab as SummarySection); }, [patientId, tab, load]);
+  useEffect(() => { if (patientId && tab in SECTION_FIELDS) void load(patientId, tab as SummarySection); }, [patientId, tab, load]);
   const [activeSessionForm, setActiveSessionForm] = useState<string | null>(null);
+  /**
+   * The message thread's length, reported by the tab once its thread loads,
+   * tagged with the patient it belongs to so a count can never outlive them.
+   */
+  const [messagesCount, setMessagesCount] = useState<{ patientId: number; count: number } | null>(null);
+  const reportMessageCount = useCallback((count: number) => setMessagesCount({ patientId: patientId ?? 0, count }), [patientId]);
 
   if (!patient) return null;
 
@@ -64,12 +77,16 @@ export function PatientWorkspacePanel({
   /** Closing drops it too, so reopening starts clean. */
   function handleClose() {
     setActiveSessionForm(null);
+    setMessagesCount(null);
     onClose();
   }
 
+  /** The badge shows only the count reported for the patient now open. */
+  const messageCount = messagesCount?.patientId === patient.id ? messagesCount.count : 0;
   const tabs = [
     { id: "progress", label: "Progress" },
     { id: "sessions", label: "Sessions", count: patient.sessions?.length || 0 },
+    { id: "messages", label: "Messages", count: messageCount },
     { id: "notes", label: "Notes" },
     { id: "attachments", label: "Attachments", count: patient.attachmentsList?.length || 0 },
     { id: "intake", label: "Intake" },
@@ -138,52 +155,63 @@ export function PatientWorkspacePanel({
           </nav>
         </header>
         <div className="flex-1 overflow-y-auto px-5 py-6 sm:px-8">
-          <SummarySectionStatus id={patient.id} section={tab as SummarySection} />
-          {!sections[`${patient.id}:${tab}`]?.loaded ? null : tab === "progress" ? (
-            <ProgressTab
-              weightHistory={patient.weightHistory}
-              measurementChanges={patient.measurementChanges}
-            />
-          ) : tab === "sessions" && activeSessionForm ? (
-            <SessionForm
+          {tab === "messages" ? (
+            <MessagesTab
+              key={patient.id}
               patientId={patient.id}
-              profileId={patient.sessions.find((s) => s.name === activeSessionForm)?.id ?? 0}
-              sessionType={activeSessionForm}
-              remainingCount={
-                patient.sessions.find((s) => s.name === activeSessionForm)?.count ?? 0
-              }
-              onBack={() => setActiveSessionForm(null)}
-              onSave={() => setActiveSessionForm(null)}
-            />
-          ) : tab === "sessions" ? (
-            <SessionList
-              sessions={patient.sessions}
-              onAddSession={(type) => setActiveSessionForm(type)}
-            />
-          ) : tab === "notes" ? (
-            <NotesTab
-              notesList={patient.notesList}
-              patientId={patient.id}
-              showToast={showToast}
-            />
-          ) : tab === "attachments" ? (
-            <AttachmentsTab
-              attachmentsList={patient.attachmentsList}
-              patientId={patient.id}
-              showToast={showToast}
-            />
-          ) : tab === "intake" ? (
-            <IntakeTab
-              intake={patient.intake}
-              name={patient.name}
-              email={patient.email}
+              patientName={patient.name}
+              onCountChange={reportMessageCount}
             />
           ) : (
-            <div className="rounded-xl border border-line bg-white p-6 shadow-sm">
-              <p className="text-center text-[#6B7280]">
-                Workspace content for {tab} coming soon...
-              </p>
-            </div>
+            <>
+              <SummarySectionStatus id={patient.id} section={tab as SummarySection} />
+              {!sections[`${patient.id}:${tab}`]?.loaded ? null : tab === "progress" ? (
+                <ProgressTab
+                  weightHistory={patient.weightHistory}
+                  measurementChanges={patient.measurementChanges}
+                />
+              ) : tab === "sessions" && activeSessionForm ? (
+                <SessionForm
+                  patientId={patient.id}
+                  profileId={patient.sessions.find((s) => s.name === activeSessionForm)?.id ?? 0}
+                  sessionType={activeSessionForm}
+                  remainingCount={
+                    patient.sessions.find((s) => s.name === activeSessionForm)?.count ?? 0
+                  }
+                  onBack={() => setActiveSessionForm(null)}
+                  onSave={() => setActiveSessionForm(null)}
+                />
+              ) : tab === "sessions" ? (
+                <SessionList
+                  sessions={patient.sessions}
+                  onAddSession={(type) => setActiveSessionForm(type)}
+                />
+              ) : tab === "notes" ? (
+                <NotesTab
+                  notesList={patient.notesList}
+                  patientId={patient.id}
+                  showToast={showToast}
+                />
+              ) : tab === "attachments" ? (
+                <AttachmentsTab
+                  attachmentsList={patient.attachmentsList}
+                  patientId={patient.id}
+                  showToast={showToast}
+                />
+              ) : tab === "intake" ? (
+                <IntakeTab
+                  intake={patient.intake}
+                  name={patient.name}
+                  email={patient.email}
+                />
+              ) : (
+                <div className="rounded-xl border border-line bg-white p-6 shadow-sm">
+                  <p className="text-center text-[#6B7280]">
+                    Workspace content for {tab} coming soon...
+                  </p>
+                </div>
+              )}
+            </>
           )}
         </div>
       </aside>
