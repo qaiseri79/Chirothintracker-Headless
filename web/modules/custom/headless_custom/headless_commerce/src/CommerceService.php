@@ -65,7 +65,10 @@ class CommerceService {
         ],
       ];
 
-      $is_sandbox = \Drupal\Core\Site\Settings::get('headless_commerce_sandbox', TRUE);
+      // Many doctors test with LIVE keys on their staging/testing portal because they don't have sandbox accounts.
+      // Therefore, explicitly fallback to the LIVE endpoint unless they explicitly requested the 'test' mode in the UI
+      // or the server has explicitly forced sandbox via settings.
+      $is_sandbox = \Drupal\Core\Site\Settings::get('headless_commerce_sandbox', FALSE);
       if (isset($body['mode']) && $body['mode'] === 'test') {
          $is_sandbox = TRUE;
       }
