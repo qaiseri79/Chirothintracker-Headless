@@ -65,11 +65,7 @@ class CommerceService {
         ],
       ];
 
-      // Determine the environment endpoint. We default to live unless explicitly configured for testing.
-      // E.g., reading from settings.php: $settings['headless_commerce_sandbox'] = TRUE;
-      // Or looking at the incoming payload if the UI supports a toggle.
-      // For now, assume live unless the payload specifies test mode, or settings dictates it.
-      $is_sandbox = \Drupal\Core\Site\Settings::get('headless_commerce_sandbox', FALSE);
+      $is_sandbox = \Drupal\Core\Site\Settings::get('headless_commerce_sandbox', TRUE);
       if (isset($body['mode']) && $body['mode'] === 'test') {
          $is_sandbox = TRUE;
       }
