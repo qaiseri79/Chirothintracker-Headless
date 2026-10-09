@@ -230,9 +230,20 @@ class CommerceService {
     $clinic = $this->getClinicForUser($actor);
     $store = $this->getStoreForClinic($clinic);
 
-    // Load all variations of the shared catalog
-    $variation_storage = $this->entityTypeManager->getStorage('commerce_product_variation');
-    $variations = $variation_storage->loadByProperties(['type' => 'chironutraceutical']);
+    // Load all shared catalog products first, then extract their variations.
+    // In Drupal Commerce, the product bundle is 'chironutraceutical', but the
+    // variation bundle might be 'default'. Querying products is safer.
+    $product_storage = $this->entityTypeManager->getStorage('commerce_product');
+    $products = $product_storage->loadByProperties(['type' => 'chironutraceutical', 'status' => 1]);
+
+    $variations = [];
+    foreach ($products as $product) {
+      foreach ($product->getVariations() as $variation) {
+         if ($variation->isActive()) {
+            $variations[] = $variation;
+         }
+      }
+    }
 
     // Load existing overrides for this store.
     $overrides = [];
