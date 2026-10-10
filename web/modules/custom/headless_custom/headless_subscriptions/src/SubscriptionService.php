@@ -592,14 +592,10 @@ final class SubscriptionService {
       // If the gateway ARB was literally cancelled (which it is immediately upon our cancel request),
       // it cannot be "resumed" in the API. We must create a new one.
       if ($p['subscription_id']) {
-          // Re-create the ARB subscription at the gateway starting at the paid_until date
-          $new_subscription_id = $this->gateway->createSubscription(
-              $p['profile_id'],
-              $p['payment_profile_id'],
-              $p['plan'],
-              $p['reference'],
-              $p['paid_until']
-          );
+          // The gateway's native method to create an ARB schedule is schedule()
+          // It expects the full $p (purchase) array which contains plan, profile_id, paid_until, etc.
+          // Because paid_until is in the future, it will correctly schedule the next charge then.
+          $new_subscription_id = $this->gateway->schedule($p);
           $p['subscription_id'] = $new_subscription_id;
       }
 
